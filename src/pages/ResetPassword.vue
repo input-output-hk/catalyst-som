@@ -28,7 +28,7 @@
   const password = ref('')
 
   const handleReset = async () => {
-    return updatePassword(pasword.value)
+    return updatePassword(password.value)
   }
 
   onMounted(async () => {

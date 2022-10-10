@@ -19,6 +19,10 @@ export const useUser = defineStore('user-store', {
       return state.localUser;
     },
 
+    getUserInfo(state) {
+      return state.userInfo
+    },
+
     isFetching(state) {
       return state.fetching;
     },
@@ -80,6 +84,7 @@ export const useUser = defineStore('user-store', {
         this.logged = false
         successNotification('Logged out.')
       } catch(error) {
+        console.log(error)
         errorNotification('Error logging out.')
       }
     },
@@ -112,10 +117,12 @@ export const useUser = defineStore('user-store', {
         try {
           const { data, error } = await supabase
             .from('users')
-            .select('*, challenges_users(*), proposals_users(*)')
+            .select('*, challenges_users(*, challenges(id, title)), proposals_users(*, proposals(id, title, url, project_id))')
             .eq('user_id', this.localUser.id)
+          console.log(this.userInfo)
           this.userInfo = data[0]
         } catch(error) {
+          console.log(error)
           errorNotification('Error fetching user info.')
         }
       }
