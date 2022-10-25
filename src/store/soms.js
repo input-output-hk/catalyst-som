@@ -24,10 +24,12 @@ export const useSoms = defineStore('soms-store', {
       try {
         const { data, error } = await supabase
           .from('soms')
-          .select('*, som_reviews(*)')
+          .select('*, som_reviews(*), poas(*, poas_reviews(*))')
           .eq('proposal_id', proposal_id)
           .eq('milestone', milestone)
           .order('created_at', { ascending: false })
+          .order('created_at', { foreignTable: 'poas', ascending: false })
+          .order('created_at', { foreignTable: 'som_reviews', ascending: false })
 
         if (!this.proposals[proposal_id]) {
           this.proposals[proposal_id] = {}
@@ -47,7 +49,7 @@ export const useSoms = defineStore('soms-store', {
           .insert([som])
         if (error) throw error
         successNotification('SoM created.')
-        this.getSoms(som.proposal_id, som.milestone)
+        //this.getSoms(som.proposal_id, som.milestone)
         return data
       } catch(error) {
         console.log(error)

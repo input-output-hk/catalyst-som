@@ -1,7 +1,11 @@
 <template>
   <div class="content">
-    <h2>Statement of Milestone {{props.milestone}}</h2>
-    <som :som="currentSom" :proposal="proposal" :current="true" />
+    <h2>Statement of Milestone {{milestone}}</h2>
+    <som
+      :milestone="milestone"
+      :som="currentSom"
+      :proposal="proposal"
+      :current="true" />
     <o-button
       v-if="otherSoms.length > 0"
       @click="othersVisible = !othersVisible">
@@ -10,6 +14,7 @@
     <section class="section" v-if="othersVisible">
       <h3 class="subtitle">Old Statements of Milestone</h3>
       <som
+        :current="false"
         :som="som"
         :proposal="proposal"
         v-for="som in otherSoms" />
@@ -33,6 +38,8 @@ import { useUser } from '../store/user.js'
 const { canWriteSom } = useUser()
 const props = defineProps(['proposal', 'milestone'])
 import { computedAsync } from '@vueuse/core'
+import useEventsBus from '../eventBus'
+const { bus } = useEventsBus()
 
 const othersVisible = ref(false)
 const newVisible = ref(false)
@@ -58,6 +65,18 @@ const currentSom = computed(() => {
     return (soms.value.length > 0) ? soms.value[0] : false
   }
   return false
+})
+
+watch(()=>bus.value.get('getSomsBus'), (val) => {
+  // destruct the parameters
+  const [getSomsBus] = val ?? []
+  getSomsBus.value = getSomsBus
+  if (
+    (getSomsBus.value.proposal_id === props.proposal.id) &&
+    (getSomsBus.value.milestone === props.milestone)
+  ) {
+    getSoms(props.proposal.id, props.milestone)
+  }
 })
 
 watch(props, () => getSoms(props.proposal.id, props.milestone))

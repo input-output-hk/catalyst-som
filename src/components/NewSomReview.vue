@@ -2,24 +2,38 @@
   <div class="content">
     <div class="box">
       <h3>New Review for Statement of Milestone</h3>
-      <o-checkbox v-model="outputs_approves">
-        Outputs Approved?
-      </o-checkbox>
-      <o-field label="Outputs comments">
-        <o-input v-model="outputs_comment" type="textarea"></o-input>
-      </o-field>
-      <o-checkbox v-model="success_criteria_approves">
-        Success Criteria Approved?
-      </o-checkbox>
-      <o-field label="Success Criteria comments">
-        <o-input v-model="success_criteria_comment" type="textarea"></o-input>
-      </o-field>
-      <o-checkbox v-model="evidence_approves">
-        Evidence Approved?
-      </o-checkbox>
-      <o-field label="Evidence comments">
-        <o-input v-model="evidence_comment" type="textarea"></o-input>
-      </o-field>
+      <div class="block">
+        <o-checkbox v-model="outputs_approves">
+          Outputs Approved?
+        </o-checkbox>
+      </div>
+      <div class="block">
+        <label>Outputs comments:</label>
+        <QuillEditor
+          theme="snow" v-model:content="outputs_comment" content-type="html" />
+      </div>
+      <div class="block">
+        <o-checkbox v-model="success_criteria_approves">
+          Success Criteria Approved?
+        </o-checkbox>
+      </div>
+      <div class="block">
+        <label>Success Criteria comments:</label>
+        <QuillEditor
+          class="mb-4"
+          theme="snow" v-model:content="success_criteria_comment" content-type="html" />
+      </div>
+      <div class="block">
+        <o-checkbox v-model="evidence_approves">
+          Evidence Approved?
+        </o-checkbox>
+      </div>
+      <div class="block">
+        <label>Evidence comments:</label>
+        <QuillEditor
+          class="mb-4"
+          theme="snow" v-model:content="evidence_comment" content-type="html" />
+      </div>
       <o-button
         @click="handleCreateSomReview"
         type="submit">

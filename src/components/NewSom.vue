@@ -5,15 +5,18 @@
       <o-field label="Title">
         <o-input v-model="title" type="text"></o-input>
       </o-field>
-      <o-field label="Outputs">
-        <o-input v-model="outputs" type="textarea"></o-input>
-      </o-field>
-      <o-field label="Success criteria">
-        <o-input v-model="success_criteria" type="textarea"></o-input>
-      </o-field>
-      <o-field label="Evidence">
-        <o-input v-model="evidence" type="textarea"></o-input>
-      </o-field>
+      <label>Outputs:</label>
+      <QuillEditor
+        class="mb-4"
+        theme="snow" v-model:content="outputs" content-type="html" />
+      <label>Success criteria:</label>
+      <QuillEditor
+        class="mb-4"
+        theme="snow" v-model:content="success_criteria" content-type="html" />
+      <label>Evidence:</label>
+      <QuillEditor
+        class="mb-4"
+        theme="snow" v-model:content="evidence" content-type="html" />
       <o-field label="Month">
         <o-select placeholder="Select a month" v-model="month">
           <option :value="m + 1"

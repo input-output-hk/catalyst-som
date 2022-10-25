@@ -55,11 +55,13 @@
             @click="reviewsVisible = !reviewsVisible">
             Open reviews for this Milestone
           </o-button>
-          <o-modal v-model:active="reviewsVisible">
-            <div class="reviews" v-for="review in som.som_reviews">
-              <som-review
-                :review="review"
-                :properties="['outputs', 'success_criteria', 'evidence']" />
+          <o-modal :active="reviewsVisible" scroll="keep">
+            <div class="modal-card scrollable-modal">
+              <div class="reviews" v-for="review in som.som_reviews">
+                <som-review
+                  :review="review"
+                  :properties="['outputs', 'success_criteria', 'evidence']" />
+              </div>
             </div>
           </o-modal>
         </div>
@@ -73,6 +75,22 @@
           <new-som-review :som="som" v-if="newReviewVisible" />
         </div>
       </div>
+      <div class="columns" v-if="current && canWriteSom(proposal.id)">
+        <div class="column is-12">
+          <o-button
+            @click="newPoAVisible = !newPoAVisible">
+            Submit new PoA
+          </o-button>
+          <o-modal v-model:active="newPoAVisible">
+            <new-poa :proposal="proposal" :som="som" />
+          </o-modal>
+        </div>
+      </div>
+      <div class="columns" v-if="som.poas.length > 0">
+        <div class="column is-12">
+          <poas :poas="som.poas" :proposal="proposal" />
+        </div>
+      </div>
     </div>
     <div class="box" v-if="!som">
       Statement of Milestone not set!
@@ -81,13 +99,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 const props = defineProps(['som', 'proposal', 'current'])
 import { useUser } from '../store/user.js'
-const { canWriteSomReview } = useUser()
+const { canWriteSom, canWriteSomReview } = useUser()
+
+import useEventsBus from '../eventBus'
+const { bus } = useEventsBus()
 
 const reviewsVisible = ref(false)
 const newReviewVisible = ref(false)
+const newPoAVisible = ref(false)
+
+watch(()=>bus.value.get('getSomsBus'), (val) => {
+  newPoAVisible.value = false
+})
 
 </script>
 
@@ -96,12 +122,16 @@ import { computed } from 'vue'
 import SomReview from '../components/SomReview.vue'
 import SomReviews from '../components/SomReviews.vue'
 import NewSomReview from '../components/NewSomReview.vue'
+import NewPoa from '../components/NewPoa.vue'
+import Poas from '../components/Poas.vue'
 
 export default {
   components: {
     SomReview,
     SomReviews,
-    NewSomReview
+    NewSomReview,
+    NewPoa,
+    Poas
   },
   computed: {
   }

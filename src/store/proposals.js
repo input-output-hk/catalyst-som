@@ -30,7 +30,7 @@ export const useProposals = defineStore('proposals-store', {
       try {
         const { data, error } = await supabase
           .from('proposals')
-          .select('*')
+          .select('*, challenges(*)')
           .eq('project_id', id)
         return (data.length > 0) ? data[0] : {}
       } catch(error) {
