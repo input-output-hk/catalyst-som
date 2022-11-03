@@ -1,6 +1,20 @@
 <template>
   <div class="content">
-    <h2>Statement of Milestone {{milestone}}</h2>
+    <div class="columns">
+      <div class="column is-8">
+        <h2 class="is-size-3 mb-2 mt-2">Statement of Milestone {{milestone}}</h2>
+        <p class="mb-5">Latest submission from proposers of the Statement of Milestone {{milestone}}.</p>
+      </div>
+      <div class="column is-4 has-text-right mt-4">
+        <o-button
+          size="medium"
+          variant="primary"
+          v-if="canWriteSom(proposal.id)"
+          @click="newVisible = !newVisible">
+          {{(newVisible) ? 'Hide submit new SoMs' : 'Submit new SoM'}}
+        </o-button>
+      </div>
+    </div>
     <som
       :milestone="milestone"
       :som="currentSom"
@@ -11,22 +25,19 @@
       @click="othersVisible = !othersVisible">
       {{(othersVisible) ? 'Hide old SoMs' : 'Show old SoMs'}}
     </o-button>
-    <section class="section" v-if="othersVisible">
-      <h3 class="subtitle">Old Statements of Milestone</h3>
+    <section class="section pr-0 pl-0" v-if="othersVisible">
+      <h3 class="subtitle">Old Statements of Milestone {{milestone}}</h3>
       <som
         :current="false"
         :som="som"
         :proposal="proposal"
         v-for="som in otherSoms" />
     </section>
-    <o-button
-      v-if="canWriteSom(proposal.id)"
-      @click="newVisible = !newVisible">
-      {{(newVisible) ? 'Hide submit new SoMs' : 'Submit new SoM'}}
-    </o-button>
-    <section class="section" v-if="newVisible">
-      <new-som :proposal="proposal" :milestone="props.milestone" />
-    </section>
+    <o-modal v-model:active="newVisible" width="900">
+      <div class="block">
+        <new-som :proposal="proposal" :milestone="props.milestone" />
+      </div>
+    </o-modal>
   </div>
 </template>
 

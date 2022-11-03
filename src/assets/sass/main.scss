@@ -38,6 +38,9 @@
 */
 
 $primary: #133FF0;
+$text: #0d112f;
+$info: #faf5ff;
+$danger: #EC4699;
 
 $primary-light: #B8C5FF;
 $primary-dark: #848484;
@@ -51,7 +54,7 @@ $link-hover: #6272F9;
 // Lists and maps
 $custom-colors: null !default;
 $custom-shades: null !default;
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Work+Sans:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Work+Sans:wght@400;600&display=swap');
 
 $family-primary: 'Work Sans', "Lucida Grande", Arial, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 $family-secondary: 'Poppins', "Lucida Grande", Arial, sans-serif;
@@ -93,7 +96,7 @@ $colors: mergeColorMaps(
         ),
         "info": (
             $info,
-            $info-invert,
+            $black,
             $info-light,
             $info-dark,
         ),
@@ -111,7 +114,7 @@ $colors: mergeColorMaps(
         ),
         "danger": (
             $danger,
-            $danger-invert,
+            $white,
             $danger-light,
             $danger-dark,
         ),
@@ -126,3 +129,14 @@ $link-focus-border: $primary;
 
 @import "bulma/bulma";
 @import '@oruga-ui/theme-bulma/dist/scss/bulma';
+
+.content {
+  h1,h2,h3,h4,h5,h6 {
+    font-family: $family-secondary;
+    font-weight: 800;
+  }
+}
+
+.modal .animation-content {
+  width: 100%;
+}

@@ -1,28 +1,22 @@
 <template>
-  <div class="block mb-5">
-    <div class="card">
-      <header class="card-header">
-        <p class="card-header-title">
-          Review from --
-        </p>
-      </header>
-      <div class="card-content">
-        <div class="content">
-          <div class="block" v-for="property in properties">
-            <p>
-              <o-checkbox v-model="review[`${property}_approves`]" disabled>
-                Approved
-              </o-checkbox>
-            </p>
-            {{ review[`${property}_comments`] }}
-          </div>
-          <div class="block">
-            Sumbitted at: {{$d(review.created_at)}}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <table class="table is-bordered is-striped">
+    <tr>
+      <td>From Challenge Team / IOG</td>
+    </tr>
+    <tr v-for="property in properties">
+      <td>
+        <o-checkbox v-model="review[`${property}_approves`]" disabled>
+          Approved
+        </o-checkbox>
+        <div v-html="review[`${property}_comment`]" />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Submitted at: {{$d(review.created_at, 'long')}}
+      </td>
+    </tr>
+  </table>
 </template>
 
 <script setup>

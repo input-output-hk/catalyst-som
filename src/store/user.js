@@ -32,6 +32,9 @@ export const useUser = defineStore('user-store', {
     },
     canWriteSom(state) {
       return (proposal_id) => {
+        if (this.isAdmin) {
+          return true
+        }
         try {
           return state.userInfo.proposals_users.map((el) => el.proposal_id)
             .includes(proposal_id)
@@ -42,6 +45,9 @@ export const useUser = defineStore('user-store', {
     },
     canWriteSomReview(state) {
       return (proposal_id, challenge_id) => {
+        if (this.isAdmin) {
+          return true
+        }
         try {
           const ret =
             !state.userInfo.proposals_users.map((el) => el.proposal_id)

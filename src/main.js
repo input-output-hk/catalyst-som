@@ -15,6 +15,8 @@ import './assets/sass/main.scss'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
+import Vue3Sanitize from "vue-3-sanitize";
+
 const store = createPinia()
 store.use(piniaPluginPersistedstate)
 const router = createRouter(createWebHistory())
@@ -30,6 +32,22 @@ const i18n = createI18n({
       },
     },
   },
+  datetimeFormats: {
+    "en": {
+      short: {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      },
+      long: {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric'
+      }
+    }
+  }
 })
 
 app.component('QuillEditor', QuillEditor)
