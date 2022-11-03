@@ -1,10 +1,25 @@
 <template>
   <div class="content">
-    <div class="col-6 form-widget">
-      <h1>Proposals</h1>
-      <proposal-preview
-        :proposal="proposal"
-        v-for="proposal in proposals" />
+    <h1 class="is-size-1">Proposals</h1>
+    <p>All the proposals in the Statement of Milestone pilot.</p>
+    <div class="table-container">
+      <table class="table is-bordered is-striped">
+        <thead>
+          <tr>
+            <th><abbr title="Project ID">ID</abbr></th>
+            <th>Title</th>
+            <th>Challenge</th>
+            <th>Budget</th>
+            <th class="small-col">SoM?</th>
+            <th class="small-col">SoM OK?</th>
+            <th class="small-col">PoA?</th>
+            <th class="small-col">PoA OK?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <proposal-row :proposal="proposal" v-for="proposal in proposals" />
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -24,10 +39,12 @@ onMounted(() => {
 import { computed } from 'vue'
 import { mapState } from 'pinia'
 import ProposalPreview from '../components/ProposalPreview.vue'
+import ProposalRow from '../components/ProposalRow.vue'
 
 export default {
   components: {
-    ProposalPreview
+    ProposalPreview,
+    ProposalRow
   },
   computed: {
     ...mapState(useProposals, {
@@ -39,3 +56,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.small-col {
+  width: 4rem;
+}
+</style>

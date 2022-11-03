@@ -20,7 +20,7 @@ export const useProposals = defineStore('proposals-store', {
       try {
         const { data, error } = await supabase
           .from('proposals')
-          .select('*')
+          .select('*, challenges(title)')
         this.localProposals = data
       } catch(error) {
         errorNotification('Error fetching proposals.')

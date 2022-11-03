@@ -53,6 +53,9 @@ export const useUser = defineStore('user-store', {
           return false
         }
       }
+    },
+    isAdmin(state) {
+      return state.userInfo.role === 3
     }
   },
 
@@ -64,6 +67,9 @@ export const useUser = defineStore('user-store', {
           email: email,
           password: password
         })
+        if (error) {
+          throw(error)
+        }
         this.localUser = user
         this.logged = true
         this.getInfo()

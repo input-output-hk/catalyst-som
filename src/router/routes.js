@@ -5,6 +5,7 @@ import ResetPassword from '../pages/ResetPassword.vue';
 import Profile from '../pages/Profile.vue';
 import Proposals from '../pages/Proposals.vue';
 import Proposal from '../pages/Proposal.vue';
+import Admin from '../pages/Admin.vue';
 
 const routes = [
   {
@@ -31,6 +32,11 @@ const routes = [
     path: '/proposals/:id',
     component: Proposal,
     name: 'proposal'
+  },
+  {
+    path: '/admin',
+    component: Admin,
+    name: 'admin'
   }
 ]
 
