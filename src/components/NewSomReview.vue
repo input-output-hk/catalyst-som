@@ -10,7 +10,10 @@
       <div class="block">
         <label>Outputs comments:</label>
         <QuillEditor
-          theme="snow" v-model:content="outputs_comment" content-type="html" />
+          ref="outputsEditor"
+          theme="snow"
+          v-model:content="outputs_comment"
+          content-type="html" />
       </div>
       <div class="block">
         <o-checkbox v-model="success_criteria_approves">
@@ -21,7 +24,10 @@
         <label>Success Criteria comments:</label>
         <QuillEditor
           class="mb-4"
-          theme="snow" v-model:content="success_criteria_comment" content-type="html" />
+          ref="successCriteriaEditor"
+          theme="snow"
+          v-model:content="success_criteria_comment"
+          content-type="html" />
       </div>
       <div class="block">
         <o-checkbox v-model="evidence_approves">
@@ -32,13 +38,24 @@
         <label>Evidence comments:</label>
         <QuillEditor
           class="mb-4"
-          theme="snow" v-model:content="evidence_comment" content-type="html" />
+          ref="evidenceEditor"
+          theme="snow"
+          v-model:content="evidence_comment"
+          content-type="html" />
       </div>
-      <o-button
-        @click="handleCreateSomReview"
-        type="submit">
-          Submit SoM review
-      </o-button>
+      <div class="buttons">
+        <o-button
+          variant="primary"
+          size="medium"
+          @click="handleCreateSomReview">
+            Submit SoM review
+        </o-button>
+        <o-button
+          size="medium"
+          @click="clearSomReview">
+            Clear SoM Review
+        </o-button>
+      </div>
     </div>
   </div>
 </template>
@@ -48,6 +65,10 @@ import { ref, onMounted } from 'vue'
 const props = defineProps(['som'])
 import { useSomReviews } from '../store/somReviews.js'
 const { createSomReview } = useSomReviews()
+
+const outputsEditor = ref()
+const successCriteriaEditor = ref()
+const evidenceEditor = ref()
 
 const outputs_approves = ref(false)
 const outputs_comment = ref('')
@@ -67,14 +88,19 @@ const handleCreateSomReview = async () => {
     som_id: props.som.id
   })
   if (response) {
-    outputs_approves.value = ''
-    outputs_comment.value = ''
-    success_criteria_approves.value = ''
-    success_criteria_comment.value = ''
-    evidence_approves.value = ''
-    evidence_comment.value = ''
+    clearSomReview()
   }
 }
+
+const clearSomReview = () => {
+  outputsEditor.value.setHTML('')
+  successCriteriaEditor.value.setHTML('')
+  evidenceEditor.value.setHTML('')
+  outputs_approves.value = false
+  success_criteria_approves.value = false
+  evidence_approves.value = false
+}
+
 </script>
 
 <script>

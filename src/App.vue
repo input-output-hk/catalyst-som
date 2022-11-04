@@ -25,7 +25,7 @@ export default {
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .scrollable-modal {
   overflow: auto !important;
   max-height: 90vh

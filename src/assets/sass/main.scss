@@ -140,3 +140,8 @@ $link-focus-border: $primary;
 .modal .animation-content {
   width: 100%;
 }
+
+.ql-editor {
+  min-height: 100px;
+  font-family: $family-primary;
+}
