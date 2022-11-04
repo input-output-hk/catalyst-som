@@ -35,7 +35,7 @@
     </section>
     <o-modal v-model:active="newVisible" width="900">
       <div class="block">
-        <new-som :proposal="proposal" :milestone="props.milestone" />
+        <new-som :proposal="proposal" :milestone="props.milestone" :som="currentSom" />
       </div>
     </o-modal>
   </div>

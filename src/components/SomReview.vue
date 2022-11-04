@@ -1,27 +1,29 @@
 <template>
   <table class="table is-bordered is-striped">
     <tr>
-      <td>From Challenge Team / IOG</td>
+      <td>From <span class="has-text-weight-semibold">{{role}}</span></td>
     </tr>
     <tr v-for="property in properties">
       <td>
-        <o-checkbox v-model="review[`${property}_approves`]" disabled>
-          Approved
-        </o-checkbox>
+        <span class="is-size-5 has-text-weight-semibold">{{ (review[`${property}_approves`]) ? 'Approved' : 'Not Approved' }}</span>
         <div v-html="review[`${property}_comment`]" />
       </td>
     </tr>
     <tr>
       <td>
-        Submitted at: {{$d(review.created_at, 'long')}}
+        Submitted at: <span class="has-text-weight-semibold">{{$d(review.created_at, 'long')}}</span>
       </td>
     </tr>
   </table>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed } from 'vue'
+import { roles } from '@/utils/roles.js'
 const props = defineProps(['review', 'properties'])
+
+const role = computed(() => roles[props.review.users.role])
+
 </script>
 
 <script>

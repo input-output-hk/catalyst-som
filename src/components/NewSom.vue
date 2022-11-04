@@ -5,22 +5,26 @@
         <h4 class="card-header-title mb-0">
           New Statement of Milestone {{milestone}}
         </h4>
+        <o-button class="mt-2 mr-4" variant="primary" size="small" @click="clone">Clone latest</o-button>
       </header>
-      <Form class="card-content" :validation-schema="somSchema">
+      <Form class="card-content scrollable-modal" :validation-schema="somSchema">
         <o-field label="Title">
           <o-input v-model="title" type="text"></o-input>
         </o-field>
         <div class="mb-2 has-text-weight-semibold">Outputs:</div>
         <QuillEditor
           class="mb-4"
+          ref="outputsEditor"
           theme="snow" v-model:content="outputs" content-type="html" />
         <div class="mb-2 has-text-weight-semibold">Acceptance criteria:</div>
         <QuillEditor
           class="mb-4"
+          ref="successCriteriaEditor"
           theme="snow" v-model:content="success_criteria" content-type="html" />
         <div class="mb-2 has-text-weight-semibold">Evidence:</div>
         <QuillEditor
           class="mb-4"
+          ref="evidenceEditor"
           theme="snow" v-model:content="evidence" content-type="html" />
         <o-field label="Month">
           <o-select placeholder="Select a month" v-model="month">
@@ -46,14 +50,23 @@
             </template>
           </o-slider>
         </o-field>
-        <o-button
-          variant="primary"
-          size="medium"
-          class="mt-6"
-          @click="handleCreateSom"
-          type="submit">
-            Submit SoM
-        </o-button>
+        <div class="buttons">
+          <o-button
+            variant="primary"
+            size="medium"
+            class="mt-6"
+            @click="handleCreateSom"
+            type="submit">
+              Submit SoM
+          </o-button>
+          <o-button
+            size="medium"
+            class="mt-6"
+            @click="clearSom"
+            type="submit">
+              Clear SoM
+          </o-button>
+        </div>
       </Form>
     </div>
   </div>
@@ -63,9 +76,13 @@
 import { ref, onMounted } from 'vue'
 import { Field, Form, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
-const props = defineProps(['proposal', 'milestone'])
+const props = defineProps(['proposal', 'milestone', 'som'])
 import { useSoms } from '../store/soms.js'
 const { createSom } = useSoms()
+
+const outputsEditor = ref()
+const successCriteriaEditor = ref()
+const evidenceEditor = ref()
 
 const title = ref('')
 const outputs = ref('')
@@ -74,6 +91,18 @@ const evidence = ref('')
 const cost = ref(0)
 const month = ref(1)
 const completion = ref(10)
+
+const clone = () => {
+  if (props.som) {
+    outputsEditor.value.setHTML(props.som.outputs)
+    successCriteriaEditor.value.setHTML(props.som.success_criteria)
+    evidenceEditor.value.setHTML(props.som.evidence)
+    title.value = props.som.title
+    month.value = props.som.month
+    completion.value = props.som.completion
+    cost.value = props.som.cost
+  }
+}
 
 const handleCreateSom = async () => {
   const response =  await createSom({
@@ -88,15 +117,19 @@ const handleCreateSom = async () => {
     milestone: props.milestone
   })
   if (response) {
-    title.value = ''
-    outputs.value = ''
-    success_criteria.value = ''
-    evidence.value = ''
-    month.value = 1
-    completion.value = 10
-    cost.value = 0
+    clearSom()
   }
   console.log(response)
+}
+
+const clearSom = () => {
+  outputsEditor.value.setHTML('')
+  successCriteriaEditor.value.setHTML('')
+  evidenceEditor.value.setHTML('')
+  title.value = ''
+  month.value = 1
+  completion.value = 10
+  cost.value = 0
 }
 
 const costRule = computed(() => {

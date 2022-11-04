@@ -16,7 +16,7 @@
       <div class="navbar-end" v-if="logged">
         <div class="navbar-item">
           <div class="buttons">
-            <a class="button is-dark">
+            <a class="button is-white">
               <span @click="logout">Logout {{user.email}}</span>
             </a>
           </div>

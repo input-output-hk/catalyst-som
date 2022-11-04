@@ -28,5 +28,6 @@ export default {
 <style>
 .scrollable-modal {
   overflow: auto !important;
+  max-height: 90vh
 }
 </style>

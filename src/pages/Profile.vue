@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <h1 class="subtitle">Profile</h1>
+    <h1 class="is-size-1">User Profile</h1>
     <div class="content">
       <div class="box">
         <div class="columns">
@@ -46,9 +46,10 @@
 <script setup>
   import { ref, onMounted, computed } from 'vue'
   import { useUser } from '../store/user.js'
+  import { roles } from '@/utils/roles.js'
   const { getUserInfo, localUser } = useUser()
 
-  const role = computed(() => (getUserInfo.role === 2) ? 'IOG Team' : 'Community')
+  const role = computed(() => roles[getUserInfo.role])
   const proposals = computed(() => {
     return getUserInfo.proposals_users.map((el) => el.proposals)
   })

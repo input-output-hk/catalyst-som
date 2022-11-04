@@ -24,7 +24,7 @@ export const useSoms = defineStore('soms-store', {
       try {
         const { data, error } = await supabase
           .from('soms')
-          .select('*, som_reviews(*), poas(*, poas_reviews(*))')
+          .select('*, som_reviews(*, users(role)), poas(*, poas_reviews(*, users(role)))')
           .eq('proposal_id', proposal_id)
           .eq('milestone', milestone)
           .order('created_at', { ascending: false })
