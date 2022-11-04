@@ -35,7 +35,12 @@
     </section>
     <o-modal v-model:active="newVisible" width="900">
       <div class="block">
-        <new-som :proposal="proposal" :milestone="props.milestone" :som="currentSom" />
+        <new-som
+          :proposal="proposal"
+          :milestone="props.milestone"
+          :som="currentSom"
+          @som-submitted="newVisible = false"
+          />
       </div>
     </o-modal>
   </div>

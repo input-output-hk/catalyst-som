@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia'
 import { supabase } from '../utils/supabase'
 import { errorNotification, successNotification } from '../utils/notifications'
+import useEventsBus from '@/eventBus'
+
+const { emit } = useEventsBus()
 
 export const useSomReviews = defineStore('soms-reviews-store', {
   state: () => {
@@ -13,13 +16,17 @@ export const useSomReviews = defineStore('soms-reviews-store', {
   },
 
   actions: {
-    async createSomReview(somReview) {
+    async createSomReview(somReview, som) {
       try {
         const { data, error } = await supabase
           .from('som_reviews')
           .insert([somReview])
         if (error) throw error
         successNotification('SoM review created.')
+        emit('getSomsBus', {
+          proposal_id: som.proposal_id,
+          milestone: som.milestone
+        })
         return data
       } catch(error) {
         console.log(error)

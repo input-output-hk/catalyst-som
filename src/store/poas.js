@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { supabase } from '../utils/supabase'
 import { errorNotification, successNotification } from '../utils/notifications'
-import useEventsBus from '../eventBus'
+import useEventsBus from '@/eventBus'
 
 const { emit } = useEventsBus()
 

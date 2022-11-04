@@ -77,6 +77,7 @@ import { ref, onMounted } from 'vue'
 import { Field, Form, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 const props = defineProps(['proposal', 'milestone', 'som'])
+const emit = defineEmits(['somSubmitted'])
 import { useSoms } from '../store/soms.js'
 const { createSom } = useSoms()
 
@@ -118,8 +119,8 @@ const handleCreateSom = async () => {
   })
   if (response) {
     clearSom()
+    emit('somSubmitted')
   }
-  console.log(response)
 }
 
 const clearSom = () => {

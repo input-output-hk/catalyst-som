@@ -63,6 +63,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 const props = defineProps(['som'])
+const emit = defineEmits(['somReviewSubmitted'])
 import { useSomReviews } from '../store/somReviews.js'
 const { createSomReview } = useSomReviews()
 
@@ -86,9 +87,10 @@ const handleCreateSomReview = async () => {
     evidence_approves: evidence_approves.value,
     evidence_comment: evidence_comment.value,
     som_id: props.som.id
-  })
+  }, props.som)
   if (response) {
     clearSomReview()
+    emit('somReviewSubmitted')
   }
 }
 

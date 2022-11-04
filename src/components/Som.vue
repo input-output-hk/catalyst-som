@@ -164,7 +164,9 @@
         </div>
       </section>
       <section class="section pr-0 pl-0" v-if="newReviewVisible">
-        <new-som-review :som="som" />
+        <new-som-review
+          :som="som"
+          @som-review-submitted="newReviewVisible = false" />
       </section>
       <div class="columns" v-if="som.poas.length > 0">
         <div class="column is-12">
