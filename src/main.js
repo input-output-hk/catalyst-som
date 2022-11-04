@@ -15,8 +15,6 @@ import './assets/sass/main.scss'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
-import Vue3Sanitize from "vue-3-sanitize";
-
 const store = createPinia()
 store.use(piniaPluginPersistedstate)
 const router = createRouter(createWebHistory())
