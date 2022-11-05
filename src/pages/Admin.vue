@@ -1,10 +1,22 @@
 <template>
   <div class="content">
-    <h1 class="subtitle">Admin</h1>
-    <div class="col-6 form-widget">
-      <ul>
-        <user-item v-for="u in users" :user="u"></user-item>
-      </ul>
+    <h1 class="is-size-1">Admin</h1>
+    <p>Page for the administration of users.</p>
+    <div class="table-container">
+      <table class="table is-bordered is-striped">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Challenges</th>
+            <th>Proposals</th>
+          </tr>
+        </thead>
+        <tbody>
+          <user-item v-for="u in users" :user="u"></user-item>
+        </tbody>
+      </table>
     </div>
     <o-pagination
       :total="count"

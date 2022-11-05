@@ -2,11 +2,11 @@
   <div class="content">
     <div class="box">
       <div class="columns">
-        <div class="column is-12">{{poa.content}}</div>
+        <div class="column is-12" v-html="poa.content"></div>
       </div>
       <div class="columns">
         <div class="column is-3">Created at:</div>
-        <div class="column is-9">{{$d(poa.created_at)}}</div>
+        <div class="column is-9">{{$d(poa.created_at, 'long')}}</div>
       </div>
       <div class="columns" v-if="poa.poas_reviews.length > 0">
         <div class="column is-12">

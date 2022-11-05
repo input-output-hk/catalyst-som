@@ -1,27 +1,29 @@
 <template>
-  <div class="columns">
-    <div class="column is-4">
-      {{user.email}}
-      {{userChallenges}}
-    </div>
-    <div class="column is-4">
-      <o-field label="Select Challenges">
-        <o-inputitems
-          v-model="userChallenges"
-          :data="filteredChallenges"
-          autocomplete
-          :allow-new="false"
-          :open-on-focus="true"
-          field="title"
-          icon="tag"
-          placeholder="Add an item"
-          @typing="getFilteredChallenges"
-        >
-        </o-inputitems>
-      </o-field>
-    </div>
-    <div class="column is-4">&nbsp;</div>
-  </div>
+  <tr>
+    <td>{{user.email}}</td>
+    <td>{{user.username}}</td>
+    <td>
+      <o-select placeholder="Select a name" v-model="role">
+        <option :value="r" v-for="r in Object.keys(roles)">{{roles[r]}}</option>
+      </o-select>
+    </td>
+    <td>
+      <o-inputitems
+        v-model="userChallenges"
+        :data="filteredChallenges"
+        autocomplete
+        :allow-new="false"
+        :open-on-focus="true"
+        field="title"
+        icon="tag"
+        placeholder="Add an item"
+        @typing="getFilteredChallenges"
+      >
+      </o-inputitems>
+    </td>
+    <td>
+    </td>
+  </tr>
 </template>
 
 <script setup>
@@ -35,7 +37,16 @@ const { getChallenges } = challengesStore
 const { challenges } = storeToRefs(challengesStore)
 
 import { useUsers } from '../../store/users.js'
-const { updateUserChallenges } = useUsers()
+const { updateUserChallenges, updateRole } = useUsers()
+
+import { roles } from '@/utils/roles'
+
+const role = computed({
+  get: () => props.user.role,
+  set: (val) => {
+    updateRole(parseInt(val), props.user)
+  }
+})
 
 const userChallenges = computed({
   get: () => props.user.challenges_users.map((el) => el.challenges),

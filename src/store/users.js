@@ -58,6 +58,12 @@ export const useUsers = defineStore('users-store', {
       const { data, error2 } = await supabase
         .from('challenges_users')
         .insert(challengesUsers)
+    },
+    async updateRole(role, user) {
+      const { error } = await supabase
+        .from('users')
+        .update({'role': role})
+        .eq('id', user.id)
     }
   }
 })
