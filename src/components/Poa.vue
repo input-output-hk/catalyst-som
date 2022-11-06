@@ -1,28 +1,32 @@
 <template>
   <div class="content">
-    <div class="box">
-      <div class="columns">
-        <div class="column is-12" v-html="poa.content"></div>
-      </div>
-      <div class="columns">
-        <div class="column is-3">Created at:</div>
-        <div class="column is-9">{{$d(poa.created_at, 'long')}}</div>
-      </div>
-      <div class="columns" v-if="poa.poas_reviews.length > 0">
-        <div class="column is-12">
-          <poa-reviews :reviews="poa.poas_reviews" />
-        </div>
-      </div>
-      <div class="columns" v-if="canWriteSomReview(proposal.id, proposal.challenge_id)">
-        <div class="column is-12">
-          <o-button
-            @click="newReviewVisible = !newReviewVisible">
-            New review for this PoA
-          </o-button>
-          <new-poa-review :poa="poa" v-if="newReviewVisible" />
-        </div>
-      </div>
-    </div>
+    <table class="table is-bordered is-striped" v-if="poa">
+      <tbody class="poa-recap">
+        <tr>
+          <th>PoA</th>
+          <td>
+            <div v-html="poa.content"></div>
+          </td>
+        </tr>
+        <tr>
+          <th>Submitted At:</th>
+          <td>{{$d(poa.created_at, 'long')}}</td>
+        </tr>
+        <tr v-if="poa.poas_reviews.length > 0">
+          <th>PoA reviews</th>
+          <td>
+            <poa-reviews :reviews="poa.poas_reviews" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <o-button
+      size="medium"
+      variant="primary"
+      @click="newReviewVisible = !newReviewVisible">
+        New review for this PoA
+      </o-button>
+    <new-poa-review :poa="poa" v-if="newReviewVisible" />
   </div>
 </template>
 

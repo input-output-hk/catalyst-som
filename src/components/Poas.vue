@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <h4>Proof of Achivements</h4>
+    <h3 class="subtitle">Proof of Achivement</h3>
     <poa
       :poa="poa"
       :proposal="proposal"

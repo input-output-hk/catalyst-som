@@ -3,6 +3,11 @@
     <table class="table is-bordered is-striped" v-if="som">
       <tbody class="som-recap">
         <tr>
+          <th>SoM Submitted at</th>
+          <td>{{$d(som.created_at, 'long')}}</td>
+          <td></td>
+        </tr>
+        <tr>
           <th>Milestone Title</th>
           <td><span class="is-size-5 has-text-weight-semibold">{{som.title}}</span></td>
           <td></td>
@@ -64,62 +69,8 @@
           </td>
           <td></td>
         </tr>
-        <tr>
-          <th>SoM Submitted at</th>
-          <td>{{$d(som.created_at, 'long')}}</td>
-          <td></td>
-        </tr>
       </tbody>
     </table>
-    <div class="box" v-if="false">
-      <div class="columns">
-        <div class="column is-2">Title</div>
-        <div class="column is-10">{{som.title}}</div>
-      </div>
-      <div class="columns">
-        <div class="column is-2">Outputs</div>
-        <div class="column is-6" v-html="som.outputs"></div>
-        <div class="column is-4">
-          <som-reviews
-            v-if="som.som_reviews.length > 0"
-            :reviews="som.som_reviews" :property="'outputs'" />
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column is-2">Acceptance criteria</div>
-        <div class="column is-6" v-html="som.success_criteria"></div>
-        <div class="column is-4">
-          <som-reviews
-            v-if="som.som_reviews.length > 0"
-            :reviews="som.som_reviews" :property="'success_criteria'" />
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column is-2">Evidence</div>
-        <div class="column is-6" v-html="som.evidence"></div>
-        <div class="column is-4">
-          <som-reviews
-            v-if="som.som_reviews.length > 0"
-            :reviews="som.som_reviews" :property="'evidence'" />
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column is-2">Month</div>
-        <div class="column is-6">{{som.month}}</div>
-      </div>
-      <div class="columns">
-        <div class="column is-2">Cost</div>
-        <div class="column is-6">{{$n(som.cost, 'currency')}}</div>
-      </div>
-      <div class="columns">
-        <div class="column is-2">Completion</div>
-        <div class="column is-6">{{som.completion}}%</div>
-      </div>
-      <div class="columns">
-        <div class="column is-2">Submitted at</div>
-        <div class="column is-6">{{$d(som.created_at, 'long')}}</div>
-      </div>
-    </div>
     <div v-if="som">
       <div class="columns" v-if="som.som_reviews.length > 0">
         <div class="column is-12">
@@ -140,7 +91,7 @@
         </div>
       </div>
       <section class="section pr-0 pl-0" v-if="current">
-        <h3 class="subtitle">Actions</h3>
+        <!--<h3 class="subtitle">SoM Actions</h3>-->
         <div class="block buttons">
           <div class="mr-4" v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current">
             <o-button

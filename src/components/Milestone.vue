@@ -21,6 +21,8 @@
       :proposal="proposal"
       :current="true" />
     <o-button
+      class="mt-6"
+      size="medium"
       v-if="otherSoms.length > 0"
       @click="othersVisible = !othersVisible">
       {{(othersVisible) ? 'Hide old SoMs' : 'Show old SoMs'}}
