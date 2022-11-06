@@ -2,59 +2,28 @@
   <div class="content">
     <h1 class="is-size-1">Proposals</h1>
     <p>All the proposals in the Statement of Milestone pilot.</p>
-    <div class="table-container">
-      <table class="table is-bordered is-striped">
-        <thead>
-          <tr>
-            <th><abbr title="Project ID">ID</abbr></th>
-            <th>Title</th>
-            <th>Challenge</th>
-            <th>Budget</th>
-            <th class="small-col">SoM?</th>
-            <th class="small-col">SoM OK?</th>
-            <th class="small-col">PoA?</th>
-            <th class="small-col">PoA OK?</th>
-          </tr>
-        </thead>
-        <tbody>
-          <proposal-row :proposal="proposal" v-for="proposal in proposals" />
-        </tbody>
-      </table>
-    </div>
+    <paginated-table
+      classStyle="proposals-list"
+      :headers="['ID', 'Title', 'Challenge', 'Budget', 'SoM?', 'SoM OK?', 'PoA', 'PoA OK?']"
+      :items="proposals"
+      :getItems="getProposals"
+      :getCount="getCount"
+      :itemComponent="ProposalRow"
+    >
+    </paginated-table>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import ProposalRow from '@/components/ProposalRow.vue'
+import PaginatedTable from '@/components/PaginatedTable.vue'
 import { useProposals } from '../store/proposals.js'
-const { getProposals } = useProposals()
+const proposalsStore = useProposals()
+const { getProposals, getCount } = proposalsStore
+const { proposals } = storeToRefs(proposalsStore);
 
-onMounted(() => {
-  getProposals()
-})
-
-</script>
-
-<script>
-import { computed } from 'vue'
-import { mapState } from 'pinia'
-import ProposalPreview from '../components/ProposalPreview.vue'
-import ProposalRow from '../components/ProposalRow.vue'
-
-export default {
-  components: {
-    ProposalPreview,
-    ProposalRow
-  },
-  computed: {
-    ...mapState(useProposals, {
-      proposals: 'proposals'
-    }),
-  },
-
-  created() {
-  }
-}
 </script>
 
 <style lang="scss" scoped>

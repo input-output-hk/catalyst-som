@@ -27,6 +27,7 @@ export const useUsers = defineStore('users-store', {
           .from('users')
           .select('*', { count: 'exact', head: true })
           this._count = count
+          return count
         if (error) {
           throw(error)
         }
@@ -35,7 +36,7 @@ export const useUsers = defineStore('users-store', {
       }
     },
     async getUsers(page, size) {
-      const { from, to } = getPagination(page, size);
+      const { from, to } = getPagination(page, size)
       try {
         const { data, error } = await supabase
           .from('users')

@@ -1,13 +1,13 @@
 <template>
   <tr>
-    <td>{{proposal.project_id}}</td>
+    <td>{{item.project_id}}</td>
     <td>
-      <router-link :to="{name: 'proposal', params: {id: proposal.project_id}}">
-        {{proposal.title}}
+      <router-link :to="{name: 'proposal', params: {id: item.project_id}}">
+        {{item.title}}
       </router-link>
     </td>
-    <td>{{ proposal.challenges.title }}</td>
-    <td class="has-text-right">{{ $n(proposal.budget, "currency") }}</td>
+    <td>{{ item.challenges.title }}</td>
+    <td class="has-text-right">{{ $n(item.budget, "currency") }}</td>
     <td class="checkbox-col">
       <div class="is-flex is-align-content-center is-justify-content-center">
         <o-checkbox class="m-0" disabled v-model="v"></o-checkbox>
@@ -33,7 +33,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-const props = defineProps(['proposal'])
+const props = defineProps(['item'])
 
 const v = ref(false)
 

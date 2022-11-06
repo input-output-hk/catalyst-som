@@ -1,7 +1,7 @@
 <template>
   <tr>
-    <td>{{user.email}}</td>
-    <td>{{user.username}}</td>
+    <td>{{item.email}}</td>
+    <td>{{item.username}}</td>
     <td>
       <o-select placeholder="Select a name" v-model="role">
         <option :value="r" v-for="r in Object.keys(roles)">{{roles[r]}}</option>
@@ -39,7 +39,7 @@
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue'
 import { storeToRefs } from 'pinia'
-const props = defineProps(['user'])
+const props = defineProps(['item'])
 
 import { useChallenges } from '../../store/challenges.js'
 const challengesStore = useChallenges()
@@ -57,37 +57,37 @@ const { updateUserChallenges, updateUserProposals, updateRole } = useUsers()
 import { roles } from '@/utils/roles'
 
 const role = computed({
-  get: () => props.user.role,
+  get: () => props.item.role,
   set: (val) => {
-    updateRole(parseInt(val), props.user)
+    updateRole(parseInt(val), props.item)
   }
 })
 
 const userChallenges = computed({
-  get: () => props.user.challenges_users.map((el) => el.challenges),
+  get: () => props.item.challenges_users.map((el) => el.challenges),
   set: val => {
     const toSend = val.map((el) => {
       return {
-        user_idd: props.user.id,
+        user_idd: props.item.id,
         challenge_id: el.id,
-        user_id: props.user.user_id
+        user_id: props.item.user_id
       }
     })
-    updateUserChallenges(toSend, props.user)
+    updateUserChallenges(toSend, props.item)
   }
 })
 
 const userProposals = computed({
-  get: () => props.user.proposals_users.map((el) => el.proposals),
+  get: () => props.item.proposals_users.map((el) => el.proposals),
   set: val => {
     const toSend = val.map((el) => {
       return {
-        user_idd: props.user.id,
+        user_idd: props.item.id,
         proposal_id: el.id,
-        user_id: props.user.user_id
+        user_id: props.item.user_id
       }
     })
-    updateUserProposals(toSend, props.user)
+    updateUserProposals(toSend, props.item)
   }
 })
 
