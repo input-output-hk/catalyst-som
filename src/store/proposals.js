@@ -5,13 +5,13 @@ import { errorNotification, successNotification } from '../utils/notifications'
 export const useProposals = defineStore('proposals-store', {
   state: () => {
     return {
-      localProposals: [],
+      _proposals: [],
     }
   },
 
   getters: {
     proposals(state) {
-      return state.localProposals;
+      return state._proposals;
     }
   },
 
@@ -21,7 +21,18 @@ export const useProposals = defineStore('proposals-store', {
         const { data, error } = await supabase
           .from('proposals')
           .select('*, challenges(title)')
-        this.localProposals = data
+        this._proposals = data
+      } catch(error) {
+        errorNotification('Error fetching proposals.')
+      }
+    },
+    async getProposalsByTitle(title) {
+      try {
+        const { data, error } = await supabase
+          .from('proposals')
+          .select('id, title')
+          .like('title', `%${title}%`)
+        this._proposals = data
       } catch(error) {
         errorNotification('Error fetching proposals.')
       }

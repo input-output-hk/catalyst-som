@@ -57,3 +57,25 @@ onMounted(() => {
 })
 
 </script>
+
+<style lang="scss" scoped>
+.table-container {
+  thead {
+    th:nth-child(1) {
+      width: 16%
+    }
+    th:nth-child(2) {
+      width: 10%
+    }
+    th:nth-child(3) {
+      width: 10%
+    }
+    th:nth-child(4) {
+      width: 26%
+    }
+    th:nth-child(5) {
+      width: 26%
+    }
+  }
+}
+</style>

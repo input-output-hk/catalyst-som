@@ -15,13 +15,23 @@
         :allow-new="false"
         :open-on-focus="true"
         field="title"
-        icon="tag"
-        placeholder="Add an item"
+        placeholder="Add a challenge"
         @typing="getFilteredChallenges"
       >
       </o-inputitems>
     </td>
     <td>
+      <o-inputitems
+        v-model="userProposals"
+        :data="proposals"
+        autocomplete
+        :allow-new="false"
+        :open-on-focus="true"
+        field="title"
+        placeholder="Add a proposal"
+        @typing="getFilteredProposals"
+      >
+      </o-inputitems>
     </td>
   </tr>
 </template>
@@ -36,8 +46,13 @@ const challengesStore = useChallenges()
 const { getChallenges } = challengesStore
 const { challenges } = storeToRefs(challengesStore)
 
+import { useProposals } from '../../store/proposals.js'
+const proposalsStore = useProposals()
+const { getProposalsByTitle } = proposalsStore
+const { proposals } = storeToRefs(proposalsStore)
+
 import { useUsers } from '../../store/users.js'
-const { updateUserChallenges, updateRole } = useUsers()
+const { updateUserChallenges, updateUserProposals, updateRole } = useUsers()
 
 import { roles } from '@/utils/roles'
 
@@ -59,7 +74,20 @@ const userChallenges = computed({
       }
     })
     updateUserChallenges(toSend, props.user)
-    console.log(toSend)
+  }
+})
+
+const userProposals = computed({
+  get: () => props.user.proposals_users.map((el) => el.proposals),
+  set: val => {
+    const toSend = val.map((el) => {
+      return {
+        user_idd: props.user.id,
+        proposal_id: el.id,
+        user_id: props.user.user_id
+      }
+    })
+    updateUserProposals(toSend, props.user)
   }
 })
 
@@ -79,6 +107,10 @@ const getFilteredChallenges = (text) => {
   } else {
     filteredChallenges.value = challenges.value
   }
+}
+
+const getFilteredProposals = async (text) => {
+  await getProposalsByTitle(text)
 }
 
 onMounted(() => {
