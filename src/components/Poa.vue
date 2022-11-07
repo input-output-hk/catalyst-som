@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <table class="table is-bordered is-striped" v-if="poa">
+    <table class="table is-bordered is-striped poa-table" v-if="poa">
       <tbody class="poa-recap">
         <tr>
           <th>PoA</th>
@@ -20,37 +20,48 @@
         </tr>
       </tbody>
     </table>
-    <o-button
-      size="medium"
-      variant="primary"
-      @click="newReviewVisible = !newReviewVisible">
-        New review for this PoA
-      </o-button>
-    <new-poa-review :poa="poa" v-if="newReviewVisible" />
+    <div class="block buttons">
+      <o-button
+        v-if="current"
+        size="medium"
+        variant="primary"
+        @click="newReviewVisible = !newReviewVisible">
+          Submit review for this PoA
+        </o-button>
+    </div>
+    <section class="section pr-0 pl-0" v-if="newReviewVisible">
+      <new-poa-review
+        :som="som"
+        :poa="poa"
+        @poa-review-submitted="newReviewVisible = false"
+      />
+    </section>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-const props = defineProps(['poa', 'proposal'])
-import { useUser } from '../store/user.js'
+import PoaReviews from '@/components/PoaReviews.vue'
+import NewPoaReview from '@/components/NewPoaReview.vue'
+const props = defineProps(['poa', 'proposal', 'current', 'som'])
+import { useUser } from '@/store/user.js'
 const { canWriteSom, canWriteSomReview } = useUser()
 
 const newReviewVisible = ref(false)
 
 </script>
 
-<script>
-import { computed } from 'vue'
-import PoaReviews from '../components/PoaReviews.vue'
-import NewPoaReview from '../components/NewPoaReview.vue'
-
-export default {
-  components: {
-    PoaReviews,
-    NewPoaReview
-  },
-  computed: {
+<style lang="scss" scoped>
+.poa-table {
+  tr {
+    td, th {
+      &:nth-child(1) {
+        width: 30%;
+      }
+      &:nth-child(2) {
+        width: 70%;
+      }
+    }
   }
 }
-</script>
+</style>

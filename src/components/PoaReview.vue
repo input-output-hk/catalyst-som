@@ -1,40 +1,26 @@
 <template>
-  <div class="block mb-5">
-    <div class="card">
-      <header class="card-header">
-        <p class="card-header-title">
-          Review from --
-        </p>
-      </header>
-      <div class="card-content">
-        <div class="content">
-          <div class="block">
-            <p>
-              <o-checkbox v-model="review.content_approved" disabled>
-                Approved
-              </o-checkbox>
-            </p>
-            {{ review.content_comment }}
-          </div>
-          <div class="block">
-            Sumbitted at: {{$d(review.created_at)}}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <table class="table is-bordered is-striped">
+    <tr>
+      <td>From <span class="has-text-weight-semibold">{{role}}</span></td>
+    </tr>
+    <tr>
+      <td>
+        <span class="is-size-5 has-text-weight-semibold">{{ (review.content_approved) ? 'Approved' : 'Not Approved' }}</span>
+        <div v-html="review.content_comment" />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Submitted at: <span class="has-text-weight-semibold">{{$d(review.created_at, 'long')}}</span>
+      </td>
+    </tr>
+  </table>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-const props = defineProps(['review'])
-</script>
-
-<script>
 import { computed } from 'vue'
+import { roles } from '@/utils/roles.js'
+const props = defineProps(['review'])
 
-export default {
-  computed: {
-  }
-}
+const role = computed(() => roles[props.review.users.role])
 </script>

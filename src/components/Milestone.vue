@@ -20,20 +20,21 @@
       :som="currentSom"
       :proposal="proposal"
       :current="true" />
-    <o-button
-      class="mt-6"
-      size="medium"
-      v-if="otherSoms.length > 0"
-      @click="othersVisible = !othersVisible">
-      {{(othersVisible) ? 'Hide old SoMs' : 'Show old SoMs'}}
-    </o-button>
-    <section class="section pr-0 pl-0" v-if="othersVisible">
-      <h3 class="subtitle">Old Statements of Milestone {{milestone}}</h3>
-      <som
-        :current="false"
-        :som="som"
-        :proposal="proposal"
-        v-for="som in otherSoms" />
+    <section class="section pr-0 pl-0 has-background-grey-lighter"
+      v-if="otherSoms.length > 0">
+      <o-button
+        size="medium"
+        @click="othersVisible = !othersVisible">
+        {{(othersVisible) ? 'Hide archived SoMs' : 'Show archived SoMs'}}
+      </o-button>
+      <div v-if="othersVisible">
+        <h3 class="mt-6 subtitle">Archived Statements of Milestone {{milestone}}</h3>
+        <som
+          :current="false"
+          :som="som"
+          :proposal="proposal"
+          v-for="som in otherSoms" />
+      </div>
     </section>
     <o-modal v-model:active="newVisible" width="900">
       <div class="block">

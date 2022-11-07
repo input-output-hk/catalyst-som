@@ -25,12 +25,3 @@ const props = defineProps(['review', 'properties'])
 const role = computed(() => roles[props.review.users.role])
 
 </script>
-
-<script>
-import { computed } from 'vue'
-
-export default {
-  computed: {
-  }
-}
-</script>

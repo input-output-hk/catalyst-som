@@ -121,7 +121,7 @@
       </section>
       <div class="columns" v-if="som.poas.length > 0">
         <div class="column is-12">
-          <poas :poas="som.poas" :proposal="proposal" />
+          <poas :som="som" :poas="som.poas" :proposal="proposal" />
         </div>
       </div>
     </div>
