@@ -33,6 +33,7 @@ export const useSoms = defineStore('soms-store', {
           .order('created_at', { ascending: false })
           .order('created_at', { foreignTable: 'poas', ascending: false })
           .order('created_at', { foreignTable: 'som_reviews', ascending: false })
+          .limit(5)
 
         if (!this.proposals[proposal_id]) {
           this.proposals[proposal_id] = {}
