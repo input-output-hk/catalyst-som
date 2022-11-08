@@ -4,7 +4,7 @@
     <p>All the proposals in the Statement of Milestone pilot.</p>
     <paginated-table
       classStyle="proposals-list"
-      :headers="['ID', 'Title', 'Challenge', 'Budget', 'SoM?', 'SoM OK?', 'PoA', 'PoA OK?']"
+      :headers="['ID', 'Title', 'Challenge', 'Budget']"
       :items="proposals"
       :getItems="getProposals"
       :getCount="getCount"

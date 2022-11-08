@@ -94,11 +94,11 @@ watch(()=>bus.value.get('getSomsBus'), (val) => {
     (getSomsBus.value.proposal_id === props.proposal.id) &&
     (getSomsBus.value.milestone === props.milestone)
   ) {
-    getSoms(props.proposal.id, props.milestone)
+    getSoms(props.proposal.id, props.milestone, 5)
   }
 })
 
-watch(props, () => getSoms(props.proposal.id, props.milestone))
+watch(props, () => getSoms(props.proposal.id, props.milestone, 5))
 
 </script>
 

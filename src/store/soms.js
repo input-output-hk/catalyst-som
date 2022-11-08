@@ -9,6 +9,7 @@ export const useSoms = defineStore('soms-store', {
   state: () => {
     return {
       proposals: {},
+      proposal_previews: {},
     }
   },
 
@@ -23,7 +24,7 @@ export const useSoms = defineStore('soms-store', {
   },
 
   actions: {
-    async getSoms(proposal_id, milestone) {
+    async getSoms(proposal_id, milestone, limit) {
       try {
         const { data, error } = await supabase
           .from('soms')
@@ -33,12 +34,33 @@ export const useSoms = defineStore('soms-store', {
           .order('created_at', { ascending: false })
           .order('created_at', { foreignTable: 'poas', ascending: false })
           .order('created_at', { foreignTable: 'som_reviews', ascending: false })
-          .limit(5)
+          .limit(limit)
 
         if (!this.proposals[proposal_id]) {
           this.proposals[proposal_id] = {}
         }
         this.proposals[proposal_id][milestone] = data
+      } catch(error) {
+        errorNotification('Error fetching soms.')
+      }
+    },
+    async getSomsPreview(proposal_id, milestone) {
+      try {
+        const { data, error } = await supabase
+          .from('soms')
+          .select('month, cost, completion, som_reviews(outputs_approves, success_criteria_approves, evidence_approves), poas(poas_reviews(content_approved))')
+          .eq('proposal_id', proposal_id)
+          .eq('milestone', milestone)
+          .order('created_at', { ascending: false })
+          .order('created_at', { foreignTable: 'poas', ascending: false })
+          .order('created_at', { foreignTable: 'som_reviews', ascending: false })
+          .limit(1, {foreignTable: 'poas'})
+          .limit(1)
+
+        if (!this.proposal_previews[proposal_id]) {
+          this.proposal_previews[proposal_id] = {}
+        }
+        this.proposal_previews[proposal_id][milestone] = data
       } catch(error) {
         errorNotification('Error fetching soms.')
       }

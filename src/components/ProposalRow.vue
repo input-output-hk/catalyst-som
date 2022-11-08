@@ -8,26 +8,6 @@
     </td>
     <td>{{ item.challenges.title }}</td>
     <td class="has-text-right">{{ $n(item.budget, "currency") }}</td>
-    <td class="checkbox-col">
-      <div class="is-flex is-align-content-center is-justify-content-center">
-        <o-checkbox class="m-0" disabled v-model="v"></o-checkbox>
-      </div>
-    </td>
-    <td class="checkbox-col">
-      <div class="is-flex is-align-content-center is-justify-content-center">
-        <o-checkbox class="m-0" disabled v-model="v"></o-checkbox>
-      </div>
-    </td>
-    <td class="checkbox-col">
-      <div class="is-flex is-align-content-center is-justify-content-center">
-        <o-checkbox class="m-0" disabled v-model="v"></o-checkbox>
-      </div>
-    </td>
-    <td class="checkbox-col">
-      <div class="is-flex is-align-content-center is-justify-content-center">
-        <o-checkbox class="m-0" disabled v-model="v"></o-checkbox>
-      </div>
-    </td>
   </tr>
 </template>
 
