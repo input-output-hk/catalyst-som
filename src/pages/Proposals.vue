@@ -1,17 +1,19 @@
 <template>
-  <div class="content">
-    <h1 class="is-size-1">Proposals</h1>
-    <p>All the proposals in the Statement of Milestone pilot.</p>
-    <paginated-table
-      classStyle="proposals-list"
-      :headers="['ID', 'Title', 'Challenge', 'Budget']"
-      :items="proposals"
-      :getItems="getProposals"
-      :getCount="getCount"
-      :itemComponent="ProposalRow"
-    >
-    </paginated-table>
-  </div>
+  <section class="section">
+    <div class="content">
+      <h1 class="is-size-1">Proposals</h1>
+      <p>All the proposals in the Statement of Milestone pilot.</p>
+      <paginated-table
+        classStyle="proposals-list"
+        :headers="['ID', 'Title', 'Challenge', 'Budget']"
+        :items="proposals"
+        :getItems="getProposals"
+        :getCount="getCount"
+        :itemComponent="ProposalRow"
+      >
+      </paginated-table>
+    </div>
+  </section>
 </template>
 
 <script setup>

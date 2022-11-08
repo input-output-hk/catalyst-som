@@ -1,27 +1,33 @@
 <template>
-  <div class="content columns is-multiline">
-    <div class="column is-6">
-      <h1 class="title is-size-1">{{proposal.title}}</h1>
-      <p>
-        <router-link
-          v-if="proposal.project_id"
-          :to="{name: 'proposal', params: {id: proposal.project_id}}">
-          Go back to main proposal page.
-        </router-link>
-      </p>
-    </div>
-    <div class="column is-6">
-      <recap :proposal="proposal" />
-    </div>
-    <div class="column is-12 milestones-wrapper">
-      <o-tabs type="boxed">
-        <o-tab-item v-for="ml in [...Array(5).keys()]">
-          <template #header>
-            <span>Milestone {{ml + 1}}</span>
-          </template>
-          <milestone :proposal="proposal" :milestone="ml + 1" />
-        </o-tab-item>
-      </o-tabs>
+  <div>
+    <section class="section">
+      <div class="content columns is-multiline">
+        <div class="column is-6">
+          <h1 class="title is-size-1">{{proposal.title}}</h1>
+          <p>
+            <router-link
+              v-if="proposal.project_id"
+              :to="{name: 'proposal', params: {id: proposal.project_id}}">
+              Go back to main proposal page.
+            </router-link>
+          </p>
+        </div>
+        <div class="column is-6">
+          <recap :proposal="proposal" />
+        </div>
+      </div>
+    </section>
+    <div class="content columns is-multiline">
+      <div class="column is-12 milestones-wrapper">
+        <o-tabs type="boxed">
+          <o-tab-item v-for="ml in [...Array(5).keys()]">
+            <template #header>
+              <span>Milestone {{ml + 1}}</span>
+            </template>
+            <milestone :proposal="proposal" :milestone="ml + 1" />
+          </o-tab-item>
+        </o-tabs>
+      </div>
     </div>
   </div>
 </template>

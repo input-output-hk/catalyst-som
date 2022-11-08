@@ -1,19 +1,21 @@
 <template>
-  <div class="content">
-    <h3 class="subtitle">Proof of Achivement</h3>
-    <poa
-      :current="true"
-      :poa="currentPoa"
-      :som="som"
-      :proposal="proposal" />
-    <o-button
-      class="mt-6"
-      size="medium"
-      v-if="otherPoas.length > 0"
-      @click="othersVisible = !othersVisible">
-      {{(othersVisible) ? 'Hide archived PoAs' : 'Show archived PoAs'}}
-    </o-button>
-    <section class="section pr-0 pl-0" v-if="othersVisible">
+  <div class="content mb-0">
+    <section class="section has-background-white-ter">
+      <h3 class="subtitle">Proof of Achivement</h3>
+      <poa
+        :current="true"
+        :poa="currentPoa"
+        :som="som"
+        :proposal="proposal" />
+      <o-button
+        class="mt-6"
+        size="medium"
+        v-if="otherPoas.length > 0"
+        @click="othersVisible = !othersVisible">
+        {{(othersVisible) ? 'Hide archived PoAs' : 'Show archived PoAs'}}
+      </o-button>
+    </section>
+    <section class="section has-background-grey-light" v-if="othersVisible">
       <h3 class="subtitle">Archived Proof of Achivement</h3>
       <poa
         :current="false"

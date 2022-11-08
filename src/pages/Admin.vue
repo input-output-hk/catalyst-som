@@ -1,17 +1,19 @@
 <template>
-  <div class="content">
-    <h1 class="is-size-1">Admin</h1>
-    <p>Page for the administration of users.</p>
-    <paginated-table
-      classStyle="users-list"
-      :headers="['Email', 'Username', 'Role', 'Challenges', 'Proposals']"
-      :items="users"
-      :getItems="getUsers"
-      :getCount="getCount"
-      :itemComponent="UserItem"
-    >
-    </paginated-table>
-  </div>
+  <section class="section">
+    <div class="content">
+      <h1 class="is-size-1">Admin</h1>
+      <p>Page for the administration of users.</p>
+      <paginated-table
+        classStyle="users-list"
+        :headers="['Email', 'Username', 'Role', 'Challenges', 'Proposals']"
+        :items="users"
+        :getItems="getUsers"
+        :getCount="getCount"
+        :itemComponent="UserItem"
+      >
+      </paginated-table>
+    </div>
+  </section>
 </template>
 
 <script setup>

@@ -14,9 +14,7 @@ export default {
 <template>
   <div>
     <nav-bar />
-    <div class="container mt-6 mb-6">
-      <router-view></router-view>
-    </div>
+    <router-view></router-view>
     <footer class="footer mt-6 has-background-primary has-text-white has-text-weight-semibold">
       <div class="content has-text-centered">
         <p>Project Catalyst - Milestone module</p>

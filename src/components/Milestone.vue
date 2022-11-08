@@ -1,26 +1,28 @@
 <template>
-  <div class="content">
-    <div class="columns">
-      <div class="column is-8">
-        <h2 class="is-size-3 mb-2 mt-2">Statement of Milestone {{milestone}}</h2>
-        <p class="mb-5">Latest submission from proposers of the Statement of Milestone {{milestone}}.</p>
+  <div class="content mb-0">
+    <section class="section pt-0">
+      <div class="columns">
+        <div class="column is-8">
+          <h2 class="is-size-3 mb-2 mt-2">Statement of Milestone {{milestone}}</h2>
+          <p class="mb-5">Latest submission from proposers of the Statement of Milestone {{milestone}}.</p>
+        </div>
+        <div class="column is-4 has-text-right mt-4">
+          <o-button
+            size="medium"
+            variant="primary"
+            v-if="canWriteSom(proposal.id)"
+            @click="newVisible = !newVisible">
+            {{(newVisible) ? 'Hide submit new SoMs' : 'Submit new SoM'}}
+          </o-button>
+        </div>
       </div>
-      <div class="column is-4 has-text-right mt-4">
-        <o-button
-          size="medium"
-          variant="primary"
-          v-if="canWriteSom(proposal.id)"
-          @click="newVisible = !newVisible">
-          {{(newVisible) ? 'Hide submit new SoMs' : 'Submit new SoM'}}
-        </o-button>
-      </div>
-    </div>
+    </section>
     <som
       :milestone="milestone"
       :som="currentSom"
       :proposal="proposal"
       :current="true" />
-    <section class="section pr-0 pl-0 has-background-grey-lighter"
+    <section class="section has-background-grey-lighter"
       v-if="otherSoms.length > 0">
       <o-button
         size="medium"

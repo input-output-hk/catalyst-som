@@ -1,25 +1,27 @@
 <template>
-  <div class="tile is-4 is-parent">
-    <div class="tile is-child notification primary" v-if="som">
+  <div class="tile is-ml is-parent" v-if="som">
+    <div class="tile is-child notification">
       <h1 class="title is-size-1 mb-2">M {{milestone}}</h1>
       <approval-counters :approves="approves" :not-approves="notApproves" />
-      <p class="is-size-3 mb-2 has-text-weight-semibold">{{som.title}}</p>
+      <p class="is-size-4 mb-2 has-text-weight-semibold">{{som.title}}</p>
       <p class="is-size-6 mb-0">Milestone cost:</p>
-      <p class="is-size-3 mb-2 has-text-weight-semibold">{{$n(som.cost, 'currency')}}</p>
+      <p class="is-size-4 mb-2 has-text-weight-semibold">{{$n(som.cost, 'currency')}}</p>
       <p class="is-size-6 mb-0">Delivery on:</p>
-      <p class="is-size-3 has-text-weight-semibold">Month {{som.month}}</p>
-      <div class="mb-6" v-if="poa">
-        <p class="is-size-2 mb-0 has-text-weight-semibold">PoA:</p>
+      <p class="is-size-4 has-text-weight-semibold">Month {{som.month}}</p>
+      <div class="is-tile is-child notification is-info ml-0">
+        <p class="is-size-5 mb-4 has-text-weight-semibold">Payments schedule:</p>
+        <ul>
+          <li v-for="payment,idx in payments">
+            <span class="is-size-6 has-text-weight-semibold">{{$n(payment, 'currency')}} - Month {{parseInt(previousSomEnd) + idx + 1}}</span>
+          </li>
+        </ul>
+        <p class="is-size-7 mb-0" v-if="milestone > 1">Payments starts after previous milestone PoA approval.</p>
+        <p class="is-size-7 mb-0" v-if="milestone === 5">Last payment occurs after Project Closeout approval.</p>
+      </div>
+      <div v-if="poa">
+        <p class="is-size-3 mb-0 has-text-weight-semibold">PoA:</p>
         <approval-counters :approves="poaApproves" :not-approves="poaNotApproves" />
       </div>
-      <p class="is-size-4 mb-0 has-text-weight-semibold">Payments schedule:</p>
-      <ul>
-        <li v-for="payment,idx in payments">
-          <span class="is-size-5 has-text-weight-semibold">{{$n(payment, 'currency')}} - Month {{parseInt(previousSomEnd) + idx + 1}}</span>
-        </li>
-      </ul>
-      <p class="is-size-7 mb-0" v-if="milestone > 1">Payments starts after previous milestone PoA approval.</p>
-      <p class="is-size-7 mb-0" v-if="milestone === 5">Last payment occurs after Project Closeout approval.</p>
     </div>
   </div>
 </template>
@@ -109,3 +111,31 @@ const poaNotApproves = computed(() => {
 })
 
 </script>
+<style lang="scss" scoped>
+$primary: #133FF0;
+.is-ml:nth-child(1) {
+  & > .notification {
+    background: change-color($primary, $lightness: 96%);
+  }
+}
+.is-ml:nth-child(2) {
+  & > .notification {
+    background: change-color($primary, $lightness: 94%);
+  }
+}
+.is-ml:nth-child(3) {
+  & > .notification {
+    background: change-color($primary, $lightness: 92%);
+  }
+}
+.is-ml:nth-child(4) {
+  & > .notification {
+    background: change-color($primary, $lightness: 88%);
+  }
+}
+.is-ml:nth-child(5) {
+  & > .notification {
+    background: change-color($primary, $lightness: 82%);
+  }
+}
+</style>
