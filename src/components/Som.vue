@@ -80,9 +80,10 @@
             Open reviews for this Milestone
           </o-button>
           <o-modal :active="reviewsVisible" scroll="keep">
-            <div class="modal-card scrollable-modal">
+            <div class="container scrollable-modal">
               <div class="reviews" v-for="review in som.som_reviews">
                 <som-review
+                  class="mb-6"
                   :review="review"
                   :properties="['outputs', 'success_criteria', 'evidence']" />
               </div>
