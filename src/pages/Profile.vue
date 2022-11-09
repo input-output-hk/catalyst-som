@@ -2,23 +2,23 @@
   <section class="section">
     <div class="content">
       <h1 class="is-size-1">User Profile</h1>
-      <div class="content">
-        <div class="box">
-          <div class="columns">
-            <div class="column is-3">Email:</div>
-            <div class="column is-9">{{ localUser.email }}</div>
-          </div>
-          <div class="columns">
-            <div class="column is-3">Username:</div>
-            <div class="column is-9">{{ getUserInfo.username }}</div>
-          </div>
-          <div class="columns">
-            <div class="column is-3">Role:</div>
-            <div class="column is-9">{{ role }}</div>
-          </div>
-          <div class="columns">
-            <div class="column is-3">Proposals (as Funded Proposer):</div>
-            <div class="column is-9">
+      <table class="table is-bordered is-striped">
+        <tbody class="som-recap">
+          <tr>
+            <th>Email</th>
+            <td>{{ localUser.email }}</td>
+          </tr>
+          <tr>
+            <th>Username</th>
+            <td>{{ localUser.username }}</td>
+          </tr>
+          <tr>
+            <th>Role</th>
+            <td>{{ role }}</td>
+          </tr>
+          <tr>
+            <th>Proposals (as Funded Proposer):</th>
+            <td>
               <ul>
                 <li v-for="proposal in proposals">
                   <router-link class="navbar-item" :to="{
@@ -27,20 +27,20 @@
                     }">{{proposal.title}}</router-link>
                 </li>
               </ul>
-            </div>
-          </div>
-          <div class="columns">
-            <div class="column is-3">Challenges (as Challenge Team):</div>
-            <div class="column is-9">
+            </td>
+          </tr>
+          <tr>
+            <th>Challenges (as Challenge Team):</th>
+            <td>
               <ul>
                 <li v-for="challenge in challenges">
                   {{challenge.title}}
                 </li>
               </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </section>
 </template>
