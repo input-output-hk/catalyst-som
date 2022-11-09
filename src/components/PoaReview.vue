@@ -6,7 +6,7 @@
     <tr>
       <td>
         <span class="is-size-5 has-text-weight-semibold">{{ (review.content_approved) ? 'Approved' : 'Not Approved' }}</span>
-        <div v-html="review.content_comment" />
+        <div v-html="$sanitize(review.content_comment)" />
       </td>
     </tr>
     <tr>

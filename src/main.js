@@ -15,6 +15,8 @@ import './assets/sass/main.scss'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
+import Vue3Sanitize from "vue-3-sanitize";
+
 const store = createPinia()
 store.use(piniaPluginPersistedstate)
 const router = createRouter(createWebHistory())
@@ -48,10 +50,16 @@ const i18n = createI18n({
   }
 })
 
+const sanitizeOptions = {
+    allowedTags: ['ul', 'li', 'a', 'ol', 'h1', 'h2', 'h3', 'strong', 'b', 'u', 'i'],
+    allowedSchemes: ['http', 'https', 'mailto'],
+}
+
 app.component('QuillEditor', QuillEditor)
 
 app.use(Oruga, bulmaConfig)
   .use(router)
   .use(store)
   .use(i18n)
+  .use(Vue3Sanitize, sanitizeOptions)
   .mount('#app')

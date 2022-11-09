@@ -15,7 +15,7 @@
           </tr>
           <tr>
             <th>Milestone Outputs</th>
-            <td v-html="som.outputs"></td>
+            <td v-html="$sanitize(som.outputs)"></td>
             <td>
               <som-reviews
                 v-if="som.som_reviews.length > 0"
@@ -24,7 +24,7 @@
           </tr>
           <tr>
             <th>Acceptance criteria</th>
-            <td v-html="som.success_criteria"></td>
+            <td v-html="$sanitize(som.success_criteria)"></td>
             <td>
               <som-reviews
                 v-if="som.som_reviews.length > 0"
@@ -33,7 +33,7 @@
           </tr>
           <tr>
             <th>Milestone Evidence</th>
-            <td v-html="som.evidence"></td>
+            <td v-html="$sanitize(som.evidence)"></td>
             <td>
               <som-reviews
                 v-if="som.som_reviews.length > 0"

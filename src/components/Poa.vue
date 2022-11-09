@@ -5,7 +5,7 @@
         <tr>
           <th>PoA</th>
           <td>
-            <div v-html="poa.content"></div>
+            <div v-html="$sanitize(poa.content)"></div>
           </td>
         </tr>
         <tr>

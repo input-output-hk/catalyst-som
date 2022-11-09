@@ -6,7 +6,7 @@
     <tr v-for="property in properties">
       <td>
         <span class="is-size-5 has-text-weight-semibold">{{ (review[`${property}_approves`]) ? 'Approved' : 'Not Approved' }}</span>
-        <div v-html="review[`${property}_comment`]" />
+        <div v-html="$sanitize(review[`${property}_comment`])" />
       </td>
     </tr>
     <tr>
