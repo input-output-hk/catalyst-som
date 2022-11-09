@@ -7,10 +7,12 @@
         </h4>
         <o-button class="mt-2 mr-4" variant="primary" size="small" @click="clone">Clone latest</o-button>
       </header>
-      <Form class="card-content scrollable-modal" :validation-schema="somSchema">
-        <o-field label="Title">
-          <o-input v-model="title" type="text"></o-input>
-        </o-field>
+      <Form @submit="handleCreateSom" class="card-content scrollable-modal" :validation-schema="somSchema">
+        <Field name="title" v-slot="{ field, errors, meta }">
+          <o-field label="Title" :variant="errors[0] ? 'danger' : ''" :message="errors[0] ? errors[0] : ''">
+            <o-input v-model="title" type="text" v-bind="field"></o-input>
+          </o-field>
+        </Field>
         <div class="mb-2 has-text-weight-semibold">Outputs:</div>
         <QuillEditor
           class="mb-4"
@@ -26,20 +28,19 @@
           class="mb-4"
           ref="evidenceEditor"
           theme="snow" v-model:content="evidence" content-type="html" />
-        <o-field label="Month">
-          <o-select placeholder="Select a month" v-model="month">
-            <option :value="m + 1"
-              v-for="m in [...Array(24).keys()]">
-              Month {{m + 1}}
-            </option>
-          </o-select>
-        </o-field>
+
+        <Field name="month" v-slot="{ field, errors, meta }">
+          <o-field label="Month" :variant="errors[0] ? 'danger' : ''" :message="errors[0] ? errors[0] : ''">
+            <o-select placeholder="Select a month" v-model="month" v-bind="field">
+              <option :value="m + 1"
+                v-for="m in [...Array(24).keys()]">
+                Month {{m + 1}}
+              </option>
+            </o-select>
+          </o-field>
+        </Field>
         <Field name="cost" v-slot="{ field, errors, meta }">
-          <o-field
-            label="Cost"
-            :variant="errors[0] ? 'danger' : ''"
-            :message="errors[0] ? errors[0] : ''"
-          >
+          <o-field label="Cost" :variant="errors[0] ? 'danger' : ''" :message="errors[0] ? errors[0] : ''">
             <o-input v-model="cost" type="number" v-bind="field"></o-input>
           </o-field>
         </Field>
@@ -51,14 +52,11 @@
           </o-slider>
         </o-field>
         <div class="buttons">
-          <o-button
+          <button class="button is-primary is-medium mt-6"
             variant="primary"
-            size="medium"
-            class="mt-6"
-            @click="handleCreateSom"
-            type="submit">
+            size="medium">
               Submit SoM
-          </o-button>
+          </button>
           <o-button
             size="medium"
             class="mt-6"
@@ -142,7 +140,14 @@ const costRule = computed(() => {
   return rule
 })
 
+const monthRule = computed(() => {
+  const rule = yup.number().required()
+  return rule.min(1)
+});
+
 const somSchema = yup.object({
+  title: yup.string().required(),
+  month: monthRule.value,
   cost: costRule.value
 });
 </script>
