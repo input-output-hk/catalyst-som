@@ -113,7 +113,7 @@
               Submit review for this SoM
             </o-button>
           </div>
-          <div class="mr-4" v-if="current && canWriteSom(proposal.id) && !poaLocked">
+          <div class="mr-4" v-if="current && canWriteSom(proposal.id) && locked && !poaLocked">
             <o-button
               variant="primary"
               size="medium"
