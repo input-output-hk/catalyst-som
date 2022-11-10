@@ -70,6 +70,13 @@
             </td>
             <td></td>
           </tr>
+          <tr v-if="locked">
+            <th>Signed off at:</th>
+            <td>
+              {{$d(som.signoffs[0].created_at, 'long')}}
+            </td>
+            <td></td>
+          </tr>
         </tbody>
       </table>
     </section>
@@ -106,7 +113,7 @@
               Submit review for this SoM
             </o-button>
           </div>
-          <div class="mr-4" v-if="current && canWriteSom(proposal.id)">
+          <div class="mr-4" v-if="current && canWriteSom(proposal.id) && !poaLocked">
             <o-button
               variant="primary"
               size="medium"
@@ -169,6 +176,13 @@ const somCost = computed(() => {
 
 const locked = computed(() => {
   return props.som.signoffs.length
+})
+
+const poaLocked = computed(() => {
+  if (props.som.poas.length > 0) {
+    return (props.som.poas[0].signoffs.length > 0)
+  }
+  return false
 })
 
 watch(()=>bus.value.get('getSomsBus'), (val) => {
