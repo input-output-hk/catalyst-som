@@ -29,7 +29,7 @@ const { createPoa } = usePoas()
 const content = ref('')
 
 const handleCreatePoa = async () => {
-  const response =  await createPoa({
+  const response = await createPoa({
     content: content.value,
     proposal_id: props.proposal.id,
     challenge_id: props.proposal.challenge_id,

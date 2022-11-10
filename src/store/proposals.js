@@ -68,5 +68,35 @@ export const useProposals = defineStore('proposals-store', {
         errorNotification('Error fetching proposals.')
       }
     },
+    async getProposalsForExport() {
+      try {
+        const { data, error } = await supabase
+          .rpc('getmilestones')
+        if (error) {
+          throw(error)
+        }
+        return data
+      } catch(error) {
+        errorNotification('Error fetching proposals.')
+      }
+    },
+    async getSomsById(ids) {
+      try {
+        const { data, error } = await supabase
+          .from('soms')
+          .select('id, month, cost, completion, som_reviews(outputs_approves, success_criteria_approves, evidence_approves), poas(poas_reviews(content_approved))')
+          .in('id', ids)
+          .order('created_at', { ascending: false })
+          .order('created_at', { foreignTable: 'poas', ascending: false })
+          .order('created_at', { foreignTable: 'som_reviews', ascending: false })
+          .limit(1, {foreignTable: 'poas'})
+        if (error) {
+          throw(error)
+        }
+        return data
+      } catch(error) {
+        errorNotification('Error fetching proposals.')
+      }
+    }
   }
 })
