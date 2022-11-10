@@ -53,7 +53,7 @@ export const useUser = defineStore('user-store', {
             !state.userInfo.proposals_users.map((el) => el.proposal_id)
               .includes(proposal_id) &&
             (state.userInfo.challenges_users.map((el) => el.challenge_id)
-              .includes(challenge_id) || (state.userInfo.role === 2))
+              .includes(challenge_id) || [2,4].includes(state.userInfo.role))
           return ret
         } catch {
           return false
@@ -61,7 +61,10 @@ export const useUser = defineStore('user-store', {
       }
     },
     isAdmin(state) {
-      return state.userInfo.role === 3
+      return [3].includes(state.userInfo.role)
+    },
+    canSignoff(state) {
+      return [3,4].includes(state.userInfo.role)
     }
   },
 

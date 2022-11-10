@@ -98,7 +98,7 @@
       <section class="section" v-if="current">
         <!--<h3 class="subtitle">SoM Actions</h3>-->
         <div class="block buttons">
-          <div class="mr-4" v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current">
+          <div class="mr-4" v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current && !locked">
             <o-button
               variant="primary"
               size="medium"
@@ -106,7 +106,7 @@
               Submit review for this SoM
             </o-button>
           </div>
-          <div v-if="current && canWriteSom(proposal.id)">
+          <div class="mr-4" v-if="current && canWriteSom(proposal.id)">
             <o-button
               variant="primary"
               size="medium"
@@ -115,6 +115,17 @@
             </o-button>
             <o-modal v-model:active="newPoAVisible">
               <new-poa :proposal="proposal" :som="som" />
+            </o-modal>
+          </div>
+          <div v-if="current && canSignoff && !locked">
+            <o-button
+              variant="primary"
+              size="medium"
+              @click="confirmSignoff = !confirmSignoff">
+              Signoff
+            </o-button>
+            <o-modal v-model:active="confirmSignoff">
+              <new-signoff :som="som" @clear-signoff="confirmSignoff = false" />
             </o-modal>
           </div>
         </div>
@@ -142,7 +153,7 @@
 import { ref, onMounted, watch, computed } from 'vue'
 const props = defineProps(['som', 'proposal', 'current'])
 import { useUser } from '../store/user.js'
-const { canWriteSom, canWriteSomReview } = useUser()
+const { canWriteSom, canWriteSomReview, canSignoff } = useUser()
 
 import useEventsBus from '../eventBus'
 const { bus } = useEventsBus()
@@ -150,9 +161,14 @@ const { bus } = useEventsBus()
 const reviewsVisible = ref(false)
 const newReviewVisible = ref(false)
 const newPoAVisible = ref(false)
+const confirmSignoff = ref(false)
 
 const somCost = computed(() => {
   return (props.som.cost * 100) / props.proposal.budget
+})
+
+const locked = computed(() => {
+  return props.som.signoffs.length
 })
 
 watch(()=>bus.value.get('getSomsBus'), (val) => {
@@ -168,6 +184,7 @@ import SomReviews from '../components/SomReviews.vue'
 import NewSomReview from '../components/NewSomReview.vue'
 import NewPoa from '../components/NewPoa.vue'
 import Poas from '../components/Poas.vue'
+import NewSignoff from '../components/NewSignoff.vue'
 
 export default {
   components: {
@@ -175,7 +192,8 @@ export default {
     SomReviews,
     NewSomReview,
     NewPoa,
-    Poas
+    Poas,
+    NewSignoff
   },
   computed: {
   }

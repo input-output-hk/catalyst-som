@@ -6,11 +6,11 @@
           <h2 class="is-size-3 mb-2 mt-2">Statement of Milestone {{milestone}}</h2>
           <p class="mb-5">Latest submission from proposers of the Statement of Milestone {{milestone}}.</p>
         </div>
-        <div class="column is-4 has-text-right mt-4">
+        <div class="column is-4 has-text-right mt-4" v-if="currentSom">
           <o-button
             size="medium"
             variant="primary"
-            v-if="canWriteSom(proposal.id)"
+            v-if="canWriteSom(proposal.id) && currentSom.signoffs.length === 0"
             @click="newVisible = !newVisible">
             {{(newVisible) ? 'Hide submit new SoMs' : 'Submit new SoM'}}
           </o-button>
