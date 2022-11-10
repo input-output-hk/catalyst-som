@@ -31,7 +31,7 @@
         <th>Completion date</th>
         <td>
           <span v-if="proposal.completion_date">
-            {{ $d(proposal.completion_date) }}
+            {{ $d(proposal.completion_date, 'short') }}
           </span>
         </td>
       </tr>

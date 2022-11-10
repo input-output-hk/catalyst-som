@@ -31,7 +31,7 @@ const props = defineProps({
   items: Object,
   size: {
     type: Number,
-    default: 3
+    default: 25
   },
   getItems: Function,
   getCount: Function,
