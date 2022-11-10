@@ -18,18 +18,16 @@ function onComplete(results) {
 }
 
 function downloadCsv(data) {
-  let date = new Date().toLocaleString().replace(',', '').replaceAll('/', '-').replaceAll(':', '-')
-  filename = date + '-milestone-export.csv'
-  let csv = papa.unparse(data, {
+  const date = new Date().toLocaleString().replace(',', '').replaceAll('/', '-').replaceAll(':', '-')
+  const filename = date + '-milestone-export.csv'
+  const csv = papa.unparse(data, {
     complete: onComplete,
     error: errorHandling,
-
     dynamicTyping: true,
     header: true,
     skipEmptyLines: true,
-    // preview: 0, //experiment with specifing how many columns to read in order to avoid issues
   })
-  var blob = new Blob([csv], { type: "text/plain;charset=utf-8" });
+  const blob = new Blob([csv], { type: "text/plain;charset=utf-8" });
   FileSaver.saveAs(blob, slugify(filename));
 }
 
