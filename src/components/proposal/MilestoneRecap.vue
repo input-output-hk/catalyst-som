@@ -54,7 +54,7 @@ const previousSomEnd = computed(() => {
 })
 
 const payments = computed(() => {
-  const times = som.value.month - previousSomEnd.value
+  const times = Math.max(1, som.value.month - previousSomEnd.value)
   const unit = som.value.cost / times
   return [...Array(times).keys()].map(() => unit)
 })
@@ -78,8 +78,8 @@ const poa = computed(() => {
 
 const boolKeys = ['outputs', 'success_criteria', 'evidence']
 const approves = computed(() => {
-  if (som.som_reviews) {
-    return som.som_reviews.filter((r) => {
+  if (som.value.som_reviews) {
+    return som.value.som_reviews.filter((r) => {
       let result = true
       boolKeys.forEach((el) => {
         result = result && r[`${el}_approves`]
@@ -90,8 +90,8 @@ const approves = computed(() => {
   return 0
 })
 const notApproves = computed(() => {
-  if (som.som_reviews) {
-    return som.som_reviews.length - approves.value
+  if (som.value.som_reviews) {
+    return som.value.som_reviews.length - approves.value
   }
   return 0
 })

@@ -171,7 +171,7 @@ const newPoAVisible = ref(false)
 const confirmSignoff = ref(false)
 
 const somCost = computed(() => {
-  return (props.som.cost * 100) / props.proposal.budget
+  return ((props.som.cost * 100) / props.proposal.budget).toFixed(2)
 })
 
 const locked = computed(() => {
