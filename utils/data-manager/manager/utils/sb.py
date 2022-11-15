@@ -32,3 +32,11 @@ class SB():
     def get_proposals(self):
         results = self.client.table("proposals").select("*").execute()
         return [AttrDict(el) for el in results.data]
+
+    def get_soms(self):
+        results = self.client.table("soms").select("*").execute()
+        return [AttrDict(el) for el in results.data]
+
+    def push_som_reviews(self, som_reviews):
+        results = self.client.table("som_reviews").insert(som_reviews).execute()
+        return results.data

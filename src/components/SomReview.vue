@@ -22,6 +22,11 @@ import { computed } from 'vue'
 import { roles } from '@/utils/roles.js'
 const props = defineProps(['review', 'properties'])
 
-const role = computed(() => roles[props.review.users.role])
+const role = computed(() => {
+  if (props.review.users) {
+    return roles[props.review.users.role]
+  }
+  return 'System'
+})
 
 </script>
