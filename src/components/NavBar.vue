@@ -27,28 +27,13 @@
 </template>
 
 <script setup>
+import { storeToRefs } from 'pinia'
 import { useUser } from '../store/user.js'
 import { useRouter } from 'vue-router'
 import logoUrl from '@/assets/images/catalyst-logo-white.svg'
-const { canWriteSom } = useUser()
-</script>
-
-<script>
-import { computed } from 'vue'
-import { mapState, mapActions } from 'pinia'
-
-export default {
-  computed: {
-    ...mapState(useUser, {user: 'user', logged: 'logged', isAdmin: 'isAdmin'})
-  },
-
-  methods: {
-    ...mapActions(useUser, ['login', 'logout']),
-  },
-
-  created() {
-  }
-}
+const userStore = useUser()
+const { canWriteSom, login, logout } = userStore
+const { user, logged, isAdmin } = storeToRefs(userStore)
 </script>
 
 <style lang="scss" scoped>

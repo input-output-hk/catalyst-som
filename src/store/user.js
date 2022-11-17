@@ -134,10 +134,8 @@ export const useUser = defineStore('user-store', {
             .from('users')
             .select('*, challenges_users(*, challenges(id, title)), proposals_users(*, proposals(id, title, url, project_id))')
             .eq('user_id', this.localUser.id)
-          console.log(this.userInfo)
           this.userInfo = data[0]
         } catch(error) {
-          console.log(error)
           errorNotification('Error fetching user info.')
         }
       }
