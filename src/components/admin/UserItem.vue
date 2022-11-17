@@ -92,7 +92,6 @@ const userProposals = computed({
 })
 
 const filteredChallenges = ref([])
-// const userChallenges = ref(props.user.challenges_users)
 
 const getFilteredChallenges = (text) => {
   if (text.length) {
@@ -120,12 +119,5 @@ onMounted(() => {
 watch(challenges, () => {
   filteredChallenges.value = challenges.value
 })
-
-/*
-watch(props.user.challenges_users, () => {
-  console.log(props.user)
-  userChallenges.value = props.user.challenges_users
-})
-*/
 
 </script>

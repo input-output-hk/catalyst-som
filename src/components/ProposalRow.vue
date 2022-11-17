@@ -12,20 +12,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
 const props = defineProps(['item'])
-
-const v = ref(false)
-
-</script>
-
-<script>
-import { computed } from 'vue'
-
-export default {
-  computed: {
-  }
-}
 </script>
 
 <style lang="scss">

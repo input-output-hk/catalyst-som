@@ -5,10 +5,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue'
 import MilestoneRecap from '@/components/proposal/MilestoneRecap.vue'
 
 const props = defineProps(['proposal'])
-
 
 </script>

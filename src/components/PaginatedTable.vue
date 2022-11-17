@@ -55,5 +55,4 @@ onMounted(async () => {
   _getItems()
 })
 
-
 </script>

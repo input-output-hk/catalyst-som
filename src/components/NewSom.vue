@@ -151,12 +151,3 @@ const somSchema = yup.object({
   cost: costRule.value
 });
 </script>
-
-<script>
-import { computed } from 'vue'
-
-export default {
-  computed: {
-  }
-}
-</script>

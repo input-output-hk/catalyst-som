@@ -47,12 +47,3 @@ const signoff = async () => {
   }
 }
 </script>
-
-<script>
-import { computed } from 'vue'
-
-export default {
-  computed: {
-  }
-}
-</script>

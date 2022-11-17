@@ -104,12 +104,3 @@ const clearSomReview = () => {
 }
 
 </script>
-
-<script>
-import { computed } from 'vue'
-
-export default {
-  computed: {
-  }
-}
-</script>

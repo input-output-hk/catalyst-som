@@ -15,12 +15,3 @@
 import { ref, onMounted } from 'vue'
 const props = defineProps(['proposal'])
 </script>
-
-<script>
-import { computed } from 'vue'
-
-export default {
-  computed: {
-  }
-}
-</script>
