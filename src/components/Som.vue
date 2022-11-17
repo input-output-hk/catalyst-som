@@ -19,6 +19,7 @@
             <td>
               <som-reviews
                 v-if="som.som_reviews.length > 0"
+                :som="som"
                 :reviews="som.som_reviews" :property="'outputs'" />
             </td>
           </tr>
@@ -28,6 +29,7 @@
             <td>
               <som-reviews
                 v-if="som.som_reviews.length > 0"
+                :som="som"
                 :reviews="som.som_reviews" :property="'success_criteria'" />
             </td>
           </tr>
@@ -37,6 +39,7 @@
             <td>
               <som-reviews
                 v-if="som.som_reviews.length > 0"
+                :som="som"
                 :reviews="som.som_reviews" :property="'evidence'" />
             </td>
           </tr>
