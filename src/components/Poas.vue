@@ -4,13 +4,13 @@
       <h3 class="subtitle">Proof of Achivement</h3>
       <poa
         :current="true"
-        :poa="currentPoa"
+        :poa="renderedPoas.current"
         :som="som"
         :proposal="proposal" />
       <o-button
         class="mt-6"
         size="medium"
-        v-if="otherPoas.length > 0"
+        v-if="renderedPoas.others.length > 0"
         @click="othersVisible = !othersVisible">
         {{(othersVisible) ? 'Hide archived PoAs' : 'Show archived PoAs'}}
       </o-button>
@@ -22,7 +22,7 @@
         :poa="poa"
         :som="som"
         :proposal="proposal"
-        v-for="poa in otherPoas" />
+        v-for="poa in renderedPoas.others" />
     </section>
   </div>
 </template>
@@ -33,33 +33,20 @@ const props = defineProps(['poas', 'proposal', 'som'])
 
 const othersVisible = ref(false)
 
-const otherPoas = computed(() => {
+const renderedPoas = computed(() => {
+  let current = false
+  let others = []
   if (props.poas) {
-    const [, ...rest] = props.poas
-    return rest
+    [current, ...others] = props.poas
   }
-  return []
-})
-
-const currentPoa = computed(() => {
-  if (props.poas) {
-    return (props.poas.length > 0) ? props.poas[0] : false
+  return {
+    current,
+    others
   }
-  return false
 })
 
 </script>
 
 <script>
-import { computed } from 'vue'
-import { mapState } from 'pinia'
-import Poa from '../components/Poa.vue'
-
-export default {
-  components: {
-    Poa,
-  },
-  computed: {
-  }
-}
+import Poa from '@/components/Poa.vue'
 </script>
