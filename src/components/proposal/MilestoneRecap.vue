@@ -22,7 +22,9 @@
       </div>
       <div v-if="poa">
         <p class="is-size-3 mb-0 has-text-weight-semibold">PoA:</p>
-        <approval-counters :approves="poaApproves" :not-approves="poaNotApproves" />
+        <approval-counters
+          :approves="poaReviewsApproved"
+          :not-approves="poaReviewsNotApproved" />
       </div>
     </div>
   </div>
@@ -37,6 +39,7 @@ import { useSoms } from '@/store/soms.js'
 const { getSomsPreview, proposal_previews } = useSoms()
 
 import { useSomReviewsCounters } from '@/composables/useSomReviewsCounters.js'
+import { usePoaReviewsCounters } from '@/composables/usePoaReviewsCounters.js'
 
 const som = computed(() => {
   try {
@@ -46,7 +49,16 @@ const som = computed(() => {
   }
 })
 
+const poa = computed(() => {
+  try {
+    return som.value.poas[0]
+  } catch {
+    return false
+  }
+})
+
 const { somReviewsApproved, somReviewsNotApproved } = useSomReviewsCounters(som)
+const { poaReviewsApproved, poaReviewsNotApproved } = usePoaReviewsCounters(poa)
 
 watch(props, () => getSomsPreview(props.proposal.id, props.milestone))
 
@@ -73,30 +85,8 @@ const payments = computed(() => {
   return [...Array(times).keys()].map(() => unit)
 })
 
-
-const poa = computed(() => {
-  try {
-    return som.value.poas[0]
-  } catch {
-    return false
-  }
-})
-
-const poaApproves = computed(() => {
-  if (poa.value.poas_reviews) {
-    return poa.value.poas_reviews.filter((r) => r['content_approved']).length
-  }
-  return 0
-})
-
-const poaNotApproves = computed(() => {
-  if (poa.value.poas_reviews) {
-    return poa.value.poas_reviews.length - poaApproves.value
-  }
-  return 0
-})
-
 </script>
+
 <style lang="scss" scoped>
 $primary: #133FF0;
 .is-ml:nth-child(1) {

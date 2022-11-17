@@ -15,7 +15,7 @@
         <tr v-if="poa.poas_reviews.length > 0">
           <th>PoA reviews</th>
           <td>
-            <poa-reviews :reviews="poa.poas_reviews" />
+            <poa-reviews :poa="poa" :reviews="poa.poas_reviews" />
           </td>
         </tr>
         <tr v-if="locked">
