@@ -64,7 +64,7 @@
 import { ref, onMounted } from 'vue'
 const props = defineProps(['som'])
 const emit = defineEmits(['somReviewSubmitted'])
-import { useSomReviews } from '../store/somReviews.js'
+import { useSomReviews } from '@/store/somReviews.js'
 const { createSomReview } = useSomReviews()
 
 const outputsEditor = ref()

@@ -30,7 +30,7 @@
 import { ref, onMounted } from 'vue'
 const props = defineProps(['som', 'poa'])
 const emit = defineEmits(['clearSignoff'])
-import { useSignoffs } from '../store/signoffs.js'
+import { useSignoffs } from '@/store/signoffs.js'
 const { createSignoff } = useSignoffs()
 
 

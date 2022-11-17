@@ -76,7 +76,7 @@ import { Field, Form, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 const props = defineProps(['proposal', 'milestone', 'som'])
 const emit = defineEmits(['somSubmitted'])
-import { useSoms } from '../store/soms.js'
+import { useSoms } from '@/store/soms.js'
 const { createSom } = useSoms()
 
 const outputsEditor = ref()

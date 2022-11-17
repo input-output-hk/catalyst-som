@@ -28,7 +28,7 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
-import { useUser } from '../store/user.js'
+import { useUser } from '@/store/user.js'
 import { useRouter } from 'vue-router'
 import logoUrl from '@/assets/images/catalyst-logo-white.svg'
 const userStore = useUser()

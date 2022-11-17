@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import { supabase } from '../utils/supabase'
-import { getPagination } from '../utils/pagination'
-import { errorNotification, successNotification } from '../utils/notifications'
+import { supabase } from '@/utils/supabase'
+import { getPagination } from '@/utils/pagination'
+import { errorNotification, successNotification } from '@/utils/notifications'
 
 export const useUsers = defineStore('users-store', {
   state: () => {

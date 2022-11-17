@@ -31,7 +31,7 @@
 import { ref, onMounted } from 'vue'
 const props = defineProps(['poa', 'som'])
 const emit = defineEmits(['poaReviewSubmitted'])
-import { usePoaReviews } from '../store/poaReviews.js'
+import { usePoaReviews } from '@/store/poaReviews.js'
 const { createPoaReview } = usePoaReviews()
 
 const contentEditor = ref()

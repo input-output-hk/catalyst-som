@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed } from 'vue'
 const props = defineProps(['poas', 'proposal', 'som'])
 
 const othersVisible = ref(false)

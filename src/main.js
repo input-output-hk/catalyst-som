@@ -5,12 +5,11 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { createI18n } from 'vue-i18n'
 import Oruga from '@oruga-ui/oruga-next'
 
-import createRouter from './router/routes.js'
-import App from './App.vue'
+import createRouter from '@/router/routes.js'
+import App from '@/App.vue'
 
 import { bulmaConfig } from '@oruga-ui/theme-bulma'
-import './assets/sass/main.scss'
-// import '@oruga-ui/theme-bulma/dist/bulma.css'
+import '@/assets/sass/main.scss'
 
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'

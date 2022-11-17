@@ -53,13 +53,13 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
-import { useSoms } from '../store/soms.js'
+import { useSoms } from '@/store/soms.js'
 const { getSoms, proposals } = useSoms()
-import { useUser } from '../store/user.js'
+import { useUser } from '@/store/user.js'
 const { canWriteSom } = useUser()
 const props = defineProps(['proposal', 'milestone'])
 import { computedAsync } from '@vueuse/core'
-import useEventsBus from '../eventBus'
+import useEventsBus from '@/eventBus'
 const { bus } = useEventsBus()
 
 const othersVisible = ref(false)

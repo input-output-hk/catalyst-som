@@ -60,7 +60,7 @@
 import { ref, computed } from 'vue'
 import PoaReviews from '@/components/PoaReviews.vue'
 import NewPoaReview from '@/components/NewPoaReview.vue'
-import NewSignoff from '../components/NewSignoff.vue'
+import NewSignoff from '@/components/NewSignoff.vue'
 const props = defineProps(['poa', 'proposal', 'current', 'som'])
 import { useUser } from '@/store/user.js'
 const { canWriteSom, canWriteSomReview, canSignoff } = useUser()

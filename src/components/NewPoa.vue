@@ -23,7 +23,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 const props = defineProps(['proposal', 'som', 'milestone'])
-import { usePoas } from '../store/poas.js'
+import { usePoas } from '@/store/poas.js'
 const { createPoa } = usePoas()
 
 const content = ref('')

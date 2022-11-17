@@ -1,16 +1,3 @@
-<script>
-
-import NavBar from './components/NavBar.vue'
-
-export default {
-  name: 'App',
-  components: {
-    NavBar
-  }
-}
-
-</script>
-
 <template>
   <div>
     <nav-bar />
@@ -22,6 +9,10 @@ export default {
     </footer>
   </div>
 </template>
+
+<script setup>
+import NavBar from '@/components/NavBar.vue'
+</script>
 
 <style lang="scss">
 .scrollable-modal {

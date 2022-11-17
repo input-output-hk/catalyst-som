@@ -41,17 +41,17 @@ import { ref, onMounted, watch, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 const props = defineProps(['item'])
 
-import { useChallenges } from '../../store/challenges.js'
+import { useChallenges } from '@/store/challenges.js'
 const challengesStore = useChallenges()
 const { getChallenges } = challengesStore
 const { challenges } = storeToRefs(challengesStore)
 
-import { useProposals } from '../../store/proposals.js'
+import { useProposals } from '@/store/proposals.js'
 const proposalsStore = useProposals()
 const { getProposalsByTitle } = proposalsStore
 const { proposals } = storeToRefs(proposalsStore)
 
-import { useUsers } from '../../store/users.js'
+import { useUsers } from '@/store/users.js'
 const { updateUserChallenges, updateUserProposals, updateRole } = useUsers()
 
 import { roles } from '@/utils/roles'
