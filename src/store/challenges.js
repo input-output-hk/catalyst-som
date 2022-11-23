@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { supabase } from '@/utils/supabase'
-import { errorNotification, successNotification } from '../utils/notifications'
+import { errorNotification, successNotification } from '@/utils/notifications'
 
 export const useChallenges = defineStore('challenges-store', {
   state: () => {

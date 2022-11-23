@@ -20,7 +20,7 @@
 
 <script setup>
   import { ref, onMounted } from 'vue'
-  import { useUser } from '../store/user.js'
+  import { useUser } from '@/store/user.js'
   const { updatePassword } = useUser()
 
   const resetActive = ref(false)

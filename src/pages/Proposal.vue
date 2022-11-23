@@ -36,7 +36,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router';
-import { useProposals } from '../store/proposals.js'
+import { useProposals } from '@/store/proposals.js'
 const { getProposal } = useProposals()
 
 const proposal = ref({})
@@ -51,8 +51,6 @@ onMounted(async () => {
 </script>
 
 <script>
-import { computed } from 'vue'
 import Recap from '@/components/proposal/Recap.vue'
 import MilestonesRecap from '@/components/MilestonesRecap.vue'
-
 </script>

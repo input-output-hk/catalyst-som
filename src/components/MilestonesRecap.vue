@@ -6,7 +6,5 @@
 
 <script setup>
 import MilestoneRecap from '@/components/proposal/MilestoneRecap.vue'
-
 const props = defineProps(['proposal'])
-
 </script>

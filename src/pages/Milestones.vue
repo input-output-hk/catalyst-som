@@ -50,15 +50,8 @@ onMounted(async () => {
 </script>
 
 <script>
-import { computed } from 'vue'
-import Milestone from '../components/Milestone.vue'
-import Recap from '../components/proposal/Recap.vue'
-
-export default {
-  components: {
-    Milestone
-  }
-}
+import Milestone from '@/components/Milestone.vue'
+import Recap from '@/components/proposal/Recap.vue'
 </script>
 
 <style lang="scss">

@@ -46,8 +46,8 @@
 </template>
 
 <script setup>
-  import { ref, onMounted, computed } from 'vue'
-  import { useUser } from '../store/user.js'
+  import { ref, computed } from 'vue'
+  import { useUser } from '@/store/user.js'
   import { roles } from '@/utils/roles.js'
   const { getUserInfo, localUser } = useUser()
 
