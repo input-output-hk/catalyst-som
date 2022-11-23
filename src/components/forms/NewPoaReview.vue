@@ -46,13 +46,12 @@ const handleCreatePoaReview = async () => {
     poas_id: props.poa.id
   }, props.som)
   if (response) {
-    content_approved.value = ''
-    content_comment.value = ''
+    clearForm()
     emit('poaReviewSubmitted')
   }
 }
 
-const clearPoaReview = () => {
+const clearForm = () => {
   contentEditor.value.setHTML('')
   content_approved.value = false
 }

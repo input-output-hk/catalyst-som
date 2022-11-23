@@ -60,7 +60,7 @@
           <o-button
             size="medium"
             class="mt-6"
-            @click="clearSom"
+            @click="clearForm"
             type="submit">
               Clear SoM
           </o-button>
@@ -116,12 +116,12 @@ const handleCreateSom = async () => {
     milestone: props.milestone
   })
   if (response) {
-    clearSom()
+    clearForm()
     emit('somSubmitted')
   }
 }
 
-const clearSom = () => {
+const clearForm = () => {
   outputsEditor.value.setHTML('')
   successCriteriaEditor.value.setHTML('')
   evidenceEditor.value.setHTML('')
@@ -130,6 +130,8 @@ const clearSom = () => {
   completion.value = 10
   cost.value = 0
 }
+
+// Form validation rules
 
 const costRule = computed(() => {
   const rule = yup.number().required().min(1)

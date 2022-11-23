@@ -197,10 +197,10 @@ watch(()=>bus.value.get('getSomsBus'), (val) => {
 <script>
 import SomReview from '@/components/SomReview.vue'
 import SomReviews from '@/components/SomReviews.vue'
-import NewSomReview from '@/components/NewSomReview.vue'
-import NewPoa from '@/components/NewPoa.vue'
+import NewSomReview from '@/components/forms/NewSomReview.vue'
+import NewPoa from '@/components/forms/NewPoa.vue'
 import Poas from '@/components/Poas.vue'
-import NewSignoff from '@/components/NewSignoff.vue'
+import NewSignoff from '@/components/forms/NewSignoff.vue'
 </script>
 
 <style lang="scss" scoped>

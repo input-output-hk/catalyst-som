@@ -52,7 +52,7 @@
         </o-button>
         <o-button
           size="medium"
-          @click="clearSomReview">
+          @click="clearForm">
             Clear SoM Review
         </o-button>
       </div>
@@ -89,12 +89,12 @@ const handleCreateSomReview = async () => {
     som_id: props.som.id
   }, props.som)
   if (response) {
-    clearSomReview()
+    clearForm()
     emit('somReviewSubmitted')
   }
 }
 
-const clearSomReview = () => {
+const clearForm = () => {
   outputsEditor.value.setHTML('')
   successCriteriaEditor.value.setHTML('')
   evidenceEditor.value.setHTML('')

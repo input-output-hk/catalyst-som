@@ -9,6 +9,7 @@
       <div class="card-content">
         <QuillEditor
           class="mb-4"
+          ref="contentEditor"
           theme="snow" v-model:content="content" content-type="html" />
         <o-button
           @click="handleCreatePoa"
@@ -26,6 +27,7 @@ const props = defineProps(['proposal', 'som', 'milestone'])
 import { usePoas } from '@/store/poas.js'
 const { createPoa } = usePoas()
 
+const contentEditor = ref()
 const content = ref('')
 
 const handleCreatePoa = async () => {
@@ -36,7 +38,11 @@ const handleCreatePoa = async () => {
     som_id: props.som.id,
   }, props.som)
   if (response) {
-    content.value = ''
+    clearForm()
   }
+}
+
+const clearForm = () => {
+  contentEditor.value.setHTML('')
 }
 </script>

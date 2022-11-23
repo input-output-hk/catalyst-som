@@ -106,5 +106,5 @@ watch(props, () => getSoms(props.proposal.id, props.milestone, 5))
 
 <script>
 import Som from '@/components/Som.vue'
-import NewSom from '@/components/NewSom.vue'
+import NewSom from '@/components/forms/NewSom.vue'
 </script>
