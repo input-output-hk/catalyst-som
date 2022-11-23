@@ -10,28 +10,28 @@
       <Form @submit="handleCreateSom" class="card-content scrollable-modal" :validation-schema="somSchema">
         <Field name="title" v-slot="{ field, errors, meta }">
           <o-field label="Title" :variant="errors[0] ? 'danger' : ''" :message="errors[0] ? errors[0] : ''">
-            <o-input v-model="title" type="text" v-bind="field"></o-input>
+            <o-input v-model="form.title" type="text" v-bind="field"></o-input>
           </o-field>
         </Field>
         <div class="mb-2 has-text-weight-semibold">Outputs:</div>
         <QuillEditor
           class="mb-4"
           ref="outputsEditor"
-          theme="snow" v-model:content="outputs" content-type="html" />
+          theme="snow" v-model:content="form.outputs" content-type="html" />
         <div class="mb-2 has-text-weight-semibold">Acceptance criteria:</div>
         <QuillEditor
           class="mb-4"
           ref="successCriteriaEditor"
-          theme="snow" v-model:content="success_criteria" content-type="html" />
+          theme="snow" v-model:content="form.success_criteria" content-type="html" />
         <div class="mb-2 has-text-weight-semibold">Evidence:</div>
         <QuillEditor
           class="mb-4"
           ref="evidenceEditor"
-          theme="snow" v-model:content="evidence" content-type="html" />
+          theme="snow" v-model:content="form.evidence" content-type="html" />
 
         <Field name="month" v-slot="{ field, errors, meta }">
           <o-field label="Month" :variant="errors[0] ? 'danger' : ''" :message="errors[0] ? errors[0] : ''">
-            <o-select placeholder="Select a month" v-model="month" v-bind="field">
+            <o-select placeholder="Select a month" v-model="form.month" v-bind="field">
               <option :value="m + 1"
                 v-for="m in [...Array(24).keys()]">
                 Month {{m + 1}}
@@ -41,11 +41,11 @@
         </Field>
         <Field name="cost" v-slot="{ field, errors, meta }">
           <o-field label="Cost" :variant="errors[0] ? 'danger' : ''" :message="errors[0] ? errors[0] : ''">
-            <o-input v-model="cost" type="number" v-bind="field"></o-input>
+            <o-input v-model="form.cost" type="number" v-bind="field"></o-input>
           </o-field>
         </Field>
         <o-field label="% progress">
-          <o-slider size="medium" :min="0" :max="100" v-model="completion">
+          <o-slider size="medium" :min="0" :max="100" v-model="form.completion">
             <template v-for="val in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]" :key="val">
               <o-slider-tick :value="val">{{ val }}</o-slider-tick>
             </template>
@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, reactive, computed } from 'vue'
 import { Field, Form, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 const props = defineProps(['proposal', 'milestone', 'som'])
@@ -83,35 +83,33 @@ const outputsEditor = ref()
 const successCriteriaEditor = ref()
 const evidenceEditor = ref()
 
-const title = ref('')
-const outputs = ref('')
-const success_criteria = ref('')
-const evidence = ref('')
-const cost = ref(0)
-const month = ref(1)
-const completion = ref(10)
+const initialForm = {
+  title: '',
+  outputs: '',
+  success_criteria: '',
+  evidence: '',
+  cost: 0,
+  month: 1,
+  completion: 10
+}
+
+const form = reactive({...initialForm})
 
 const clone = () => {
   if (props.som) {
     outputsEditor.value.setHTML(props.som.outputs)
     successCriteriaEditor.value.setHTML(props.som.success_criteria)
     evidenceEditor.value.setHTML(props.som.evidence)
-    title.value = props.som.title
-    month.value = props.som.month
-    completion.value = props.som.completion
-    cost.value = props.som.cost
+    form.title = props.som.title
+    form.month = props.som.month
+    form.completion = props.som.completion
+    form.cost = props.som.cost
   }
 }
 
 const handleCreateSom = async () => {
   const response =  await createSom({
-    title: title.value,
-    outputs: outputs.value,
-    success_criteria: success_criteria.value,
-    evidence: evidence.value,
-    month: month.value,
-    completion: completion.value,
-    cost: cost.value,
+    ...form,
     proposal_id: props.proposal.id,
     milestone: props.milestone
   })
@@ -122,13 +120,10 @@ const handleCreateSom = async () => {
 }
 
 const clearForm = () => {
+  Object.assign(form, initialForm)
   outputsEditor.value.setHTML('')
   successCriteriaEditor.value.setHTML('')
   evidenceEditor.value.setHTML('')
-  title.value = ''
-  month.value = 1
-  completion.value = 10
-  cost.value = 0
 }
 
 // Form validation rules
