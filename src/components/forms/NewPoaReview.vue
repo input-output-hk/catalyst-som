@@ -31,6 +31,7 @@
 import { ref, reactive } from 'vue'
 const props = defineProps(['poa', 'som'])
 const emit = defineEmits(['poaReviewSubmitted'])
+import { useForm } from '@/composables/useForm.js'
 import { usePoaReviews } from '@/store/poaReviews.js'
 const { createPoaReview } = usePoaReviews()
 
@@ -41,7 +42,7 @@ const initialForm = {
   content_comment: ''
 }
 
-const form = reactive({...initialForm})
+const { form, _clearForm } = useForm(initialForm)
 
 const handleCreatePoaReview = async () => {
   const response =  await createPoaReview({
@@ -55,7 +56,7 @@ const handleCreatePoaReview = async () => {
 }
 
 const clearForm = () => {
-  Object.assign(form, initialForm)
+  _clearForm()
   contentEditor.value.setHTML('')
 }
 

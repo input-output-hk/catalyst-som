@@ -64,6 +64,7 @@
 import { ref, reactive } from 'vue'
 const props = defineProps(['som'])
 const emit = defineEmits(['somReviewSubmitted'])
+import { useForm } from '@/composables/useForm.js'
 import { useSomReviews } from '@/store/somReviews.js'
 const { createSomReview } = useSomReviews()
 
@@ -80,7 +81,7 @@ const initialForm = {
   evidence_comment: ''
 }
 
-const form = reactive({...initialForm})
+const { form, _clearForm } = useForm(initialForm)
 
 const handleCreateSomReview = async () => {
   const response =  await createSomReview({
@@ -94,7 +95,7 @@ const handleCreateSomReview = async () => {
 }
 
 const clearForm = () => {
-  Object.assign(form, initialForm)
+  _clearForm()
   outputsEditor.value.setHTML('')
   successCriteriaEditor.value.setHTML('')
   evidenceEditor.value.setHTML('')

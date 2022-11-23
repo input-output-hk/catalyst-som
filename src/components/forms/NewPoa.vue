@@ -22,8 +22,9 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 const props = defineProps(['proposal', 'som', 'milestone'])
+import { useForm } from '@/composables/useForm.js'
 import { usePoas } from '@/store/poas.js'
 const { createPoa } = usePoas()
 
@@ -33,7 +34,7 @@ const initialForm = {
   content: ''
 }
 
-const form = reactive({...initialForm})
+const { form, _clearForm } = useForm(initialForm)
 
 const handleCreatePoa = async () => {
   const response = await createPoa({
@@ -48,7 +49,7 @@ const handleCreatePoa = async () => {
 }
 
 const clearForm = () => {
-  Object.assign(form, initialForm)
+  _clearForm()
   contentEditor.value.setHTML('')
 }
 </script>

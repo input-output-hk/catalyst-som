@@ -71,11 +71,12 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { Field, Form, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 const props = defineProps(['proposal', 'milestone', 'som'])
 const emit = defineEmits(['somSubmitted'])
+import { useForm } from '@/composables/useForm.js'
 import { useSoms } from '@/store/soms.js'
 const { createSom } = useSoms()
 
@@ -93,7 +94,7 @@ const initialForm = {
   completion: 10
 }
 
-const form = reactive({...initialForm})
+const { form, _clearForm } = useForm(initialForm)
 
 const clone = () => {
   if (props.som) {
@@ -120,7 +121,7 @@ const handleCreateSom = async () => {
 }
 
 const clearForm = () => {
-  Object.assign(form, initialForm)
+  _clearForm()
   outputsEditor.value.setHTML('')
   successCriteriaEditor.value.setHTML('')
   evidenceEditor.value.setHTML('')
