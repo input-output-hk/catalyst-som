@@ -25,5 +25,5 @@ dist-ssr
 
 .env
 meta/
-utils/data
+milestone-tracker-importer/data
 __pycache__
