@@ -3,7 +3,7 @@
     <div class="box">
       <h3>New Review for Statement of Milestone</h3>
       <div class="block">
-        <o-checkbox v-model="outputs_approves">
+        <o-checkbox v-model="form.outputs_approves">
           Outputs Approved?
         </o-checkbox>
       </div>
@@ -12,11 +12,11 @@
         <QuillEditor
           ref="outputsEditor"
           theme="snow"
-          v-model:content="outputs_comment"
+          v-model:content="form.outputs_comment"
           content-type="html" />
       </div>
       <div class="block">
-        <o-checkbox v-model="success_criteria_approves">
+        <o-checkbox v-model="form.success_criteria_approves">
           Success Criteria Approved?
         </o-checkbox>
       </div>
@@ -26,11 +26,11 @@
           class="mb-4"
           ref="successCriteriaEditor"
           theme="snow"
-          v-model:content="success_criteria_comment"
+          v-model:content="form.success_criteria_comment"
           content-type="html" />
       </div>
       <div class="block">
-        <o-checkbox v-model="evidence_approves">
+        <o-checkbox v-model="form.evidence_approves">
           Evidence Approved?
         </o-checkbox>
       </div>
@@ -40,7 +40,7 @@
           class="mb-4"
           ref="evidenceEditor"
           theme="snow"
-          v-model:content="evidence_comment"
+          v-model:content="form.evidence_comment"
           content-type="html" />
       </div>
       <div class="buttons">
@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, reactive } from 'vue'
 const props = defineProps(['som'])
 const emit = defineEmits(['somReviewSubmitted'])
 import { useSomReviews } from '@/store/somReviews.js'
@@ -71,21 +71,20 @@ const outputsEditor = ref()
 const successCriteriaEditor = ref()
 const evidenceEditor = ref()
 
-const outputs_approves = ref(false)
-const outputs_comment = ref('')
-const success_criteria_approves = ref(false)
-const success_criteria_comment = ref('')
-const evidence_approves = ref(false)
-const evidence_comment = ref('')
+const initialForm = {
+  outputs_approves: false,
+  outputs_comment: '',
+  success_criteria_approves: false,
+  success_criteria_comment: '',
+  evidence_approves: false,
+  evidence_comment: ''
+}
+
+const form = reactive({...initialForm})
 
 const handleCreateSomReview = async () => {
   const response =  await createSomReview({
-    outputs_approves: outputs_approves.value,
-    outputs_comment: outputs_comment.value,
-    success_criteria_approves: success_criteria_approves.value,
-    success_criteria_comment: success_criteria_comment.value,
-    evidence_approves: evidence_approves.value,
-    evidence_comment: evidence_comment.value,
+    ...form,
     som_id: props.som.id
   }, props.som)
   if (response) {
@@ -95,12 +94,10 @@ const handleCreateSomReview = async () => {
 }
 
 const clearForm = () => {
+  Object.assign(form, initialForm)
   outputsEditor.value.setHTML('')
   successCriteriaEditor.value.setHTML('')
   evidenceEditor.value.setHTML('')
-  outputs_approves.value = false
-  success_criteria_approves.value = false
-  evidence_approves.value = false
 }
 
 </script>

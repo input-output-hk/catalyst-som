@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive, computed } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { Field, Form, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 const props = defineProps(['proposal', 'milestone', 'som'])

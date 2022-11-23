@@ -3,7 +3,7 @@
     <div class="box">
       <h3>New Review for Proof of Achievement</h3>
       <div class="block">
-        <o-checkbox v-model="content_approved">
+        <o-checkbox v-model="form.content_approved">
           PoA Approved?
         </o-checkbox>
       </div>
@@ -12,7 +12,7 @@
         <QuillEditor
           ref="contentEditor"
           class="mb-4"
-          theme="snow" v-model:content="content_comment" content-type="html" />
+          theme="snow" v-model:content="form.content_comment" content-type="html" />
       </div>
       <div class="block">
         <o-button
@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, reactive } from 'vue'
 const props = defineProps(['poa', 'som'])
 const emit = defineEmits(['poaReviewSubmitted'])
 import { usePoaReviews } from '@/store/poaReviews.js'
@@ -36,13 +36,16 @@ const { createPoaReview } = usePoaReviews()
 
 const contentEditor = ref()
 
-const content_approved = ref(false)
-const content_comment = ref('')
+const initialForm = {
+  content_approved: false,
+  content_comment: ''
+}
+
+const form = reactive({...initialForm})
 
 const handleCreatePoaReview = async () => {
   const response =  await createPoaReview({
-    content_approved: content_approved.value,
-    content_comment: content_comment.value,
+    ...form,
     poas_id: props.poa.id
   }, props.som)
   if (response) {
@@ -52,8 +55,8 @@ const handleCreatePoaReview = async () => {
 }
 
 const clearForm = () => {
+  Object.assign(form, initialForm)
   contentEditor.value.setHTML('')
-  content_approved.value = false
 }
 
 </script>

@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 const props = defineProps(['som', 'poa'])
 const emit = defineEmits(['clearSignoff'])
 import { useSignoffs } from '@/store/signoffs.js'
