@@ -24,6 +24,7 @@ dist-ssr
 *.sw?
 
 .env
+.env.prod
 meta/
 milestone-tracker-importer/data
 __pycache__
