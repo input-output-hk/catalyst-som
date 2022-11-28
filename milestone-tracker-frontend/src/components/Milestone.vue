@@ -6,11 +6,10 @@
           <h2 class="is-size-3 mb-2 mt-2">Statement of Milestone {{milestone}}</h2>
           <p class="mb-5">Latest submission from proposers of the Statement of Milestone {{milestone}}.</p>
         </div>
-        <div class="column is-4 has-text-right mt-4" v-if="currentSom">
+        <div class="column is-4 has-text-right mt-4" v-if="canSubmitSom">
           <o-button
             size="medium"
             variant="primary"
-            v-if="canWriteSom(proposal.id) && currentSom.signoffs.length === 0"
             @click="newVisible = !newVisible">
             {{(newVisible) ? 'Hide submit new SoMs' : 'Submit new SoM'}}
           </o-button>
@@ -86,6 +85,16 @@ const currentSom = computed(() => {
     return (soms.value.length > 0) ? soms.value[0] : false
   }
   return false
+})
+
+const canSubmitSom = computed(() => {
+  if (currentSom.value) {
+    return (
+      canWriteSom(props.proposal.id) &&
+      currentSom.value.signoffs.length === 0
+    )
+  }
+  return canWriteSom(props.proposal.id)
 })
 
 watch(()=>bus.value.get('getSomsBus'), (val) => {

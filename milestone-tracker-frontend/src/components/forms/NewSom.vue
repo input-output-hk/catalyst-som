@@ -112,6 +112,7 @@ const handleCreateSom = async () => {
   const response =  await createSom({
     ...form,
     proposal_id: props.proposal.id,
+    challenge_id: props.proposal.challenge_id,
     milestone: props.milestone
   })
   if (response) {

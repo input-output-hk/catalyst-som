@@ -28,7 +28,7 @@
     </table>
     <div class="block buttons">
       <o-button
-        v-if="current && !locked"
+        v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current && !locked"
         size="medium"
         variant="primary"
         @click="newReviewVisible = !newReviewVisible">
@@ -46,7 +46,8 @@
           </o-modal>
         </div>
     </div>
-    <section class="section pr-0 pl-0" v-if="newReviewVisible">
+    <section class="section pr-0 pl-0"
+      v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current && !locked && newReviewVisible">
       <new-poa-review
         :som="som"
         :poa="poa"
