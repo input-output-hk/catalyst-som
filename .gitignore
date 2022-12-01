@@ -28,3 +28,9 @@ dist-ssr
 meta/
 milestone-tracker-importer/data
 __pycache__
+
+# Type script generated js
+milestone-tracker-tests/distrib
+
+# Test Report
+milestone-tracker-tests/tests_output
