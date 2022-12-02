@@ -1,0 +1,52 @@
+name: Milestone tracker CI tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  HOST: localhost
+  PORT: 5173
+
+jobs:
+  automation_tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Start docker
+        run: |
+          cd milestone-tracker-backend
+          cp .env.example .env
+          docker-compose up -d
+
+      - name: Start Vite
+        run: |
+          cd milestone-tracker-frontend
+          cp .env.example .env
+          npm install
+          npm run build
+     
+      - name: Run E2E Tests
+        run: |
+            cd milestone-tracker-frontend
+            npm run dev &
+            sleep 60 &&
+            curl -sSf http://${{ env.HOST }}:${{ env.PORT }} > /dev/null &&
+            cd ../milestone-tracker-tests &&
+            npm install
+            xvfb-run --auto-servernum npm test        
+
+      - name: Deploy allure report to Github Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: nightwatch-history
