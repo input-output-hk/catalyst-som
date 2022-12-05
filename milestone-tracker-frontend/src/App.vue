@@ -1,6 +1,14 @@
 <template>
   <div>
     <nav-bar />
+    <o-notification closable
+      variant="warning"
+      aria-close-label="Close notification"
+      role="alert">
+        This is a test environment. All the information in this platform are intended only for testing purpose.
+        Fell free to submit SoM / PoA / Reviews and signoff. Please use <a href="https://forms.gle/KmSkWqa1Ua6UUQr28" target="_blank">this form</a>
+        to submit feedback and bug reports.
+    </o-notification>
     <router-view></router-view>
     <footer class="footer mt-6 has-background-primary has-text-white has-text-weight-semibold">
       <div class="content has-text-centered">
