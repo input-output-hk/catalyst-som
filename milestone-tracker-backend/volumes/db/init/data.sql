@@ -501,6 +501,9 @@ COPY public.proposals (id, title, url, project_id, completion_date, created_at, 
 1	Proposal 1	https://cardano.ideascale.com/a/dtd/422294-48088	900002	2023-03-01 00:00:00	2022-11-10 16:35:28.580163+00	1	22000
 2	Proposal 2	https://cardano.ideascale.com/a/dtd/419167-48088	900003	2023-06-30 00:00:00	2022-11-10 16:35:28.580163+00	2	120000
 3	Proposal 3	https://cardano.ideascale.com/a/dtd/418759-48088	900005	2023-04-01 00:00:00	2022-11-10 16:35:28.580163+00	3	55100
+4	Proposal 4	https://cardano.ideascale.com/a/dtd/422294-48088	900002	2023-03-01 00:00:00	2022-11-10 16:35:28.580163+00	1	12000
+5	Proposal 5	https://cardano.ideascale.com/a/dtd/419167-48088	900003	2023-06-30 00:00:00	2022-11-10 16:35:28.580163+00	2	160000
+6	Proposal 6	https://cardano.ideascale.com/a/dtd/418759-48088	900005	2023-04-01 00:00:00	2022-11-10 16:35:28.580163+00	3	85100
 \.
 
 
@@ -1477,7 +1480,9 @@ INSERT INTO public.challenges_users (challenge_id, user_id, user_idd)
 INSERT INTO public.proposals_users (proposal_id, user_id, user_idd)
   VALUES
     (1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), (SELECT id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1)),
-    (2, (SELECT user_id FROM public.users WHERE email = 'proposer-2@example.org' LIMIT 1), (SELECT id FROM public.users WHERE email = 'proposer-2@example.org' LIMIT 1));
+    (2, (SELECT user_id FROM public.users WHERE email = 'proposer-2@example.org' LIMIT 1), (SELECT id FROM public.users WHERE email = 'proposer-2@example.org' LIMIT 1)),
+    (4, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), (SELECT id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1)),
+    (5, (SELECT user_id FROM public.users WHERE email = 'proposer-2@example.org' LIMIT 1), (SELECT id FROM public.users WHERE email = 'proposer-2@example.org' LIMIT 1));
 
 INSERT INTO public.soms (outputs, success_criteria, evidence, month, cost, completion, proposal_id, milestone, title, challenge_id, user_id)
   VALUES
