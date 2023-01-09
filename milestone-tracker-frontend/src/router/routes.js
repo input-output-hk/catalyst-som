@@ -43,6 +43,11 @@ const routes = [
     name: 'proposal-milestones'
   },
   {
+    path: '/proposals/:id/milestones/:milestone',
+    component: Milestones,
+    name: 'proposal-milestones-detail'
+  },
+  {
     path: '/admin',
     component: Admin,
     name: 'admin'

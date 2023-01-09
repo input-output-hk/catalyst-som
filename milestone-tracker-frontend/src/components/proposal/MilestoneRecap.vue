@@ -1,7 +1,11 @@
 <template>
   <div class="tile is-ml is-parent" v-if="som">
     <div class="tile is-child notification">
-      <h1 class="title is-size-1 mb-2">M {{milestone}}</h1>
+      <h1 class="title is-size-1 mb-2">
+        <router-link :to="{name: 'proposal-milestones-detail', params: {id: proposal.project_id, milestone: milestone}}">
+          M {{milestone}}
+        </router-link>
+      </h1>
       <approval-counters
         :approves="somReviewsApproved"
         :not-approves="somReviewsNotApproved" />

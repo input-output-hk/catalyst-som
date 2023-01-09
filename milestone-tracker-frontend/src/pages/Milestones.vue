@@ -19,9 +19,11 @@
     </section>
     <div class="content columns is-multiline">
       <div class="column is-12 milestones-wrapper">
-        <o-tabs type="boxed">
+        <o-tabs type="boxed" v-model="activeTab">
           <o-tab-item v-for="ml in [...Array(5).keys()]">
-            <template #header>
+            <template
+              @click="changeTab"
+              #header>
               <span>Milestone {{ml + 1}}</span>
             </template>
             <milestone :proposal="proposal" :milestone="ml + 1" />
@@ -39,9 +41,32 @@ import { useProposals } from '../store/proposals.js'
 const { getProposal } = useProposals()
 
 const proposal = ref({})
+
+const router = useRouter()
+
 const proposalId = computed(() => {
-  return useRouter().currentRoute.value.params.id;
+  return router.currentRoute.value.params.id;
 })
+
+const activeTab = computed({
+  get() {
+    const current = parseInt(router.currentRoute.value.params.milestone)
+    return (current) ? current : 1
+  },
+  set(value) {
+    router.push({
+      name: 'proposal-milestones-detail',
+      params: {
+        id: proposalId.value,
+        milestone: value
+      }
+    })
+  }
+})
+
+const changeTab = (tab) => {
+  console.log(tab)
+}
 
 onMounted(async () => {
   proposal.value = await getProposal(proposalId.value)
