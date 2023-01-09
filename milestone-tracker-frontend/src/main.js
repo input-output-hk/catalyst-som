@@ -17,10 +17,18 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import Vue3Sanitize from "vue-3-sanitize"
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTimes,
+  faAngleLeft,
+  faAngleRight
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(fas)
+library.add(
+  faTimes,
+  faAngleLeft,
+  faAngleRight
+)
 
 const router = createRouter(createWebHistory())
 
