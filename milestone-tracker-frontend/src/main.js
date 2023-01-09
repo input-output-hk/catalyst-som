@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, markRaw } from 'vue'
 import { createWebHistory } from 'vue-router'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
@@ -16,9 +16,13 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 import Vue3Sanitize from "vue-3-sanitize";
 
+const router = createRouter(createWebHistory())
+
 const store = createPinia()
 store.use(piniaPluginPersistedstate)
-const router = createRouter(createWebHistory())
+store.use(({ store }) => {
+  store.$router = markRaw(router)
+})
 const app = createApp(App)
 const i18n = createI18n({
   locale: 'en',

@@ -27,13 +27,18 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUser } from '@/store/user.js'
 import { useRouter } from 'vue-router'
 import logoUrl from '@/assets/images/catalyst-logo-white.svg'
 const userStore = useUser()
-const { canWriteSom, login, logout } = userStore
+const { canWriteSom, login, logout, initUser } = userStore
 const { user, logged, isAdmin } = storeToRefs(userStore)
+
+onMounted(async () => {
+  await initUser()
+})
 </script>
 
 <style lang="scss" scoped>

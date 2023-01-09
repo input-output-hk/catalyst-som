@@ -72,20 +72,20 @@ export const useUser = defineStore('user-store', {
     async login(email, password) {
       this.fetching = true;
       try {
-        const { user, error } = await supabase.auth.signIn({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email: email,
           password: password
         })
         if (error) {
           throw(error)
         }
-        this.localUser = user
+        this.localUser = data.user
         this.logged = true
         this.getInfo()
         successNotification('Logged in.')
+        this.$router.push({name: 'proposals'})
       } catch(error) {
-        this.localUser = {}
-        this.logged = false
+        this.resetState()
         errorNotification('Error logging in.')
       } finally {
         this.fetching = false;
@@ -94,14 +94,18 @@ export const useUser = defineStore('user-store', {
     async logout() {
       try {
         const { error } = await supabase.auth.signOut()
-        this.localUser = {}
-        this.userInfo = {}
-        this.logged = false
+        this.resetState()
         successNotification('Logged out.')
       } catch(error) {
         console.log(error)
         errorNotification('Error logging out.')
       }
+    },
+    resetState() {
+      this.localUser = {}
+      this.userInfo = {}
+      this.logged = false
+      this.$router.push({name: 'login'})
     },
     async resetPassword(email) {
       try {
@@ -137,6 +141,20 @@ export const useUser = defineStore('user-store', {
           this.userInfo = data[0]
         } catch(error) {
           errorNotification('Error fetching user info.')
+        }
+      }
+    },
+    async initUser() {
+      if (this.logged) {
+        try {
+          const { data, error } = await supabase.auth.getSession()
+          if (!data.session) {
+            this.resetState()
+          }
+        } catch(error) {
+          console.log(error)
+          this.resetState()
+          console.log('user error, reset state')
         }
       }
     }

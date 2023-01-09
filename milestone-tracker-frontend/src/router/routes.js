@@ -11,10 +11,12 @@ import Admin from '@/pages/Admin.vue';
 const routes = [
   {
     path: '/',
+    name: 'home',
     component: Home
   },
   {
     path: '/login',
+    name: 'login',
     component: Login
   },
   {
@@ -27,6 +29,7 @@ const routes = [
   },
   {
     path: '/proposals',
+    name: 'proposals',
     component: Proposals
   },
   {
