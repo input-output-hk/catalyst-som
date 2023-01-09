@@ -4,8 +4,18 @@
       <figure class="image p-3">
         <img class="logo" :src="logoUrl" alt="Project Catalyst Milestone Module" />
       </figure>
+      <a role="button"
+        class="navbar-burger"
+        :class="{'is-active': navActive}"
+        aria-label="menu"
+        aria-expanded="false"
+        @click="toggleNav">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+      </a>
     </div>
-    <div id="main-nav" class="navbar-menu">
+    <div id="main-nav" class="navbar-menu" :class="{'is-active': navActive}">
       <div class="navbar-start">
         <router-link class="navbar-item" to="/">Home</router-link>
         <router-link class="navbar-item" to="/proposals">Proposals</router-link>
@@ -27,7 +37,7 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUser } from '@/store/user.js'
 import { useRouter } from 'vue-router'
@@ -36,6 +46,12 @@ const userStore = useUser()
 const { canWriteSom, login, logout, initUser } = userStore
 const { user, logged, isAdmin } = storeToRefs(userStore)
 
+const navActive = ref(false)
+
+const toggleNav = () => {
+  navActive.value = !navActive.value
+}
+
 onMounted(async () => {
   await initUser()
 })
@@ -43,6 +59,6 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
   .logo {
-    max-height: 2.5rem;
+    max-height: 1.8rem;
   }
 </style>
