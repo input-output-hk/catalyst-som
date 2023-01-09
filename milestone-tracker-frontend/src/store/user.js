@@ -152,9 +152,7 @@ export const useUser = defineStore('user-store', {
             this.resetState()
           }
         } catch(error) {
-          console.log(error)
           this.resetState()
-          console.log('user error, reset state')
         }
       }
     }
