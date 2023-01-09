@@ -14,7 +14,13 @@ import '@/assets/sass/main.scss'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
-import Vue3Sanitize from "vue-3-sanitize";
+import Vue3Sanitize from "vue-3-sanitize"
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(fas)
 
 const router = createRouter(createWebHistory())
 
@@ -60,7 +66,13 @@ const sanitizeOptions = {
 
 app.component('QuillEditor', QuillEditor)
 
-app.use(Oruga, bulmaConfig)
+app.component('vue-fontawesome', FontAwesomeIcon);
+
+app.use(Oruga, {
+  ...bulmaConfig,
+  iconComponent: 'vue-fontawesome',
+  iconPack: 'fas'
+  })
   .use(router)
   .use(store)
   .use(i18n)
