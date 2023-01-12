@@ -42,6 +42,7 @@
         <new-som
           :proposal="proposal"
           :milestone="props.milestone"
+          :soms="otherMilestonesSoms"
           :som="currentSom"
           @som-submitted="newVisible = false"
           />
@@ -52,6 +53,7 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useSoms } from '@/store/soms.js'
 const { getSoms, proposals } = useSoms()
 import { useUser } from '@/store/user.js'
@@ -85,6 +87,14 @@ const currentSom = computed(() => {
     return (soms.value.length > 0) ? soms.value[0] : false
   }
   return false
+})
+
+const otherMilestonesSoms = computed(() => {
+  try {
+    return Object.values(proposals[props.proposal.id]).map((soms) => (soms.length > 0) ? soms[0] : null)
+  } catch {
+    return []
+  }
 })
 
 const canSubmitSom = computed(() => {

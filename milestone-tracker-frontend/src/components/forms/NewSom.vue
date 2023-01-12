@@ -8,9 +8,9 @@
         <o-button class="mt-2 mr-4" variant="primary" size="small" @click="clone">Clone latest</o-button>
       </header>
       <Form @submit="handleCreateSom" class="card-content scrollable-modal" :validation-schema="somSchema">
-        <Field name="title" v-slot="{ field, errors, meta }">
+        <Field v-model="form.title" name="title" v-slot="{ field, errors, meta, value }">
           <o-field label="Title" :variant="errors[0] ? 'danger' : ''" :message="errors[0] ? errors[0] : ''">
-            <o-input v-model="form.title" type="text" v-bind="field"></o-input>
+            <o-input type="text" v-bind="field" :model-value="value"></o-input>
           </o-field>
         </Field>
         <div class="mb-2 has-text-weight-semibold">Outputs:</div>
@@ -29,9 +29,9 @@
           ref="evidenceEditor"
           theme="snow" v-model:content="form.evidence" content-type="html" />
 
-        <Field name="month" v-slot="{ field, errors, meta }">
+        <Field v-model="form.month" name="month" v-slot="{ field, errors, meta, value }">
           <o-field label="Month" :variant="errors[0] ? 'danger' : ''" :message="errors[0] ? errors[0] : ''">
-            <o-select placeholder="Select a month" v-model="form.month" v-bind="field">
+            <o-select placeholder="Select a month" v-bind="field" :model-value="value">
               <option :value="m + 1"
                 v-for="m in [...Array(24).keys()]">
                 Month {{m + 1}}
@@ -39,9 +39,9 @@
             </o-select>
           </o-field>
         </Field>
-        <Field name="cost" v-slot="{ field, errors, meta }">
+        <Field v-model="form.cost" name="cost" v-slot="{ field, errors, meta, value }">
           <o-field label="Cost" :variant="errors[0] ? 'danger' : ''" :message="errors[0] ? errors[0] : ''">
-            <o-input v-model="form.cost" type="number" v-bind="field"></o-input>
+            <o-input type="number" v-bind="field" :model-value="value"></o-input>
           </o-field>
         </Field>
         <o-field label="% progress">
@@ -71,13 +71,14 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Field, Form, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
-const props = defineProps(['proposal', 'milestone', 'som'])
+const props = defineProps(['proposal', 'milestone', 'som', 'soms'])
 const emit = defineEmits(['somSubmitted'])
 import { useForm } from '@/composables/useForm.js'
 import { useSoms } from '@/store/soms.js'
+import { getPrevMilestone } from '@/utils/milestones'
 const { createSom } = useSoms()
 
 const outputsEditor = ref()
@@ -141,12 +142,14 @@ const costRule = computed(() => {
 
 const monthRule = computed(() => {
   const rule = yup.number().required()
-  return rule.min(1)
-});
+  const min = getPrevMilestone(props.soms, props.milestone)
+  return rule.min((min) ? parseInt(min.month) : 1)
+})
 
 const somSchema = yup.object({
   title: yup.string().required(),
   month: monthRule.value,
   cost: costRule.value
-});
+})
+
 </script>
