@@ -7,12 +7,16 @@ export const useProposals = defineStore('proposals-store', {
   state: () => {
     return {
       _proposals: [],
+      _selectProposals: []
     }
   },
 
   getters: {
     proposals(state) {
       return state._proposals;
+    },
+    selectProposals(state) {
+      return state._selectProposals;
     }
   },
 
@@ -46,13 +50,13 @@ export const useProposals = defineStore('proposals-store', {
         errorNotification('Error fetching proposals.')
       }
     },
-    async getProposalsByTitle(title) {
+    async getSelectProposalsByTitle(title) {
       try {
         const { data, error } = await supabase
           .from('proposals')
           .select('id, title')
           .like('title', `%${title}%`)
-        this._proposals = data
+        this._selectProposals = data
       } catch(error) {
         errorNotification('Error fetching proposals.')
       }

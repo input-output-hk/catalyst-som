@@ -23,7 +23,7 @@
     <td>
       <o-inputitems
         v-model="userProposals"
-        :data="proposals"
+        :data="selectProposals"
         autocomplete
         :allow-new="false"
         :open-on-focus="true"
@@ -48,8 +48,8 @@ const { challenges } = storeToRefs(challengesStore)
 
 import { useProposals } from '@/store/proposals.js'
 const proposalsStore = useProposals()
-const { getProposalsByTitle } = proposalsStore
-const { proposals } = storeToRefs(proposalsStore)
+const { getSelectProposalsByTitle } = proposalsStore
+const { selectProposals } = storeToRefs(proposalsStore)
 
 import { useUsers } from '@/store/users.js'
 const { updateUserChallenges, updateUserProposals, updateRole } = useUsers()
@@ -109,7 +109,7 @@ const getFilteredChallenges = (text) => {
 }
 
 const getFilteredProposals = async (text) => {
-  await getProposalsByTitle(text)
+  await getSelectProposalsByTitle(text)
 }
 
 onMounted(() => {
