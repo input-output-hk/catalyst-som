@@ -21,7 +21,10 @@ import {
   faTimes,
   faAngleLeft,
   faAngleRight,
-  faExclamationCircle
+  faExclamationCircle,
+  faCheck,
+  faMinus,
+  faPlus
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -29,7 +32,10 @@ library.add(
   faTimes,
   faAngleLeft,
   faAngleRight,
-  faExclamationCircle
+  faExclamationCircle,
+  faCheck,
+  faMinus,
+  faPlus
 )
 
 const router = createRouter(createWebHistory())

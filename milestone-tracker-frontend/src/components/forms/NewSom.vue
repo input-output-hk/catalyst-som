@@ -7,83 +7,50 @@
         </h4>
         <o-button class="mt-2 mr-4" variant="primary" size="small" @click="clone">Clone latest</o-button>
       </header>
-      <Form @submit="handleCreateSom" class="card-content scrollable-modal" :validation-schema="somSchema">
-        <Field v-model="form.title" name="title" v-slot="{ field, errors, meta, value }">
-          <o-field label="Title" :variant="errors[0] ? 'danger' : ''" :message="errors[0] ? errors[0] : ''">
-            <o-input type="text" v-bind="field" :model-value="value"></o-input>
-          </o-field>
-        </Field>
-        <div class="mb-2 has-text-weight-semibold">Outputs:</div>
-        <QuillEditor
-          class="mb-4"
-          ref="outputsEditor"
-          theme="snow" v-model:content="form.outputs" content-type="html" />
-        <div class="mb-2 has-text-weight-semibold">Acceptance criteria:</div>
-        <QuillEditor
-          class="mb-4"
-          ref="successCriteriaEditor"
-          theme="snow" v-model:content="form.success_criteria" content-type="html" />
-        <div class="mb-2 has-text-weight-semibold">Evidence:</div>
-        <QuillEditor
-          class="mb-4"
-          ref="evidenceEditor"
-          theme="snow" v-model:content="form.evidence" content-type="html" />
-
-        <Field v-model="form.month" name="month" v-slot="{ field, errors, meta, value }">
-          <o-field label="Month" :variant="errors[0] ? 'danger' : ''" :message="errors[0] ? errors[0] : ''">
-            <o-select placeholder="Select a month" v-bind="field" :model-value="value">
-              <option :value="m + 1"
-                v-for="m in [...Array(24).keys()]">
-                Month {{m + 1}}
-              </option>
-            </o-select>
-          </o-field>
-        </Field>
-        <Field v-model="form.cost" name="cost" v-slot="{ field, errors, meta, value }">
-          <o-field label="Cost" :variant="errors[0] ? 'danger' : ''" :message="errors[0] ? errors[0] : ''">
-            <o-input type="number" v-bind="field" :model-value="value"></o-input>
-          </o-field>
-        </Field>
-        <o-field label="% progress">
-          <o-slider size="medium" :min="0" :max="100" v-model="form.completion">
-            <template v-for="val in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]" :key="val">
-              <o-slider-tick :value="val">{{ val }}</o-slider-tick>
-            </template>
-          </o-slider>
-        </o-field>
-        <div class="buttons">
-          <button class="button is-primary is-medium mt-6"
-            variant="primary"
-            size="medium">
-              Submit SoM
-          </button>
-          <o-button
-            size="medium"
-            class="mt-6"
-            @click="clearForm"
-            type="submit">
-              Clear SoM
-          </o-button>
-        </div>
-      </Form>
+      <schema-form
+        class="card-content scrollable-modal"
+        :schema="schema"
+        @submit="handleCreateSom"
+        @reset="_clearForm"
+        >
+        <template #afterForm>
+          <div class="buttons">
+            <o-button variant="primary" native-type="submit">
+              <span>Submit</span>
+            </o-button>
+            <o-button native-type="reset">
+              <span>Reset</span>
+            </o-button>
+          </div>
+        </template>
+      </schema-form>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { Field, Form, ErrorMessage } from 'vee-validate';
+import { ref, computed, onMounted, markRaw } from 'vue'
+
+import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
+import { SchemaFormFactory, useSchemaForm } from "formvuelate"
+import FieldHtml from "@/components/forms/formFields/FieldHtml.vue"
+import FieldInput from "@/components/forms/formFields/FieldInput.vue"
+import FieldNumber from "@/components/forms/formFields/FieldNumber.vue"
+import FieldSelect from "@/components/forms/formFields/FieldSelect.vue"
+import FieldRange from "@/components/forms/formFields/FieldRange.vue"
+
+markRaw(FieldHtml)
+markRaw(FieldInput)
+markRaw(FieldNumber)
+markRaw(FieldSelect)
+markRaw(FieldRange)
+
 import * as yup from 'yup';
 const props = defineProps(['proposal', 'milestone', 'som', 'soms'])
 const emit = defineEmits(['somSubmitted'])
-import { useForm } from '@/composables/useForm.js'
 import { useSoms } from '@/store/soms.js'
 import { getPrevMilestone } from '@/utils/milestones'
 const { createSom } = useSoms()
-
-const outputsEditor = ref()
-const successCriteriaEditor = ref()
-const evidenceEditor = ref()
 
 const initialForm = {
   title: '',
@@ -95,23 +62,84 @@ const initialForm = {
   completion: 10
 }
 
-const { form, _clearForm } = useForm(initialForm)
+const schema = computed(() => {
+  return {
+    title: {
+      component: FieldInput,
+      label: 'Title',
+      validations: yup.string().required(),
+      default: initialForm.title
+    },
+    outputs: {
+      component: FieldHtml,
+      label: 'Outputs',
+      validations: yup.string().required(),
+      default: initialForm.outputs
+    },
+    success_criteria: {
+      component: FieldHtml,
+      label: 'Success Criteria',
+      validations: yup.string().required(),
+      default: initialForm.success_criteria
+    },
+    evidence: {
+      component: FieldHtml,
+      label: 'Evidence',
+      validations: yup.string().required(),
+      default: initialForm.evidence
+    },
+    cost: {
+      component: FieldNumber,
+      label: 'Cost',
+      validations: costRule.value,
+      default: initialForm.cost.toFixed(0)
+    },
+    month: {
+      component: FieldSelect,
+      label: 'Month',
+      validations: monthRule.value,
+      default: initialForm.month,
+      options: [...Array(24).keys()].map((m) => ({value: m, label: `Month ${m}`}))
+    },
+    completion: {
+      component: FieldRange,
+      label: 'Completion %',
+      validations: yup.number().required().min(0).max(100),
+      default: initialForm.completion,
+      min: 0,
+      max: 100,
+      step: 1
+    }
+  }
+})
+
+const formData = ref({})
+
+useSchemaForm(formData);
+
+let SchemaForm = SchemaFormFactory([
+  VeeValidatePlugin(),
+]);
+
+
+
+
 
 const clone = () => {
   if (props.som) {
-    outputsEditor.value.setHTML(props.som.outputs)
-    successCriteriaEditor.value.setHTML(props.som.success_criteria)
-    evidenceEditor.value.setHTML(props.som.evidence)
-    form.title = props.som.title
-    form.month = props.som.month
-    form.completion = props.som.completion
-    form.cost = props.som.cost
+    Object.keys(formData.value).forEach((k) => {
+      let value = props.som[k]
+      if (k === 'cost') {
+        value = value.toFixed(0)
+      }
+      formData.value[k] = value
+    })
   }
 }
 
 const handleCreateSom = async () => {
   const response =  await createSom({
-    ...form,
+    ...formData.value,
     proposal_id: props.proposal.id,
     challenge_id: props.proposal.challenge_id,
     milestone: props.milestone
@@ -122,11 +150,8 @@ const handleCreateSom = async () => {
   }
 }
 
-const clearForm = () => {
-  _clearForm()
-  outputsEditor.value.setHTML('')
-  successCriteriaEditor.value.setHTML('')
-  evidenceEditor.value.setHTML('')
+const _clearForm = () => {
+  formData.value = {}
 }
 
 // Form validation rules
