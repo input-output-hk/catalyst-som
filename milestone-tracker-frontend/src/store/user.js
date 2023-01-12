@@ -86,7 +86,7 @@ export const useUser = defineStore('user-store', {
         this.$router.push({name: 'proposals'})
       } catch(error) {
         this.resetState()
-        errorNotification('Error logging in.')
+        errorNotification(error.message)
       } finally {
         this.fetching = false;
       }
@@ -97,8 +97,7 @@ export const useUser = defineStore('user-store', {
         this.resetState()
         successNotification('Logged out.')
       } catch(error) {
-        console.log(error)
-        errorNotification('Error logging out.')
+        errorNotification(error.message)
       }
     },
     resetState() {
@@ -115,7 +114,7 @@ export const useUser = defineStore('user-store', {
         )
         successNotification('Check your email to reset the password.')
       } catch(error) {
-        errorNotification('Error resetting Password.')
+        errorNotification(error.message)
       }
     },
     async updatePassword(password) {
@@ -126,7 +125,7 @@ export const useUser = defineStore('user-store', {
         })
         successNotification('Password updated successfully!')
       } catch(error) {
-        errorNotification('There was an error updating your password.')
+        errorNotification(error.message)
       } finally {
         this.fetching = true
       }
@@ -140,7 +139,7 @@ export const useUser = defineStore('user-store', {
             .eq('user_id', this.localUser.id)
           this.userInfo = data[0]
         } catch(error) {
-          errorNotification('Error fetching user info.')
+          errorNotification(error.message)
         }
       }
     },
