@@ -29,83 +29,70 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, markRaw } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
 import { SchemaFormFactory, useSchemaForm } from "formvuelate"
-import FieldHtml from "@/components/forms/formFields/FieldHtml.vue"
-import FieldInput from "@/components/forms/formFields/FieldInput.vue"
-import FieldNumber from "@/components/forms/formFields/FieldNumber.vue"
-import FieldSelect from "@/components/forms/formFields/FieldSelect.vue"
-import FieldRange from "@/components/forms/formFields/FieldRange.vue"
-
-markRaw(FieldHtml)
-markRaw(FieldInput)
-markRaw(FieldNumber)
-markRaw(FieldSelect)
-markRaw(FieldRange)
 
 import * as yup from 'yup';
 const props = defineProps(['proposal', 'milestone', 'som', 'soms'])
 const emit = defineEmits(['somSubmitted'])
 import { useSoms } from '@/store/soms.js'
+import { useFormFields } from '@/composables/useFormFields.js'
 import { getPrevMilestone } from '@/utils/milestones'
 const { createSom } = useSoms()
 
-const initialForm = {
-  title: '',
-  outputs: '',
-  success_criteria: '',
-  evidence: '',
-  cost: 0,
-  month: 1,
-  completion: 10
-}
+// Form validation rules
 
-const schema = computed(() => {
+const costRule = computed(() => {
+  const rule = yup.number().required().min(1)
+  const maxMilestoneBudget = parseFloat(import.meta.env.VITE_MAX_MILESTONE_BUDGET)
+  if (props.milestone < 5 && props.proposal.budget > 0) {
+    return rule.max(props.proposal.budget * maxMilestoneBudget)
+  }
+  return rule
+})
+
+const monthRule = computed(() => {
+  const rule = yup.number().required()
+  const min = getPrevMilestone(props.soms, props.milestone)
+  return rule.min((min) ? parseInt(min.month) : 1)
+})
+
+const initialSchema = computed(() => {
   return {
     title: {
-      component: FieldInput,
-      label: 'Title',
-      validations: yup.string().required(),
-      default: initialForm.title
+      type: 'string',
+      label: 'Title'
     },
     outputs: {
-      component: FieldHtml,
-      label: 'Outputs',
-      validations: yup.string().required(),
-      default: initialForm.outputs
+      type: 'html',
+      label: 'Outputs'
     },
     success_criteria: {
-      component: FieldHtml,
-      label: 'Success Criteria',
-      validations: yup.string().required(),
-      default: initialForm.success_criteria
+      type: 'html',
+      label: 'Success Criteria'
     },
     evidence: {
-      component: FieldHtml,
-      label: 'Evidence',
-      validations: yup.string().required(),
-      default: initialForm.evidence
+      type: 'html',
+      label: 'Evidence'
     },
     cost: {
-      component: FieldNumber,
+      type: 'number',
       label: 'Cost',
       validations: costRule.value,
-      default: initialForm.cost.toFixed(0)
     },
     month: {
-      component: FieldSelect,
+      type: 'select',
       label: 'Month',
       validations: monthRule.value,
-      default: initialForm.month,
+      default: 1,
       options: [...Array(24).keys()].map((m) => ({value: m, label: `Month ${m}`}))
     },
     completion: {
-      component: FieldRange,
+      type: 'range',
       label: 'Completion %',
-      validations: yup.number().required().min(0).max(100),
-      default: initialForm.completion,
+      default: 10,
       min: 0,
       max: 100,
       step: 1
@@ -113,17 +100,12 @@ const schema = computed(() => {
   }
 })
 
+const { schema } = useFormFields(initialSchema.value)
 const formData = ref({})
-
-useSchemaForm(formData);
-
+useSchemaForm(formData)
 let SchemaForm = SchemaFormFactory([
   VeeValidatePlugin(),
-]);
-
-
-
-
+])
 
 const clone = () => {
   if (props.som) {
@@ -154,27 +136,6 @@ const _clearForm = () => {
   formData.value = {}
 }
 
-// Form validation rules
 
-const costRule = computed(() => {
-  const rule = yup.number().required().min(1)
-  const maxMilestoneBudget = parseFloat(import.meta.env.VITE_MAX_MILESTONE_BUDGET)
-  if (props.milestone < 5 && props.proposal.budget > 0) {
-    return rule.max(props.proposal.budget * maxMilestoneBudget)
-  }
-  return rule
-})
-
-const monthRule = computed(() => {
-  const rule = yup.number().required()
-  const min = getPrevMilestone(props.soms, props.milestone)
-  return rule.min((min) ? parseInt(min.month) : 1)
-})
-
-const somSchema = yup.object({
-  title: yup.string().required(),
-  month: monthRule.value,
-  cost: costRule.value
-})
 
 </script>
