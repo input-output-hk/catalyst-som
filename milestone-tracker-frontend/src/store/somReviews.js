@@ -21,6 +21,7 @@ export const useSomReviews = defineStore('soms-reviews-store', {
         const { data, error } = await supabase
           .from('som_reviews')
           .insert([somReview])
+          .select()
         if (error) throw error
         successNotification('SoM review created.')
         emit('getSomsBus', {

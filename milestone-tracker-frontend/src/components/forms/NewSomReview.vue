@@ -2,90 +2,63 @@
   <div class="content">
     <div class="box">
       <h3>New Review for Statement of Milestone</h3>
-      <div class="block">
-        <o-checkbox v-model="form.outputs_approves">
-          Outputs Approved?
-        </o-checkbox>
-      </div>
-      <div class="block">
-        <label>Outputs comments:</label>
-        <QuillEditor
-          ref="outputsEditor"
-          theme="snow"
-          v-model:content="form.outputs_comment"
-          content-type="html" />
-      </div>
-      <div class="block">
-        <o-checkbox v-model="form.success_criteria_approves">
-          Success Criteria Approved?
-        </o-checkbox>
-      </div>
-      <div class="block">
-        <label>Success Criteria comments:</label>
-        <QuillEditor
-          class="mb-4"
-          ref="successCriteriaEditor"
-          theme="snow"
-          v-model:content="form.success_criteria_comment"
-          content-type="html" />
-      </div>
-      <div class="block">
-        <o-checkbox v-model="form.evidence_approves">
-          Evidence Approved?
-        </o-checkbox>
-      </div>
-      <div class="block">
-        <label>Evidence comments:</label>
-        <QuillEditor
-          class="mb-4"
-          ref="evidenceEditor"
-          theme="snow"
-          v-model:content="form.evidence_comment"
-          content-type="html" />
-      </div>
-      <div class="buttons">
-        <o-button
-          variant="primary"
-          size="medium"
-          @click="handleCreateSomReview">
-            Submit SoM review
-        </o-button>
-        <o-button
-          size="medium"
-          @click="clearForm">
-            Clear SoM Review
-        </o-button>
-      </div>
+      <schema-form
+        class="card-content scrollable-modal"
+        :schema="schema"
+        @submit="handleCreateSomReview"
+        >
+        <template #afterForm>
+          <div class="buttons">
+            <o-button variant="primary" native-type="submit">
+              <span>Submit</span>
+            </o-button>
+            <o-button @click="clearForm">
+              <span>Reset</span>
+            </o-button>
+          </div>
+        </template>
+      </schema-form>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, computed } from 'vue'
+import { useFormFields } from '@/composables/useFormFields.js'
+import { useSomReviews } from '@/store/somReviews.js'
+import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
+import { SchemaFormFactory, useSchemaForm } from "formvuelate"
+
 const props = defineProps(['som'])
 const emit = defineEmits(['somReviewSubmitted'])
-import { useForm } from '@/composables/useForm.js'
-import { useSomReviews } from '@/store/somReviews.js'
 const { createSomReview } = useSomReviews()
 
-const outputsEditor = ref()
-const successCriteriaEditor = ref()
-const evidenceEditor = ref()
+const initialSchema = computed(() => {
+  const schema = {}
+  const keys = ['outputs', 'success_criteria', 'evidence']
+  keys.forEach((key) => {
+    schema[`${key}_approves`] = {
+      type: 'checkbox',
+      label: `${key} Approved?`
+    }
+    schema[`${key}_comment`] = {
+      type: 'html',
+      label: `${key} comments:`
+    }
+  })
+  return schema
+})
 
-const initialForm = {
-  outputs_approves: false,
-  outputs_comment: '',
-  success_criteria_approves: false,
-  success_criteria_comment: '',
-  evidence_approves: false,
-  evidence_comment: ''
-}
-
-const { form, _clearForm } = useForm(initialForm)
+const { schema, reset } = useFormFields(initialSchema.value)
+const formData = ref({})
+useSchemaForm(formData)
+let SchemaForm = SchemaFormFactory([
+  VeeValidatePlugin(),
+])
 
 const handleCreateSomReview = async () => {
   const response =  await createSomReview({
-    ...form,
+    ...formData.value,
     som_id: props.som.id
   }, props.som)
   if (response) {
@@ -95,10 +68,7 @@ const handleCreateSomReview = async () => {
 }
 
 const clearForm = () => {
-  _clearForm()
-  outputsEditor.value.setHTML('')
-  successCriteriaEditor.value.setHTML('')
-  evidenceEditor.value.setHTML('')
+  formData.value = reset.value
 }
 
 </script>
