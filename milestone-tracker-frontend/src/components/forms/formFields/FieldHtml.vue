@@ -77,7 +77,7 @@ watch(
   },
 );
 
-watchOnce(
+watch(
   () => props.modelValue,
   () => {
     if (typeof props.modelValue === "string") {

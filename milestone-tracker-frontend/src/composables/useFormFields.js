@@ -62,7 +62,18 @@ export function useFormFields(initialSchema) {
     return initialSchema
   })
 
+  const reset = computed(() => {
+    const resetValue = {}
+    Object.keys(initialSchema).forEach((k) => {
+      let field = initialSchema[k]
+      let def = (field.def) ? field.def : fieldsMap[field.type].def
+      resetValue[k] = def
+    })
+    return resetValue
+  })
+
   return {
-    schema
+    schema,
+    reset
   }
 }

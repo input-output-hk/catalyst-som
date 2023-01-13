@@ -11,14 +11,13 @@
         class="card-content scrollable-modal"
         :schema="schema"
         @submit="handleCreateSom"
-        @reset="_clearForm"
         >
         <template #afterForm>
           <div class="buttons">
             <o-button variant="primary" native-type="submit">
               <span>Submit</span>
             </o-button>
-            <o-button native-type="reset">
+            <o-button @click="clearForm">
               <span>Reset</span>
             </o-button>
           </div>
@@ -100,7 +99,7 @@ const initialSchema = computed(() => {
   }
 })
 
-const { schema } = useFormFields(initialSchema.value)
+const { schema, reset } = useFormFields(initialSchema.value)
 const formData = ref({})
 useSchemaForm(formData)
 let SchemaForm = SchemaFormFactory([
@@ -132,10 +131,8 @@ const handleCreateSom = async () => {
   }
 }
 
-const _clearForm = () => {
-  formData.value = {}
+const clearForm = () => {
+  formData.value = reset.value
 }
-
-
 
 </script>

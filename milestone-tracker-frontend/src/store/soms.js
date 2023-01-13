@@ -73,6 +73,7 @@ export const useSoms = defineStore('soms-store', {
         const { data, error } = await supabase
           .from('soms')
           .insert([som])
+          .select()
         if (error) throw error
         successNotification('SoM created.')
         emit('getSomsBus', {
