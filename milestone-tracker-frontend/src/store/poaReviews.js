@@ -21,6 +21,7 @@ export const usePoaReviews = defineStore('poas-reviews-store', {
         const { data, error } = await supabase
           .from('poas_reviews')
           .insert([poaReview])
+          .select()
         if (error) throw error
         successNotification('PoA review created.')
         emit('getSomsBus', {

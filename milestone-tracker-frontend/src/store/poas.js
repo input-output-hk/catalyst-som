@@ -21,6 +21,7 @@ export const usePoas = defineStore('poas-store', {
         const { data, error } = await supabase
           .from('poas')
           .insert([poa])
+          .select()
         if (error) throw error
         successNotification('PoA created.')
         emit('getSomsBus', {
