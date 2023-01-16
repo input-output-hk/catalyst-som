@@ -49,9 +49,9 @@ const initialSchema = computed(() => {
   return schema
 })
 
-const { schema, reset } = useFormFields(initialSchema.value)
+const { schema, clearForm } = useFormFields(initialSchema.value)
 const formData = ref({})
-useSchemaForm(formData)
+const { updateFormModel } = useSchemaForm(formData)
 let SchemaForm = SchemaFormFactory([
   VeeValidatePlugin(),
 ])
@@ -62,13 +62,13 @@ const handleCreateSomReview = async () => {
     som_id: props.som.id
   }, props.som)
   if (response) {
-    clearForm()
+    _clearForm()
     emit('somReviewSubmitted')
   }
 }
 
-const clearForm = () => {
-  formData.value = reset.value
+const _clearForm = () => {
+  clearForm(formData, updateFormModel)
 }
 
 </script>
