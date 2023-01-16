@@ -6,6 +6,14 @@ const homePageCommands = {
       .click('@discoverProposals')
       .waitForElementNotPresent('@discoverProposals');
   },
+  clickNavProposals(this: HomePage) {
+    return this.waitForElementPresent('@navProposals', 10000)
+      .click('@navProposals');
+  },
+  clickNavLogin(this: HomePage) {
+    return this.waitForElementPresent('@navLogin', 10000)
+      .click('@navLogin');
+  },
 };
 
 const homePage: PageObjectModel = {
@@ -13,7 +21,13 @@ const homePage: PageObjectModel = {
   commands: [homePageCommands],
   elements: {
     discoverProposals: {
-      selector: 'button[type=button]',
+      selector: 'a.discover-proposals',
+    },
+    navProposals: {
+      selector: '#main-nav .navbar-start a:nth-child(2)'
+    },
+    navLogin: {
+      selector: '#main-nav .navbar-start a:nth-child(3)'
     }
   }
 };

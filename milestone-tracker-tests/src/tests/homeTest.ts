@@ -1,8 +1,9 @@
 import { NightwatchTests, NightwatchBrowser } from 'nightwatch';
 import { HomePage } from '../page-objects/homePage';
 
-const googleTest: NightwatchTests = {
-  'Google search test': (browser: NightwatchBrowser) => {
+const homeTest: NightwatchTests = {
+  'Home test': (browser: NightwatchBrowser) => {
+    browser.resizeWindow(1280, 800);
     const homePage: HomePage = browser.page.homePage();
 
     homePage
@@ -16,8 +17,28 @@ const googleTest: NightwatchTests = {
         'All the proposals in the Statement of Milestone pilot.'
       );
 
+    browser.assert.urlContains('/proposals');
+
+    homePage
+      .clickNavProposals()
+      .expect.element('body')
+      .text.to.contain(
+        'All the proposals in the Statement of Milestone pilot.'
+      );
+
+    browser.assert.urlContains('/proposals');
+
+    homePage
+      .clickNavLogin()
+      .expect.element('body')
+      .text.to.contain(
+        'Login as Funded Proposer, Challenge Team member or IOG member to interact with milestones.'
+      );
+
+    browser.assert.urlContains('/login');
+
     browser.end();
   }
 };
 
-export default googleTest;
+export default homeTest;
