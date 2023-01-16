@@ -132,7 +132,7 @@ const handleCreateSom = async () => {
     milestone: props.milestone
   })
   if (response) {
-    clearForm()
+    _clearForm()
     emit('somSubmitted')
   }
 }
