@@ -59,7 +59,7 @@ const props = defineProps({
   modelValue: {
     type: [Object, String],
     required: true,
-  },
+  }
 });
 
 const editor = ref(null);
@@ -68,7 +68,7 @@ const emit = defineEmits({
   "update:modelValue": (value) => typeof value === "string",
 });
 
-const value = ref(props.modelValue);
+const value = ref(props.modelValue)
 
 watch(
   value,
@@ -79,9 +79,10 @@ watch(
 
 watch(
   () => props.modelValue,
-  () => {
-    if (typeof props.modelValue === "string") {
-      editor.value.setHTML(props.modelValue);
+  (newVal) => {
+    if (typeof newVal === "object") {
+      editor.value.setHTML(newVal.content)
+      value.value = newVal.content
     }
   },
 );

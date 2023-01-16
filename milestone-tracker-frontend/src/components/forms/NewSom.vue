@@ -30,8 +30,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 
-import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
 import { SchemaFormFactory, useSchemaForm } from "formvuelate"
+import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
 
 import * as yup from 'yup';
 const props = defineProps(['proposal', 'milestone', 'som', 'soms'])
@@ -101,19 +101,24 @@ const initialSchema = computed(() => {
 
 const { schema, reset } = useFormFields(initialSchema.value)
 const formData = ref({})
-useSchemaForm(formData)
+const { updateFormModel } = useSchemaForm(formData)
 let SchemaForm = SchemaFormFactory([
-  VeeValidatePlugin(),
+  VeeValidatePlugin()
 ])
 
 const clone = () => {
   if (props.som) {
-    Object.keys(formData.value).forEach((k) => {
+    Object.keys(schema.value).forEach((k) => {
       let value = props.som[k]
       if (k === 'cost') {
         value = value.toFixed(0)
       }
-      formData.value[k] = value
+      const field = schema.value[k]
+      const val = (field.type === 'html') ? {type: 'update', content: value} : value
+      const formDataVal = (formData.value[k]) ? formData.value[k] : ''
+      if (value !== formDataVal) {
+        updateFormModel(k, val)
+      }
     })
   }
 }
@@ -132,7 +137,14 @@ const handleCreateSom = async () => {
 }
 
 const clearForm = () => {
-  formData.value = reset.value
+  Object.keys(schema.value).forEach((k) => {
+    const field = schema.value[k]
+    const val = (field.type === 'html') ? {type: 'update', content: field.default} : field.default
+    const formDataVal = (formData.value[k]) ? formData.value[k] : ''
+    if (field.default !== formDataVal) {
+      updateFormModel(k, val)
+    }
+  })
 }
 
 </script>
