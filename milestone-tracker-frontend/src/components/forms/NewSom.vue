@@ -15,9 +15,9 @@
         <template #afterForm>
           <div class="buttons">
             <o-button variant="primary" native-type="submit">
-              <span>Submit</span>
+              <span>Submit SoM</span>
             </o-button>
-            <o-button @click="clearForm">
+            <o-button @click="_clearForm">
               <span>Reset</span>
             </o-button>
           </div>
@@ -100,7 +100,7 @@ const initialSchema = computed(() => {
   }
 })
 
-const { schema, reset } = useFormFields(initialSchema.value)
+const { schema, clearForm } = useFormFields(initialSchema.value)
 const formData = ref({})
 const { updateFormModel } = useSchemaForm(formData)
 let SchemaForm = SchemaFormFactory([
@@ -137,15 +137,8 @@ const handleCreateSom = async () => {
   }
 }
 
-const clearForm = () => {
-  Object.keys(schema.value).forEach((k) => {
-    const field = schema.value[k]
-    const val = (field.type === 'html') ? {type: 'update', content: field.default} : field.default
-    const formDataVal = (formData.value[k]) ? formData.value[k] : ''
-    if (field.default !== formDataVal) {
-      updateFormModel(k, val)
-    }
-  })
+const _clearForm = () => {
+  clearForm(formData, updateFormModel)
 }
 
 </script>

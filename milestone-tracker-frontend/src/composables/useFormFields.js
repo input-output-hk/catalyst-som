@@ -62,18 +62,20 @@ export function useFormFields(initialSchema) {
     return initialSchema
   })
 
-  const reset = computed(() => {
-    const resetValue = {}
-    Object.keys(initialSchema).forEach((k) => {
-      let field = initialSchema[k]
-      let def = (field.def) ? field.def : fieldsMap[field.type].def
-      resetValue[k] = def
+
+  const clearForm = (formData, updateFormModel) => {
+    Object.keys(schema.value).forEach((k) => {
+      const field = schema.value[k]
+      const val = (field.type === 'html') ? {type: 'update', content: field.default} : field.default
+      const formDataVal = (formData.value[k]) ? formData.value[k] : ''
+      if (field.default !== formDataVal) {
+        updateFormModel(k, val)
+      }
     })
-    return resetValue
-  })
+  }
 
   return {
     schema,
-    reset
+    clearForm
   }
 }
