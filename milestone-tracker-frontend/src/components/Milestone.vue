@@ -8,6 +8,7 @@
         </div>
         <div class="column is-4 has-text-right mt-4" v-if="canSubmitSom">
           <o-button
+            class="new-som"
             size="medium"
             variant="primary"
             @click="newVisible = !newVisible">

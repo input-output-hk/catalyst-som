@@ -16,6 +16,7 @@
             </o-field>
             <div class="buttons mt-6">
               <o-button
+                class="login"
                 :disabled="password.length === 0 || email.length === 0"
                 variant="primary"
                 size="medium"
@@ -23,6 +24,7 @@
                   {{ loginMsg }}
               </o-button>
               <o-button
+                class="reset"
                 @click="handleReset"
                 variant="primary"
                 size="medium"

@@ -1,5 +1,5 @@
 <template>
-  <div class="block">
+  <div class="block new-som-popup">
     <div class="card">
       <header class="card-header">
         <h4 class="card-header-title mb-0">

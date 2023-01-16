@@ -27,7 +27,7 @@
         <div class="navbar-item">
           <div class="buttons">
             <a class="button is-white">
-              <span @click="logout">Logout {{user.email}}</span>
+              <span class="logout" @click="logout">Logout {{user.email}}</span>
             </a>
           </div>
         </div>
