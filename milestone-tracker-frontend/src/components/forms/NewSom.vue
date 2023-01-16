@@ -85,8 +85,9 @@ const initialSchema = computed(() => {
       type: 'select',
       label: 'Month',
       validations: monthRule.value,
+      required: true,
       default: 1,
-      options: [...Array(24).keys()].map((m) => ({value: m, label: `Month ${m}`}))
+      options: [...Array(24).keys()].map((m) => ({value: m + 1, label: `Month ${m + 1}`}))
     },
     completion: {
       type: 'range',

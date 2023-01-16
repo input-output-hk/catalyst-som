@@ -86,7 +86,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits({
-  "update:modelValue": (value) => Array.isArray(value) || typeof value === "string" || value === null,
+  "update:modelValue": (value) => Array.isArray(value) || typeof value === "string" || typeof value === "number" || value === null,
 });
 
 const value = ref(props.modelValue);
