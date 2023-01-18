@@ -194,6 +194,12 @@ export default {
       title: "Proposals",
       description: "All the proposals in the Statement of Milestone pilot.",
       export: "Export CSV"
+    },
+    reset_password: {
+      title: "Reset password",
+      description: "",
+      password: "Password",
+      reset: "Reset"
     }
   }
 }
