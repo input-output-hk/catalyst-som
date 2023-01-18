@@ -12,8 +12,8 @@ export default function setup(app) {
   setupComponents(app)
   setupOruga(app)
   const router = setupRouter(app)
-  setupPinia(app, router)
-  setupI18n(app)
+  const i18n = setupI18n(app)
+  setupPinia(app, router, i18n)
   setupSanitize(app)
   return app
 }

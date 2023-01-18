@@ -14,4 +14,5 @@ export default function setupI18n(app) {
     datetimeFormats
   })
   app.use(i18n)
+  return i18n.global
 }

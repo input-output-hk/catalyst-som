@@ -150,6 +150,12 @@ export default {
     approvals: "approval | approvals",
     refusals: "refusal | refusals",
   },
+  notifications: {
+    logged_in: "Logged in.",
+    logged_out: "Logged out.",
+    check_email: "Check your email to reset the password.",
+    password_updated: "Password updated successfully!"
+  },
   pages: {
     admin: {
       title: "Admin",

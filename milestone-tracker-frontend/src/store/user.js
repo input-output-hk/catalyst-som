@@ -82,7 +82,7 @@ export const useUser = defineStore('user-store', {
         this.localUser = data.user
         this.logged = true
         this.getInfo()
-        successNotification('Logged in.')
+        successNotification(this.$i18n.t('notifications.logged_in'))
         this.$router.push({name: 'proposals'})
       } catch(error) {
         this.resetState()
@@ -95,7 +95,7 @@ export const useUser = defineStore('user-store', {
       try {
         const { error } = await supabase.auth.signOut()
         this.resetState()
-        successNotification('Logged out.')
+        successNotification(this.$i18n.t('notifications.logged_out'))
       } catch(error) {
         errorNotification(error.message)
       }
@@ -112,7 +112,7 @@ export const useUser = defineStore('user-store', {
           email,
           { redirectTo: `${import.meta.env.VITE_LOCAL_BASEURL}/reset-password/` }
         )
-        successNotification('Check your email to reset the password.')
+        successNotification(this.$i18n.t('notifications.check_email'))
       } catch(error) {
         errorNotification(error.message)
       }
@@ -123,7 +123,7 @@ export const useUser = defineStore('user-store', {
         const { data, error } = await supabase.auth.update({
           password: password,
         })
-        successNotification('Password updated successfully!')
+        successNotification(this.$i18n.t('notifications.password_updated'))
       } catch(error) {
         errorNotification(error.message)
       } finally {
