@@ -3,23 +3,23 @@
     <table class="table is-bordered is-striped poa-table" v-if="poa">
       <tbody class="poa-recap">
         <tr>
-          <th>PoA</th>
+          <th>{{ $t('poa.poa') }}</th>
           <td>
             <div v-html="$sanitize(poa.content)"></div>
           </td>
         </tr>
         <tr>
-          <th>Submitted At:</th>
+          <th>{{ $t('poa.submitted_at') }}</th>
           <td>{{$d(poa.created_at, 'long')}}</td>
         </tr>
         <tr v-if="poa.poas_reviews.length > 0">
-          <th>PoA reviews</th>
+          <th>{{ $t('poa.reviews') }}</th>
           <td>
             <poa-reviews :poa="poa" :reviews="poa.poas_reviews" />
           </td>
         </tr>
         <tr v-if="locked">
-          <th>Signed off at:</th>
+          <th>{{ $t('poa.signed_off_at') }}</th>
           <td>
             {{$d(poa.signoffs[0].created_at, 'long')}}
           </td>
@@ -32,14 +32,14 @@
         size="medium"
         variant="primary"
         @click="newReviewVisible = !newReviewVisible">
-          Submit review for this PoA
+          {{ $t('poa.submit') }}
         </o-button>
         <div v-if="current && canSignoff && !locked">
           <o-button
             variant="primary"
             size="medium"
             @click="confirmSignoff = !confirmSignoff">
-            Signoff
+            {{ $t('poa.signoff') }}
           </o-button>
           <o-modal v-model:active="confirmSignoff">
             <new-signoff :som="som" :poa="poa" @clear-signoff="confirmSignoff = false" />

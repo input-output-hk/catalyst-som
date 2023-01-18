@@ -20,5 +20,13 @@ export default {
     previous: "Previous page",
     page: "Page",
     current: "Current"
+  },
+  poa: {
+    poa: "Content:",
+    submitted_at: "Submitted at:",
+    reviews: "PoA reviews",
+    signed_off_at: "Signed off at:",
+    submit: "Submit review for this PoA",
+    signoff: "Signoff"
   }
 }
