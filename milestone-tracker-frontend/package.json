@@ -27,7 +27,7 @@
     "vee-validate": "^4.7.2",
     "vue": "^3.2.37",
     "vue-3-sanitize": "^0.1.4",
-    "vue-i18n": "9",
+    "vue-i18n": "^9.2.2",
     "vue-router": "4",
     "yup": "^0.32.11"
   },
