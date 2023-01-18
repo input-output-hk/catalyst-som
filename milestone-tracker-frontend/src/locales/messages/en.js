@@ -50,6 +50,13 @@ export default {
     from: "From",
     submitted_at: "Submitted at:"
   },
+  new_poa_review: {
+    title: "New Review for Proof of Achievement",
+    submit: "Submit PoA review",
+    reset: "Reset",
+    poa_approved: "PoA Approved?",
+    comment: "Comment:",
+  },
   poa_reviews: {
     open: "Open",
     close: "Close",
