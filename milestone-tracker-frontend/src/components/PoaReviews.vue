@@ -6,7 +6,14 @@
         :not-approves="poaReviewsNotApproved" />
       <o-collapse v-model:open="reviewsVisible">
         <template #trigger="props">
-          <o-button size="small" variant="primary">{{ (props.open) ? 'Close' : 'Open'}} PoA reviews</o-button>
+          <o-button size="small" variant="primary">
+            {{ $t(
+              'poa_reviews.poa_reviews',
+              {
+                action: (props.open) ? $t('poa_reviews.close') : $t('poa_reviews.open')
+              })
+            }}
+          </o-button>
         </template>
         <div class="reviews mt-3" v-for="review in reviews">
           <poa-review :review="review" />
@@ -14,7 +21,7 @@
       </o-collapse>
     </div>
     <div v-if="poaReviewsTot === 0">
-      No PoA reviews
+      {{ $t('poa_reviews.no_reviews') }}
     </div>
   </div>
 </template>

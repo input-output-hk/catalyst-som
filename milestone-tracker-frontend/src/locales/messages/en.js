@@ -32,5 +32,11 @@ export default {
   poa_review: {
     from: "From",
     submitted_at: "Submitted at:"
+  },
+  poa_reviews: {
+    open: "Open",
+    close: "Close",
+    poa_reviews: "{action} PoA reviews",
+    no_reviews: "No PoA reviews"
   }
 }
