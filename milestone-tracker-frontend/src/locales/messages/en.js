@@ -63,6 +63,14 @@ export default {
     poa_reviews: "{action} PoA reviews",
     no_reviews: "No PoA reviews"
   },
+  new_signoff: {
+    title: "Signoff",
+    confirm: "Confirm Signoff? This {entity} will be locked.",
+    signoff: "Signoff",
+    cancel: "Cancel",
+    poa: "PoA",
+    som: "SoM"
+  },
   som: {
     submitted_at: "SoM Submitted at",
     title: "Milestone Title",

@@ -3,22 +3,30 @@
     <div class="card">
       <header class="card-header">
         <p class="card-header-title">
-          Signoff
+          {{ $t('new_signoff.title') }}
         </p>
       </header>
       <div class="card-content">
-        <p>Confirm Signoff? This SoM will be locked.</p>
+        <p>
+          {{ $t(
+              'new_signoff.confirm',
+              {
+                entity: (poa) ? $t('new_signoff.poa') : $t('new_signoff.som')
+              }
+            )
+          }}
+        </p>
         <div class="buttons">
           <o-button
             variant="primary"
             size="medium"
             @click="signoff">
-            Signoff
+            {{ $t('new_signoff.signoff') }}
           </o-button>
           <o-button
             size="medium"
             @click="emit('clearSignoff')">
-            Cancel
+            {{ $t('new_signoff.cancel') }}
           </o-button>
         </div>
       </div>
