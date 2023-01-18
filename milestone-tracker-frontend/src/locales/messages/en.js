@@ -145,5 +145,9 @@ export default {
     challenge: "Challenge",
     budget: "Budget",
     completion: "Completion date"
+  },
+  reviews_counter: {
+    approvals: "approval | approvals",
+    refusals: "refusal | refusals",
   }
 }
