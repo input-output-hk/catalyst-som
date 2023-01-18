@@ -8,7 +8,7 @@
           v-slot="{href, route, navigate}"
           :to="{name: 'proposal-milestones', params: {id: proposal.project_id}}">
           <o-button variant="primary" size="large" @click="navigate">
-            Open Milestones Details
+            {{ $t('pages.proposal.open_details') }}
           </o-button>
         </router-link>
       </div>
@@ -16,7 +16,7 @@
         <recap :proposal="proposal" />
       </div>
       <div class="column is-12">
-        <h3 class="title is-size-2">Milestones Recap</h3>
+        <h3 class="title is-size-2">{{ $t('pages.proposal.milestone_recap') }}</h3>
         <milestones-recap :proposal="proposal" />
       </div>
       <div class="column is-12">
@@ -25,7 +25,7 @@
           v-slot="{href, route, navigate}"
           :to="{name: 'proposal-milestones', params: {id: proposal.project_id}}">
           <o-button variant="primary" size="large" @click="navigate">
-            Open Milestones Details
+            {{ $t('pages.proposal.open_details') }}
           </o-button>
         </router-link>
       </div>

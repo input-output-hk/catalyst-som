@@ -185,6 +185,9 @@ export default {
       role: "Role",
       proposals: "Proposals (as Funded Proposer):",
       challenges: "Challenges (as Challenge Team):"
+    },
+    proposal: {
+      open_details: "Open Milestones Details"
     }
   }
 }
