@@ -4,17 +4,17 @@
       <table class="table is-bordered is-striped">
         <tbody class="som-recap">
           <tr>
-            <th>SoM Submitted at</th>
+            <th>{{ $t('som.submitted_at') }}</th>
             <td>{{$d(som.created_at, 'long')}}</td>
             <td></td>
           </tr>
           <tr>
-            <th>Milestone Title</th>
+            <th>{{ $t('som.title') }}</th>
             <td><span class="is-size-5 has-text-weight-semibold">{{som.title}}</span></td>
             <td></td>
           </tr>
           <tr>
-            <th>Milestone Outputs</th>
+            <th>{{ $t('som.outputs') }}</th>
             <td v-html="$sanitize(som.outputs)"></td>
             <td>
               <som-reviews
@@ -24,7 +24,7 @@
             </td>
           </tr>
           <tr>
-            <th>Acceptance criteria</th>
+            <th>{{ $t('som.acceptance_criteria') }}</th>
             <td v-html="$sanitize(som.success_criteria)"></td>
             <td>
               <som-reviews
@@ -34,7 +34,7 @@
             </td>
           </tr>
           <tr>
-            <th>Milestone Evidence</th>
+            <th>{{ $t('som.evidence') }}</th>
             <td v-html="$sanitize(som.evidence)"></td>
             <td>
               <som-reviews
@@ -44,14 +44,14 @@
             </td>
           </tr>
           <tr>
-            <th>Delivery Month</th>
+            <th>{{ $t('som.month') }}</th>
             <td>
               <span class="is-size-3 mr-4 has-text-weight-semibold">{{som.month}}</span>
             </td>
             <td></td>
           </tr>
           <tr>
-            <th>Milestone Cost</th>
+            <th>{{ $t('som.cost') }}</th>
             <td>
               <div class="is-flex is-align-items-center">
                 <span class="is-size-3 mr-4 has-text-weight-semibold">{{somCost}}%</span>
@@ -64,7 +64,7 @@
             <td></td>
           </tr>
           <tr>
-            <th>Project Completion</th>
+            <th>{{ $t('som.completion') }}</th>
             <td>
               <div class="is-flex is-align-items-center">
                 <span class="is-size-3 mr-4 has-text-weight-semibold">{{som.completion}}%</span>
@@ -74,7 +74,7 @@
             <td></td>
           </tr>
           <tr v-if="locked">
-            <th>Signed off at:</th>
+            <th>{{ $t('som.signed_off_at') }}</th>
             <td>
               {{$d(som.signoffs[0].created_at, 'long')}}
             </td>
@@ -90,7 +90,7 @@
             <o-button
               class="is-small"
               @click="reviewsVisible = !reviewsVisible">
-              Open reviews for this Milestone
+              {{ $t('som.open_reviews') }}
             </o-button>
             <o-modal :active="reviewsVisible" scroll="keep">
               <div class="container scrollable-modal">
@@ -113,7 +113,7 @@
               variant="primary"
               size="medium"
               @click="newReviewVisible = !newReviewVisible">
-              Submit review for this SoM
+              {{ $t('som.submit_review') }}
             </o-button>
           </div>
           <div class="mr-4" v-if="current && canWriteSom(proposal.id) && locked && !poaLocked">
@@ -121,7 +121,7 @@
               variant="primary"
               size="medium"
               @click="newPoAVisible = !newPoAVisible">
-              Submit new PoA
+              {{ $t('som.submit_poa') }}
             </o-button>
             <o-modal v-model:active="newPoAVisible">
               <new-poa :proposal="proposal" :som="som" />
@@ -132,7 +132,7 @@
               variant="primary"
               size="medium"
               @click="confirmSignoff = !confirmSignoff">
-              Signoff
+              {{ $t('som.signoff') }}
             </o-button>
             <o-modal v-model:active="confirmSignoff">
               <new-signoff :som="som" @clear-signoff="confirmSignoff = false" />
@@ -153,7 +153,7 @@
     </div>
     <section class="section" v-if="!som">
       <div class="notification">
-        <span class="is-size-4">Statement of Milestone not submitted yet!</span>
+        <span class="is-size-4">{{$t('som.not_submitted')}}</span>
       </div>
     </section>
   </div>

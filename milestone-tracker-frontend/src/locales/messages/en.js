@@ -44,5 +44,21 @@ export default {
     close: "Close",
     poa_reviews: "{action} PoA reviews",
     no_reviews: "No PoA reviews"
+  },
+  som: {
+    submitted_at: "SoM Submitted at",
+    title: "Milestone Title",
+    outputs: "Milestone Outputs",
+    acceptance_criteria: "Acceptance criteria",
+    evidence: "Milestone Evidence",
+    month: "Delivery Month",
+    cost: "Milestone Cost",
+    completion: "Project Completion",
+    signed_off_at: "Signed off at:",
+    open_reviews: "Open reviews for this Milestone",
+    submit_review: "Submit review for this SoM",
+    submit_poa: "Submit new PoA",
+    signoff: "Signoff",
+    not_submitted: "Statement of Milestone not submitted yet!"
   }
 }
