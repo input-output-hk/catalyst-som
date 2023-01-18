@@ -14,5 +14,11 @@ export default {
     som: "Statement of Milestone {nr}",
     latest_som: "Latest submission from proposers of the Statement of Milestone {nr}.",
     archived: "Archived Statements of Milestone {nr}"
+  },
+  table: {
+    next: "Next page",
+    previous: "Previous page",
+    page: "Page",
+    current: "Current"
   }
 }

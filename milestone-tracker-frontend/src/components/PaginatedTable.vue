@@ -15,10 +15,10 @@
     :total="count"
     v-model:current="page"
     :per-page="size"
-    aria-next-label="Next page"
-    aria-previous-label="Previous page"
-    aria-page-label="Page"
-    aria-current-label="Current page"
+    :aria-next-label="$t('table.next')"
+    :aria-previous-label="$t('table.previous')"
+    :aria-page-label="$t('table.page')"
+    :aria-current-label="$t('table.current')"
   >
   </o-pagination>
 </template>
