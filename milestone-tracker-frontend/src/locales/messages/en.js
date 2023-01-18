@@ -159,6 +159,12 @@ export default {
       role: "Role",
       challenges: "Challenges",
       proposals: "Proposals"
+    },
+    home: {
+      title: "Project Catalyst<br />Milestone Module",
+      discover: "Discover proposals",
+      how: "How it works",
+      faq: "FAQ"
     }
   }
 }
