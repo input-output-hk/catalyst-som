@@ -1,17 +1,17 @@
 <template>
   <table class="table is-bordered is-striped">
     <tr>
-      <td>From <span class="has-text-weight-semibold">{{role}}</span></td>
+      <td>{{ $t('som_review.from')}} <span class="has-text-weight-semibold">{{role}}</span></td>
     </tr>
     <tr v-for="property in properties">
       <td>
-        <span class="is-size-5 has-text-weight-semibold">{{ (review[`${property}_approves`]) ? 'Approved' : 'Not Approved' }}</span>
+        <span class="is-size-5 has-text-weight-semibold">{{ (review[`${property}_approves`]) ? $t('som_review.approved') : $t('som_review.not_approved') }}</span>
         <div v-html="$sanitize(review[`${property}_comment`])" />
       </td>
     </tr>
     <tr>
       <td>
-        Submitted at: <span class="has-text-weight-semibold">{{$d(review.created_at, 'long')}}</span>
+        {{ $t('som_review.submitted_at') }} <span class="has-text-weight-semibold">{{$d(review.created_at, 'long')}}</span>
       </td>
     </tr>
   </table>
@@ -19,14 +19,16 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { roles } from '@/utils/roles.js'
+const { t } = useI18n()
 const props = defineProps(['review', 'properties'])
 
 const role = computed(() => {
   if (props.review.users) {
-    return roles[props.review.users.role]
+    return t(`roles.${roles[props.review.users.role]}`)
   }
-  return 'System'
+  return t('som_review.system')
 })
 
 </script>

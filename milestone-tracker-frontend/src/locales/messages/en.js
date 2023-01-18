@@ -60,5 +60,22 @@ export default {
     submit_poa: "Submit new PoA",
     signoff: "Signoff",
     not_submitted: "Statement of Milestone not submitted yet!"
+  },
+  som_review: {
+    from: "From",
+    approved: "Approved",
+    not_approved: "Not Approved",
+    submitted_at: "Submitted at:",
+    system: "System",
+    outputs: "outputs",
+    acceptance_criteria: "acceptance criteria",
+    evidence: "evidence"
+  },
+  roles: {
+    funded_proposer: "Funded proposer",
+    ct_member: "Challenge Team member",
+    io_member: "IOG Team member",
+    admin: "Admin",
+    signoff: "Signoff"
   }
 }

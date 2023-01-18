@@ -1,7 +1,7 @@
 export const roles = {
-  0: 'Funded proposer',
-  1: 'Challenge Team member',
-  2: 'IOG Team member',
-  3: 'Admin',
-  4: 'Signoff'
+  0: 'funded_proposer',
+  1: 'ct_member',
+  2: 'io_member',
+  3: 'admin',
+  4: 'signoff'
 }
