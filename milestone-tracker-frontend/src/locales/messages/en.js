@@ -20,6 +20,16 @@ export default {
     latest_som: "Latest submission from proposers of the Statement of Milestone {nr}.",
     archived: "Archived Statements of Milestone {nr}"
   },
+  milestone_recap: {
+    title: "M {nr}",
+    cost: "Milestone cost:",
+    delivery: "Delivery on:",
+    month: "Month {month}",
+    payment: "Payments schedule:",
+    payment_starts: "Payments starts after previous milestone PoA approval.",
+    last_payment: "Last payment occurs after Project Closeout approval.",
+    poa: "PoA:"
+  },
   table: {
     next: "Next page",
     previous: "Previous page",

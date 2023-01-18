@@ -3,29 +3,37 @@
     <div class="tile is-child notification">
       <h1 class="title is-size-1 mb-2">
         <router-link :to="{name: 'proposal-milestones-detail', params: {id: proposal.project_id, milestone: milestone}}">
-          M {{milestone}}
+          {{ $t('milestone_recap.title', {nr: milestone}) }}
         </router-link>
       </h1>
       <approval-counters
         :approves="somReviewsApproved"
         :not-approves="somReviewsNotApproved" />
       <p class="is-size-4 mb-2 has-text-weight-semibold">{{som.title}}</p>
-      <p class="is-size-6 mb-0">Milestone cost:</p>
-      <p class="is-size-4 mb-2 has-text-weight-semibold">{{$n(som.cost, 'currency')}}</p>
-      <p class="is-size-6 mb-0">Delivery on:</p>
-      <p class="is-size-4 has-text-weight-semibold">Month {{som.month}}</p>
+      <p class="is-size-6 mb-0">{{ $t('milestone_recap.cost') }}</p>
+      <p class="is-size-4 mb-2 has-text-weight-semibold">
+        {{$n(som.cost, 'currency')}}
+      </p>
+      <p class="is-size-6 mb-0">{{ $t('milestone_recap.delivery') }}</p>
+      <p class="is-size-4 has-text-weight-semibold">
+        {{ $t('milestone_recap.month', {month: som.month}) }}
+      </p>
       <div class="is-tile is-child notification is-info ml-0">
-        <p class="is-size-5 mb-4 has-text-weight-semibold">Payments schedule:</p>
+        <p class="is-size-5 mb-4 has-text-weight-semibold">
+          {{ $t('milestone_recap.payment') }}
+        </p>
         <ul>
           <li v-for="payment,idx in payments">
-            <span class="is-size-6 has-text-weight-semibold">{{$n(payment, 'currency')}} - Month {{parseInt(previousSomEnd) + idx + 1}}</span>
+            <span class="is-size-6 has-text-weight-semibold">
+              {{$n(payment, 'currency')}} - Month {{ $t('milestone_recap.month', {month: parseInt(previousSomEnd) + idx + 1}) }}
+            </span>
           </li>
         </ul>
-        <p class="is-size-7 mb-0" v-if="milestone > 1">Payments starts after previous milestone PoA approval.</p>
-        <p class="is-size-7 mb-0" v-if="milestone === 5">Last payment occurs after Project Closeout approval.</p>
+        <p class="is-size-7 mb-0" v-if="milestone > 1">{{ $t('milestone_recap.payment_starts') }}</p>
+        <p class="is-size-7 mb-0" v-if="milestone === 5">{{ $t('milestone_recap.last_payment') }}</p>
       </div>
       <div v-if="poa">
-        <p class="is-size-3 mb-0 has-text-weight-semibold">PoA:</p>
+        <p class="is-size-3 mb-0 has-text-weight-semibold">{{ $t('milestone_recap.poa') }}</p>
         <approval-counters
           :approves="poaReviewsApproved"
           :not-approves="poaReviewsNotApproved" />
