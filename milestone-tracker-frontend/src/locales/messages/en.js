@@ -149,5 +149,16 @@ export default {
   reviews_counter: {
     approvals: "approval | approvals",
     refusals: "refusal | refusals",
+  },
+  pages: {
+    admin: {
+      title: "Admin",
+      description: "Page for the administration of users.",
+      email: "Email",
+      username: "Username",
+      role: "Role",
+      challenges: "Challenges",
+      proposals: "Proposals"
+    }
   }
 }

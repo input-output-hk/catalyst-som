@@ -1,11 +1,17 @@
 <template>
   <section class="section">
     <div class="content">
-      <h1 class="is-size-1">Admin</h1>
-      <p>Page for the administration of users.</p>
+      <h1 class="is-size-1">{{ $t('pages.admin.title') }}</h1>
+      <p>{{ $t('pages.admin.description') }}</p>
       <paginated-table
         classStyle="users-list"
-        :headers="['Email', 'Username', 'Role', 'Challenges', 'Proposals']"
+        :headers="[
+          $t('pages.admin.email'),
+          $t('pages.admin.username'),
+          $t('pages.admin.role'),
+          $t('pages.admin.challenges'),
+          $t('pages.admin.proposals')
+        ]"
         :items="users"
         :getItems="getUsers"
         :getCount="getCount"
@@ -18,9 +24,9 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import UserItem from '../components/admin/UserItem.vue'
+import UserItem from '@/components/admin/UserItem.vue'
 import PaginatedTable from '@/components/PaginatedTable.vue'
-import { useUsers } from '../store/users.js'
+import { useUsers } from '@/store/users.js'
 import { storeToRefs } from 'pinia'
 const userStore = useUsers()
 const { getUsers, getCount } = userStore
