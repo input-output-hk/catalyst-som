@@ -137,5 +137,13 @@ export default {
     io_member: "IOG Team member",
     admin: "Admin",
     signoff: "Signoff"
+  },
+  proposal_recap: {
+    proposal_id: "Proposal ID",
+    link: "Link",
+    open_ideascale: "Open in Ideascale",
+    challenge: "Challenge",
+    budget: "Budget",
+    completion: "Completion date"
   }
 }
