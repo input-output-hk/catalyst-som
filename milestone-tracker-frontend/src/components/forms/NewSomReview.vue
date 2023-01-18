@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div class="box">
-      <h3>New Review for Statement of Milestone</h3>
+      <h3>{{ $t('new_som_review.title') }}</h3>
       <schema-form
         class="card-content scrollable-modal"
         :schema="schema"
@@ -10,10 +10,10 @@
         <template #afterForm>
           <div class="buttons">
             <o-button variant="primary" native-type="submit">
-              <span>Submit</span>
+              <span>{{ $t('new_som_review.submit') }}</span>
             </o-button>
             <o-button @click="clearForm">
-              <span>Reset</span>
+              <span>{{ $t('new_som_review.reset') }}</span>
             </o-button>
           </div>
         </template>
@@ -26,9 +26,11 @@
 import { ref, computed } from 'vue'
 import { useFormFields } from '@/composables/useFormFields.js'
 import { useSomReviews } from '@/store/somReviews.js'
-import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
-import { SchemaFormFactory, useSchemaForm } from "formvuelate"
+import VeeValidatePlugin from '@formvuelate/plugin-vee-validate'
+import { SchemaFormFactory, useSchemaForm } from 'formvuelate'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const props = defineProps(['som'])
 const emit = defineEmits(['somReviewSubmitted'])
 const { createSomReview } = useSomReviews()
@@ -39,11 +41,11 @@ const initialSchema = computed(() => {
   keys.forEach((key) => {
     schema[`${key}_approves`] = {
       type: 'checkbox',
-      label: `${key} Approved?`
+      label: t(`new_som_review.${key}_approved`)
     }
     schema[`${key}_comment`] = {
       type: 'html',
-      label: `${key} comments:`
+      label: t(`new_som_review.${key}_comment`),
     }
   })
   return schema

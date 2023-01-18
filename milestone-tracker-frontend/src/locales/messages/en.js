@@ -110,6 +110,17 @@ export default {
     acceptance_criteria: "acceptance criteria",
     evidence: "evidence"
   },
+  new_som_review: {
+    title: "New Review for Statement of Milestone",
+    submit: "Submit",
+    reset: "Reset",
+    outputs_approved: "Outputs approved?",
+    outputs_comment: "Outputs comment:",
+    success_criteria_approved: "Success criteria approved?",
+    success_criteria_comment: "Success criteria comment:",
+    evidence_approved: "Evidence approved?",
+    evidence_comment: "Evidence comment:",
+  },
   roles: {
     funded_proposer: "Funded proposer",
     ct_member: "Challenge Team member",
