@@ -3,8 +3,8 @@
     <div class="content">
       <div class="columns">
         <div class="column is-8">
-          <h1 class="is-size-1">Proposals</h1>
-          <p>All the proposals in the Statement of Milestone pilot.</p>
+          <h1 class="is-size-1">{{ $t('pages.proposals.title') }}</h1>
+          <p>{{ $t('pages.proposals.description') }}</p>
         </div>
         <div class="column is-4 has-text-right">
           <o-button
@@ -13,7 +13,7 @@
             v-if="isAdmin"
             @click="exportCSV"
           >
-            Export CSV
+            {{ $t('pages.proposals.export') }}
           </o-button>
         </div>
       </div>

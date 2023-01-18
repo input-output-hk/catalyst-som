@@ -187,7 +187,13 @@ export default {
       challenges: "Challenges (as Challenge Team):"
     },
     proposal: {
-      open_details: "Open Milestones Details"
+      open_details: "Open Milestones Details",
+      milestone_recap: "Milestones Recap"
+    },
+    proposals: {
+      title: "Proposals",
+      description: "All the proposals in the Statement of Milestone pilot.",
+      export: "Export CSV"
     }
   }
 }
