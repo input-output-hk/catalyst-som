@@ -173,6 +173,10 @@ export default {
       password: "Password",
       login: "Login",
       reset: "Reset Password"
+    },
+    milestones: {
+      back: "Go back to main proposal page.",
+      milestone: "Milestone {nr}"
     }
   }
 }

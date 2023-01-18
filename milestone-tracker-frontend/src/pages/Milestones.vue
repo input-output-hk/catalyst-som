@@ -8,7 +8,7 @@
             <router-link
               v-if="proposal.project_id"
               :to="{name: 'proposal', params: {id: proposal.project_id}}">
-              Go back to main proposal page.
+              {{ $t('pages.milestones.back') }}
             </router-link>
           </p>
         </div>
@@ -22,9 +22,8 @@
         <o-tabs type="boxed" v-model="activeTab">
           <o-tab-item v-for="ml in [...Array(5).keys()]">
             <template
-              @click="changeTab"
               #header>
-              <span>Milestone {{ml + 1}}</span>
+              <span>{{ $t('pages.milestones.milestone', {nr: ml + 1}) }}</span>
             </template>
             <milestone :proposal="proposal" :milestone="ml + 1" />
           </o-tab-item>
@@ -63,10 +62,6 @@ const activeTab = computed({
     })
   }
 })
-
-const changeTab = (tab) => {
-  console.log(tab)
-}
 
 onMounted(async () => {
   proposal.value = await getProposal(proposalId.value)
