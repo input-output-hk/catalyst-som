@@ -3,15 +3,15 @@
     <div class="content">
       <div class="columns is-multiline">
         <div class="column is-8">
-          <h1 class="is-size-1">Login</h1>
-          <p>Login as Funded Proposer, Challenge Team member or IOG member to interact with milestones.</p>
+          <h1 class="is-size-1">{{ $t('pages.login.title') }}</h1>
+          <p>{{ $t('pages.login.description') }}</p>
         </div>
         <div class="column is-6">
           <form @submit.prevent="handleLogin">
-            <o-field label="Email">
+            <o-field :label="$t('pages.login.email')">
               <o-input v-model="email" type="email"></o-input>
             </o-field>
-            <o-field label="Password">
+            <o-field :label="$t('pages.login.password')">
               <o-input v-model="password" type="password"></o-input>
             </o-field>
             <div class="buttons mt-6">
@@ -21,7 +21,7 @@
                 variant="primary"
                 size="medium"
                 native-type="submit">
-                  {{ loginMsg }}
+                  {{ $t('pages.login.login') }}
               </o-button>
               <o-button
                 class="reset"
@@ -29,7 +29,7 @@
                 variant="primary"
                 size="medium"
                 :disabled="loading || email.length === 0">
-                Reset Password
+                {{ $t('pages.login.reset') }}
               </o-button>
             </div>
           </form>
@@ -63,12 +63,8 @@ import { mapState } from 'pinia'
 export default {
   computed: {
     ...mapState(useUser, {
-      user: 'user',
-      fetching: 'fetching'
-    }),
-    loginMsg() {
-      return (this.fetching) ? 'Loading...' : 'Login'
-    }
+      user: 'user'
+    })
   },
 
   created() {

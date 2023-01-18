@@ -165,6 +165,14 @@ export default {
       discover: "Discover proposals",
       how: "How it works",
       faq: "FAQ"
+    },
+    login: {
+      title: "Login",
+      description: "Login as Funded Proposer, Challenge Team member or IOG member to interact with milestones.",
+      email: "Email",
+      password: "Password",
+      login: "Login",
+      reset: "Reset Password"
     }
   }
 }
