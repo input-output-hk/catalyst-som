@@ -3,8 +3,8 @@
     <section class="section pt-0">
       <div class="columns">
         <div class="column is-8">
-          <h2 class="is-size-3 mb-2 mt-2">Statement of Milestone {{milestone}}</h2>
-          <p class="mb-5">Latest submission from proposers of the Statement of Milestone {{milestone}}.</p>
+          <h2 class="is-size-3 mb-2 mt-2">{{ $t('milestone.som', {nr: milestone}) }}</h2>
+          <p class="mb-5">{{ $t('milestone.latest_som', {nr: milestone}) }}</p>
         </div>
         <div class="column is-4 has-text-right mt-4" v-if="canSubmitSom">
           <o-button
@@ -30,7 +30,7 @@
         {{(othersVisible) ? 'Hide archived SoMs' : 'Show archived SoMs'}}
       </o-button>
       <div v-if="othersVisible">
-        <h3 class="mt-6 subtitle">Archived Statements of Milestone {{milestone}}</h3>
+        <h3 class="mt-6 subtitle">{{ $t('milestone.archived', {nr: milestone}) }}</h3>
         <som
           :current="false"
           :som="som"
