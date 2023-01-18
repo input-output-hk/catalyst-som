@@ -7,6 +7,7 @@ import datetimeFormats from '@/locales/datetime/index.js'
 export default function setupI18n(app) {
   const i18n = createI18n({
     locale: 'en',
+    legacy: false,
     allowComposition: true,
     messages,
     numberFormats,

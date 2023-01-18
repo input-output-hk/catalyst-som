@@ -124,7 +124,7 @@
               {{ $t('som.submit_poa') }}
             </o-button>
             <o-modal v-model:active="newPoAVisible">
-              <new-poa :proposal="proposal" :som="som" />
+              <new-poa :proposal="proposal" :som="som" :milestone="som.milestone" />
             </o-modal>
           </div>
           <div v-if="current && canSignoff && !locked">

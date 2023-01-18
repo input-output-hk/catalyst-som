@@ -34,6 +34,12 @@ export default {
     submit: "Submit review for this PoA",
     signoff: "Signoff"
   },
+  new_poa: {
+    title: "New Proof of Achivement for Milestone {nr}",
+    submit: "Submit PoA",
+    reset: "Reset",
+    content: "Content"
+  },
   poas: {
     title: "Proof of Achivements",
     hide_archived: "Hide archived PoAs",

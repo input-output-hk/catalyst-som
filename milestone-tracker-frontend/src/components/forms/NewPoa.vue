@@ -3,7 +3,7 @@
     <div class="card">
       <header class="card-header">
         <p class="card-header-title">
-          New Proof of Achivement for {{milestone}}
+          {{ $t('new_poa.title', {nr: milestone}) }}
         </p>
       </header>
       <schema-form
@@ -14,10 +14,10 @@
         <template #afterForm>
           <div class="buttons">
             <o-button variant="primary" native-type="submit">
-              <span>Submit PoA</span>
+              <span>{{ $t('new_poa.submit') }}</span>
             </o-button>
             <o-button @click="_clearForm">
-              <span>Reset</span>
+              <span>{{ $t('new_poa.reset') }}</span>
             </o-button>
           </div>
         </template>
@@ -33,16 +33,19 @@ import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
 const props = defineProps(['proposal', 'som', 'milestone'])
 import { useFormFields } from '@/composables/useFormFields.js'
 import { usePoas } from '@/store/poas.js'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const { createPoa } = usePoas()
 
 const initialSchema = computed(() => {
   return {
     content: {
       type: 'html',
-      label: 'Content'
+      label: t('new_poa.content')
     }
   }
 })
+
 
 const { schema, clearForm } = useFormFields(initialSchema.value)
 const formData = ref({})
