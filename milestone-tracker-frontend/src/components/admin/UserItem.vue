@@ -3,8 +3,10 @@
     <td>{{item.email}}</td>
     <td>{{item.username}}</td>
     <td>
-      <o-select placeholder="Select a name" v-model="role">
-        <option :value="r" v-for="r in Object.keys(roles)">{{roles[r]}}</option>
+      <o-select :placeholder="$t('admin.select_role')" v-model="role">
+        <option :value="r" v-for="r in Object.keys(roles)">
+          {{$t(`roles.${roles[r]}`)}}
+        </option>
       </o-select>
     </td>
     <td>
@@ -15,7 +17,7 @@
         :allow-new="false"
         :open-on-focus="true"
         field="title"
-        placeholder="Add a challenge"
+        :placeholder="$t('admin.add_challenge')"
         @typing="getFilteredChallenges"
       >
       </o-inputitems>
@@ -28,7 +30,7 @@
         :allow-new="false"
         :open-on-focus="true"
         field="title"
-        placeholder="Add a proposal"
+        :placeholder="$t('admin.add_proposal')"
         @typing="getFilteredProposals"
       >
       </o-inputitems>

@@ -10,6 +10,11 @@ export default {
     admin: "Admin",
     logout: "Logout {name}"
   },
+  admin: {
+    select_role: "Select role",
+    add_challenge: "Add a challenge",
+    add_proposal: "Add a proposal"
+  },
   milestone: {
     som: "Statement of Milestone {nr}",
     latest_som: "Latest submission from proposers of the Statement of Milestone {nr}.",
