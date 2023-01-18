@@ -23,7 +23,7 @@ export const useChallenges = defineStore('challenges-store', {
           .select('*')
         this._challenges = data
       } catch(error) {
-        errorNotification('Error fetching proposals.')
+        errorNotification(this.$i18n.t('errors.fetching_proposals'))
       }
     }
   }

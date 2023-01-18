@@ -23,15 +23,14 @@ export const useSomReviews = defineStore('soms-reviews-store', {
           .insert([somReview])
           .select()
         if (error) throw error
-        successNotification('SoM review created.')
+        successNotification(this.$i18n.t('notifications.som_review_created'))
         emit('getSomsBus', {
           proposal_id: som.proposal_id,
           milestone: som.milestone
         })
         return data
       } catch(error) {
-        console.log(error)
-        errorNotification('Error creating SoM review.')
+        errorNotification(this.$i18n.t('errors.creating_som_review'))
       }
     },
   }

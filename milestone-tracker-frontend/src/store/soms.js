@@ -41,7 +41,7 @@ export const useSoms = defineStore('soms-store', {
         }
         this.proposals[proposal_id][milestone] = data
       } catch(error) {
-        errorNotification('Error fetching soms.')
+        errorNotification(this.$i18n.t('errors.fetching_soms'))
       }
     },
     async getSomsPreview(proposal_id, milestone) {
@@ -62,7 +62,7 @@ export const useSoms = defineStore('soms-store', {
         }
         this.proposal_previews[proposal_id][milestone] = data
       } catch(error) {
-        errorNotification('Error fetching soms.')
+        errorNotification(this.$i18n.t('errors.fetching_soms'))
       }
     },
     async getSom(id) {
@@ -75,7 +75,7 @@ export const useSoms = defineStore('soms-store', {
           .insert([som])
           .select()
         if (error) throw error
-        successNotification('SoM created.')
+        successNotification(this.$i18n.t('notifications.som_created'))
         emit('getSomsBus', {
           proposal_id: som.proposal_id,
           milestone: som.milestone
@@ -83,7 +83,7 @@ export const useSoms = defineStore('soms-store', {
         return data
       } catch(error) {
         console.log(error)
-        errorNotification('Error creating SoM.')
+        errorNotification(this.$i18n.t('errors.creating_som'))
       }
     },
   }

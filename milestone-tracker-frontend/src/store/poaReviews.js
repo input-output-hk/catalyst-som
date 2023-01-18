@@ -23,7 +23,7 @@ export const usePoaReviews = defineStore('poas-reviews-store', {
           .insert([poaReview])
           .select()
         if (error) throw error
-        successNotification('PoA review created.')
+        successNotification(this.$i18n.t('notifications.poa_review_created'))
         emit('getSomsBus', {
           proposal_id: som.proposal_id,
           milestone: som.milestone
@@ -31,7 +31,7 @@ export const usePoaReviews = defineStore('poas-reviews-store', {
         return data
       } catch(error) {
         console.log(error)
-        errorNotification('Error creating PoA review.')
+        errorNotification(this.$i18n.t('errors.creating_poa_review'))
       }
     },
   }

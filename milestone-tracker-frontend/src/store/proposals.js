@@ -32,7 +32,7 @@ export const useProposals = defineStore('proposals-store', {
           throw(error)
         }
       } catch(error) {
-        errorNotification('Error fetching proposals count.')
+        errorNotification(this.$i18n.t('errors.fetching_proposals_count'))
       }
     },
     async getProposals(page, size) {
@@ -47,7 +47,7 @@ export const useProposals = defineStore('proposals-store', {
         }
         this._proposals = data
       } catch(error) {
-        errorNotification('Error fetching proposals.')
+        errorNotification(this.$i18n.t('errors.fetching_proposals'))
       }
     },
     async getSelectProposalsByTitle(title) {
@@ -58,7 +58,7 @@ export const useProposals = defineStore('proposals-store', {
           .like('title', `%${title}%`)
         this._selectProposals = data
       } catch(error) {
-        errorNotification('Error fetching proposals.')
+        errorNotification(this.$i18n.t('errors.fetching_proposals'))
       }
     },
     async getProposal(id) {
@@ -69,7 +69,7 @@ export const useProposals = defineStore('proposals-store', {
           .eq('project_id', id)
         return (data.length > 0) ? data[0] : {}
       } catch(error) {
-        errorNotification('Error fetching proposals.')
+        errorNotification(this.$i18n.t('errors.fetching_proposals'))
       }
     },
     async getProposalsForExport() {
@@ -81,7 +81,7 @@ export const useProposals = defineStore('proposals-store', {
         }
         return data
       } catch(error) {
-        errorNotification('Error fetching proposals.')
+        errorNotification(this.$i18n.t('errors.fetching_proposals'))
       }
     },
     async getSomsById(ids) {
@@ -99,7 +99,7 @@ export const useProposals = defineStore('proposals-store', {
         }
         return data
       } catch(error) {
-        errorNotification('Error fetching proposals.')
+        errorNotification(this.$i18n.t('errors.fetching_proposals'))
       }
     }
   }

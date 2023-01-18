@@ -23,7 +23,7 @@ export const usePoas = defineStore('poas-store', {
           .insert([poa])
           .select()
         if (error) throw error
-        successNotification('PoA created.')
+        successNotification(this.$i18n.t('notifications.poa_created'))
         emit('getSomsBus', {
           proposal_id: som.proposal_id,
           milestone: som.milestone
@@ -31,7 +31,7 @@ export const usePoas = defineStore('poas-store', {
         return data
       } catch(error) {
         console.log(error)
-        errorNotification('Error creating PoA.')
+        errorNotification(this.$i18n.t('errors.creating_poa'))
       }
     },
   }

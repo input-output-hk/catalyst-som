@@ -22,14 +22,14 @@ export const useSignoffs = defineStore('signoffs-store', {
           .from('signoffs')
           .insert([signoff])
         if (error) throw error
-        successNotification('Signoff created.')
+        successNotification(this.$i18n.t('notifications.signoff_created'))
         emit('getSomsBus', {
           proposal_id: som.proposal_id,
           milestone: som.milestone
         })
         return data
       } catch(error) {
-        errorNotification('Error creating Signoff.')
+        errorNotification(this.$i18n.t('errors.creating_signoff'))
       }
     },
   }

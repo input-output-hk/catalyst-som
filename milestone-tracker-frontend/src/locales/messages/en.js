@@ -2,6 +2,29 @@ export default {
   global: {
     title: "Project Catalyst Milestone Module"
   },
+  errors: {
+    fetching_proposals: "Error fetching proposals.",
+    fetching_proposals_count: "Error fetching proposals count.",
+    fetching_soms: "Error fetching soms.",
+    fetching_users: "Error fetching users.",
+    fetching_users_count: "Error fetching users count.",
+    creating_poa_review: "Error creating PoA review.",
+    creating_poa: "Error creating PoA.",
+    creating_signoff: "Error creating Signoff.",
+    creating_som_review: "Error creating SoM review.",
+    creating_som: "Error creating SoM."
+  },
+  notifications: {
+    logged_in: "Logged in.",
+    logged_out: "Logged out.",
+    check_email: "Check your email to reset the password.",
+    password_updated: "Password updated successfully!",
+    poa_review_created: "PoA review created.",
+    poa_created: "PoA created.",
+    signoff_created: "Signoff created.",
+    som_review_created: "SoM review created.",
+    som_created: "SoM created."
+  },
   nav: {
     home: "Home",
     proposals: "Proposals",
@@ -149,12 +172,6 @@ export default {
   reviews_counter: {
     approvals: "approval | approvals",
     refusals: "refusal | refusals",
-  },
-  notifications: {
-    logged_in: "Logged in.",
-    logged_out: "Logged out.",
-    check_email: "Check your email to reset the password.",
-    password_updated: "Password updated successfully!"
   },
   pages: {
     admin: {

@@ -32,7 +32,7 @@ export const useUsers = defineStore('users-store', {
           throw(error)
         }
       } catch(error) {
-        errorNotification('Error fetching users count.')
+        errorNotification(this.$i18n.t('errors.fetching_users_count'))
       }
     },
     async getUsers(page, size) {
@@ -48,7 +48,7 @@ export const useUsers = defineStore('users-store', {
         }
         this._users = data
       } catch(error) {
-        errorNotification('Error fetching users.')
+        errorNotification(this.$i18n.t('errors.fetching_users'))
       }
     },
     async updateUserChallenges(challengesUsers, user) {
