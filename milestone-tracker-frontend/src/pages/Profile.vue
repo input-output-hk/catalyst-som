@@ -1,23 +1,23 @@
 <template>
   <section class="section">
     <div class="content">
-      <h1 class="is-size-1">User Profile</h1>
+      <h1 class="is-size-1">{{ $t('pages.profile.title') }}</h1>
       <table class="table is-bordered is-striped">
         <tbody class="som-recap">
           <tr>
-            <th>Email</th>
+            <th>{{ $t('pages.profile.email') }}</th>
             <td>{{ localUser.email }}</td>
           </tr>
           <tr>
-            <th>Username</th>
+            <th>{{ $t('pages.profile.username') }}</th>
             <td>{{ localUser.username }}</td>
           </tr>
           <tr>
-            <th>Role</th>
+            <th>{{ $t('pages.profile.role') }}</th>
             <td>{{ role }}</td>
           </tr>
           <tr>
-            <th>Proposals (as Funded Proposer):</th>
+            <th>{{ $t('pages.profile.proposals') }}</th>
             <td>
               <ul>
                 <li v-for="proposal in proposals">
@@ -30,7 +30,7 @@
             </td>
           </tr>
           <tr>
-            <th>Challenges (as Challenge Team):</th>
+            <th>{{ $t('pages.profile.challenges') }}</th>
             <td>
               <ul>
                 <li v-for="challenge in challenges">

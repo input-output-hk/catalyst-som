@@ -177,6 +177,14 @@ export default {
     milestones: {
       back: "Go back to main proposal page.",
       milestone: "Milestone {nr}"
+    },
+    profile: {
+      title: "User Profile",
+      email: "Email",
+      username: "Username",
+      role: "Role",
+      proposals: "Proposals (as Funded Proposer):",
+      challenges: "Challenges (as Challenge Team):"
     }
   }
 }
