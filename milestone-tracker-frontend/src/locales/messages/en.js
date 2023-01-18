@@ -29,6 +29,12 @@ export default {
     submit: "Submit review for this PoA",
     signoff: "Signoff"
   },
+  poas: {
+    title: "Proof of Achivements",
+    hide_archived: "Hide archived PoAs",
+    show_archived: "Show archived PoAs",
+    archived: "Archived Proof of Achivements"
+  },
   poa_review: {
     from: "From",
     submitted_at: "Submitted at:"

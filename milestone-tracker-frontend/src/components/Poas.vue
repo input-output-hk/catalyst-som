@@ -1,7 +1,7 @@
 <template>
   <div class="content mb-0">
     <section class="section has-background-white-ter">
-      <h3 class="subtitle">Proof of Achivement</h3>
+      <h3 class="subtitle">{{ $t('poas.title') }}</h3>
       <poa
         :current="true"
         :poa="renderedPoas.current"
@@ -12,11 +12,11 @@
         size="medium"
         v-if="renderedPoas.others.length > 0"
         @click="othersVisible = !othersVisible">
-        {{(othersVisible) ? 'Hide archived PoAs' : 'Show archived PoAs'}}
+        {{(othersVisible) ? $t('poas.hide_archived') : $t('poas.show_archived')}}
       </o-button>
     </section>
     <section class="section has-background-grey-light" v-if="othersVisible">
-      <h3 class="subtitle">Archived Proof of Achivement</h3>
+      <h3 class="subtitle">{{ $t('poas.archived') }}</h3>
       <poa
         :current="false"
         :poa="poa"
