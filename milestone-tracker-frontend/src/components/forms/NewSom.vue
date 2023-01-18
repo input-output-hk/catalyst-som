@@ -3,9 +3,11 @@
     <div class="card">
       <header class="card-header">
         <h4 class="card-header-title mb-0">
-          New Statement of Milestone {{milestone}}
+          {{ $t('new_som.component_title', {nr: milestone}) }}
         </h4>
-        <o-button class="mt-2 mr-4" variant="primary" size="small" @click="clone">Clone latest</o-button>
+        <o-button class="mt-2 mr-4" variant="primary" size="small" @click="clone">
+          {{ $t('new_som.clone_latest') }}
+        </o-button>
       </header>
       <schema-form
         class="card-content scrollable-modal"
@@ -15,10 +17,10 @@
         <template #afterForm>
           <div class="buttons">
             <o-button variant="primary" native-type="submit">
-              <span>Submit SoM</span>
+              <span>{{ $t('new_som.submit') }}</span>
             </o-button>
             <o-button @click="_clearForm">
-              <span>Reset</span>
+              <span>{{ $t('new_som.reset') }}</span>
             </o-button>
           </div>
         </template>
@@ -39,6 +41,8 @@ const emit = defineEmits(['somSubmitted'])
 import { useSoms } from '@/store/soms.js'
 import { useFormFields } from '@/composables/useFormFields.js'
 import { getPrevMilestone } from '@/utils/milestones'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const { createSom } = useSoms()
 
 // Form validation rules
@@ -59,31 +63,25 @@ const monthRule = computed(() => {
 })
 
 const initialSchema = computed(() => {
-  return {
+  const localSchema = {
     title: {
-      type: 'string',
-      label: 'Title'
+      type: 'string'
     },
     outputs: {
-      type: 'html',
-      label: 'Outputs'
+      type: 'html'
     },
     success_criteria: {
-      type: 'html',
-      label: 'Success Criteria'
+      type: 'html'
     },
     evidence: {
-      type: 'html',
-      label: 'Evidence'
+      type: 'html'
     },
     cost: {
       type: 'number',
-      label: 'Cost',
-      validations: costRule.value,
+      validations: costRule.value
     },
     month: {
       type: 'select',
-      label: 'Month',
       validations: monthRule.value,
       required: true,
       default: 1,
@@ -91,13 +89,16 @@ const initialSchema = computed(() => {
     },
     completion: {
       type: 'range',
-      label: 'Completion %',
       default: 10,
       min: 0,
       max: 100,
       step: 1
     }
   }
+  Object.keys(localSchema).forEach((field) => {
+    localSchema[field].label = t(`new_som.${field}`)
+  })
+  return localSchema
 })
 
 const { schema, clearForm } = useFormFields(initialSchema.value)

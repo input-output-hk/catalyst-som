@@ -87,6 +87,19 @@ export default {
     signoff: "Signoff",
     not_submitted: "Statement of Milestone not submitted yet!"
   },
+  new_som: {
+    component_title: "New Statement of Milestone {nr}",
+    clone_latest: "Clone latest submission",
+    submit: "Submit SoM",
+    reset: "Reset",
+    title: "Title:",
+    outputs: "Outputs:",
+    success_criteria: "Success Criteria:",
+    evidence: "Evidence:",
+    cost: "Cost:",
+    month: "Delivery month:",
+    completion: "Completion %"
+  },
   som_review: {
     from: "From",
     approved: "Approved",
