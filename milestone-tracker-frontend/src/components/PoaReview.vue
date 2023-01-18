@@ -1,7 +1,7 @@
 <template>
   <table class="table is-bordered is-striped">
     <tr>
-      <td>From <span class="has-text-weight-semibold">{{role}}</span></td>
+      <td>{{$t('poa_review.from')}} <span class="has-text-weight-semibold">{{role}}</span></td>
     </tr>
     <tr>
       <td>
@@ -11,7 +11,7 @@
     </tr>
     <tr>
       <td>
-        Submitted at: <span class="has-text-weight-semibold">{{$d(review.created_at, 'long')}}</span>
+        {{$t('poa_review.submitted_at')}} <span class="has-text-weight-semibold">{{$d(review.created_at, 'long')}}</span>
       </td>
     </tr>
   </table>

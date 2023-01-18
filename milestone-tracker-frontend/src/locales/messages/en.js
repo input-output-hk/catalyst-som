@@ -28,5 +28,9 @@ export default {
     signed_off_at: "Signed off at:",
     submit: "Submit review for this PoA",
     signoff: "Signoff"
+  },
+  poa_review: {
+    from: "From",
+    submitted_at: "Submitted at:"
   }
 }
