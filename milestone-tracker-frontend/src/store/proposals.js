@@ -104,14 +104,18 @@ export const useProposals = defineStore('proposals-store', {
     },
     async updateProposalAllocations(allocations, proposal) {
       try {
-        let { error } = await supabase
+        const { error } = await supabase
           .from('allocations')
           .delete()
           .eq('proposal_id', proposal.id)
-        ({ error } = await supabase
-          .from('allocations')
-          .insert(allocations))
-        successNotification(this.$i18n.t('notifications.allocation_updated'))
+          try {
+            const { error } = await supabase
+            .from('allocations')
+            .insert(allocations)
+            successNotification(this.$i18n.t('notifications.allocation_updated'))
+          } catch (error) {
+            errorNotification(this.$i18n.t('errors.updating_allocations'))
+          }
       } catch (error) {
         errorNotification(this.$i18n.t('errors.updating_allocations'))
       }
