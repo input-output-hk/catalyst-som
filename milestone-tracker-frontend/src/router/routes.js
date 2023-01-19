@@ -6,6 +6,7 @@ import Profile from '@/pages/Profile.vue';
 import Proposals from '@/pages/Proposals.vue';
 import Proposal from '@/pages/Proposal.vue';
 import Milestones from '@/pages/Milestones.vue';
+import Notifications from '@/pages/Notifications.vue';
 import Admin from '@/pages/Admin.vue';
 
 const routes = [
@@ -51,6 +52,11 @@ const routes = [
     path: '/admin',
     component: Admin,
     name: 'admin'
+  },
+  {
+    path: '/notifications',
+    component: Notifications,
+    name: 'notifications'
   }
 ]
 

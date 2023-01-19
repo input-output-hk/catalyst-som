@@ -235,6 +235,12 @@ export default {
       description: "",
       password: "Password",
       reset: "Reset"
+    },
+    notifications: {
+      go_to_milestone: "Go to Milestone",
+      proposal: "Proposal",
+      milestone: "Milestone",
+      submitted_at: "Submitted at"
     }
   }
 }

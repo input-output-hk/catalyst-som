@@ -21,6 +21,7 @@
         <router-link class="navbar-item" to="/proposals">{{ $t('nav.proposals') }}</router-link>
         <router-link class="navbar-item" to="/login" v-if="!logged">{{ $t('nav.login') }}</router-link>
         <router-link class="navbar-item" to="/profile" v-if="logged">{{ $t('nav.profile') }}</router-link>
+        <router-link class="navbar-item" to="/notifications" v-if="logged">{{ $t('nav.notifications') }}</router-link>
         <router-link class="navbar-item" to="/admin" v-if="isAdmin">{{ $t('nav.admin') }}</router-link>
       </div>
       <div class="navbar-end" v-if="logged">

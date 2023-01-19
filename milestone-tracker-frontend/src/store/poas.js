@@ -34,5 +34,17 @@ export const usePoas = defineStore('poas-store', {
         errorNotification(this.$i18n.t('errors.creating_poa'))
       }
     },
+    async getPoasByAllocation() {
+      try {
+        const { data, error } = await supabase
+          .rpc('getallocatedpoas')
+        if (error) {
+          throw(error)
+        }
+        return data
+      } catch(error) {
+        errorNotification(this.$i18n.t('errors.fetching_poas'))
+      }
+    }
   }
 })

@@ -65,6 +65,18 @@ export const useSoms = defineStore('soms-store', {
         errorNotification(this.$i18n.t('errors.fetching_soms'))
       }
     },
+    async getSomsByAllocation() {
+      try {
+        const { data, error } = await supabase
+          .rpc('getallocatedsoms')
+        if (error) {
+          throw(error)
+        }
+        return data
+      } catch(error) {
+        errorNotification(this.$i18n.t('errors.fetching_soms'))
+      }
+    },
     async getSom(id) {
       //
     },
