@@ -154,7 +154,7 @@ export const useUser = defineStore('user-store', {
         try {
           const { data, error } = await supabase
             .from('users')
-            .select('*, challenges_users(*, challenges(id, title)), proposals_users(*, proposals(id, title, url, project_id), allocations(*, proposals(id, title, url, project_id))')
+            .select('*, challenges_users(*, challenges(id, title)), proposals_users(*, proposals(id, title, url, project_id)), allocations(*, proposals(id, title, url, project_id))')
             .eq('user_id', this.localUser.id)
           this.userInfo = data[0]
         } catch(error) {

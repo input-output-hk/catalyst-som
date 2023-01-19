@@ -10,7 +10,8 @@
           $t('pages.admin.username'),
           $t('pages.admin.role'),
           $t('pages.admin.challenges'),
-          $t('pages.admin.proposals')
+          $t('pages.admin.proposals_as_owner'),
+          $t('pages.admin.proposals_allocated')
         ]"
         :items="users"
         :getItems="getUsers"

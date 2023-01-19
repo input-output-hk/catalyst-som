@@ -40,7 +40,7 @@ export const useUsers = defineStore('users-store', {
       try {
         const { data, error } = await supabase
           .from('users')
-          .select('*, challenges_users(*, challenges(id, title)), proposals_users(*, proposals(id, title))')
+          .select('*, challenges_users(*, challenges(id, title)), proposals_users(*, proposals(id, title)), allocations(*, proposals(id, title))')
           .order('created_at', { ascending: true })
           .range(from, to)
         if (error) {
@@ -67,6 +67,15 @@ export const useUsers = defineStore('users-store', {
         .eq('user_idd', user.id)
       const { data, error2 } = await supabase
         .from('proposals_users')
+        .insert(proposalsUsers)
+    },
+    async updateUserAllocatedProposals(proposalsUsers, user) {
+      const { error } = await supabase
+        .from('allocations')
+        .delete()
+        .eq('user_idd', user.id)
+      const { data, error2 } = await supabase
+        .from('allocations')
         .insert(proposalsUsers)
     },
     async updateRole(role, user) {

@@ -181,7 +181,8 @@ export default {
       username: "Username",
       role: "Role",
       challenges: "Challenges",
-      proposals: "Proposals"
+      proposals_as_owner: "Proposals (as owner)",
+      proposals_allocated: "Proposals allocated (as reviewer)",
     },
     home: {
       title: "Project Catalyst<br />Milestone Module",

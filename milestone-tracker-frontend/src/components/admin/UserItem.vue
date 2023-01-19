@@ -35,6 +35,19 @@
       >
       </o-inputitems>
     </td>
+    <td>
+      <o-inputitems
+        v-model="userAllocatedProposals"
+        :data="selectProposals"
+        autocomplete
+        :allow-new="false"
+        :open-on-focus="true"
+        field="title"
+        :placeholder="$t('admin.add_proposal')"
+        @typing="getFilteredProposals"
+      >
+      </o-inputitems>
+    </td>
   </tr>
 </template>
 
@@ -54,7 +67,12 @@ const { getSelectProposalsByTitle } = proposalsStore
 const { selectProposals } = storeToRefs(proposalsStore)
 
 import { useUsers } from '@/store/users.js'
-const { updateUserChallenges, updateUserProposals, updateRole } = useUsers()
+const {
+  updateUserChallenges,
+  updateUserProposals,
+  updateUserAllocatedProposals,
+  updateRole
+} = useUsers()
 
 import { roles } from '@/utils/roles'
 
@@ -90,6 +108,20 @@ const userProposals = computed({
       }
     })
     updateUserProposals(toSend, props.item)
+  }
+})
+
+const userAllocatedProposals = computed({
+  get: () => props.item.allocations.map((el) => el.proposals),
+  set: val => {
+    const toSend = val.map((el) => {
+      return {
+        user_idd: props.item.id,
+        proposal_id: el.id,
+        user_id: props.item.user_id
+      }
+    })
+    updateUserAllocatedProposals(toSend, props.item)
   }
 })
 
