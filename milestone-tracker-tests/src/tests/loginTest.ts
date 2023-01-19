@@ -6,7 +6,7 @@ const logout = (browser: NightwatchBrowser, page: LoginPage) => {
     .logout()
     .expect.element('body')
     .text.to.contain('Login')
-  page.assert.elementNotPresent('#main-nav .navbar-start a:nth-child(4)');
+  page.assert.not.elementPresent('#main-nav .navbar-start a:nth-child(5)');
   browser.assert.urlContains('/login');
 }
 
@@ -24,7 +24,7 @@ const loginTest: NightwatchTests = {
       .expect.element('body')
       .text.to.contain('Logout admin@example.org')
 
-    loginPage.assert.elementPresent('#main-nav .navbar-start a:nth-child(4)');
+    loginPage.assert.elementPresent('#main-nav .navbar-start a:nth-child(5)');
     browser.assert.urlContains('/proposals');
 
     logout(browser, loginPage)
@@ -39,7 +39,7 @@ const loginTest: NightwatchTests = {
       .expect.element('body')
       .text.to.contain('Logout proposer-1@example.org')
 
-    loginPage.assert.elementNotPresent('#main-nav .navbar-start a:nth-child(4)');
+    loginPage.assert.not.elementPresent('#main-nav .navbar-start a:nth-child(5)');
     browser.assert.urlContains('/proposals');
 
     logout(browser, loginPage)
