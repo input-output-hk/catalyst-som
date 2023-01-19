@@ -140,6 +140,34 @@ CREATE FUNCTION public.getmilestones() RETURNS TABLE(title character varying, pr
     end;
 $$;
 
+--
+-- Name: can_access_users(); Type: FUNCTION; Schema: public; Owner: supabase_admin
+--
+
+-- Parameters need to be prefixed because the name clashes with `om`'s columns
+CREATE FUNCTION public.can_access_users(_user_id uuid) RETURNS bool AS $$
+SELECT EXISTS (
+  SELECT 1
+  FROM users u
+  WHERE u.user_id = _user_id
+  AND u.role >= 2
+);
+$$ LANGUAGE sql SECURITY DEFINER;
+-- Function is owned by postgres which bypasses RLS
+
+--
+-- Name: is_admin(); Type: FUNCTION; Schema: public; Owner: supabase_admin
+--
+
+CREATE FUNCTION public.is_admin(_user_id uuid) RETURNS bool AS $$
+SELECT EXISTS (
+  SELECT 1
+  FROM users u
+  WHERE u.user_id = _user_id
+  AND u.role = 3
+);
+$$ LANGUAGE sql SECURITY DEFINER;
+
 
 -- ALTER FUNCTION public.getmilestones() OWNER TO supabase_admin;
 
@@ -918,11 +946,9 @@ CREATE POLICY "Delete admin" ON public.proposals_users FOR DELETE USING ((EXISTS
 -- Name: allocations Delete admin; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Delete admin" ON public.allocations FOR DELETE USING ((EXISTS ( SELECT users.user_id,
-    users.role
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 3)))));
-
+CREATE POLICY "Delete admin" ON public.allocations FOR DELETE USING (
+  public.can_access_users(auth.uid())
+);
 
 --
 -- Name: poas_reviews IO member; Type: POLICY; Schema: public; Owner: supabase_admin
@@ -1069,10 +1095,9 @@ CREATE POLICY "insert admin" ON public.proposals_users FOR INSERT WITH CHECK ((E
 -- Name: allocations insert admin; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "insert admin" ON public.allocations FOR INSERT WITH CHECK ((EXISTS ( SELECT users.user_id,
-    users.role
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 3)))));
+CREATE POLICY "insert admin" ON public.allocations FOR INSERT WITH CHECK (
+  public.can_access_users(auth.uid())
+);
 
 
 --
@@ -1144,7 +1169,9 @@ CREATE POLICY public ON public.soms FOR SELECT USING (true);
 -- Name: users public; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY public ON public.users FOR SELECT USING (true);
+CREATE POLICY public ON public.users FOR SELECT USING (
+  users.user_id = auth.uid() OR public.can_access_users(auth.uid())
+);
 
 
 --
@@ -1183,13 +1210,9 @@ ALTER TABLE public.soms ENABLE ROW LEVEL SECURITY;
 -- Name: users update public; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "update public" ON public.users FOR UPDATE USING ((EXISTS ( SELECT users_1.user_id,
-    users_1.role
-   FROM public.users users_1
-  WHERE ((users_1.user_id = auth.uid()) AND (users_1.role = 3))))) WITH CHECK ((EXISTS ( SELECT users_1.user_id,
-    users_1.role
-   FROM public.users users_1
-  WHERE ((users_1.user_id = auth.uid()) AND (users_1.role = 3)))));
+CREATE POLICY "users update admin" ON public.users FOR UPDATE USING (
+  users.user_id = auth.uid() OR public.is_admin(auth.uid())
+);
 
 
 --
