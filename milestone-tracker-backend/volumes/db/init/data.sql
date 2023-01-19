@@ -915,6 +915,16 @@ CREATE POLICY "Delete admin" ON public.proposals_users FOR DELETE USING ((EXISTS
 
 
 --
+-- Name: allocations Delete admin; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY "Delete admin" ON public.allocations FOR DELETE USING ((EXISTS ( SELECT users.user_id,
+    users.role
+   FROM public.users
+  WHERE ((users.user_id = auth.uid()) AND (users.role = 3)))));
+
+
+--
 -- Name: poas_reviews IO member; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
@@ -1056,6 +1066,16 @@ CREATE POLICY "insert admin" ON public.proposals_users FOR INSERT WITH CHECK ((E
 
 
 --
+-- Name: allocations insert admin; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY "insert admin" ON public.allocations FOR INSERT WITH CHECK ((EXISTS ( SELECT users.user_id,
+    users.role
+   FROM public.users
+  WHERE ((users.user_id = auth.uid()) AND (users.role = 3)))));
+
+
+--
 -- Name: poas; Type: ROW SECURITY; Schema: public; Owner: supabase_admin
 --
 
@@ -1078,6 +1098,12 @@ ALTER TABLE public.proposals ENABLE ROW LEVEL SECURITY;
 --
 
 ALTER TABLE public.proposals_users ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: allocations; Type: ROW SECURITY; Schema: public; Owner: supabase_admin
+--
+
+ALTER TABLE public.allocations ENABLE ROW LEVEL SECURITY;
 
 --
 -- Name: poas public; Type: POLICY; Schema: public; Owner: supabase_admin
@@ -1126,6 +1152,13 @@ CREATE POLICY public ON public.users FOR SELECT USING (true);
 --
 
 CREATE POLICY "public select" ON public.proposals_users FOR SELECT USING (true);
+
+
+--
+-- Name: allocations public select; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY "public select" ON public.allocations FOR SELECT USING (true);
 
 
 --
@@ -1332,6 +1365,26 @@ GRANT ALL ON SEQUENCE public.proposals_users_id_seq TO postgres;
 GRANT ALL ON SEQUENCE public.proposals_users_id_seq TO anon;
 GRANT ALL ON SEQUENCE public.proposals_users_id_seq TO authenticated;
 GRANT ALL ON SEQUENCE public.proposals_users_id_seq TO service_role;
+
+
+--
+-- Name: TABLE allocations; Type: ACL; Schema: public; Owner: supabase_admin
+--
+
+GRANT ALL ON TABLE public.allocations TO postgres;
+GRANT ALL ON TABLE public.allocations TO anon;
+GRANT ALL ON TABLE public.allocations TO authenticated;
+GRANT ALL ON TABLE public.allocations TO service_role;
+
+
+--
+-- Name: SEQUENCE allocations_id_seq; Type: ACL; Schema: public; Owner: supabase_admin
+--
+
+GRANT ALL ON SEQUENCE public.allocations_id_seq TO postgres;
+GRANT ALL ON SEQUENCE public.allocations_id_seq TO anon;
+GRANT ALL ON SEQUENCE public.allocations_id_seq TO authenticated;
+GRANT ALL ON SEQUENCE public.allocations_id_seq TO service_role;
 
 
 --
