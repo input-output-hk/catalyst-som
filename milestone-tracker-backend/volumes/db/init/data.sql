@@ -298,6 +298,7 @@ CREATE TABLE public.poas_reviews (
     content_approved boolean,
     content_comment text,
     poas_id bigint,
+    role bigint,
     created_at timestamp with time zone DEFAULT now(),
     user_id uuid DEFAULT auth.uid()
 );
@@ -448,6 +449,7 @@ CREATE TABLE public.som_reviews (
     evidence_approves boolean,
     evidence_comment text,
     som_id bigint,
+    role bigint,
     created_at timestamp with time zone DEFAULT now(),
     challenge_id bigint,
     user_id uuid DEFAULT auth.uid()
@@ -1589,6 +1591,26 @@ $$ language plpgsql;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.create_user();
+
+
+-- setRole FUNCTION
+
+create or replace function public.set_row_role()
+returns trigger as $$
+begin
+  new.role := (select role from public.users where user_id = new.user_id);
+  return new;
+end;
+$$ language plpgsql;
+
+
+create trigger on_poa_review_created
+  before insert on public.poas_reviews
+  for each row execute procedure public.set_row_role();
+
+create trigger on_som_review_created
+  before insert on public.som_reviews
+  for each row execute procedure public.set_row_role();
 
 -- SEED USERS
 

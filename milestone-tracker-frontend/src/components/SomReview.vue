@@ -25,8 +25,8 @@ const { t } = useI18n()
 const props = defineProps(['review', 'properties'])
 
 const role = computed(() => {
-  if (props.review.users) {
-    return t(`roles.${roles[props.review.users.role]}`)
+  if (props.review.role) {
+    return t(`roles.${roles[props.review.role]}`)
   }
   return t('som_review.system')
 })

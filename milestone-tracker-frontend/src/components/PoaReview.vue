@@ -24,5 +24,5 @@ import { roles } from '@/utils/roles.js'
 const { t } = useI18n()
 const props = defineProps(['review'])
 
-const role = computed(() => t(`roles.${roles[props.review.users.role]}`))
+const role = computed(() => t(`roles.${roles[props.review.role]}`))
 </script>
