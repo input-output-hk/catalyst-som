@@ -44,6 +44,18 @@ export const useUser = defineStore('user-store', {
       }
     },
     canWriteSomReview(state) {
+      /*
+      A user is allowed to write a SoM review if:
+      - It's not the proposal owner
+      AND
+      (
+        - It's a challenge team member in the proposal's challenge
+        OR
+        - The proposal is in their allocations
+        OR
+        - Has Admin, IO team role or Signoff role
+      )
+      */
       return (proposal_id, challenge_id) => {
         if (this.isAdmin) {
           return true
@@ -52,8 +64,15 @@ export const useUser = defineStore('user-store', {
           const ret =
             !state.userInfo.proposals_users.map((el) => el.proposal_id)
               .includes(proposal_id) &&
-            (state.userInfo.challenges_users.map((el) => el.challenge_id)
-              .includes(challenge_id) || [2,4].includes(state.userInfo.role))
+            (
+              state.userInfo.challenges_users.map(
+                (el) => el.challenge_id
+              ).includes(challenge_id) ||
+              state.userInfo.allocations.map(
+                (el) => el.proposal_id
+              ).includes(proposal_id) ||
+              [2,4].includes(state.userInfo.role)
+            )
           return ret
         } catch {
           return false
@@ -135,7 +154,7 @@ export const useUser = defineStore('user-store', {
         try {
           const { data, error } = await supabase
             .from('users')
-            .select('*, challenges_users(*, challenges(id, title)), proposals_users(*, proposals(id, title, url, project_id))')
+            .select('*, challenges_users(*, challenges(id, title)), proposals_users(*, proposals(id, title, url, project_id), allocations(*, proposals(id, title, url, project_id))')
             .eq('user_id', this.localUser.id)
           this.userInfo = data[0]
         } catch(error) {
