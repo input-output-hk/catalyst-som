@@ -12,7 +12,8 @@ export default {
     creating_poa: "Error creating PoA.",
     creating_signoff: "Error creating Signoff.",
     creating_som_review: "Error creating SoM review.",
-    creating_som: "Error creating SoM."
+    creating_som: "Error creating SoM.",
+    updating_allocations: "Error updatung allocations."
   },
   notifications: {
     logged_in: "Logged in.",
@@ -23,7 +24,8 @@ export default {
     poa_created: "PoA created.",
     signoff_created: "Signoff created.",
     som_review_created: "SoM review created.",
-    som_created: "SoM created."
+    som_created: "SoM created.",
+    allocation_updated: "Allocation updated."
   },
   nav: {
     home: "Home",
@@ -172,6 +174,10 @@ export default {
   reviews_counter: {
     approvals: "approval | approvals",
     refusals: "refusal | refusals",
+  },
+  allocation: {
+    allocation: "Allocation",
+    add_allocation: "Add allocation"
   },
   pages: {
     admin: {

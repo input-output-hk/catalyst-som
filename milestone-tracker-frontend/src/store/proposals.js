@@ -13,10 +13,10 @@ export const useProposals = defineStore('proposals-store', {
 
   getters: {
     proposals(state) {
-      return state._proposals;
+      return state._proposals
     },
     selectProposals(state) {
-      return state._selectProposals;
+      return state._selectProposals
     }
   },
 
@@ -40,7 +40,7 @@ export const useProposals = defineStore('proposals-store', {
       try {
         const { data, error } = await supabase
           .from('proposals')
-          .select('*, challenges(title)')
+          .select('*, challenges(title), allocations(*)')
           .range(from, to)
         if (error) {
           throw(error)
@@ -65,7 +65,7 @@ export const useProposals = defineStore('proposals-store', {
       try {
         const { data, error } = await supabase
           .from('proposals')
-          .select('*, challenges(*)')
+          .select('*, challenges(*), allocations(*, users(email))')
           .eq('project_id', id)
         return (data.length > 0) ? data[0] : {}
       } catch(error) {
@@ -101,6 +101,20 @@ export const useProposals = defineStore('proposals-store', {
       } catch(error) {
         errorNotification(this.$i18n.t('errors.fetching_proposals'))
       }
-    }
+    },
+    async updateProposalAllocations(allocations, proposal) {
+      try {
+        let { error } = await supabase
+          .from('allocations')
+          .delete()
+          .eq('proposal_id', proposal.id)
+        ({ error } = await supabase
+          .from('allocations')
+          .insert(allocations))
+        successNotification(this.$i18n.t('notifications.allocation_updated'))
+      } catch (error) {
+        errorNotification(this.$i18n.t('errors.updating_allocations'))
+      }
+    },
   }
 })

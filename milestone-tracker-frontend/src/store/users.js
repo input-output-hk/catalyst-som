@@ -7,6 +7,7 @@ export const useUsers = defineStore('users-store', {
   state: () => {
     return {
       _users: {},
+      _selectUsers: [],
       _count: 0
     }
   },
@@ -17,6 +18,9 @@ export const useUsers = defineStore('users-store', {
     },
     count(state) {
       return state._count
+    },
+    selectUsers(state) {
+      return state._selectUsers
     }
   },
 
@@ -83,6 +87,17 @@ export const useUsers = defineStore('users-store', {
         .from('users')
         .update({'role': role})
         .eq('id', user.id)
-    }
+    },
+    async getSelectUsersByEmail(email) {
+      try {
+        const { data, error } = await supabase
+          .from('users')
+          .select('id, user_id, email')
+          .like('email', `%${email}%`)
+        this._selectUsers = data
+      } catch(error) {
+        errorNotification(this.$i18n.t('errors.fetching_users'))
+      }
+    },
   }
 })

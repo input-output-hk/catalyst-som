@@ -84,6 +84,9 @@ export const useUser = defineStore('user-store', {
     },
     canSignoff(state) {
       return [3,4].includes(state.userInfo.role)
+    },
+    canSetAllocations(state) {
+      return [2,3,4].includes(state.userInfo.role)
     }
   },
 
