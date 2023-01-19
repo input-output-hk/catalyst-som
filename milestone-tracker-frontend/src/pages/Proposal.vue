@@ -14,7 +14,6 @@
       </div>
       <div class="column is-6">
         <recap :proposal="proposal" />
-        <allocation :proposal="proposal" />
       </div>
       <div class="column is-12">
         <h3 class="title is-size-2">{{ $t('pages.proposal.milestone_recap') }}</h3>
@@ -53,6 +52,5 @@ onMounted(async () => {
 
 <script>
 import Recap from '@/components/proposal/Recap.vue'
-import Allocation from '@/components/proposal/Allocation.vue'
 import MilestonesRecap from '@/components/MilestonesRecap.vue'
 </script>

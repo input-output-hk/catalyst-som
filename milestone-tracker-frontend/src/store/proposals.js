@@ -40,7 +40,7 @@ export const useProposals = defineStore('proposals-store', {
       try {
         const { data, error } = await supabase
           .from('proposals')
-          .select('*, challenges(title), allocations(*)')
+          .select('*, challenges(title), allocations(*, users(id, user_id, email))')
           .range(from, to)
         if (error) {
           throw(error)
@@ -65,7 +65,7 @@ export const useProposals = defineStore('proposals-store', {
       try {
         const { data, error } = await supabase
           .from('proposals')
-          .select('*, challenges(*), allocations(*, users(email))')
+          .select('*, challenges(*), allocations(*, users(id, user_id, email))')
           .eq('project_id', id)
         return (data.length > 0) ? data[0] : {}
       } catch(error) {

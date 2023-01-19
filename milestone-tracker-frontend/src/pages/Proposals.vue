@@ -19,7 +19,7 @@
       </div>
       <paginated-table
         classStyle="proposals-list"
-        :headers="['ID', 'Title', 'Challenge', 'Budget']"
+        :headers="dynamicHeaders"
         :items="proposals"
         :getItems="getProposals"
         :getCount="getCount"
@@ -31,19 +31,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useUser } from '@/store/user.js'
 import ProposalRow from '@/components/ProposalRow.vue'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import { prepareDataForExport, formatDataForExport } from '@/utils/exportProposals.js'
 import downloadCsv from '@/utils/exportCsv.js'
 import { useProposals } from '@/store/proposals.js'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const proposalsStore = useProposals()
 const { getProposals, getCount, getProposalsForExport, getSomsById } = proposalsStore
+const { isAdmin, canSetAllocations } = useUser()
 const { proposals } = storeToRefs(proposalsStore)
 
-import { useUser } from '@/store/user.js'
-const { isAdmin } = useUser()
 
 const exportCSV = async () => {
   const soms = await getProposalsForExport()
@@ -53,10 +55,30 @@ const exportCSV = async () => {
   downloadCsv(data)
 }
 
+const dynamicHeaders = computed(() => {
+  const base = [
+    t('pages.proposals.id'),
+    t('pages.proposals.title'),
+    t('pages.proposals.challenge'),
+    t('pages.proposals.budget')
+  ]
+  if (canSetAllocations) {
+    base.push(t('pages.proposals.allocations'))
+  }
+  return base
+})
+
 </script>
 
 <style lang="scss" scoped>
 .small-col {
   width: 4rem;
+}
+</style>
+<style lang="scss">
+.proposals-list {
+  th:nth-child(5) {
+    width: 400px;
+  }
 }
 </style>

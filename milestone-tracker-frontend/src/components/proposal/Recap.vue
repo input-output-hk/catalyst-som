@@ -35,11 +35,18 @@
           </span>
         </td>
       </tr>
+      <tr v-if="canSetAllocations">
+        <th>Reviewers allocations</th>
+        <td><allocation :proposal="proposal" /></td>
+      </tr>
     </tbody>
   </table>
 </template>
 
 <script setup>
+import Allocation from '@/components/proposal/Allocation.vue'
+import { useUser } from '@/store/user.js'
 const props = defineProps(['proposal'])
+const { canSetAllocations } = useUser()
 
 </script>

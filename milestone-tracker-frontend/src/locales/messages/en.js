@@ -223,7 +223,12 @@ export default {
     proposals: {
       title: "Proposals",
       description: "All the proposals in the Statement of Milestone pilot.",
-      export: "Export CSV"
+      export: "Export CSV",
+      id: "ID",
+      title: "Title",
+      challenge: "Challenge",
+      budget: "Budget",
+      allocations: "Allocations"
     },
     reset_password: {
       title: "Reset password",

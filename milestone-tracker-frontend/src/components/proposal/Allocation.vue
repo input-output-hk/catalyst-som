@@ -1,36 +1,25 @@
 <template>
-  <table class="table is-bordered is-striped" v-if="canSetAllocations">
-    <tbody>
-      <tr>
-        <th>{{ $t('allocation.allocation') }}</th>
-        <td>
-          <o-inputitems
-            v-model="proposalAllocatedUsers"
-            :data="selectUsers"
-            autocomplete
-            :allow-new="false"
-            :open-on-focus="true"
-            field="email"
-            :placeholder="$t('allocation.add_allocation')"
-            @typing="getFilteredUsers"
-          >
-      </o-inputitems>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <o-inputitems
+    v-model="proposalAllocatedUsers"
+    :data="selectUsers"
+    autocomplete
+    :allow-new="false"
+    :open-on-focus="true"
+    field="email"
+    :placeholder="$t('allocation.add_allocation')"
+    @typing="getFilteredUsers"
+  >
+  </o-inputitems>
 </template>
 
 <script setup>
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useUser } from '@/store/user.js'
 import { useUsers } from '@/store/users.js'
 import { useProposals } from '@/store/proposals.js'
 
 const props = defineProps(['proposal'])
 
-const { canSetAllocations } = useUser()
 const usersStore = useUsers()
 const { getSelectUsersByEmail } = usersStore
 const { selectUsers } = storeToRefs(usersStore)
