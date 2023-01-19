@@ -1575,6 +1575,35 @@ CREATE OR REPLACE FUNCTION public.getMilestones() RETURNS TABLE(title varchar, p
 $$ LANGUAGE plpgsql;
 
 
+create or replace function public.getAllocatedSoms() returns table(milestone bigint, proposal_id bigint, title varchar, created_at timestamp with time zone, project_id bigint, my_reviews_count bigint) as $$
+    BEGIN
+        RETURN QUERY
+          SELECT DISTINCT ON (soms.proposal_id, soms.milestone)
+            soms.milestone,
+            soms.proposal_id,
+            soms.title,
+            soms.created_at,
+            proposals.project_id,
+            count(distinct som_reviews.id) as my_reviews_count
+            -- count(distinct signoffs.id) as signoffs_count
+            FROM soms left join
+              som_reviews
+                on som_reviews.som_id = soms.id
+                and som_reviews.user_id = auth.uid()
+              left join
+                signoffs
+                  on signoffs.som_id = soms.id
+              left join
+                proposals
+                  on proposals.id = soms.proposal_id
+            where soms.proposal_id in (select allocations.proposal_id from allocations where allocations.user_id = auth.uid())
+            group by soms.id, proposals.project_id
+            having count(distinct signoffs.id) = 0
+            ORDER BY soms.proposal_id, soms.milestone, soms.created_at DESC;
+  END;
+$$ LANGUAGE plpgsql;
+
+
 -- createUser FUNCTION
 
 create or replace function public.create_user()
