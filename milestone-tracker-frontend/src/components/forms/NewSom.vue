@@ -128,6 +128,7 @@ const clone = () => {
 const handleCreateSom = async () => {
   const response =  await createSom({
     ...formData.value,
+    current: true,
     proposal_id: props.proposal.id,
     challenge_id: props.proposal.challenge_id,
     milestone: props.milestone

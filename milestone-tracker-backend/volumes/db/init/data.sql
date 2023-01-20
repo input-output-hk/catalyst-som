@@ -489,6 +489,7 @@ CREATE TABLE public.soms (
     milestone bigint,
     title character varying,
     challenge_id bigint,
+    current boolean DEFAULT false,
     user_id uuid DEFAULT auth.uid()
 );
 
@@ -988,6 +989,17 @@ CREATE POLICY "Proposal owner" ON public.poas FOR INSERT WITH CHECK (((EXISTS ( 
 --
 
 CREATE POLICY "Proposal owner insert" ON public.soms FOR INSERT WITH CHECK (((EXISTS ( SELECT proposals_users.user_id
+   FROM public.proposals_users
+  WHERE ((proposals_users.user_id = auth.uid()) AND (proposals_users.proposal_id = soms.proposal_id)))) OR (EXISTS ( SELECT users.user_id
+   FROM public.users
+  WHERE ((users.user_id = auth.uid()) AND (users.role = 3))))));
+
+CREATE POLICY "Proposal owner update" ON public.soms FOR UPDATE USING (((EXISTS ( SELECT proposals_users.user_id
+   FROM public.proposals_users
+  WHERE ((proposals_users.user_id = auth.uid()) AND (proposals_users.proposal_id = soms.proposal_id)))) OR (EXISTS ( SELECT users.user_id
+   FROM public.users
+  WHERE ((users.user_id = auth.uid()) AND (users.role = 3))))))
+WITH CHECK (((EXISTS ( SELECT proposals_users.user_id
    FROM public.proposals_users
   WHERE ((proposals_users.user_id = auth.uid()) AND (proposals_users.proposal_id = soms.proposal_id)))) OR (EXISTS ( SELECT users.user_id
    FROM public.users
@@ -1622,7 +1634,7 @@ create trigger on_auth_user_created
   for each row execute procedure public.create_user();
 
 
--- setRole FUNCTION
+-- set_row_role FUNCTION
 
 create or replace function public.set_row_role()
 returns trigger as $$
@@ -1640,6 +1652,26 @@ create trigger on_poa_review_created
 create trigger on_som_review_created
   before insert on public.som_reviews
   for each row execute procedure public.set_row_role();
+
+-- set_old_som_not_current FUNCTION
+
+create or replace function public.set_old_som_not_current()
+returns trigger as $$
+begin
+  update public.soms
+  set current=false
+  where proposal_id = new.proposal_id
+  and milestone = new.milestone
+  and current
+  and id != new.id;
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger on_som_created
+  before insert on public.soms
+  for each row execute procedure public.set_old_som_not_current();
+
 
 -- SEED USERS
 
@@ -1670,14 +1702,14 @@ INSERT INTO public.proposals_users (proposal_id, user_id, user_idd)
     (4, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), (SELECT id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1)),
     (5, (SELECT user_id FROM public.users WHERE email = 'proposer-2@example.org' LIMIT 1), (SELECT id FROM public.users WHERE email = 'proposer-2@example.org' LIMIT 1));
 
-INSERT INTO public.soms (outputs, success_criteria, evidence, month, cost, completion, proposal_id, milestone, title, challenge_id, user_id)
+INSERT INTO public.soms (outputs, success_criteria, evidence, month, cost, completion, proposal_id, milestone, title, challenge_id, user_id, current)
   VALUES
-    ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 1, 'Title ipsum', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1)),
-    ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 1, 'Title ipsum 2 try', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1)),
-    ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 2, 'Title ipsum 2', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1)),
-    ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 3, 'Title ipsum 3', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1)),
-    ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 4, 'Title ipsum 4', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1)),
-    ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 5, 'Title ipsum 5', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1));
+    ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 1, 'Title ipsum', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), true),
+    ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 1, 'Title ipsum 2 try', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), false),
+    ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 2, 'Title ipsum 2', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), true),
+    ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 3, 'Title ipsum 3', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), true),
+    ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 4, 'Title ipsum 4', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), true),
+    ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 5, 'Title ipsum 5', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), true);
 
 INSERT INTO public.som_reviews (outputs_approves, outputs_comment, success_criteria_approves, success_criteria_comment, evidence_approves, evidence_comment, som_id, challenge_id, user_id)
   VALUES
