@@ -63,7 +63,7 @@ const handleCreatePoa = async () => {
     som_id: props.som.id,
   }, props.som)
   if (response) {
-    clearForm()
+    _clearForm()
   }
 }
 

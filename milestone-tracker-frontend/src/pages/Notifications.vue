@@ -21,7 +21,7 @@
           </tr>
         </tbody>
       </table>
-      <p>{{ $t('pages.notifications.no_soms_to_review') }}</p>
+      <p v-if="!somsToReview.length">{{ $t('pages.notifications.no_soms_to_review') }}</p>
     </div>
     <div class="content">
       <h2>PoA to be reviewed</h2>
@@ -44,7 +44,7 @@
           </tr>
         </tbody>
       </table>
-      <p>{{ $t('pages.notifications.no_poas_to_review') }}</p>
+      <p v-if="!poasToReview.length">{{ $t('pages.notifications.no_poas_to_review') }}</p>
     </div>
   </section>
 </template>
@@ -80,7 +80,7 @@ const poasToReview = computed(() => {
 onMounted(async () => {
   soms.value = await getSomsByAllocation()
   // draft
-  poas.value = []
+  poas.value = await getPoasByAllocation()
 })
 
 </script>

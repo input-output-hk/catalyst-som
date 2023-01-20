@@ -32,6 +32,7 @@ export default {
     proposals: "Proposals",
     login: "Login",
     profile: "Profile",
+    notifications: "Notifications",
     admin: "Admin",
     logout: "Logout {name}"
   },
@@ -238,9 +239,12 @@ export default {
     },
     notifications: {
       go_to_milestone: "Go to Milestone",
+      go_to_poa: "Go to PoA",
       proposal: "Proposal",
       milestone: "Milestone",
-      submitted_at: "Submitted at"
+      submitted_at: "Submitted at",
+      no_poas_to_review: "No PoA to review!",
+      no_soms_to_review: "No SoM to review!",
     }
   }
 }
