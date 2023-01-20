@@ -269,6 +269,7 @@ CREATE TABLE public.poas (
     created_at timestamp with time zone DEFAULT now(),
     som_id bigint,
     challenge_id bigint,
+    current boolean DEFAULT false,
     user_id uuid
 );
 
@@ -983,6 +984,16 @@ CREATE POLICY "Proposal owner" ON public.poas FOR INSERT WITH CHECK (((EXISTS ( 
    FROM public.users
   WHERE ((users.user_id = auth.uid()) AND (users.role = 3))))));
 
+CREATE POLICY "Proposal owner update PoAs" ON public.poas FOR UPDATE USING (((EXISTS ( SELECT proposals_users.user_id
+   FROM public.proposals_users
+  WHERE ((proposals_users.user_id = auth.uid()) AND (proposals_users.proposal_id = poas.proposal_id)))) OR (EXISTS ( SELECT users.user_id
+   FROM public.users
+  WHERE ((users.user_id = auth.uid()) AND (users.role = 3))))))
+WITH CHECK (((EXISTS ( SELECT proposals_users.user_id
+   FROM public.proposals_users
+  WHERE ((proposals_users.user_id = auth.uid()) AND (proposals_users.proposal_id = poas.proposal_id)))) OR (EXISTS ( SELECT users.user_id
+   FROM public.users
+  WHERE ((users.user_id = auth.uid()) AND (users.role = 3))))));
 
 --
 -- Name: soms Proposal owner insert; Type: POLICY; Schema: public; Owner: supabase_admin
@@ -1671,6 +1682,24 @@ $$ language plpgsql;
 create trigger on_som_created
   before insert on public.soms
   for each row execute procedure public.set_old_som_not_current();
+
+-- set_old_poa_not_current FUNCTION
+
+create or replace function public.set_old_poa_not_current()
+returns trigger as $$
+begin
+  update public.poas
+  set current=false
+  where som_id = new.som_id
+  and current
+  and id != new.id;
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger on_poa_created
+  before insert on public.poas
+  for each row execute procedure public.set_old_poa_not_current();
 
 
 -- SEED USERS

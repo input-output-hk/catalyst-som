@@ -57,6 +57,7 @@ let SchemaForm = SchemaFormFactory([
 const handleCreatePoa = async () => {
   const response = await createPoa({
     ...formData.value,
+    current: true,
     proposal_id: props.proposal.id,
     challenge_id: props.proposal.challenge_id,
     som_id: props.som.id,
