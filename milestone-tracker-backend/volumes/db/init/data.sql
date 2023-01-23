@@ -999,7 +999,7 @@ CREATE POLICY "Insert PoAs reviews" ON public.poas_reviews FOR INSERT WITH CHECK
       WHERE (poas.id = poas_reviews.poas_id)
     )
   )
-  OR public.is_io_member()
+  OR public.is_io_member(auth.uid())
   OR public.is_admin(auth.uid())
 );
 
