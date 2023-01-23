@@ -169,6 +169,19 @@ SELECT EXISTS (
 $$ LANGUAGE sql SECURITY DEFINER;
 
 --
+-- Name: is_io_member(); Type: FUNCTION; Schema: public; Owner: supabase_admin
+--
+
+CREATE FUNCTION public.is_io_member(_user_id uuid) RETURNS bool AS $$
+SELECT EXISTS (
+  SELECT 1
+  FROM users u
+  WHERE u.user_id = _user_id
+  AND u.role = 2
+);
+$$ LANGUAGE sql SECURITY DEFINER;
+
+--
 -- Name: is_proposal_owner(); Type: FUNCTION; Schema: public; Owner: supabase_admin
 --
 
@@ -919,10 +932,24 @@ ALTER TABLE ONLY public.users
 -- Name: challenges_users Admin insert; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Admin insert" ON public.challenges_users FOR INSERT WITH CHECK ((EXISTS ( SELECT users.user_id,
+CREATE POLICY "Create challenges_users" ON public.challenges_users FOR INSERT WITH CHECK (
+  public.is_admin(auth.uid())
+);
+
+--
+-- Name: challenges_users delete admin; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY "delete admin" ON public.challenges_users FOR DELETE USING ((EXISTS ( SELECT users.user_id,
     users.role
    FROM public.users
   WHERE ((users.user_id = auth.uid()) AND (users.role = 3)))));
+
+--
+-- Name: challenges_users Select public; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY "Select public" ON public.challenges_users FOR SELECT USING (true);
 
 
 --
@@ -1050,12 +1077,6 @@ CREATE POLICY "Public select" ON public.funds FOR SELECT USING (true);
 CREATE POLICY "Public visible" ON public.challenges FOR SELECT USING (true);
 
 
---
--- Name: challenges_users Select public; Type: POLICY; Schema: public; Owner: supabase_admin
---
-
-CREATE POLICY "Select public" ON public.challenges_users FOR SELECT USING (true);
-
 
 --
 -- Name: signoffs admin; Type: POLICY; Schema: public; Owner: supabase_admin
@@ -1091,15 +1112,6 @@ ALTER TABLE public.challenges ENABLE ROW LEVEL SECURITY;
 --
 
 ALTER TABLE public.challenges_users ENABLE ROW LEVEL SECURITY;
-
---
--- Name: challenges_users delete admin; Type: POLICY; Schema: public; Owner: supabase_admin
---
-
-CREATE POLICY "delete admin" ON public.challenges_users FOR DELETE USING ((EXISTS ( SELECT users.user_id,
-    users.role
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 3)))));
 
 
 --
