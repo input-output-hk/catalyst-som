@@ -1038,11 +1038,21 @@ CREATE POLICY "Insert SoMs reviews" ON public.som_reviews FOR INSERT WITH CHECK 
 
 CREATE POLICY public ON public.som_reviews FOR SELECT USING (true);
 
+
+--
+-- Name: proposals_users insert admin; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY "proposals_users insert" ON public.proposals_users FOR INSERT WITH CHECK (
+  public.is_admin(auth.uid())
+);
+
+
 --
 -- Name: proposals_users Delete admin; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Delete admin" ON public.proposals_users FOR DELETE USING (
+CREATE POLICY "proposals_users delete" ON public.proposals_users FOR DELETE USING (
   public.is_admin(auth.uid())
 );
 
@@ -1051,16 +1061,32 @@ CREATE POLICY "Delete admin" ON public.proposals_users FOR DELETE USING (
 -- Name: proposals_users public select; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "public select" ON public.proposals_users FOR SELECT USING (true);
+CREATE POLICY "proposals_users select" ON public.proposals_users FOR SELECT USING (true);
+
+
+--
+-- Name: allocations insert admin; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY "Allocations insert" ON public.allocations FOR INSERT WITH CHECK (
+  public.can_access_users(auth.uid())
+);
 
 
 --
 -- Name: allocations Delete admin; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Delete admin" ON public.allocations FOR DELETE USING (
+CREATE POLICY "Allocations delete" ON public.allocations FOR DELETE USING (
   public.can_access_users(auth.uid())
 );
+
+
+--
+-- Name: allocations public select; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY "Allocations select" ON public.allocations FOR SELECT USING (true);
 
 
 --
@@ -1174,24 +1200,6 @@ CREATE POLICY "delete admin" ON public.signoffs FOR DELETE USING ((EXISTS ( SELE
 
 ALTER TABLE public.funds ENABLE ROW LEVEL SECURITY;
 
---
--- Name: proposals_users insert admin; Type: POLICY; Schema: public; Owner: supabase_admin
---
-
-CREATE POLICY "insert admin" ON public.proposals_users FOR INSERT WITH CHECK ((EXISTS ( SELECT users.user_id,
-    users.role
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 3)))));
-
-
---
--- Name: allocations insert admin; Type: POLICY; Schema: public; Owner: supabase_admin
---
-
-CREATE POLICY "insert admin" ON public.allocations FOR INSERT WITH CHECK (
-  public.can_access_users(auth.uid())
-);
-
 
 --
 -- Name: poas; Type: ROW SECURITY; Schema: public; Owner: supabase_admin
@@ -1252,12 +1260,6 @@ CREATE POLICY public ON public.users FOR SELECT USING (
   users.user_id = auth.uid() OR public.can_access_users(auth.uid())
 );
 
-
---
--- Name: allocations public select; Type: POLICY; Schema: public; Owner: supabase_admin
---
-
-CREATE POLICY "public select" ON public.allocations FOR SELECT USING (true);
 
 
 --
