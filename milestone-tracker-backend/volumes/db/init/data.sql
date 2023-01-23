@@ -168,6 +168,19 @@ SELECT EXISTS (
 );
 $$ LANGUAGE sql SECURITY DEFINER;
 
+--
+-- Name: is_proposal_owner(); Type: FUNCTION; Schema: public; Owner: supabase_admin
+--
+
+CREATE FUNCTION public.is_proposal_owner(_proposal_id bigint) RETURNS bool AS $$
+SELECT EXISTS (
+  SELECT 1
+  FROM proposals_users pu
+  WHERE pu.user_id = auth.uid()
+  AND pu.proposal_id = _proposal_id
+);
+$$ LANGUAGE sql SECURITY DEFINER;
+
 
 -- ALTER FUNCTION public.getmilestones() OWNER TO supabase_admin;
 
@@ -996,26 +1009,28 @@ WITH CHECK (((EXISTS ( SELECT proposals_users.user_id
   WHERE ((users.user_id = auth.uid()) AND (users.role = 3))))));
 
 --
--- Name: soms Proposal owner insert; Type: POLICY; Schema: public; Owner: supabase_admin
+-- Name: SoMs insert; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Proposal owner insert" ON public.soms FOR INSERT WITH CHECK (((EXISTS ( SELECT proposals_users.user_id
-   FROM public.proposals_users
-  WHERE ((proposals_users.user_id = auth.uid()) AND (proposals_users.proposal_id = soms.proposal_id)))) OR (EXISTS ( SELECT users.user_id
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 3))))));
+CREATE POLICY "SoMs insert" ON public.soms FOR INSERT WITH CHECK (
+  (public.is_proposal_owner(proposal_id) OR public.is_admin(auth.uid()))
+);
 
-CREATE POLICY "Proposal owner update" ON public.soms FOR UPDATE USING (((EXISTS ( SELECT proposals_users.user_id
-   FROM public.proposals_users
-  WHERE ((proposals_users.user_id = auth.uid()) AND (proposals_users.proposal_id = soms.proposal_id)))) OR (EXISTS ( SELECT users.user_id
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 3))))))
-WITH CHECK (((EXISTS ( SELECT proposals_users.user_id
-   FROM public.proposals_users
-  WHERE ((proposals_users.user_id = auth.uid()) AND (proposals_users.proposal_id = soms.proposal_id)))) OR (EXISTS ( SELECT users.user_id
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 3))))));
+--
+-- Name: SoMs update; Type: POLICY; Schema: public; Owner: supabase_admin
+--
 
+CREATE POLICY "SoMs update" ON public.soms FOR UPDATE USING (
+  (public.is_proposal_owner(proposal_id) OR public.is_admin(auth.uid()))
+) WITH CHECK (
+  (public.is_proposal_owner(proposal_id) OR public.is_admin(auth.uid()))
+);
+
+--
+-- Name: soms public; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY public ON public.soms FOR SELECT USING (true);
 
 --
 -- Name: poas_reviews Public list; Type: POLICY; Schema: public; Owner: supabase_admin
@@ -1183,11 +1198,7 @@ CREATE POLICY public ON public.signoffs FOR SELECT USING (true);
 CREATE POLICY public ON public.som_reviews FOR SELECT USING (true);
 
 
---
--- Name: soms public; Type: POLICY; Schema: public; Owner: supabase_admin
---
 
-CREATE POLICY public ON public.soms FOR SELECT USING (true);
 
 
 --
