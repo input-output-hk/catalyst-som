@@ -181,6 +181,20 @@ SELECT EXISTS (
 );
 $$ LANGUAGE sql SECURITY DEFINER;
 
+
+--
+-- Name: is_signoff_user(); Type: FUNCTION; Schema: public; Owner: supabase_admin
+--
+
+CREATE FUNCTION public.is_signoff_user(_user_id uuid) RETURNS bool AS $$
+SELECT EXISTS (
+  SELECT 1
+  FROM users u
+  WHERE u.user_id = _user_id
+  AND u.role = 4
+);
+$$ LANGUAGE sql SECURITY DEFINER;
+
 --
 -- Name: is_proposal_owner(); Type: FUNCTION; Schema: public; Owner: supabase_admin
 --
@@ -1155,28 +1169,64 @@ CREATE POLICY "Public select" ON public.funds FOR SELECT USING (true);
 CREATE POLICY "Public visible" ON public.challenges FOR SELECT USING (true);
 
 
+--
+-- Name: proposals public; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY public ON public.proposals FOR SELECT USING (true);
+
+
+--
+-- Name: users update public; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY "users update admin" ON public.users FOR UPDATE USING (
+  users.user_id = auth.uid() OR public.is_admin(auth.uid())
+);
+
+--
+-- Name: users public; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY public ON public.users FOR SELECT USING (
+  users.user_id = auth.uid() OR public.can_access_users(auth.uid())
+);
+
 
 --
 -- Name: signoffs admin; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY admin ON public.signoffs FOR UPDATE USING ((EXISTS ( SELECT users.user_id,
-    users.role
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 3))))) WITH CHECK ((EXISTS ( SELECT users.user_id,
-    users.role
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 3)))));
+CREATE POLICY "Update signoffs" ON public.signoffs FOR UPDATE USING (
+  public.is_admin(auth.uid()) OR public.is_signoff_user(auth.uid())
+) WITH CHECK (
+  public.is_admin(auth.uid()) OR public.is_signoff_user(auth.uid())
+);
 
 
 --
 -- Name: signoffs admin / signoff; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "admin / signoff" ON public.signoffs FOR INSERT WITH CHECK ((EXISTS ( SELECT users.user_id,
-    users.role
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND ((users.role = 4) OR (users.role = 3))))));
+CREATE POLICY "Insert signoffs" ON public.signoffs FOR INSERT WITH CHECK (
+  public.is_admin(auth.uid()) OR public.is_signoff_user(auth.uid())
+);
+
+
+--
+-- Name: signoffs delete admin; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY "Delete signoffs" ON public.signoffs FOR DELETE USING (
+  public.is_admin(auth.uid()) OR public.is_signoff_user(auth.uid())
+);
+
+
+--
+-- Name: signoffs public; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY public ON public.signoffs FOR SELECT USING (true);
 
 
 --
@@ -1185,21 +1235,12 @@ CREATE POLICY "admin / signoff" ON public.signoffs FOR INSERT WITH CHECK ((EXIST
 
 ALTER TABLE public.challenges ENABLE ROW LEVEL SECURITY;
 
+
 --
 -- Name: challenges_users; Type: ROW SECURITY; Schema: public; Owner: supabase_admin
 --
 
 ALTER TABLE public.challenges_users ENABLE ROW LEVEL SECURITY;
-
-
---
--- Name: signoffs delete admin; Type: POLICY; Schema: public; Owner: supabase_admin
---
-
-CREATE POLICY "delete admin" ON public.signoffs FOR DELETE USING ((EXISTS ( SELECT users.user_id,
-    users.role
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 3)))));
 
 
 --
@@ -1239,31 +1280,6 @@ ALTER TABLE public.proposals_users ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE public.allocations ENABLE ROW LEVEL SECURITY;
 
-
---
--- Name: proposals public; Type: POLICY; Schema: public; Owner: supabase_admin
---
-
-CREATE POLICY public ON public.proposals FOR SELECT USING (true);
-
-
---
--- Name: signoffs public; Type: POLICY; Schema: public; Owner: supabase_admin
---
-
-CREATE POLICY public ON public.signoffs FOR SELECT USING (true);
-
-
---
--- Name: users public; Type: POLICY; Schema: public; Owner: supabase_admin
---
-
-CREATE POLICY public ON public.users FOR SELECT USING (
-  users.user_id = auth.uid() OR public.can_access_users(auth.uid())
-);
-
-
-
 --
 -- Name: signoffs; Type: ROW SECURITY; Schema: public; Owner: supabase_admin
 --
@@ -1281,15 +1297,6 @@ ALTER TABLE public.som_reviews ENABLE ROW LEVEL SECURITY;
 --
 
 ALTER TABLE public.soms ENABLE ROW LEVEL SECURITY;
-
---
--- Name: users update public; Type: POLICY; Schema: public; Owner: supabase_admin
---
-
-CREATE POLICY "users update admin" ON public.users FOR UPDATE USING (
-  users.user_id = auth.uid() OR public.is_admin(auth.uid())
-);
-
 
 --
 -- Name: users; Type: ROW SECURITY; Schema: public; Owner: supabase_admin
