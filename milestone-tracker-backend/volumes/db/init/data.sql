@@ -1013,13 +1013,30 @@ CREATE POLICY "Public list" ON public.poas_reviews FOR SELECT USING (true);
 -- Name: som_reviews CT member (real); Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "CT member (real)" ON public.som_reviews FOR INSERT WITH CHECK (((EXISTS ( SELECT challenges_users.user_id
-   FROM public.challenges_users
-  WHERE ((challenges_users.user_id = auth.uid()) AND (challenges_users.challenge_id IN ( SELECT soms.challenge_id
-           FROM public.soms
-          WHERE (soms.id = som_reviews.som_id)))))) OR (EXISTS ( SELECT users.user_id
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 3))))));
+CREATE POLICY "Insert SoMs reviews" ON public.som_reviews FOR INSERT WITH CHECK (
+  public.is_in_challenge_ct(
+    (
+      SELECT array_agg(soms.challenge_id)
+      FROM public.soms
+      WHERE (soms.id = som_reviews.som_id)
+    )
+  )
+  OR public.is_proposal_allocated(
+    (
+      SELECT soms.proposal_id
+      FROM public.soms
+      WHERE (soms.id = som_reviews.som_id)
+    )
+  )
+  OR public.is_io_member(auth.uid())
+  OR public.is_admin(auth.uid())
+);
+
+--
+-- Name: som_reviews public; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY public ON public.som_reviews FOR SELECT USING (true);
 
 
 --
@@ -1040,15 +1057,6 @@ CREATE POLICY "Delete admin" ON public.allocations FOR DELETE USING (
   public.can_access_users(auth.uid())
 );
 
-
---
--- Name: som_reviews IO member; Type: POLICY; Schema: public; Owner: supabase_admin
---
-
-CREATE POLICY "IO member" ON public.som_reviews FOR INSERT WITH CHECK ((EXISTS ( SELECT users.user_id,
-    users.role
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 2)))));
 
 --
 -- Name: PoAs insert; Type: POLICY; Schema: public; Owner: supabase_admin
@@ -1229,16 +1237,6 @@ CREATE POLICY public ON public.proposals FOR SELECT USING (true);
 --
 
 CREATE POLICY public ON public.signoffs FOR SELECT USING (true);
-
-
---
--- Name: som_reviews public; Type: POLICY; Schema: public; Owner: supabase_admin
---
-
-CREATE POLICY public ON public.som_reviews FOR SELECT USING (true);
-
-
-
 
 
 --
