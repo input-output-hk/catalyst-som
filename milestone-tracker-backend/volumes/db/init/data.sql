@@ -1038,15 +1038,20 @@ CREATE POLICY "Insert SoMs reviews" ON public.som_reviews FOR INSERT WITH CHECK 
 
 CREATE POLICY public ON public.som_reviews FOR SELECT USING (true);
 
-
 --
 -- Name: proposals_users Delete admin; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Delete admin" ON public.proposals_users FOR DELETE USING ((EXISTS ( SELECT users.user_id,
-    users.role
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 3)))));
+CREATE POLICY "Delete admin" ON public.proposals_users FOR DELETE USING (
+  public.is_admin(auth.uid())
+);
+
+
+--
+-- Name: proposals_users public select; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY "public select" ON public.proposals_users FOR SELECT USING (true);
 
 
 --
@@ -1246,13 +1251,6 @@ CREATE POLICY public ON public.signoffs FOR SELECT USING (true);
 CREATE POLICY public ON public.users FOR SELECT USING (
   users.user_id = auth.uid() OR public.can_access_users(auth.uid())
 );
-
-
---
--- Name: proposals_users public select; Type: POLICY; Schema: public; Owner: supabase_admin
---
-
-CREATE POLICY "public select" ON public.proposals_users FOR SELECT USING (true);
 
 
 --
