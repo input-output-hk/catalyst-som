@@ -986,27 +986,24 @@ CREATE POLICY "IO member" ON public.som_reviews FOR INSERT WITH CHECK ((EXISTS (
    FROM public.users
   WHERE ((users.user_id = auth.uid()) AND (users.role = 2)))));
 
+--
+-- Name: PoAs insert; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY "PoAs insert" ON public.poas FOR INSERT WITH CHECK (
+  (public.is_proposal_owner(proposal_id) OR public.is_admin(auth.uid()))
+);
 
 --
--- Name: poas Proposal owner; Type: POLICY; Schema: public; Owner: supabase_admin
+-- Name: PoAs update; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "Proposal owner" ON public.poas FOR INSERT WITH CHECK (((EXISTS ( SELECT proposals_users.user_id
-   FROM public.proposals_users
-  WHERE ((proposals_users.user_id = auth.uid()) AND (proposals_users.proposal_id = poas.proposal_id)))) OR (EXISTS ( SELECT users.user_id
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 3))))));
+CREATE POLICY "PoAs update" ON public.poas FOR UPDATE USING (
+  (public.is_proposal_owner(proposal_id) OR public.is_admin(auth.uid()))
+) WITH CHECK (
+  (public.is_proposal_owner(proposal_id) OR public.is_admin(auth.uid()))
+);
 
-CREATE POLICY "Proposal owner update PoAs" ON public.poas FOR UPDATE USING (((EXISTS ( SELECT proposals_users.user_id
-   FROM public.proposals_users
-  WHERE ((proposals_users.user_id = auth.uid()) AND (proposals_users.proposal_id = poas.proposal_id)))) OR (EXISTS ( SELECT users.user_id
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 3))))))
-WITH CHECK (((EXISTS ( SELECT proposals_users.user_id
-   FROM public.proposals_users
-  WHERE ((proposals_users.user_id = auth.uid()) AND (proposals_users.proposal_id = poas.proposal_id)))) OR (EXISTS ( SELECT users.user_id
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 3))))));
 
 --
 -- Name: SoMs insert; Type: POLICY; Schema: public; Owner: supabase_admin
