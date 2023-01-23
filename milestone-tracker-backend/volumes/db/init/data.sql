@@ -1009,6 +1009,7 @@ CREATE POLICY "Insert PoAs reviews" ON public.poas_reviews FOR INSERT WITH CHECK
 
 CREATE POLICY "Public list" ON public.poas_reviews FOR SELECT USING (true);
 
+
 --
 -- Name: som_reviews CT member (real); Type: POLICY; Schema: public; Owner: supabase_admin
 --
@@ -1106,6 +1107,13 @@ CREATE POLICY "PoAs update" ON public.poas FOR UPDATE USING (
 ) WITH CHECK (
   (public.is_proposal_owner(proposal_id) OR public.is_admin(auth.uid()))
 );
+
+
+--
+-- Name: poas public; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY public ON public.poas FOR SELECT USING (true);
 
 
 --
@@ -1230,12 +1238,6 @@ ALTER TABLE public.proposals_users ENABLE ROW LEVEL SECURITY;
 --
 
 ALTER TABLE public.allocations ENABLE ROW LEVEL SECURITY;
-
---
--- Name: poas public; Type: POLICY; Schema: public; Owner: supabase_admin
---
-
-CREATE POLICY public ON public.poas FOR SELECT USING (true);
 
 
 --
