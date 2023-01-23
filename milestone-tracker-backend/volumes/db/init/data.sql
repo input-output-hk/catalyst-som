@@ -194,6 +194,34 @@ SELECT EXISTS (
 );
 $$ LANGUAGE sql SECURITY DEFINER;
 
+--
+-- Name: is_in_challenge_ct(); Type: FUNCTION; Schema: public; Owner: supabase_admin
+--
+
+CREATE FUNCTION public.is_in_challenge_ct(_challenge_ids bigint[]) RETURNS bool AS $$
+SELECT EXISTS (
+  SELECT cu.user_id
+  FROM public.challenges_users cu
+  WHERE (
+    cu.user_id = auth.uid()
+    AND cu.challenge_id = any (_challenge_ids)
+  )
+);
+$$ LANGUAGE sql SECURITY DEFINER;
+
+--
+-- Name: is_proposal_allocated(); Type: FUNCTION; Schema: public; Owner: supabase_admin
+--
+
+CREATE FUNCTION public.is_proposal_allocated(_proposal_id bigint) RETURNS bool AS $$
+SELECT EXISTS (
+  SELECT 1
+  FROM allocations a
+  WHERE a.user_id = auth.uid()
+  AND a.proposal_id = _proposal_id
+);
+$$ LANGUAGE sql SECURITY DEFINER;
+
 
 -- ALTER FUNCTION public.getmilestones() OWNER TO supabase_admin;
 
@@ -956,12 +984,30 @@ CREATE POLICY "Select public" ON public.challenges_users FOR SELECT USING (true)
 -- Name: poas_reviews CT member; Type: POLICY; Schema: public; Owner: supabase_admin
 --
 
-CREATE POLICY "CT member" ON public.poas_reviews FOR INSERT WITH CHECK ((EXISTS ( SELECT challenges_users.user_id
-   FROM public.challenges_users
-  WHERE ((challenges_users.user_id = auth.uid()) AND (challenges_users.challenge_id IN ( SELECT poas.challenge_id
-           FROM public.poas
-          WHERE (poas.id = poas_reviews.poas_id)))))));
+CREATE POLICY "Insert PoAs reviews" ON public.poas_reviews FOR INSERT WITH CHECK (
+  public.is_in_challenge_ct(
+    (
+      SELECT array_agg(poas.challenge_id)
+      FROM public.poas
+      WHERE (poas.id = poas_reviews.poas_id)
+    )
+  )
+  OR public.is_proposal_allocated(
+    (
+      SELECT poas.proposal_id
+      FROM public.poas
+      WHERE (poas.id = poas_reviews.poas_id)
+    )
+  )
+  OR public.is_io_member()
+  OR public.is_admin(auth.uid())
+);
 
+--
+-- Name: poas_reviews Public list; Type: POLICY; Schema: public; Owner: supabase_admin
+--
+
+CREATE POLICY "Public list" ON public.poas_reviews FOR SELECT USING (true);
 
 --
 -- Name: som_reviews CT member (real); Type: POLICY; Schema: public; Owner: supabase_admin
@@ -993,15 +1039,6 @@ CREATE POLICY "Delete admin" ON public.proposals_users FOR DELETE USING ((EXISTS
 CREATE POLICY "Delete admin" ON public.allocations FOR DELETE USING (
   public.can_access_users(auth.uid())
 );
-
---
--- Name: poas_reviews IO member; Type: POLICY; Schema: public; Owner: supabase_admin
---
-
-CREATE POLICY "IO member" ON public.poas_reviews FOR INSERT WITH CHECK ((EXISTS ( SELECT users.user_id,
-    users.role
-   FROM public.users
-  WHERE ((users.user_id = auth.uid()) AND (users.role = 2)))));
 
 
 --
@@ -1055,12 +1092,6 @@ CREATE POLICY "SoMs update" ON public.soms FOR UPDATE USING (
 --
 
 CREATE POLICY public ON public.soms FOR SELECT USING (true);
-
---
--- Name: poas_reviews Public list; Type: POLICY; Schema: public; Owner: supabase_admin
---
-
-CREATE POLICY "Public list" ON public.poas_reviews FOR SELECT USING (true);
 
 
 --
