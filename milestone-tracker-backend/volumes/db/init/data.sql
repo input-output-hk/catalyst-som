@@ -401,7 +401,8 @@ CREATE TABLE public.proposals (
     completion_date timestamp without time zone,
     created_at timestamp with time zone DEFAULT now(),
     challenge_id bigint,
-    budget bigint
+    budget bigint,
+    funds_distributed bigint DEFAULT 0
 );
 
 

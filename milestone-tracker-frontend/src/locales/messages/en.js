@@ -170,7 +170,8 @@ export default {
     open_ideascale: "Open in Ideascale",
     challenge: "Challenge",
     budget: "Budget",
-    completion: "Completion date"
+    completion: "Completion date",
+    funds_distributed: "Funds distributed"
   },
   reviews_counter: {
     approvals: "approval | approvals",

@@ -28,6 +28,14 @@
         </td>
       </tr>
       <tr>
+        <th>{{ $t('proposal_recap.funds_distributed') }}</th>
+        <td>
+          <span v-if="proposal.funds_distributed">
+            {{ $n(proposal.funds_distributed, "currency") }}
+          </span>
+        </td>
+      </tr>
+      <tr>
         <th>{{ $t('proposal_recap.completion') }}</th>
         <td>
           <span v-if="proposal.completion_date">
