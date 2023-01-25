@@ -54,7 +54,7 @@ export default {
   milestone_recap: {
     title: "M {nr}",
     cost: "Milestone cost:",
-    delivery: "Delivery on:",
+    delivery: "Stated delivery on:",
     month: "Month {month}",
     payment: "Payments schedule:",
     payment_starts: "Payments starts after previous milestone PoA approval.",

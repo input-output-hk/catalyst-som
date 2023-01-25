@@ -18,7 +18,7 @@
       </div>
       <div class="column is-12">
         <h3 class="title is-size-2">{{ $t('pages.proposal.milestone_recap') }}</h3>
-        <milestones-recap :proposal="proposal" />
+        <milestones-recap :proposal="proposal" :durations="durations" />
       </div>
       <div class="column is-12">
         <router-link

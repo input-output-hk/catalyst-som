@@ -48,7 +48,6 @@ const getCurrentMilestone = (milestones) => {
     continuing: true,
     availablePoAPayments: 0
   })
-  console.log(accumulator)
   accumulator.milestone = milestones.find(
     m => m.milestone === accumulator.milestone
   )
@@ -58,12 +57,10 @@ const getCurrentMilestone = (milestones) => {
 const getNextPayment = (proposal, milestones, current) => {
   if (proposal && current && milestones.length > 0) {
     const lastMilestone = Math.max(...milestones.map(m => m.milestone))
-    console.log(lastMilestone)
     let chunkPayment = 0
     const poaPayment = roundAmounts(
       Math.max(current.availablePoAPayments - proposal.funds_distributed, 0)
     )
-    console.log(proposal.funds_distributed, poaPayment, current.availablePoAPayments)
     const currentDistributedFunds = (
       proposal.funds_distributed +
       poaPayment -

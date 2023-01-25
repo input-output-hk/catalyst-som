@@ -2,8 +2,8 @@
   <div class="tile is-ml is-parent" v-if="som">
     <div class="tile is-child notification">
       <h1 class="title is-size-1 mb-2">
-        <router-link :to="{name: 'proposal-milestones-detail', params: {id: proposal.project_id, milestone: milestone}}">
-          {{ $t('milestone_recap.title', {nr: milestone}) }}
+        <router-link :to="{name: 'proposal-milestones-detail', params: {id: proposal.project_id, milestone: milestone.milestone}}">
+          {{ $t('milestone_recap.title', {nr: milestone.milestone}) }}
         </router-link>
       </h1>
       <approval-counters
@@ -23,14 +23,14 @@
           {{ $t('milestone_recap.payment') }}
         </p>
         <ul>
-          <li v-for="payment,idx in payments">
+          <li v-for="x, i in Array.from({length: milestone.duration})">
             <span class="is-size-6 has-text-weight-semibold">
-              {{$n(payment, 'currency')}} - Month {{ $t('milestone_recap.month', {month: parseInt(previousSomEnd) + idx + 1}) }}
+              {{$n(milestone.monthly_payment, 'currency')}} - {{ $t('milestone_recap.month', {month: startingMonth + i}) }}
             </span>
           </li>
         </ul>
-        <p class="is-size-7 mb-0" v-if="milestone > 1">{{ $t('milestone_recap.payment_starts') }}</p>
-        <p class="is-size-7 mb-0" v-if="milestone === 5">{{ $t('milestone_recap.last_payment') }}</p>
+        <p class="is-size-7 mb-0" v-if="milestone.milestone > 1">{{ $t('milestone_recap.payment_starts') }}</p>
+        <p class="is-size-7 mb-0" v-if="milestone.milestone === 5">{{ $t('milestone_recap.last_payment') }}</p>
       </div>
       <div v-if="poa">
         <p class="is-size-3 mb-0 has-text-weight-semibold">{{ $t('milestone_recap.poa') }}</p>
@@ -44,18 +44,21 @@
 
 <script setup>
 import { ref, onMounted, computed, watch, toRef } from 'vue'
+import { storeToRefs } from 'pinia'
 import ApprovalCounters from '@/components/reviews/ApprovalCounters.vue'
 
 const props = defineProps(['milestone', 'proposal'])
 import { useSoms } from '@/store/soms.js'
-const { getSomsPreview, proposal_previews } = useSoms()
+const _useSoms = useSoms()
+const { getSomsPreview } = _useSoms
+const { proposal_previews } = storeToRefs(_useSoms)
 
 import { useSomReviewsCounters } from '@/composables/useSomReviewsCounters.js'
 import { usePoaReviewsCounters } from '@/composables/usePoaReviewsCounters.js'
 
 const som = computed(() => {
   try {
-    return proposal_previews[props.proposal.id][props.milestone][0]
+    return proposal_previews.value[props.proposal.id][props.milestone.milestone][0]
   } catch {
     return false
   }
@@ -72,29 +75,15 @@ const poa = computed(() => {
 const { somReviewsApproved, somReviewsNotApproved } = useSomReviewsCounters(som)
 const { poaReviewsApproved, poaReviewsNotApproved } = usePoaReviewsCounters(poa)
 
-watch(props, () => getSomsPreview(props.proposal.id, props.milestone))
-
-const previousSomEnd = computed(() => {
-  if (proposal_previews[props.proposal.id]) {
-    let counter = props.milestone -1
-    let previousSom = false
-    while (counter > 0 && !previousSom) {
-      if (proposal_previews[props.proposal.id][counter]) {
-        previousSom = proposal_previews[props.proposal.id][counter][0]
-      }
-      counter--
-    }
-    if (previousSom) {
-      return previousSom.month
-    }
-  }
-  return 0
+onMounted(() => {
+  getSomsPreview(props.proposal.id, props.milestone.milestone)
 })
 
-const payments = computed(() => {
-  const times = Math.max(1, som.value.month - previousSomEnd.value)
-  const unit = som.value.cost / times
-  return [...Array(times).keys()].map(() => unit)
+const startingMonth = computed(() => {
+  if (props.milestone) {
+    return props.milestone.progress - props.milestone.duration + 1
+  }
+  return 0
 })
 
 </script>
