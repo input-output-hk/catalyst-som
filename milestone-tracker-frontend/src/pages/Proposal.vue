@@ -60,7 +60,7 @@ const currentExecuting = computed(() => {
 })
 
 const payment = computed(() => {
-  return getNextPayment(proposal.value, durations.value, currentExecuting.value)
+  return getNextPayment(durations.value, currentExecuting.value)
 })
 
 onMounted(async () => {

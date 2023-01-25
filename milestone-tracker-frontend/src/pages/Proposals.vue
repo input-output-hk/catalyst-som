@@ -36,22 +36,26 @@ import { storeToRefs } from 'pinia'
 import { useUser } from '@/store/user.js'
 import ProposalRow from '@/components/ProposalRow.vue'
 import PaginatedTable from '@/components/PaginatedTable.vue'
-import { prepareDataForExport, formatDataForExport } from '@/utils/exportProposals.js'
+import {
+  preparePaymentsData
+ } from '@/utils/exportProposals.js'
 import downloadCsv from '@/utils/exportCsv.js'
 import { useProposals } from '@/store/proposals.js'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const proposalsStore = useProposals()
-const { getProposals, getCount, getProposalsForExport, getSomsById } = proposalsStore
+const {
+  getProposals,
+  getCount,
+  getProposalsSnapshot
+} = proposalsStore
 const { isAdmin, canSetAllocations } = useUser()
 const { proposals } = storeToRefs(proposalsStore)
 
 
 const exportCSV = async () => {
-  const soms = await getProposalsForExport()
-  let ids = await getSomsById(soms.map((el) => el.id))
-  let data = await prepareDataForExport(soms, ids)
-  data = await formatDataForExport(data)
+  const soms = await getProposalsSnapshot()
+  const data = preparePaymentsData(soms)
   downloadCsv(data)
 }
 

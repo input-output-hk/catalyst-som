@@ -54,17 +54,21 @@ const getCurrentMilestone = (milestones) => {
   return accumulator
 }
 
-const getNextPayment = (proposal, milestones, current) => {
-  if (proposal && current && milestones.length > 0) {
+const getNextPayment = (milestones, current) => {
+  if (current && milestones.length > 0) {
     const lastMilestone = Math.max(...milestones.map(m => m.milestone))
     let chunkPayment = 0
     const poaPayment = roundAmounts(
-      Math.max(current.availablePoAPayments - proposal.funds_distributed, 0)
+      Math.max(current.availablePoAPayments - milestones[0].funds_distributed, 0)
+    )
+    const excludeCurrent = (
+      (current.milestone.milestone === lastMilestone) &&
+      (current.milestone.poa_signoff_count > 0)
     )
     const currentDistributedFunds = (
-      proposal.funds_distributed +
+      milestones[0].funds_distributed +
       poaPayment -
-      current.availablePoAPayments
+      ((excludeCurrent) ? 0 : current.availablePoAPayments)
     )
     let currentChunksPayed = 0
     if (currentDistributedFunds > 0) {
