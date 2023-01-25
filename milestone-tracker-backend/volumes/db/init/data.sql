@@ -127,18 +127,21 @@ end;$$;
 --
 
 CREATE FUNCTION public.getmilestones() RETURNS TABLE(title character varying, project_id bigint, budget bigint, id bigint, proposal_id bigint, milestone bigint)
-    LANGUAGE plpgsql
-    AS $$
-    BEGIN
-        RETURN QUERY
-            SELECT DISTINCT ON (soms.proposal_id, soms.milestone)
-            proposals.title, proposals.project_id, proposals.budget,
-            soms.id, soms.proposal_id, soms.milestone
-            FROM soms
-            LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
-            ORDER BY soms.proposal_id, soms.milestone, soms.created_at DESC;
-    end;
+  LANGUAGE plpgsql
+  AS $$
+  BEGIN
+      RETURN QUERY
+          SELECT DISTINCT ON (soms.proposal_id, soms.milestone)
+          proposals.title, proposals.project_id, proposals.budget,
+          soms.id, soms.proposal_id, soms.milestone
+          FROM soms
+          LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
+          ORDER BY soms.proposal_id, soms.milestone, soms.created_at DESC;
+  end;
 $$;
+
+
+
 
 --
 -- Name: can_access_users(); Type: FUNCTION; Schema: public; Owner: supabase_admin
@@ -1721,6 +1724,31 @@ create or replace function public.getAllocatedPoas() returns table(milestone big
   END;
 $$ LANGUAGE plpgsql;
 
+CREATE FUNCTION public.getProposalSnapshot(_project_id bigint) RETURNS TABLE(
+  title character varying, project_id bigint, budget bigint,
+  id bigint, milestone bigint, month bigint, cost bigint, poas_id bigint,
+  som_signoff_count bigint, poa_signoff_count bigint
+)
+  LANGUAGE plpgsql
+  AS $$
+  BEGIN
+    RETURN QUERY
+      SELECT distinct on (soms.proposal_id, soms.milestone)
+      proposals.title, proposals.project_id, proposals.budget,
+      soms.id, soms.milestone, CAST(soms.month as bigint), soms.cost,
+      poas.id as poas_id,
+      COUNT(ss.id) as som_signoff_count, COUNT(sp.id) as poa_signoff_count
+      FROM soms
+      LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
+      LEFT OUTER JOIN signoffs ss ON soms.id = ss.som_id
+      LEFT OUTER JOIN poas ON soms.id = poas.som_id AND poas.current = true
+      LEFT OUTER JOIN signoffs sp ON poas.id = sp.poa_id
+      WHERE soms.current = true AND proposals.project_id = _project_id
+      GROUP BY proposals.title, proposals.project_id, proposals.budget, soms.id, soms.milestone, poas_id, poas.id
+      ORDER BY soms.proposal_id ASC, soms.milestone ASC;
+  end;
+$$;
+
 
 -- createUser FUNCTION
 
@@ -1828,8 +1856,8 @@ INSERT INTO public.proposals_users (proposal_id, user_id, user_idd)
 
 INSERT INTO public.soms (outputs, success_criteria, evidence, month, cost, completion, proposal_id, milestone, title, challenge_id, user_id, current)
   VALUES
-    ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 1, 'Title ipsum', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), true),
-    ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 1, 'Title ipsum 2 try', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), false),
+    ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 1, 'Title ipsum', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), false),
+    ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 1, 'Title ipsum 2 try', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), true),
     ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 2, 'Title ipsum 2', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), true),
     ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 3, 'Title ipsum 3', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), true),
     ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 10000, 30, 1, 4, 'Title ipsum 4', 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), true),
@@ -1837,26 +1865,26 @@ INSERT INTO public.soms (outputs, success_criteria, evidence, month, cost, compl
 
 INSERT INTO public.som_reviews (outputs_approves, outputs_comment, success_criteria_approves, success_criteria_comment, evidence_approves, evidence_comment, som_id, challenge_id, user_id)
   VALUES
+    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 2, 1, (SELECT user_id FROM public.users WHERE email = 'challenge-team-1@example.org' LIMIT 1)),
     (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 3, 1, (SELECT user_id FROM public.users WHERE email = 'challenge-team-1@example.org' LIMIT 1)),
     (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 4, 1, (SELECT user_id FROM public.users WHERE email = 'challenge-team-1@example.org' LIMIT 1)),
-    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 5, 1, (SELECT user_id FROM public.users WHERE email = 'challenge-team-1@example.org' LIMIT 1)),
-    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 6, 1, (SELECT user_id FROM public.users WHERE email = 'challenge-team-1@example.org' LIMIT 1));
+    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 5, 1, (SELECT user_id FROM public.users WHERE email = 'challenge-team-1@example.org' LIMIT 1));
 
 INSERT INTO public.signoffs (som_id, user_id)
   VALUES
-    (4, (SELECT user_id FROM public.users WHERE email = 'signoff@example.org' LIMIT 1)),
-    (5, (SELECT user_id FROM public.users WHERE email = 'signoff@example.org' LIMIT 1)),
-    (6, (SELECT user_id FROM public.users WHERE email = 'signoff@example.org' LIMIT 1));
+    (2, (SELECT user_id FROM public.users WHERE email = 'signoff@example.org' LIMIT 1)),
+    (3, (SELECT user_id FROM public.users WHERE email = 'signoff@example.org' LIMIT 1)),
+    (4, (SELECT user_id FROM public.users WHERE email = 'signoff@example.org' LIMIT 1));
 
-INSERT INTO public.poas (content, proposal_id, som_id, challenge_id, user_id)
+INSERT INTO public.poas (content, proposal_id, som_id, challenge_id, user_id, current)
   VALUES
-    ('Lorem ipsum dolor sit amet', 1, 5, 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1)),
-    ('Lorem ipsum dolor sit amet', 1, 6, 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1));
+    ('Lorem ipsum dolor sit amet', 1, 2, 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), true),
+    ('Lorem ipsum dolor sit amet', 1, 3, 1, (SELECT user_id FROM public.users WHERE email = 'proposer-1@example.org' LIMIT 1), true);
 
 INSERT INTO public.poas_reviews (content_approved, content_comment, poas_id, user_id)
   VALUES
-    (true, 'Lorem ipsum dolor sit amet', 2, (SELECT user_id FROM public.users WHERE email = 'iog@example.org' LIMIT 1));
+    (true, 'Lorem ipsum dolor sit amet', 1, (SELECT user_id FROM public.users WHERE email = 'iog@example.org' LIMIT 1));
 
 INSERT INTO public.signoffs (poa_id, user_id)
   VALUES
-    (2, (SELECT user_id FROM public.users WHERE email = 'signoff@example.org' LIMIT 1));
+    (1, (SELECT user_id FROM public.users WHERE email = 'signoff@example.org' LIMIT 1));

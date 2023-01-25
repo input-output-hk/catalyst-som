@@ -36,6 +36,11 @@ export default {
     admin: "Admin",
     logout: "Logout {name}"
   },
+  next_payment: {
+    to_be_distributed: "to be distributed in next batch.",
+    as_poa_completion: "as PoA completion.",
+    as_monthly_chunk: "as monthly payment."
+  },
   admin: {
     select_role: "Select role",
     add_challenge: "Add a challenge",

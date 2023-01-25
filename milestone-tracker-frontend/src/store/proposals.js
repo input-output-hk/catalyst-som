@@ -84,6 +84,20 @@ export const useProposals = defineStore('proposals-store', {
         errorNotification(this.$i18n.t('errors.fetching_proposals'))
       }
     },
+    async getProposalSnapshot(project_id) {
+      try {
+        const { data, error } = await supabase
+          .rpc('getproposalsnapshot', {
+            _project_id: project_id
+          })
+        if (error) {
+          throw(error)
+        }
+        return data
+      } catch(error) {
+        errorNotification(this.$i18n.t('errors.fetching_proposals'))
+      }
+    },
     async getSomsById(ids) {
       try {
         const { data, error } = await supabase

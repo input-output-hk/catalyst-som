@@ -11,6 +11,7 @@
             {{ $t('pages.proposal.open_details') }}
           </o-button>
         </router-link>
+        <next-payment :payment="payment" />
       </div>
       <div class="column is-6">
         <recap :proposal="proposal" />
@@ -37,15 +38,34 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router';
 import { useProposals } from '@/store/proposals.js'
-const { getProposal } = useProposals()
+import {
+  generateMilestoneDuration,
+  getCurrentMilestone,
+  getNextPayment
+} from '@/utils/milestones.js'
+const { getProposal, getProposalSnapshot } = useProposals()
 
 const proposal = ref({})
+const snapshot = ref([])
 const proposalId = computed(() => {
   return useRouter().currentRoute.value.params.id;
 })
 
+const durations = computed(() => {
+  return generateMilestoneDuration(snapshot.value)
+})
+
+const currentExecuting = computed(() => {
+  return getCurrentMilestone(durations.value)
+})
+
+const payment = computed(() => {
+  return getNextPayment(proposal.value, durations.value, currentExecuting.value)
+})
+
 onMounted(async () => {
   proposal.value = await getProposal(proposalId.value)
+  snapshot.value = await getProposalSnapshot(proposalId.value)
 })
 
 </script>
@@ -53,4 +73,5 @@ onMounted(async () => {
 <script>
 import Recap from '@/components/proposal/Recap.vue'
 import MilestonesRecap from '@/components/MilestonesRecap.vue'
+import nextPayment from '@/components/proposal/NextPayment.vue'
 </script>
