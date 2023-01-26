@@ -33,6 +33,7 @@ import { SchemaFormFactory, useSchemaForm } from "formvuelate"
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const { createPoaReview } = usePoaReviews()
+import * as yup from 'yup'
 
 const initialSchema = computed(() => {
   return {
@@ -42,7 +43,16 @@ const initialSchema = computed(() => {
     },
     content_comment: {
       type: 'html',
-      label: t('new_poa_review.comment') 
+      label: t('new_poa_review.comment'),
+      validations: yup.string().when('_', {
+        is: true,
+        otherwise: (schema) => {
+          if (!formData.value.content_approved) {
+            return schema.required()
+          }
+          return schema
+        }
+      })
     }
   }
 })

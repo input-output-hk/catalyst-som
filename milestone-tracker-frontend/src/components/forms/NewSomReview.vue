@@ -29,6 +29,7 @@ import { useSomReviews } from '@/store/somReviews.js'
 import VeeValidatePlugin from '@formvuelate/plugin-vee-validate'
 import { SchemaFormFactory, useSchemaForm } from 'formvuelate'
 import { useI18n } from 'vue-i18n'
+import * as yup from 'yup'
 
 const { t } = useI18n()
 const props = defineProps(['som'])
@@ -46,6 +47,15 @@ const initialSchema = computed(() => {
     schema[`${key}_comment`] = {
       type: 'html',
       label: t(`new_som_review.${key}_comment`),
+      validations: yup.string().when('_', {
+        is: true,
+        otherwise: (schema) => {
+          if (!formData.value[`${key}_approves`]) {
+            return schema.required()
+          }
+          return schema
+        }
+      })
     }
   })
   return schema
