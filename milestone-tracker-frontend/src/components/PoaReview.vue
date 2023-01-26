@@ -22,7 +22,12 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { roles } from '@/utils/roles.js'
 const { t } = useI18n()
-const props = defineProps(['review'])
+const props = defineProps({
+  review: {
+    type: Object,
+    default: () => {}
+  }
+})
 
 const role = computed(() => t(`roles.${roles[props.review.role]}`))
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="tile is-ancestor mb-0 mt-4" v-if="payment">
+  <div v-if="payment" class="tile is-ancestor mb-0 mt-4">
     <div class="tile is-6 is-parent">
       <div class="tile is-child notification is-info">
         <h4 class="is-size-3 mr-4 has-text-weight-semibold mb-0">
@@ -20,7 +20,12 @@
 
 <script setup>
 import { computed } from 'vue'
-const props = defineProps(['payment'])
+const props = defineProps({
+  payment: {
+    type: Object,
+    default: () => {}
+  }
+})
 
 const totPayment = computed(() => {
   if (props.payment) {

@@ -1,10 +1,19 @@
 <template>
   <div class="tile is-ancestor is-flex-wrap-wrap is-justify-content-flex-start">
-    <milestone-recap :proposal="proposal" :milestone="ml" v-for="ml in durations" />
+    <milestone-recap v-for="ml in durations" :key="ml.id" :proposal="proposal" :milestone="ml" />
   </div>
 </template>
 
 <script setup>
 import MilestoneRecap from '@/components/proposal/MilestoneRecap.vue'
-const props = defineProps(['proposal', 'durations'])
+defineProps({
+  proposal: {
+    type: Object,
+    default: () => {}
+  },
+  durations: {
+    type: Array,
+    default: () => []
+  }
+})
 </script>

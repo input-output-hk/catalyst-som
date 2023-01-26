@@ -3,14 +3,14 @@
     <div class="content">
       <div class="columns">
         <div class="column is-8">
-          <h1 class="is-size-1">{{ $t('pages.proposals.title') }}</h1>
+          <h1 class="is-size-1">{{ $t('pages.proposals.page_title') }}</h1>
           <p>{{ $t('pages.proposals.description') }}</p>
         </div>
         <div class="column is-4 has-text-right">
           <o-button
+            v-if="isAdmin"
             variant="primary"
             size="small"
-            v-if="isAdmin"
             @click="exportCSV"
           >
             {{ $t('pages.proposals.export') }}
@@ -18,12 +18,12 @@
         </div>
       </div>
       <paginated-table
-        classStyle="proposals-list"
+        class-style="proposals-list"
         :headers="dynamicHeaders"
         :items="proposals"
-        :getItems="getProposals"
-        :getCount="getCount"
-        :itemComponent="ProposalRow"
+        :get-items="getProposals"
+        :get-count="getCount"
+        :item-component="ProposalRow"
       >
       </paginated-table>
     </div>
@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUser } from '@/store/user.js'
 import ProposalRow from '@/components/ProposalRow.vue'

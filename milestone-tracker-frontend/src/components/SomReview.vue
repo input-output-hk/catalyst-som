@@ -3,7 +3,7 @@
     <tr>
       <td>{{ $t('som_review.from')}} <span class="has-text-weight-semibold">{{role}}</span></td>
     </tr>
-    <tr v-for="property in properties">
+    <tr v-for="property in properties" :key="property">
       <td>
         <span class="is-size-5 has-text-weight-semibold">{{ (review[`${property}_approves`]) ? $t('som_review.approved') : $t('som_review.not_approved') }}</span>
         <div v-html="$sanitize(review[`${property}_comment`])" />
@@ -22,7 +22,16 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { roles } from '@/utils/roles.js'
 const { t } = useI18n()
-const props = defineProps(['review', 'properties'])
+const props = defineProps({
+  review: {
+    type: Object,
+    default: () => {}
+  },
+  properties: {
+    type: Array,
+    default: () => []
+  }
+})
 
 const role = computed(() => {
   if (props.review.role) {

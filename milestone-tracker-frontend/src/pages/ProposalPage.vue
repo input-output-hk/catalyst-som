@@ -5,7 +5,7 @@
         <h1 class="title is-size-1">{{proposal.title}}</h1>
         <router-link
           v-if="proposal.project_id"
-          v-slot="{href, route, navigate}"
+          v-slot="{ navigate }"
           :to="{name: 'proposal-milestones', params: {id: proposal.project_id}}">
           <o-button variant="primary" size="large" @click="navigate">
             {{ $t('pages.proposal.open_details') }}
@@ -14,7 +14,7 @@
         <next-payment :payment="payment" />
       </div>
       <div class="column is-6">
-        <recap :proposal="proposal" />
+        <proposal-recap :proposal="proposal" />
       </div>
       <div class="column is-12">
         <h3 class="title is-size-2">{{ $t('pages.proposal.milestone_recap') }}</h3>
@@ -23,7 +23,7 @@
       <div class="column is-12">
         <router-link
           v-if="proposal.project_id"
-          v-slot="{href, route, navigate}"
+          v-slot="{ navigate }"
           :to="{name: 'proposal-milestones', params: {id: proposal.project_id}}">
           <o-button variant="primary" size="large" @click="navigate">
             {{ $t('pages.proposal.open_details') }}
@@ -71,7 +71,7 @@ onMounted(async () => {
 </script>
 
 <script>
-import Recap from '@/components/proposal/Recap.vue'
+import ProposalRecap from '@/components/proposal/ProposalRecap.vue'
 import MilestonesRecap from '@/components/MilestonesRecap.vue'
 import nextPayment from '@/components/proposal/NextPayment.vue'
 </script>

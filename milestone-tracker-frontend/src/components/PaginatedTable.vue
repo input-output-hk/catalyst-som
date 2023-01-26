@@ -3,17 +3,17 @@
     <table class="table is-bordered is-striped">
       <thead>
         <tr>
-          <th v-for="header in headers">{{header}}</th>
+          <th v-for="header in headers" :key="header">{{header}}</th>
         </tr>
       </thead>
       <tbody>
-        <component :is="itemComponent" v-for="item in items" :item="item" />
+        <component :is="itemComponent" v-for="item, idx in items" :key="`row-${idx}`" :item="item" />
       </tbody>
     </table>
   </div>
   <o-pagination
-    :total="count"
     v-model:current="page"
+    :total="count"
     :per-page="size"
     :aria-next-label="$t('table.next')"
     :aria-previous-label="$t('table.previous')"
@@ -27,16 +27,34 @@
 import { ref, watch, onMounted } from 'vue'
 
 const props = defineProps({
-  headers: Array,
-  items: Object,
+  headers: {
+    type: Array,
+    default: () => []
+  },
+  items: {
+    type: Object,
+    default: () => {}
+  },
   size: {
     type: Number,
     default: 25
   },
-  getItems: Function,
-  getCount: Function,
-  itemComponent: Object,
-  classStyle: String
+  getItems: {
+    type: Function,
+    default: () => []
+  },
+  getCount: {
+    type: Function,
+    default: () => 0
+  },
+  itemComponent: {
+    type: Object,
+    default: () => {}
+  },
+  classStyle: {
+    type: String,
+    default: ''
+  }
 })
 
 const page = ref(1)
@@ -46,7 +64,7 @@ const _getItems = () => {
   props.getItems(page.value - 1, props.size)
 }
 
-watch(page, (val) => {
+watch(page, () => {
   _getItems()
 })
 

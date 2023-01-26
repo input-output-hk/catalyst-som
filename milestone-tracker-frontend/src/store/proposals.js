@@ -27,10 +27,8 @@ export const useProposals = defineStore('proposals-store', {
           .from('proposals')
           .select('*', { count: 'exact', head: true })
           this._count = count
-          return count
-        if (error) {
-          throw(error)
-        }
+        if (error) throw(error)
+        return count
       } catch(error) {
         errorNotification(this.$i18n.t('errors.fetching_proposals_count'))
       }
@@ -42,9 +40,7 @@ export const useProposals = defineStore('proposals-store', {
           .from('proposals')
           .select('*, challenges(title), allocations(*, users(id, user_id, email))')
           .range(from, to)
-        if (error) {
-          throw(error)
-        }
+        if (error) throw(error)
         this._proposals = data
       } catch(error) {
         errorNotification(this.$i18n.t('errors.fetching_proposals'))
@@ -56,6 +52,7 @@ export const useProposals = defineStore('proposals-store', {
           .from('proposals')
           .select('id, title')
           .like('title', `%${title}%`)
+        if (error) throw(error)
         this._selectProposals = data
       } catch(error) {
         errorNotification(this.$i18n.t('errors.fetching_proposals'))
@@ -67,6 +64,7 @@ export const useProposals = defineStore('proposals-store', {
           .from('proposals')
           .select('*, challenges(*), allocations(*, users(id, user_id, email))')
           .eq('project_id', id)
+        if (error) throw(error)
         return (data.length > 0) ? data[0] : {}
       } catch(error) {
         errorNotification(this.$i18n.t('errors.fetching_proposals'))
@@ -76,9 +74,7 @@ export const useProposals = defineStore('proposals-store', {
       try {
         const { data, error } = await supabase
           .rpc('getmilestones')
-        if (error) {
-          throw(error)
-        }
+        if (error) throw(error)
         return data
       } catch(error) {
         errorNotification(this.$i18n.t('errors.fetching_proposals'))
@@ -90,9 +86,7 @@ export const useProposals = defineStore('proposals-store', {
           .rpc('getproposalsnapshot', {
             _project_id: project_id
           })
-        if (error) {
-          throw(error)
-        }
+        if (error) throw(error)
         return data
       } catch(error) {
         errorNotification(this.$i18n.t('errors.fetching_proposals'))
@@ -102,9 +96,7 @@ export const useProposals = defineStore('proposals-store', {
       try {
         const { data, error } = await supabase
           .rpc('getproposalssnapshot')
-        if (error) {
-          throw(error)
-        }
+        if (error) throw(error)
         return data
       } catch(error) {
         errorNotification(this.$i18n.t('errors.fetching_proposals'))
@@ -120,9 +112,7 @@ export const useProposals = defineStore('proposals-store', {
           .order('created_at', { foreignTable: 'poas', ascending: false })
           .order('created_at', { foreignTable: 'som_reviews', ascending: false })
           .limit(1, {foreignTable: 'poas'})
-        if (error) {
-          throw(error)
-        }
+        if (error) throw(error)
         return data
       } catch(error) {
         errorNotification(this.$i18n.t('errors.fetching_proposals'))
@@ -134,10 +124,12 @@ export const useProposals = defineStore('proposals-store', {
           .from('allocations')
           .delete()
           .eq('proposal_id', proposal.id)
+          if (error) throw(error)
           try {
             const { error } = await supabase
             .from('allocations')
             .insert(allocations)
+            if (error) throw(error)
             successNotification(this.$i18n.t('notifications.allocation_updated'))
           } catch (error) {
             errorNotification(this.$i18n.t('errors.updating_allocations'))

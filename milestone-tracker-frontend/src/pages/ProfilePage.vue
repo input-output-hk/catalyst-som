@@ -20,10 +20,11 @@
             <th>{{ $t('pages.profile.proposals') }}</th>
             <td>
               <ul>
-                <li v-for="proposal in proposals">
-                  <router-link class="navbar-item" :to="{
-                    name: 'proposal',
-                    params: {id: proposal.project_id}
+                <li v-for="proposal in proposals" :key="proposal.id">
+                  <router-link
+                    class="navbar-item" :to="{
+                      name: 'proposal',
+                      params: {id: proposal.project_id}
                     }">{{proposal.title}}</router-link>
                 </li>
               </ul>
@@ -33,7 +34,7 @@
             <th>{{ $t('pages.profile.challenges') }}</th>
             <td>
               <ul>
-                <li v-for="challenge in challenges">
+                <li v-for="challenge in challenges" :key="challenge.id">
                   {{challenge.title}}
                 </li>
               </ul>
@@ -46,7 +47,7 @@
 </template>
 
 <script setup>
-  import { ref, computed } from 'vue'
+  import { computed } from 'vue'
   import { useUser } from '@/store/user.js'
   import { roles } from '@/utils/roles.js'
   const { getUserInfo, localUser } = useUser()

@@ -24,7 +24,16 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-const props = defineProps(['poa', 'som'])
+const props = defineProps({
+  poa: {
+    type: Object,
+    default: () => {}
+  },
+  som: {
+    type: Object,
+    default: () => {}
+  }
+})
 const emit = defineEmits(['poaReviewSubmitted'])
 import { useFormFields } from '@/composables/useFormFields.js'
 import { usePoaReviews } from '@/store/poaReviews.js'

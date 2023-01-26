@@ -31,10 +31,8 @@ export const useUsers = defineStore('users-store', {
           .from('users')
           .select('*', { count: 'exact', head: true })
           this._count = count
-          return count
-        if (error) {
-          throw(error)
-        }
+        if (error) throw(error)
+        return count
       } catch(error) {
         errorNotification(this.$i18n.t('errors.fetching_users_count'))
       }
@@ -47,46 +45,80 @@ export const useUsers = defineStore('users-store', {
           .select('*, challenges_users(*, challenges(id, title)), proposals_users(*, proposals(id, title)), allocations(*, proposals(id, title))')
           .order('created_at', { ascending: true })
           .range(from, to)
-        if (error) {
-          throw(error)
-        }
+        if (error) throw(error)
         this._users = data
       } catch(error) {
         errorNotification(this.$i18n.t('errors.fetching_users'))
       }
     },
     async updateUserChallenges(challengesUsers, user) {
-      const { error } = await supabase
-        .from('challenges_users')
-        .delete()
-        .eq('user_idd', user.id)
-      const { data, error2 } = await supabase
-        .from('challenges_users')
-        .insert(challengesUsers)
+      try {
+        const { error } = await supabase
+          .from('challenges_users')
+          .delete()
+          .eq('user_idd', user.id)
+        if (error) throw(error)
+        try {
+          const { error } = await supabase
+            .from('challenges_users')
+            .insert(challengesUsers)
+          if (error) throw(error)
+          successNotification(this.$i18n.t('notifications.users_updated'))
+        } catch(error) {
+          errorNotification(this.$i18n.t('errors.updating_users'))
+        }
+      } catch(error) {
+        errorNotification(this.$i18n.t('errors.updating_users'))
+      }
     },
     async updateUserProposals(proposalsUsers, user) {
-      const { error } = await supabase
-        .from('proposals_users')
-        .delete()
-        .eq('user_idd', user.id)
-      const { data, error2 } = await supabase
-        .from('proposals_users')
-        .insert(proposalsUsers)
+      try {
+        const { error } = await supabase
+          .from('proposals_users')
+          .delete()
+          .eq('user_idd', user.id)
+        if (error) throw(error)
+        try {
+          const { error } = await supabase
+            .from('proposals_users')
+            .insert(proposalsUsers)
+          if (error) throw(error)
+        } catch(error) {
+          errorNotification(this.$i18n.t('errors.updating_users'))
+        }
+      } catch(error) {
+        errorNotification(this.$i18n.t('errors.updating_users'))
+      }
     },
     async updateUserAllocatedProposals(proposalsUsers, user) {
-      const { error } = await supabase
-        .from('allocations')
-        .delete()
-        .eq('user_idd', user.id)
-      const { data, error2 } = await supabase
-        .from('allocations')
-        .insert(proposalsUsers)
+      try {
+        const { error } = await supabase
+          .from('allocations')
+          .delete()
+          .eq('user_idd', user.id)
+        if (error) throw(error)
+        try {
+          const { error } = await supabase
+            .from('allocations')
+            .insert(proposalsUsers)
+          if (error) throw(error)
+        } catch(error) {
+          errorNotification(this.$i18n.t('errors.updating_allocations'))
+        }
+      } catch(error) {
+        errorNotification(this.$i18n.t('errors.updating_allocations'))
+      }
     },
     async updateRole(role, user) {
-      const { error } = await supabase
-        .from('users')
-        .update({'role': role})
-        .eq('id', user.id)
+      try {
+        const { error } = await supabase
+          .from('users')
+          .update({'role': role})
+          .eq('id', user.id)
+        if (error) throw(error)
+      } catch(error) {
+        errorNotification(this.$i18n.t('errors.updating_role'))
+      }
     },
     async getSelectUsersByEmail(email) {
       try {
@@ -95,6 +127,7 @@ export const useUsers = defineStore('users-store', {
           .select('id, user_id, email')
           .like('email', `%${email}%`)
         this._selectUsers = data
+        if (error) throw(error)
       } catch(error) {
         errorNotification(this.$i18n.t('errors.fetching_users'))
       }

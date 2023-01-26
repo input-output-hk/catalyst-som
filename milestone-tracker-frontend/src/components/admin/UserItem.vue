@@ -3,8 +3,8 @@
     <td>{{item.email}}</td>
     <td>{{item.username}}</td>
     <td>
-      <o-select :placeholder="$t('admin.select_role')" v-model="role">
-        <option :value="r" v-for="r in Object.keys(roles)">
+      <o-select v-model="role" :placeholder="$t('admin.select_role')">
+        <option v-for="r in Object.keys(roles)" :key="r" :value="r">
           {{$t(`roles.${roles[r]}`)}}
         </option>
       </o-select>
@@ -54,7 +54,12 @@
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue'
 import { storeToRefs } from 'pinia'
-const props = defineProps(['item'])
+const props = defineProps({
+  item: {
+    type: Object,
+    default: () => {}
+  }
+})
 
 import { useChallenges } from '@/store/challenges.js'
 const challengesStore = useChallenges()

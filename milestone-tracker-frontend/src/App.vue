@@ -1,7 +1,8 @@
 <template>
   <div>
     <nav-bar />
-    <o-notification closable
+    <o-notification
+      closable
       variant="warning"
       aria-close-label="Close notification"
       role="alert">

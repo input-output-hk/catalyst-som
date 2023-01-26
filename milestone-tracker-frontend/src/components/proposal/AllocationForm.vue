@@ -18,7 +18,12 @@ import { storeToRefs } from 'pinia'
 import { useUsers } from '@/store/users.js'
 import { useProposals } from '@/store/proposals.js'
 
-const props = defineProps(['proposal'])
+const props = defineProps({
+  proposal: {
+    type: Object,
+    default: () => {}
+  }
+})
 
 const usersStore = useUsers()
 const { getSelectUsersByEmail } = usersStore

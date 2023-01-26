@@ -1,11 +1,11 @@
 <template>
   <div class="content mb-0">
-    <section class="section" v-if="som">
+    <section v-if="som" class="section">
       <table class="table is-bordered is-striped">
         <tbody class="som-recap">
           <tr>
             <th>{{ $t('som.submitted_at') }}</th>
-            <td>{{$d(som.created_at, 'long')}}</td>
+            <td>{{ $d(som.created_at, 'long') }}</td>
             <td></td>
           </tr>
           <tr>
@@ -85,7 +85,7 @@
     </section>
     <div v-if="som">
       <section class="section pt-0 pb-0">
-        <div class="columns" v-if="som.som_reviews.length > 0">
+        <div v-if="som.som_reviews.length > 0" class="columns">
           <div class="column is-12">
             <o-button
               class="is-small"
@@ -94,7 +94,7 @@
             </o-button>
             <o-modal :active="reviewsVisible" scroll="keep">
               <div class="container scrollable-modal">
-                <div class="reviews" v-for="review in som.som_reviews">
+                <div v-for="review in som.som_reviews" :key="review.id" class="reviews">
                   <som-review
                     class="mb-6"
                     :review="review"
@@ -105,10 +105,10 @@
           </div>
         </div>
       </section>
-      <section class="section" v-if="current">
+      <section v-if="current" class="section">
         <!--<h3 class="subtitle">SoM Actions</h3>-->
         <div class="block buttons">
-          <div class="mr-4" v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current && !locked">
+          <div v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current && !locked" class="mr-4">
             <o-button
               variant="primary"
               size="medium"
@@ -116,7 +116,7 @@
               {{ $t('som.submit_review') }}
             </o-button>
           </div>
-          <div class="mr-4" v-if="current && canWriteSom(proposal.id) && locked && !poaLocked">
+          <div v-if="current && canWriteSom(proposal.id) && locked && !poaLocked" class="mr-4">
             <o-button
               variant="primary"
               size="medium"
@@ -140,18 +140,18 @@
           </div>
         </div>
       </section>
-      <section class="section pt-0" v-if="newReviewVisible">
+      <section v-if="newReviewVisible" class="section pt-0">
         <new-som-review
           :som="som"
           @som-review-submitted="newReviewVisible = false" />
       </section>
-      <div class="columns" v-if="som.poas.length > 0">
+      <div v-if="som.poas.length > 0" class="columns">
         <div class="column is-12">
-          <poas :som="som" :poas="som.poas" :proposal="proposal" />
+          <poa-list :som="som" :poas="som.poas" :proposal="proposal" />
         </div>
       </div>
     </div>
-    <section class="section" v-if="!som">
+    <section v-if="!som" class="section">
       <div class="notification">
         <span class="is-size-4">{{$t('som.not_submitted')}}</span>
       </div>
@@ -160,12 +160,25 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue'
-const props = defineProps(['som', 'proposal', 'current'])
-import { useUser } from '../store/user.js'
+import { ref, watch, computed } from 'vue'
+const props = defineProps({
+  som: {
+    type: [Object, Boolean],
+    default: false
+  },
+  proposal: {
+    type: Object,
+    default: () => {}
+  },
+  current: {
+    type: [Object, Boolean],
+    default: () => {}
+  }
+})
+import { useUser } from '@/store/user.js'
 const { canWriteSom, canWriteSomReview, canSignoff } = useUser()
 
-import useEventsBus from '../eventBus'
+import useEventsBus from '@/eventBus'
 const { bus } = useEventsBus()
 
 const reviewsVisible = ref(false)
@@ -188,7 +201,7 @@ const poaLocked = computed(() => {
   return false
 })
 
-watch(()=>bus.value.get('getSomsBus'), (val) => {
+watch(()=>bus.value.get('getSomsBus'), () => {
   newPoAVisible.value = false
 })
 
@@ -199,7 +212,7 @@ import SomReview from '@/components/SomReview.vue'
 import SomReviews from '@/components/SomReviews.vue'
 import NewSomReview from '@/components/forms/NewSomReview.vue'
 import NewPoa from '@/components/forms/NewPoa.vue'
-import Poas from '@/components/Poas.vue'
+import PoaList from '@/components/PoaList.vue'
 import NewSignoff from '@/components/forms/NewSignoff.vue'
 </script>
 

@@ -25,10 +25,10 @@
               </o-button>
               <o-button
                 class="reset"
-                @click="handleReset"
                 variant="primary"
                 size="medium"
-                :disabled="loading || email.length === 0">
+                :disabled="loading || email.length === 0"
+                @click="handleReset">
                 {{ $t('pages.login.reset') }}
               </o-button>
             </div>
@@ -57,7 +57,6 @@ const handleReset = async () => {
 </script>
 
 <script>
-import { computed } from 'vue'
 import { mapState } from 'pinia'
 
 export default {

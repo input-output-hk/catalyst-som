@@ -98,9 +98,7 @@ export const useUser = defineStore('user-store', {
           email: email,
           password: password
         })
-        if (error) {
-          throw(error)
-        }
+        if (error) throw(error)
         this.localUser = data.user
         this.logged = true
         this.getInfo()
@@ -116,6 +114,7 @@ export const useUser = defineStore('user-store', {
     async logout() {
       try {
         const { error } = await supabase.auth.signOut()
+        if (error) throw(error)
         this.resetState()
         successNotification(this.$i18n.t('notifications.logged_out'))
       } catch(error) {
@@ -130,10 +129,11 @@ export const useUser = defineStore('user-store', {
     },
     async resetPassword(email) {
       try {
-        const { data, error } = await supabase.auth.resetPasswordForEmail(
+        const { error } = await supabase.auth.resetPasswordForEmail(
           email,
           { redirectTo: `${import.meta.env.VITE_LOCAL_BASEURL}/reset-password/` }
         )
+        if (error) throw(error)
         successNotification(this.$i18n.t('notifications.check_email'))
       } catch(error) {
         errorNotification(error.message)
@@ -142,9 +142,10 @@ export const useUser = defineStore('user-store', {
     async updatePassword(password) {
       this.fetching = true
       try {
-        const { data, error } = await supabase.auth.update({
+        const { error } = await supabase.auth.update({
           password: password,
         })
+        if (error) throw(error)
         successNotification(this.$i18n.t('notifications.password_updated'))
       } catch(error) {
         errorNotification(error.message)
@@ -159,6 +160,7 @@ export const useUser = defineStore('user-store', {
             .from('users')
             .select('*, challenges_users(*, challenges(id, title)), proposals_users(*, proposals(id, title, url, project_id)), allocations(*, proposals(id, title, url, project_id))')
             .eq('user_id', this.localUser.id)
+          if (error) throw(error)
           this.userInfo = data[0]
         } catch(error) {
           errorNotification(error.message)
@@ -169,6 +171,7 @@ export const useUser = defineStore('user-store', {
       if (this.logged) {
         try {
           const { data, error } = await supabase.auth.getSession()
+          if (error) throw(error)
           if (!data.session) {
             this.resetState()
           }

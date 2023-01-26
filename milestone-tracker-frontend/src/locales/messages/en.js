@@ -228,7 +228,7 @@ export default {
       milestone_recap: "Milestones Recap"
     },
     proposals: {
-      title: "Proposals",
+      page_title: "Proposals",
       description: "All the proposals in the Statement of Milestone pilot.",
       export: "Export CSV",
       id: "ID",

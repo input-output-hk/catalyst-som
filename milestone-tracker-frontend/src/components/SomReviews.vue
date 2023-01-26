@@ -8,7 +8,7 @@
         <template #trigger="props">
           <o-button size="small" variant="primary">{{ (props.open) ? 'Close' : 'Open'}} <i>{{property}}</i> reviews</o-button>
         </template>
-        <div class="reviews mt-3" v-for="review in som.som_reviews">
+        <div v-for="review in som.som_reviews" :key="review.id" class="reviews mt-3">
           <som-review :review="review" :properties="[property]" />
         </div>
       </o-collapse>
@@ -22,13 +22,22 @@
 <script setup>
 import { ref, toRef } from 'vue'
 import { useSomReviewsCounters } from '@/composables/useSomReviewsCounters.js'
-const props = defineProps(['som', 'property'])
+const componentProps = defineProps({
+  som: {
+    type: Object,
+    default: () => {}
+  },
+  property: {
+    type: String,
+    default: ''
+  }
+})
 
 const {
   somReviewsApproved,
   somReviewsNotApproved,
   somReviewsTot
-} = useSomReviewsCounters(toRef(props, 'som'), toRef(props, 'property'))
+} = useSomReviewsCounters(toRef(componentProps, 'som'), toRef(componentProps, 'property'))
 
 const reviewsVisible = ref(false)
 </script>

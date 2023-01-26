@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <table class="table is-bordered is-striped poa-table" v-if="poa">
+    <table v-if="poa" class="table is-bordered is-striped poa-table">
       <tbody class="poa-recap">
         <tr>
           <th>{{ $t('poa.poa') }}</th>
@@ -46,8 +46,9 @@
           </o-modal>
         </div>
     </div>
-    <section class="section pr-0 pl-0"
-      v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current && !locked && newReviewVisible">
+    <section
+      v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current && !locked && newReviewVisible"
+      class="section pr-0 pl-0">
       <new-poa-review
         :som="som"
         :poa="poa"
@@ -62,9 +63,26 @@ import { ref, computed } from 'vue'
 import PoaReviews from '@/components/PoaReviews.vue'
 import NewPoaReview from '@/components/forms/NewPoaReview.vue'
 import NewSignoff from '@/components/forms/NewSignoff.vue'
-const props = defineProps(['poa', 'proposal', 'current', 'som'])
+const props = defineProps({
+  poa: {
+    type: Object,
+    default: () => {}
+  },
+  proposal: {
+    type: Object,
+    default: () => {}
+  },
+  current: {
+    type: Boolean,
+    default: false
+  },
+  som: {
+    type: Object,
+    default: () => {}
+  },
+})
 import { useUser } from '@/store/user.js'
-const { canWriteSom, canWriteSomReview, canSignoff } = useUser()
+const { canWriteSomReview, canSignoff } = useUser()
 
 const newReviewVisible = ref(false)
 const confirmSignoff = ref(false)

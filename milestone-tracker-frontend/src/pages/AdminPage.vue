@@ -4,7 +4,7 @@
       <h1 class="is-size-1">{{ $t('pages.admin.title') }}</h1>
       <p>{{ $t('pages.admin.description') }}</p>
       <paginated-table
-        classStyle="users-list"
+        class-style="users-list"
         :headers="[
           $t('pages.admin.email'),
           $t('pages.admin.username'),
@@ -14,9 +14,9 @@
           $t('pages.admin.proposals_allocated')
         ]"
         :items="users"
-        :getItems="getUsers"
-        :getCount="getCount"
-        :itemComponent="UserItem"
+        :get-items="getUsers"
+        :get-count="getCount"
+        :item-component="UserItem"
       >
       </paginated-table>
     </div>
@@ -24,14 +24,13 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
 import UserItem from '@/components/admin/UserItem.vue'
 import PaginatedTable from '@/components/PaginatedTable.vue'
 import { useUsers } from '@/store/users.js'
 import { storeToRefs } from 'pinia'
 const userStore = useUsers()
 const { getUsers, getCount } = userStore
-const { users } = storeToRefs(userStore);
+const { users } = storeToRefs(userStore)
 </script>
 
 <style lang="scss">

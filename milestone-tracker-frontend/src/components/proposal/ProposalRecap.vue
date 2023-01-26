@@ -45,16 +45,21 @@
       </tr>
       <tr v-if="canSetAllocations">
         <th>Reviewers allocations</th>
-        <td><allocation :proposal="proposal" /></td>
+        <td><allocation-form :proposal="proposal" /></td>
       </tr>
     </tbody>
   </table>
 </template>
 
 <script setup>
-import Allocation from '@/components/proposal/Allocation.vue'
+import AllocationForm from '@/components/proposal/AllocationForm.vue'
 import { useUser } from '@/store/user.js'
-const props = defineProps(['proposal'])
+defineProps({
+  proposal: {
+    type: Object,
+    default: () => {}
+  }
+})
 const { canSetAllocations } = useUser()
 
 </script>

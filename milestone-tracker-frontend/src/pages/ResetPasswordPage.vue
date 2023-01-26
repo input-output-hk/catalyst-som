@@ -8,7 +8,7 @@
         </div>
         <div class="column is-6">
           <form class="content">
-            <div class="col-6 form-widget" v-if="resetActive">
+            <div v-if="resetActive" class="col-6 form-widget">
               <h2 class="title"></h2>
               <div>
                 <o-field :label="$t('pages.reset_password.password')">
@@ -17,8 +17,8 @@
               </div>
               <div class="buttons mt-6">
                 <o-button
-                  @click="handleReset"
-                  type="submit">
+                  type="submit"
+                  @click="handleReset">
                     {{ $t('pages.reset_password.reset') }}
                 </o-button>
               </div>
@@ -37,7 +37,6 @@
   const { updatePassword } = useUser()
 
   const resetActive = ref(false)
-  const loading = ref(false)
   const password = ref('')
 
   const handleReset = async () => {
@@ -45,7 +44,7 @@
   }
 
   onMounted(async () => {
-    supabase.auth.onAuthStateChange(async (event, session) => {
+    supabase.auth.onAuthStateChange(async (event) => {
       if (event == "PASSWORD_RECOVERY") {
         resetActive.value = true
       }

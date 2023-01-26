@@ -13,19 +13,19 @@
           </p>
         </div>
         <div class="column is-6">
-          <recap :proposal="proposal" />
+          <proposal-recap :proposal="proposal" />
         </div>
       </div>
     </section>
     <div class="content columns is-multiline">
       <div class="column is-12 milestones-wrapper">
-        <o-tabs type="boxed" v-model="activeTab">
-          <o-tab-item v-for="ml in [...Array(5).keys()]">
+        <o-tabs v-model="activeTab" type="boxed">
+          <o-tab-item v-for="ml in [...Array(5).keys()]" :key="ml">
             <template
               #header>
               <span>{{ $t('pages.milestones.milestone', {nr: ml + 1}) }}</span>
             </template>
-            <milestone :proposal="proposal" :milestone="ml + 1" />
+            <single-milestone :proposal="proposal" :milestone="ml + 1" />
           </o-tab-item>
         </o-tabs>
       </div>
@@ -70,8 +70,8 @@ onMounted(async () => {
 </script>
 
 <script>
-import Milestone from '@/components/Milestone.vue'
-import Recap from '@/components/proposal/Recap.vue'
+import SingleMilestone from '@/components/SingleMilestone.vue'
+import ProposalRecap from '@/components/proposal/ProposalRecap.vue'
 </script>
 
 <style lang="scss">

@@ -35,8 +35,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-const props = defineProps(['som', 'poa'])
+const props = defineProps({
+  som: {
+    type: Object,
+    default: () => {}
+  },
+  poa: {
+    type: Object,
+    default: () => {}
+  }
+})
 const emit = defineEmits(['clearSignoff'])
 import { useSignoffs } from '@/store/signoffs.js'
 const { createSignoff } = useSignoffs()

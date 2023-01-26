@@ -32,7 +32,12 @@ import { useI18n } from 'vue-i18n'
 import * as yup from 'yup'
 
 const { t } = useI18n()
-const props = defineProps(['som'])
+const props = defineProps({
+  som: {
+    type: Object,
+    default: () => {}
+  }
+})
 const emit = defineEmits(['somReviewSubmitted'])
 const { createSomReview } = useSomReviews()
 

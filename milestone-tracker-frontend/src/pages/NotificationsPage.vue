@@ -2,14 +2,14 @@
   <section class="section">
     <div class="content">
       <h2>SoM to be reviewed</h2>
-      <table class="table is-bordered is-striped" v-if="somsToReview.length > 0">
+      <table v-if="somsToReview.length > 0" class="table is-bordered is-striped">
         <thead>
           <tr>
-            <th v-for="header in headers">{{header}}</th>
+            <th v-for="header in headers" :key="header">{{header}}</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in somsToReview">
+          <tr v-for="item in somsToReview" :key="item.id">
             <td>{{ item.title }}</td>
             <td>{{ item.milestone }}</td>
             <td>{{$d(item.created_at, 'long')}}</td>
@@ -25,14 +25,14 @@
     </div>
     <div class="content">
       <h2>PoA to be reviewed</h2>
-      <table class="table is-bordered is-striped" v-if="poasToReview.length > 0">
+      <table v-if="poasToReview.length > 0" class="table is-bordered is-striped">
         <thead>
           <tr>
-            <th v-for="header in headers">{{header}}</th>
+            <th v-for="header in headers" :key="header">{{header}}</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in poasToReview">
+          <tr v-for="item in poasToReview" :key="item.id">
             <td>{{ item.title }}</td>
             <td>{{ item.milestone }}</td>
             <td>{{$d(item.created_at, 'long')}}</td>

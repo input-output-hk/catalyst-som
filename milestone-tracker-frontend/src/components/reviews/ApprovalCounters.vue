@@ -14,5 +14,14 @@
 </template>
 
 <script setup>
-const props = defineProps(['approves', 'notApproves'])
+defineProps({
+  approves: {
+    type: Number,
+    default: 0
+  },
+  notApproves: {
+    type: Number,
+    default: 0
+  }
+})
 </script>

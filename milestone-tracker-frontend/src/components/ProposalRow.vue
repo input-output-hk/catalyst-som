@@ -9,16 +9,21 @@
     <td>{{ item.challenges.title }}</td>
     <td class="has-text-right">{{ $n(item.budget, "currency") }}</td>
     <td v-if="canSetAllocations">
-      <allocation :proposal="item" />
+      <allocation-form :proposal="item" />
     </td>
   </tr>
 </template>
 
 <script setup>
-import Allocation from '@/components/proposal/Allocation.vue'
+import AllocationForm from '@/components/proposal/AllocationForm.vue'
 import { useUser } from '@/store/user.js'
 const { canSetAllocations } = useUser()
-const props = defineProps(['item'])
+defineProps({
+  item: {
+    type: Object,
+    default: () => {}
+  }
+})
 </script>
 
 <style lang="scss">

@@ -15,7 +15,7 @@
             }}
           </o-button>
         </template>
-        <div class="reviews mt-3" v-for="review in reviews">
+        <div v-for="review in reviews" :key="review.id" class="reviews mt-3">
           <poa-review :review="review" />
         </div>
       </o-collapse>
@@ -28,14 +28,23 @@
 
 <script setup>
 import { ref, toRef } from 'vue'
-const props = defineProps(['poa', 'reviews'])
+const componentProps = defineProps({
+  poa: {
+    type: Object,
+    default: () => {}
+  },
+  reviews: {
+    type: Array,
+    default: () => []
+  }
+})
 import { usePoaReviewsCounters } from '@/composables/usePoaReviewsCounters.js'
 
 const {
   poaReviewsApproved,
   poaReviewsNotApproved,
   poaReviewsTot
-} = usePoaReviewsCounters(toRef(props, 'poa'))
+} = usePoaReviewsCounters(toRef(componentProps, 'poa'))
 
 const reviewsVisible = ref(false)
 

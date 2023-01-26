@@ -4,7 +4,8 @@
       <figure class="image p-3">
         <img class="logo" :src="logoUrl" :alt="$t('global.title')" />
       </figure>
-      <a role="button"
+      <a
+        role="button"
         class="navbar-burger"
         :class="{'is-active': navActive}"
         aria-label="menu"
@@ -19,12 +20,12 @@
       <div class="navbar-start">
         <router-link class="navbar-item" to="/">{{ $t('nav.home') }}</router-link>
         <router-link class="navbar-item" to="/proposals">{{ $t('nav.proposals') }}</router-link>
-        <router-link class="navbar-item" to="/login" v-if="!logged">{{ $t('nav.login') }}</router-link>
-        <router-link class="navbar-item" to="/profile" v-if="logged">{{ $t('nav.profile') }}</router-link>
-        <router-link class="navbar-item" to="/notifications" v-if="logged">{{ $t('nav.notifications') }}</router-link>
-        <router-link class="navbar-item" to="/admin" v-if="isAdmin">{{ $t('nav.admin') }}</router-link>
+        <router-link v-if="!logged" class="navbar-item" to="/login">{{ $t('nav.login') }}</router-link>
+        <router-link v-if="logged" class="navbar-item" to="/profile">{{ $t('nav.profile') }}</router-link>
+        <router-link v-if="logged" class="navbar-item" to="/notifications">{{ $t('nav.notifications') }}</router-link>
+        <router-link v-if="isAdmin" class="navbar-item" to="/admin">{{ $t('nav.admin') }}</router-link>
       </div>
-      <div class="navbar-end" v-if="logged">
+      <div v-if="logged" class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
             <a class="button is-white">
@@ -41,10 +42,9 @@
 import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUser } from '@/store/user.js'
-import { useRouter } from 'vue-router'
 import logoUrl from '@/assets/images/catalyst-logo-white.svg'
 const userStore = useUser()
-const { canWriteSom, login, logout, initUser } = userStore
+const { logout, initUser } = userStore
 const { user, logged, isAdmin } = storeToRefs(userStore)
 
 const navActive = ref(false)

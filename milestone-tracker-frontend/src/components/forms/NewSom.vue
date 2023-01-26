@@ -30,13 +30,30 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 
 import { SchemaFormFactory, useSchemaForm } from "formvuelate"
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
 
 import * as yup from 'yup';
-const props = defineProps(['proposal', 'milestone', 'som', 'soms'])
+const props = defineProps({
+  proposal: {
+    type: Object,
+    default: () => {}
+  },
+  milestone: {
+    type: Number,
+    default: 0
+  },
+  som: {
+    type: Object,
+    default: () => {}
+  },
+  soms: {
+    type: Array,
+    default: () => []
+  },
+})
 const emit = defineEmits(['somSubmitted'])
 import { useSoms } from '@/store/soms.js'
 import { useFormFields } from '@/composables/useFormFields.js'

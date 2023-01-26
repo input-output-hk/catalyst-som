@@ -1,5 +1,5 @@
 <template>
-  <div class="tile is-ml is-parent" v-if="som">
+  <div v-if="som" class="tile is-ml is-parent">
     <div class="tile is-child notification">
       <h1 class="title is-size-1 mb-2">
         <router-link :to="{name: 'proposal-milestones-detail', params: {id: proposal.project_id, milestone: milestone.milestone}}">
@@ -23,14 +23,14 @@
           {{ $t('milestone_recap.payment') }}
         </p>
         <ul>
-          <li v-for="x, i in Array.from({length: milestone.duration})">
+          <li v-for="x, i in Array.from({length: milestone.duration})" :key="i">
             <span class="is-size-6 has-text-weight-semibold">
               {{$n(milestone.monthly_payment, 'currency')}} - {{ $t('milestone_recap.month', {month: startingMonth + i}) }}
             </span>
           </li>
         </ul>
-        <p class="is-size-7 mb-0" v-if="milestone.milestone > 1">{{ $t('milestone_recap.payment_starts') }}</p>
-        <p class="is-size-7 mb-0" v-if="milestone.milestone === 5">{{ $t('milestone_recap.last_payment') }}</p>
+        <p v-if="milestone.milestone > 1" class="is-size-7 mb-0">{{ $t('milestone_recap.payment_starts') }}</p>
+        <p v-if="milestone.milestone === 5" class="is-size-7 mb-0">{{ $t('milestone_recap.last_payment') }}</p>
       </div>
       <div v-if="poa">
         <p class="is-size-3 mb-0 has-text-weight-semibold">{{ $t('milestone_recap.poa') }}</p>
@@ -43,11 +43,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch, toRef } from 'vue'
+import { onMounted, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import ApprovalCounters from '@/components/reviews/ApprovalCounters.vue'
 
-const props = defineProps(['milestone', 'proposal'])
+const props = defineProps({
+  milestone: {
+    type: Object,
+    default: () => {}
+  },
+  proposal: {
+    type: Object,
+    default: () => {}
+  }
+})
 import { useSoms } from '@/store/soms.js'
 const _useSoms = useSoms()
 const { getSomsPreview } = _useSoms

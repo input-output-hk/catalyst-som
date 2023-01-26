@@ -36,7 +36,7 @@ export const useSoms = defineStore('soms-store', {
           .order('created_at', { foreignTable: 'poas', ascending: false })
           .order('created_at', { foreignTable: 'som_reviews', ascending: false })
           .limit(limit)
-
+        if (error) throw(error)
         if (!this.proposals[proposal_id]) {
           this.proposals[proposal_id] = {}
         }
@@ -58,7 +58,7 @@ export const useSoms = defineStore('soms-store', {
           .order('created_at', { foreignTable: 'som_reviews', ascending: false })
           .limit(1, {foreignTable: 'poas'})
           .limit(1)
-
+        if (error) throw(error)
         if (!this.proposal_previews[proposal_id]) {
           this.proposal_previews[proposal_id] = {}
         }
@@ -79,7 +79,7 @@ export const useSoms = defineStore('soms-store', {
         errorNotification(this.$i18n.t('errors.fetching_soms'))
       }
     },
-    async getSom(id) {
+    async getSom() {
       //
     },
     async createSom(som) {
