@@ -60,7 +60,7 @@ const milestonePage: PageObjectModel = {
       selector: '[model="month"] select'
     },
     monthOption: {
-      selector: '[model="month"] select option[value="1"]'
+      selector: '[model="month"] select option[value="4"]'
     },
     completionInput: {
       selector: '[model="completion"] .b-slider-thumb-wrapper'

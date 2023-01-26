@@ -20,7 +20,7 @@ const somSubmissionTest: NightwatchTests = {
   'Proposer 1 SoM submission': (browser: NightwatchBrowser) => {
     const milestonePage: MilestonePage = browser.page.milestonePage();
 
-    browser.navigateTo(milestoneUrl(900002, 1));
+    browser.navigateTo(milestoneUrl(900002, 4));
 
     milestonePage.assert.elementPresent('@newSomButton');
 
