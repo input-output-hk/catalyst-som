@@ -30,8 +30,8 @@
       <tr>
         <th>{{ $t('proposal_recap.funds_distributed') }}</th>
         <td>
-          <span v-if="proposal.funds_distributed">
-            {{ $n(proposal.funds_distributed, "currency") }}
+          <span>
+            {{ $n((proposal.funds_distributed || 0), "currency") }}
           </span>
         </td>
       </tr>
