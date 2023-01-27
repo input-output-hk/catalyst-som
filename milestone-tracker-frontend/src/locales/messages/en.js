@@ -119,7 +119,7 @@ export default {
     submitted_at: "SoM Submitted at",
     title: "Milestone Title",
     outputs: "Milestone Outputs",
-    acceptance_criteria: "Acceptance criteria",
+    success_criteria: "Acceptance criteria",
     evidence: "Milestone Evidence",
     month: "Delivery Month",
     cost: "Milestone Cost",

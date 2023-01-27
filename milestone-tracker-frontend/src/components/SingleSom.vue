@@ -6,41 +6,20 @@
           <tr>
             <th>{{ $t('som.submitted_at') }}</th>
             <td>{{ $d(som.created_at, 'long') }}</td>
-            <td></td>
+            <td v-if="somReviewsVisible"></td>
           </tr>
           <tr>
             <th>{{ $t('som.title') }}</th>
             <td><span class="is-size-5 has-text-weight-semibold">{{som.title}}</span></td>
-            <td></td>
+            <td v-if="somReviewsVisible"></td>
           </tr>
-          <tr>
-            <th>{{ $t('som.outputs') }}</th>
-            <td v-html="$sanitize(som.outputs)"></td>
-            <td>
+          <tr v-for="criterium in criteria" :key="criterium">
+            <th>{{ $t(`som.${criterium}`) }}</th>
+            <td v-html="$sanitize(som[criterium])"></td>
+            <td v-if="somReviewsVisible">
               <som-reviews
-                v-if="som.som_reviews.length > 0"
                 :som="som"
-                :reviews="som.som_reviews" :property="'outputs'" />
-            </td>
-          </tr>
-          <tr>
-            <th>{{ $t('som.acceptance_criteria') }}</th>
-            <td v-html="$sanitize(som.success_criteria)"></td>
-            <td>
-              <som-reviews
-                v-if="som.som_reviews.length > 0"
-                :som="som"
-                :reviews="som.som_reviews" :property="'success_criteria'" />
-            </td>
-          </tr>
-          <tr>
-            <th>{{ $t('som.evidence') }}</th>
-            <td v-html="$sanitize(som.evidence)"></td>
-            <td>
-              <som-reviews
-                v-if="som.som_reviews.length > 0"
-                :som="som"
-                :reviews="som.som_reviews" :property="'evidence'" />
+                :reviews="som.som_reviews" :property="criterium" />
             </td>
           </tr>
           <tr>
@@ -48,7 +27,7 @@
             <td>
               <span class="is-size-3 mr-4 has-text-weight-semibold">{{som.month}}</span>
             </td>
-            <td></td>
+            <td v-if="somReviewsVisible"></td>
           </tr>
           <tr>
             <th>{{ $t('som.cost') }}</th>
@@ -61,7 +40,7 @@
                 <span class="is-size-3 mr-4 has-text-weight-semibold">{{$n(som.cost, 'currency')}}</span>
               </div>
             </td>
-            <td></td>
+            <td v-if="somReviewsVisible"></td>
           </tr>
           <tr>
             <th>{{ $t('som.completion') }}</th>
@@ -71,14 +50,14 @@
                 <progress class="progress is-primary is-medium" :value="som.completion" max="100">{{som.completion}}%</progress>
               </div>
             </td>
-            <td></td>
+            <td v-if="somReviewsVisible"></td>
           </tr>
           <tr v-if="locked">
             <th>{{ $t('som.signed_off_at') }}</th>
             <td>
               {{$d(som.signoffs[0].created_at, 'long')}}
             </td>
-            <td></td>
+            <td v-if="somReviewsVisible"></td>
           </tr>
         </tbody>
       </table>
@@ -185,6 +164,7 @@ const reviewsVisible = ref(false)
 const newReviewVisible = ref(false)
 const newPoAVisible = ref(false)
 const confirmSignoff = ref(false)
+const criteria = ref(['outputs', 'success_criteria', 'evidence'])
 
 const somCost = computed(() => {
   return ((props.som.cost * 100) / props.proposal.budget).toFixed(2)
@@ -199,6 +179,10 @@ const poaLocked = computed(() => {
     return (props.som.poas[0].signoffs.length > 0)
   }
   return false
+})
+
+const somReviewsVisible = computed(() => {
+  return props.som.som_reviews.length > 0
 })
 
 watch(()=>bus.value.get('getSomsBus'), () => {
