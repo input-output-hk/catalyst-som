@@ -86,23 +86,26 @@ const soms = computed(() => {
 })
 
 const otherSoms = computed(() => {
-  if (soms.value) {
-    const [, ...rest] = soms.value
-    return rest
+  try {
+    return soms.value.filter(som => !som.current)
+  } catch {
+    return []
   }
-  return []
 })
 
 const currentSom = computed(() => {
-  if (soms.value) {
-    return (soms.value.length > 0) ? soms.value[0] : false
+  try {
+    return soms.value.find(som => som.current)
+  } catch {
+    return null
   }
-  return false
 })
 
 const otherMilestonesSoms = computed(() => {
   try {
-    return Object.values(proposals[props.proposal.id]).map((soms) => (soms.length > 0) ? soms[0] : null)
+    return Object.values(proposals[props.proposal.id]).map(
+      (soms) => (soms.length > 0) ? soms.find(som => som.current) : null
+    )
   } catch {
     return []
   }
