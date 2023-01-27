@@ -75,6 +75,9 @@ export default {
     submit: "Submit review for this PoA",
     signoff: "Signoff"
   },
+  signoff: {
+    poa_signed_off_at: "PoA signed off at:"
+  },
   new_poa: {
     title: "New Proof of Achivement for Milestone {nr}",
     submit: "Submit PoA",

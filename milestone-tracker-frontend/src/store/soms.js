@@ -49,11 +49,12 @@ export const useSoms = defineStore('soms-store', {
       try {
         const { data, error } = await supabase
           .from('soms')
-          .select('month, cost, completion, som_reviews(outputs_approves, success_criteria_approves, evidence_approves), poas(poas_reviews(content_approved))')
+          .select('month, cost, completion, som_reviews(outputs_approves, success_criteria_approves, evidence_approves), poas(poas_reviews(content_approved), signoffs(created_at))')
           .eq('proposal_id', proposal_id)
           .eq('milestone', milestone)
           .order('current', { ascending: false })
           .order('created_at', { ascending: false })
+          .order('current', { foreignTable: 'poas', ascending: false })
           .order('created_at', { foreignTable: 'poas', ascending: false })
           .order('created_at', { foreignTable: 'som_reviews', ascending: false })
           .limit(1, {foreignTable: 'poas'})

@@ -37,6 +37,7 @@
         <approval-counters
           :approves="poaReviewsApproved"
           :not-approves="poaReviewsNotApproved" />
+        <signoff-recap :signoffs="poa.signoffs" />
       </div>
     </div>
   </div>
@@ -46,6 +47,7 @@
 import { onMounted, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import ApprovalCounters from '@/components/reviews/ApprovalCounters.vue'
+import SignoffRecap from '@/components/proposal/SignoffRecap.vue'
 
 const props = defineProps({
   milestone: {
