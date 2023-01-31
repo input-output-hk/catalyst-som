@@ -10,7 +10,7 @@ export default defineConfig({
     vue(),
     eslint({
       extensions: ['.js', '.vue'],
-      ignorePath: '../.gitignore'
+      //ignorePath: '../.gitignore'
     })
   ],
   resolve: {
