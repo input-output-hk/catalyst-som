@@ -107,137 +107,7 @@ ALTER SCHEMA public OWNER TO postgres;
 COMMENT ON SCHEMA public IS 'standard public schema';
 
 
---
--- Name: create_user(); Type: FUNCTION; Schema: public; Owner: supabase_admin
---
 
-CREATE FUNCTION public.create_user() RETURNS trigger
-    LANGUAGE plpgsql SECURITY DEFINER
-    AS $$begin
-  insert into public.users(user_id, _auth_user_id, email, role)
-  values (new.id, new.id, new.email, 0);
-  return new;
-end;$$;
-
-
--- ALTER FUNCTION public.create_user() OWNER TO supabase_admin;
-
---
--- Name: getmilestones(); Type: FUNCTION; Schema: public; Owner: supabase_admin
---
-
-CREATE FUNCTION public.getmilestones() RETURNS TABLE(title character varying, project_id bigint, budget bigint, id bigint, proposal_id bigint, milestone bigint)
-  LANGUAGE plpgsql
-  AS $$
-  BEGIN
-      RETURN QUERY
-          SELECT DISTINCT ON (soms.proposal_id, soms.milestone)
-          proposals.title, proposals.project_id, proposals.budget,
-          soms.id, soms.proposal_id, soms.milestone
-          FROM soms
-          LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
-          ORDER BY soms.proposal_id, soms.milestone, soms.created_at DESC;
-  end;
-$$;
-
-
-
-
---
--- Name: can_access_users(); Type: FUNCTION; Schema: public; Owner: supabase_admin
---
-
--- Parameters need to be prefixed because the name clashes with `om`'s columns
-CREATE FUNCTION public.can_access_users(_user_id uuid) RETURNS bool AS $$
-SELECT EXISTS (
-  SELECT 1
-  FROM users u
-  WHERE u.user_id = _user_id
-  AND u.role >= 2
-);
-$$ LANGUAGE sql SECURITY DEFINER;
--- Function is owned by postgres which bypasses RLS
-
---
--- Name: is_admin(); Type: FUNCTION; Schema: public; Owner: supabase_admin
---
-
-CREATE FUNCTION public.is_admin(_user_id uuid) RETURNS bool AS $$
-SELECT EXISTS (
-  SELECT 1
-  FROM users u
-  WHERE u.user_id = _user_id
-  AND u.role = 3
-);
-$$ LANGUAGE sql SECURITY DEFINER;
-
---
--- Name: is_io_member(); Type: FUNCTION; Schema: public; Owner: supabase_admin
---
-
-CREATE FUNCTION public.is_io_member(_user_id uuid) RETURNS bool AS $$
-SELECT EXISTS (
-  SELECT 1
-  FROM users u
-  WHERE u.user_id = _user_id
-  AND u.role = 2
-);
-$$ LANGUAGE sql SECURITY DEFINER;
-
-
---
--- Name: is_signoff_user(); Type: FUNCTION; Schema: public; Owner: supabase_admin
---
-
-CREATE FUNCTION public.is_signoff_user(_user_id uuid) RETURNS bool AS $$
-SELECT EXISTS (
-  SELECT 1
-  FROM users u
-  WHERE u.user_id = _user_id
-  AND u.role = 4
-);
-$$ LANGUAGE sql SECURITY DEFINER;
-
---
--- Name: is_proposal_owner(); Type: FUNCTION; Schema: public; Owner: supabase_admin
---
-
-CREATE FUNCTION public.is_proposal_owner(_proposal_id bigint) RETURNS bool AS $$
-SELECT EXISTS (
-  SELECT 1
-  FROM proposals_users pu
-  WHERE pu.user_id = auth.uid()
-  AND pu.proposal_id = _proposal_id
-);
-$$ LANGUAGE sql SECURITY DEFINER;
-
---
--- Name: is_in_challenge_ct(); Type: FUNCTION; Schema: public; Owner: supabase_admin
---
-
-CREATE FUNCTION public.is_in_challenge_ct(_challenge_ids bigint[]) RETURNS bool AS $$
-SELECT EXISTS (
-  SELECT cu.user_id
-  FROM public.challenges_users cu
-  WHERE (
-    cu.user_id = auth.uid()
-    AND cu.challenge_id = any (_challenge_ids)
-  )
-);
-$$ LANGUAGE sql SECURITY DEFINER;
-
---
--- Name: is_proposal_allocated(); Type: FUNCTION; Schema: public; Owner: supabase_admin
---
-
-CREATE FUNCTION public.is_proposal_allocated(_proposal_id bigint) RETURNS bool AS $$
-SELECT EXISTS (
-  SELECT 1
-  FROM allocations a
-  WHERE a.user_id = auth.uid()
-  AND a.proposal_id = _proposal_id
-);
-$$ LANGUAGE sql SECURITY DEFINER;
 
 
 -- ALTER FUNCTION public.getmilestones() OWNER TO supabase_admin;
@@ -600,43 +470,6 @@ CREATE TABLE public.users (
 );
 
 
---
--- Data for Name: challenges; Type: TABLE DATA; Schema: public; Owner: supabase_admin
---
-
-COPY public.challenges (id, title, created_at, fund_id) FROM stdin;
-1	Dapps, Products & Integrations	2022-10-07 19:32:55.117372+00	1
-2	The Great Migration (from Ethereum)	2022-11-10 14:19:40.645101+00	1
-3	Cross-Chain Collaboration	2022-11-10 14:19:58.366977+00	1
-4	DAOs <3 Cardano	2022-11-10 14:20:21.012715+00	1
-5	Grow Africa, Grow Cardano	2022-11-10 14:20:40.23063+00	1
-6	Legal & Financial Implementations	2022-11-10 14:20:54.863976+00	1
-7	Developer Ecosystem	2022-11-10 14:21:19.367882+00	1
-\.
-
-
---
--- Data for Name: funds; Type: TABLE DATA; Schema: public; Owner: supabase_admin
---
-
-COPY public.funds (id, title, created_at) FROM stdin;
-1	Fund 9	2022-10-07 19:32:37.42443+00
-\.
-
-
---
--- Data for Name: proposals; Type: TABLE DATA; Schema: public; Owner: supabase_admin
---
-
-COPY public.proposals (id, title, url, project_id, completion_date, created_at, challenge_id, budget) FROM stdin;
-1	Proposal 1	https://cardano.ideascale.com/a/dtd/422294-48088	900002	2023-03-01 00:00:00	2022-11-10 16:35:28.580163+00	1	22000
-2	Proposal 2	https://cardano.ideascale.com/a/dtd/419167-48088	900003	2023-06-30 00:00:00	2022-11-10 16:35:28.580163+00	2	120000
-3	Proposal 3	https://cardano.ideascale.com/a/dtd/418759-48088	900005	2023-04-01 00:00:00	2022-11-10 16:35:28.580163+00	3	55100
-4	Proposal 4	https://cardano.ideascale.com/a/dtd/422294-48088	900006	2023-03-01 00:00:00	2022-11-10 16:35:28.580163+00	1	12000
-5	Proposal 5	https://cardano.ideascale.com/a/dtd/419167-48088	900007	2023-06-30 00:00:00	2022-11-10 16:35:28.580163+00	2	160000
-6	Proposal 6	https://cardano.ideascale.com/a/dtd/418759-48088	900008	2023-04-01 00:00:00	2022-11-10 16:35:28.580163+00	3	85100
-\.
-
 
 -- ALTER TABLE public.users OWNER TO supabase_admin;
 
@@ -973,6 +806,311 @@ ALTER TABLE ONLY public.soms
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id);
 
+
+-- getMilestones FUNCTION
+
+CREATE OR REPLACE FUNCTION public.getMilestones() RETURNS TABLE(title varchar, project_id bigint, budget bigint, id bigint, proposal_id bigint, milestone bigint) AS $$
+    BEGIN
+        RETURN QUERY
+            SELECT DISTINCT ON (soms.proposal_id, soms.milestone)
+            proposals.title, proposals.project_id, proposals.budget,
+            soms.id, soms.proposal_id, soms.milestone
+            FROM soms
+            LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
+            ORDER BY soms.proposal_id, soms.milestone, soms.created_at DESC;
+    end;
+$$ LANGUAGE plpgsql;
+
+
+create or replace function public.getAllocatedSoms() returns table(milestone bigint, proposal_id bigint, title varchar, created_at timestamp with time zone, project_id bigint, my_reviews_count bigint) as $$
+    BEGIN
+        RETURN QUERY
+          SELECT
+              soms.milestone,
+              soms.proposal_id,
+              soms.title,
+              soms.created_at,
+              proposals.project_id,
+              count(distinct som_reviews.id) as my_reviews_count
+              -- count(distinct signoffs.id) as signoffs_count
+              FROM soms
+
+                left join som_reviews
+                  on som_reviews.som_id = soms.id
+                  and som_reviews.user_id = auth.uid()
+                left join
+                  signoffs
+                    on signoffs.som_id = soms.id
+                left join
+                  proposals
+                    on proposals.id = soms.proposal_id
+              where soms.proposal_id in (
+                select allocations.proposal_id from allocations where allocations.user_id = auth.uid()
+              )
+              and soms.current = true
+              group by soms.milestone, soms.proposal_id, soms.title, soms.created_at, proposals.project_id
+              having count(distinct signoffs.id) = 0;
+  END;
+$$ LANGUAGE plpgsql;
+
+create or replace function public.getAllocatedPoas() returns table(milestone bigint, proposal_id bigint, title varchar, created_at timestamp with time zone, project_id bigint, my_reviews_count bigint) as $$
+    BEGIN
+        RETURN QUERY
+          SELECT
+              soms.milestone,
+              soms.proposal_id,
+              soms.title,
+              poas.created_at,
+              proposals.project_id,
+              count(distinct poas_reviews.id) as my_reviews_count
+              -- count(distinct signoffs.id) as signoffs_count
+              FROM poas
+                left join poas_reviews
+                  on poas_reviews.poas_id = poas.id
+                  and poas_reviews.user_id = auth.uid()
+                left join
+                  signoffs
+                    on signoffs.poa_id = poas.id
+                left join
+                  soms
+                    on soms.id = poas.som_id
+                left join
+                  proposals
+                    on proposals.id = poas.proposal_id
+              where poas.proposal_id in (
+                select allocations.proposal_id from allocations where allocations.user_id = auth.uid()
+              )
+              and poas.current = true
+              group by soms.milestone, soms.proposal_id, soms.title, poas.created_at, proposals.project_id
+              having count(distinct signoffs.id) = 0;
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION public.getProposalSnapshot(_project_id bigint) RETURNS TABLE(
+  title character varying, project_id bigint, budget bigint, funds_distributed bigint,
+  id bigint, milestone bigint, month bigint, cost bigint, completion bigint, poas_id bigint,
+  som_signoff_count bigint, poa_signoff_count bigint
+)
+  LANGUAGE plpgsql
+  AS $$
+  BEGIN
+    RETURN QUERY
+      SELECT distinct on (soms.proposal_id, soms.milestone)
+      proposals.title, proposals.project_id, proposals.budget,
+      proposals.funds_distributed,
+      soms.id, soms.milestone, CAST(soms.month as bigint), soms.cost, soms.completion,
+      poas.id as poas_id,
+      COUNT(ss.id) as som_signoff_count, COUNT(sp.id) as poa_signoff_count
+      FROM soms
+      LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
+      LEFT OUTER JOIN signoffs ss ON soms.id = ss.som_id
+      LEFT OUTER JOIN poas ON soms.id = poas.som_id AND poas.current = true
+      LEFT OUTER JOIN signoffs sp ON poas.id = sp.poa_id
+      WHERE soms.current = true AND proposals.project_id = _project_id
+      GROUP BY proposals.title, proposals.project_id, proposals.budget,
+      proposals.funds_distributed, soms.id, soms.milestone, poas_id, poas.id
+      ORDER BY soms.proposal_id ASC, soms.milestone ASC;
+  end;
+$$;
+
+CREATE FUNCTION public.getProposalsSnapshot() RETURNS TABLE(
+  title character varying, project_id bigint, budget bigint, funds_distributed bigint,
+  id bigint, milestone bigint, month bigint, cost bigint, completion bigint, poas_id bigint,
+  som_signoff_count bigint, poa_signoff_count bigint
+)
+  LANGUAGE plpgsql
+  AS $$
+  BEGIN
+    RETURN QUERY
+      SELECT distinct on (soms.proposal_id, soms.milestone)
+      proposals.title, proposals.project_id, proposals.budget,
+      proposals.funds_distributed,
+      soms.id, soms.milestone, CAST(soms.month as bigint), soms.cost, soms.completion,
+      poas.id as poas_id,
+      COUNT(ss.id) as som_signoff_count, COUNT(sp.id) as poa_signoff_count
+      FROM soms
+      LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
+      LEFT OUTER JOIN signoffs ss ON soms.id = ss.som_id
+      LEFT OUTER JOIN poas ON soms.id = poas.som_id AND poas.current = true
+      LEFT OUTER JOIN signoffs sp ON poas.id = sp.poa_id
+      WHERE soms.current = true
+      GROUP BY proposals.title, proposals.project_id, proposals.budget,
+      proposals.funds_distributed, soms.id, soms.milestone, poas_id, poas.id
+      ORDER BY soms.proposal_id ASC, soms.milestone ASC;
+  end;
+$$;
+
+
+--
+-- Name: can_access_users(); Type: FUNCTION; Schema: public; Owner: supabase_admin
+--
+
+-- Parameters need to be prefixed because the name clashes with `om`'s columns
+CREATE FUNCTION public.can_access_users(_user_id uuid) RETURNS bool AS $$
+SELECT EXISTS (
+  SELECT 1
+  FROM users u
+  WHERE u.user_id = _user_id
+  AND u.role >= 2
+);
+$$ LANGUAGE sql SECURITY DEFINER;
+-- Function is owned by postgres which bypasses RLS
+
+--
+-- Name: is_admin(); Type: FUNCTION; Schema: public; Owner: supabase_admin
+--
+
+CREATE FUNCTION public.is_admin(_user_id uuid) RETURNS bool AS $$
+SELECT EXISTS (
+  SELECT 1
+  FROM users u
+  WHERE u.user_id = _user_id
+  AND u.role = 3
+);
+$$ LANGUAGE sql SECURITY DEFINER;
+
+--
+-- Name: is_io_member(); Type: FUNCTION; Schema: public; Owner: supabase_admin
+--
+
+CREATE FUNCTION public.is_io_member(_user_id uuid) RETURNS bool AS $$
+SELECT EXISTS (
+  SELECT 1
+  FROM users u
+  WHERE u.user_id = _user_id
+  AND u.role = 2
+);
+$$ LANGUAGE sql SECURITY DEFINER;
+
+
+--
+-- Name: is_signoff_user(); Type: FUNCTION; Schema: public; Owner: supabase_admin
+--
+
+CREATE FUNCTION public.is_signoff_user(_user_id uuid) RETURNS bool AS $$
+SELECT EXISTS (
+  SELECT 1
+  FROM users u
+  WHERE u.user_id = _user_id
+  AND u.role = 4
+);
+$$ LANGUAGE sql SECURITY DEFINER;
+
+--
+-- Name: is_proposal_owner(); Type: FUNCTION; Schema: public; Owner: supabase_admin
+--
+
+CREATE FUNCTION public.is_proposal_owner(_proposal_id bigint) RETURNS bool AS $$
+SELECT EXISTS (
+  SELECT 1
+  FROM proposals_users pu
+  WHERE pu.user_id = auth.uid()
+  AND pu.proposal_id = _proposal_id
+);
+$$ LANGUAGE sql SECURITY DEFINER;
+
+--
+-- Name: is_in_challenge_ct(); Type: FUNCTION; Schema: public; Owner: supabase_admin
+--
+
+CREATE FUNCTION public.is_in_challenge_ct(_challenge_ids bigint[]) RETURNS bool AS $$
+SELECT EXISTS (
+  SELECT cu.user_id
+  FROM public.challenges_users cu
+  WHERE (
+    cu.user_id = auth.uid()
+    AND cu.challenge_id = any (_challenge_ids)
+  )
+);
+$$ LANGUAGE sql SECURITY DEFINER;
+
+--
+-- Name: is_proposal_allocated(); Type: FUNCTION; Schema: public; Owner: supabase_admin
+--
+
+CREATE FUNCTION public.is_proposal_allocated(_proposal_id bigint) RETURNS bool AS $$
+SELECT EXISTS (
+  SELECT 1
+  FROM allocations a
+  WHERE a.user_id = auth.uid()
+  AND a.proposal_id = _proposal_id
+);
+$$ LANGUAGE sql SECURITY DEFINER;
+
+
+-- createUser FUNCTION
+
+create or replace function public.create_user()
+returns trigger as $$
+begin
+  insert into public.users(user_id, _auth_user_id, email, role)
+  values (new.id, new.id, new.email, 0);
+  return new;
+end;
+$$ language plpgsql;
+
+-- trigger
+
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.create_user();
+
+
+-- set_row_role FUNCTION
+
+create or replace function public.set_row_role()
+returns trigger as $$
+begin
+  new.role := (select role from public.users where user_id = new.user_id);
+  return new;
+end;
+$$ language plpgsql;
+
+
+create trigger on_poa_review_created
+  before insert on public.poas_reviews
+  for each row execute procedure public.set_row_role();
+
+create trigger on_som_review_created
+  before insert on public.som_reviews
+  for each row execute procedure public.set_row_role();
+
+-- set_old_som_not_current FUNCTION
+
+create or replace function public.set_old_som_not_current()
+returns trigger as $$
+begin
+  update public.soms
+  set current=false
+  where proposal_id = new.proposal_id
+  and milestone = new.milestone
+  and current
+  and id != new.id;
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger on_som_created
+  before insert on public.soms
+  for each row execute procedure public.set_old_som_not_current();
+
+-- set_old_poa_not_current FUNCTION
+
+create or replace function public.set_old_poa_not_current()
+returns trigger as $$
+begin
+  update public.poas
+  set current=false
+  where som_id = new.som_id
+  and current
+  and id != new.id;
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger on_poa_created
+  before insert on public.poas
+  for each row execute procedure public.set_old_poa_not_current();
 
 --
 -- Name: challenges_users Admin insert; Type: POLICY; Schema: public; Owner: supabase_admin
@@ -1645,213 +1783,40 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES 
 -- Add required Postegres FUNCTIONS AND TRIGGERS
 --
 
--- getMilestones FUNCTION
 
-CREATE OR REPLACE FUNCTION public.getMilestones() RETURNS TABLE(title varchar, project_id bigint, budget bigint, id bigint, proposal_id bigint, milestone bigint) AS $$
-    BEGIN
-        RETURN QUERY
-            SELECT DISTINCT ON (soms.proposal_id, soms.milestone)
-            proposals.title, proposals.project_id, proposals.budget,
-            soms.id, soms.proposal_id, soms.milestone
-            FROM soms
-            LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
-            ORDER BY soms.proposal_id, soms.milestone, soms.created_at DESC;
-    end;
-$$ LANGUAGE plpgsql;
+--
+-- Data for Name: funds; Type: TABLE DATA; Schema: public; Owner: supabase_admin
+--
 
 
-create or replace function public.getAllocatedSoms() returns table(milestone bigint, proposal_id bigint, title varchar, created_at timestamp with time zone, project_id bigint, my_reviews_count bigint) as $$
-    BEGIN
-        RETURN QUERY
-          SELECT
-              soms.milestone,
-              soms.proposal_id,
-              soms.title,
-              soms.created_at,
-              proposals.project_id,
-              count(distinct som_reviews.id) as my_reviews_count
-              -- count(distinct signoffs.id) as signoffs_count
-              FROM soms
-
-                left join som_reviews
-                  on som_reviews.som_id = soms.id
-                  and som_reviews.user_id = auth.uid()
-                left join
-                  signoffs
-                    on signoffs.som_id = soms.id
-                left join
-                  proposals
-                    on proposals.id = soms.proposal_id
-              where soms.proposal_id in (
-                select allocations.proposal_id from allocations where allocations.user_id = auth.uid()
-              )
-              and soms.current = true
-              group by soms.milestone, soms.proposal_id, soms.title, soms.created_at, proposals.project_id
-              having count(distinct signoffs.id) = 0;
-  END;
-$$ LANGUAGE plpgsql;
-
-create or replace function public.getAllocatedPoas() returns table(milestone bigint, proposal_id bigint, title varchar, created_at timestamp with time zone, project_id bigint, my_reviews_count bigint) as $$
-    BEGIN
-        RETURN QUERY
-          SELECT
-              soms.milestone,
-              soms.proposal_id,
-              soms.title,
-              poas.created_at,
-              proposals.project_id,
-              count(distinct poas_reviews.id) as my_reviews_count
-              -- count(distinct signoffs.id) as signoffs_count
-              FROM poas
-                left join poas_reviews
-                  on poas_reviews.poas_id = poas.id
-                  and poas_reviews.user_id = auth.uid()
-                left join
-                  signoffs
-                    on signoffs.poa_id = poas.id
-                left join
-                  soms
-                    on soms.id = poas.som_id
-                left join
-                  proposals
-                    on proposals.id = poas.proposal_id
-              where poas.proposal_id in (
-                select allocations.proposal_id from allocations where allocations.user_id = auth.uid()
-              )
-              and poas.current = true
-              group by soms.milestone, soms.proposal_id, soms.title, poas.created_at, proposals.project_id
-              having count(distinct signoffs.id) = 0;
-  END;
-$$ LANGUAGE plpgsql;
-
-CREATE FUNCTION public.getProposalSnapshot(_project_id bigint) RETURNS TABLE(
-  title character varying, project_id bigint, budget bigint, funds_distributed bigint,
-  id bigint, milestone bigint, month bigint, cost bigint, completion bigint, poas_id bigint,
-  som_signoff_count bigint, poa_signoff_count bigint
-)
-  LANGUAGE plpgsql
-  AS $$
-  BEGIN
-    RETURN QUERY
-      SELECT distinct on (soms.proposal_id, soms.milestone)
-      proposals.title, proposals.project_id, proposals.budget,
-      proposals.funds_distributed,
-      soms.id, soms.milestone, CAST(soms.month as bigint), soms.cost, soms.completion,
-      poas.id as poas_id,
-      COUNT(ss.id) as som_signoff_count, COUNT(sp.id) as poa_signoff_count
-      FROM soms
-      LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
-      LEFT OUTER JOIN signoffs ss ON soms.id = ss.som_id
-      LEFT OUTER JOIN poas ON soms.id = poas.som_id AND poas.current = true
-      LEFT OUTER JOIN signoffs sp ON poas.id = sp.poa_id
-      WHERE soms.current = true AND proposals.project_id = _project_id
-      GROUP BY proposals.title, proposals.project_id, proposals.budget,
-      proposals.funds_distributed, soms.id, soms.milestone, poas_id, poas.id
-      ORDER BY soms.proposal_id ASC, soms.milestone ASC;
-  end;
-$$;
-
-CREATE FUNCTION public.getProposalsSnapshot() RETURNS TABLE(
-  title character varying, project_id bigint, budget bigint, funds_distributed bigint,
-  id bigint, milestone bigint, month bigint, cost bigint, completion bigint, poas_id bigint,
-  som_signoff_count bigint, poa_signoff_count bigint
-)
-  LANGUAGE plpgsql
-  AS $$
-  BEGIN
-    RETURN QUERY
-      SELECT distinct on (soms.proposal_id, soms.milestone)
-      proposals.title, proposals.project_id, proposals.budget,
-      proposals.funds_distributed,
-      soms.id, soms.milestone, CAST(soms.month as bigint), soms.cost, soms.completion,
-      poas.id as poas_id,
-      COUNT(ss.id) as som_signoff_count, COUNT(sp.id) as poa_signoff_count
-      FROM soms
-      LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
-      LEFT OUTER JOIN signoffs ss ON soms.id = ss.som_id
-      LEFT OUTER JOIN poas ON soms.id = poas.som_id AND poas.current = true
-      LEFT OUTER JOIN signoffs sp ON poas.id = sp.poa_id
-      WHERE soms.current = true
-      GROUP BY proposals.title, proposals.project_id, proposals.budget,
-      proposals.funds_distributed, soms.id, soms.milestone, poas_id, poas.id
-      ORDER BY soms.proposal_id ASC, soms.milestone ASC;
-  end;
-$$;
+INSERT INTO public.funds (id, title, created_at) VALUES
+(1, 'Fund 9', '2022-10-07 19:32:37.42443+00');
 
 
--- createUser FUNCTION
+--
+-- Data for Name: challenges; Type: TABLE DATA; Schema: public; Owner: supabase_admin
+--
 
-create or replace function public.create_user()
-returns trigger as $$
-begin
-  insert into public.users(user_id, _auth_user_id, email, role)
-  values (new.id, new.id, new.email, 0);
-  return new;
-end;
-$$ language plpgsql;
+INSERT INTO public.challenges (id, title, created_at, fund_id) VALUES
+  (1, 'Dapps, Products & Integrations', '2022-10-07 19:32:55.117372+00', 1),
+  (2, 'The Great Migration (from Ethereum)','2022-11-10 14:19:40.645101+00', 1),
+  (3, 'Cross-Chain Collaboration', '2022-11-10 14:19:58.366977+00', 1),
+  (4, 'DAOs <3 Cardano', '2022-11-10 14:20:21.012715+00',	1),
+  (5, 'Grow Africa, Grow Cardano', '2022-11-10 14:20:40.23063+00', 1),
+  (6, 'Legal & Financial Implementations', '2022-11-10 14:20:54.863976+00', 1),
+  (7, 'Developer Ecosystem', '2022-11-10 14:21:19.367882+00', 1);
 
--- trigger
+--
+-- Data for Name: proposals; Type: TABLE DATA; Schema: public; Owner: supabase_admin
+--
 
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.create_user();
-
-
--- set_row_role FUNCTION
-
-create or replace function public.set_row_role()
-returns trigger as $$
-begin
-  new.role := (select role from public.users where user_id = new.user_id);
-  return new;
-end;
-$$ language plpgsql;
-
-
-create trigger on_poa_review_created
-  before insert on public.poas_reviews
-  for each row execute procedure public.set_row_role();
-
-create trigger on_som_review_created
-  before insert on public.som_reviews
-  for each row execute procedure public.set_row_role();
-
--- set_old_som_not_current FUNCTION
-
-create or replace function public.set_old_som_not_current()
-returns trigger as $$
-begin
-  update public.soms
-  set current=false
-  where proposal_id = new.proposal_id
-  and milestone = new.milestone
-  and current
-  and id != new.id;
-  return new;
-end;
-$$ language plpgsql;
-
-create trigger on_som_created
-  before insert on public.soms
-  for each row execute procedure public.set_old_som_not_current();
-
--- set_old_poa_not_current FUNCTION
-
-create or replace function public.set_old_poa_not_current()
-returns trigger as $$
-begin
-  update public.poas
-  set current=false
-  where som_id = new.som_id
-  and current
-  and id != new.id;
-  return new;
-end;
-$$ language plpgsql;
-
-create trigger on_poa_created
-  before insert on public.poas
-  for each row execute procedure public.set_old_poa_not_current();
+INSERT INTO public.proposals (id, title, url, project_id, completion_date, created_at, challenge_id, budget) VALUES
+  (1, 'Proposal 1', 'https://cardano.ideascale.com/a/dtd/422294-48088', 900002, '2023-03-01 00:00:00', '2022-11-10 16:35:28.580163+00', 1, 22000),
+  (2, 'Proposal 2', 'https://cardano.ideascale.com/a/dtd/419167-48088', 900003,	'2023-06-30 00:00:00', '2022-11-10 16:35:28.580163+00', 2, 120000),
+  (3, 'Proposal 3', 'https://cardano.ideascale.com/a/dtd/418759-48088', 900005, '2023-04-01 00:00:00', '2022-11-10 16:35:28.580163+00', 3, 55100),
+  (4, 'Proposal 4',	'https://cardano.ideascale.com/a/dtd/422294-48088', 900006, '2023-03-01 00:00:00', '2022-11-10 16:35:28.580163+00', 1, 12000),
+  (5, 'Proposal 5', 'https://cardano.ideascale.com/a/dtd/419167-48088', 900007, '2023-06-30 00:00:00', '2022-11-10 16:35:28.580163+00', 2, 160000),
+  (6, 'Proposal 6', 'https://cardano.ideascale.com/a/dtd/418759-48088', 900008, '2023-04-01 00:00:00', '2022-11-10 16:35:28.580163+00', 3, 85100);
 
 
 -- SEED USERS
