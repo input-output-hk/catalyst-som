@@ -24,21 +24,24 @@ services:
 
   studio:
     container_name: supabase-studio
-    image: supabase/studio:0.22.08
+    image: supabase/studio:20230127-6bfd87b
     restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "node", "-e", "require('http').get('http://localhost:3000/api/profile', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})" ]
+      timeout: 5s
+      interval: 5s
+      retries: 3
     ports:
       - ${STUDIO_PORT}:3000/tcp
     environment:
       STUDIO_PG_META_URL: http://meta:8080
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
-      DEFAULT_ORGANIZATION: ${STUDIO_DEFAULT_ORGANIZATION}
-      DEFAULT_PROJECT: ${STUDIO_DEFAULT_PROJECT}
+      DEFAULT_ORGANIZATION_NAME: ${STUDIO_DEFAULT_ORGANIZATION}
+      DEFAULT_PROJECT_NAME: ${STUDIO_DEFAULT_PROJECT}
 
       SUPABASE_URL: http://kong:8000
       SUPABASE_PUBLIC_URL: ${SUPABASE_PUBLIC_URL}
-      # Kept for backwards compatibility with studio:0.22.08
-      SUPABASE_REST_URL: ${API_EXTERNAL_URL}/rest/v1/
       SUPABASE_ANON_KEY: ${ANON_KEY}
       SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
 
@@ -62,10 +65,15 @@ services:
 
   auth:
     container_name: supabase-auth
-    image: supabase/gotrue:v2.31.0
+    image: supabase/gotrue:v2.40.1
     depends_on:
       db: # Disable this if you are using an external Postgres database
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9999/health" ]
+      timeout: 5s
+      interval: 5s
+      retries: 3
     restart: unless-stopped
     environment:
       GOTRUE_API_HOST: 0.0.0.0
@@ -128,7 +136,7 @@ services:
 
   meta:
     container_name: supabase-meta
-    image: supabase/postgres-meta:v0.52.1
+    image: supabase/postgres-meta:v0.59.0
     depends_on:
       db: # Disable this if you are using an external Postgres database
         condition: service_healthy
@@ -144,7 +152,7 @@ services:
   # Comment out everything below this point if you are using an external Postgres database
   db:
     container_name: supabase-db
-    image: supabase/postgres:14.1.0.89
+    image: supabase/postgres:14.1.0.106
     healthcheck:
       test: pg_isready -U postgres -h localhost
       interval: 5s
@@ -164,6 +172,10 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_PORT: ${POSTGRES_PORT}
       PGPORT: ${POSTGRES_PORT}
+      RUNNING_ENV: ${RUNNING_ENV}
     volumes:
+      - ./milestone-tracker-backend/volumes/db/migrations:/volumes/migrations
+      - ./milestone-tracker-backend/volumes/db/realtime.sql:/docker-entrypoint-initdb.d/realtime.sql
       - ./milestone-tracker-backend/volumes/db/roles.sql:/docker-entrypoint-initdb.d/roles.sql
-      - ./milestone-tracker-backend/volumes/db/init/data.sql:/docker-entrypoint-initdb.d/seed.sql
+      # Must be superuser to enable pg_net extension
+      - ./milestone-tracker-backend/volumes/db/webhooks.sql:/etc/postgresql.schema.sql
