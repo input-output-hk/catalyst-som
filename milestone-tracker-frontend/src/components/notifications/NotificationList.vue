@@ -17,7 +17,6 @@
           />
       </tbody>
     </table>
-    <p v-if="!items.length">{{ noItemsMsg }}</p>
   </div>
 </template>
 
@@ -27,10 +26,6 @@ defineProps({
   title: {
     type: String,
     default: 'Notifications'
-  },
-  noItemsMsg: {
-    type: String,
-    default: 'No items'
   },
   rowMsg: {
     type: String,

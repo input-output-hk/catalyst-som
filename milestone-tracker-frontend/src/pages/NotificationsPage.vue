@@ -1,49 +1,50 @@
 <template>
   <section class="section">
     <notification-list
+      v-if="somsToReview.length"
       :row-component="NotificationRow"
       :title="$t('pages.notifications.som_to_review')"
       :items="somsToReview"
       :headers="headers"
-      :no-items-msg="$t('pages.notifications.no_soms_to_review')"
       :row-msg="$t('pages.notifications.go_to_som')"
     />
     <notification-list
+      v-if="poasToReview.length"
       :row-component="NotificationRow"
       :title="$t('pages.notifications.poa_to_review')"
       :items="poasToReview"
       :headers="headers"
-      :no-items-msg="$t('pages.notifications.no_poas_to_review')"
       :row-msg="$t('pages.notifications.go_to_poa')"
     />
     <notification-list
+      v-if="signoffs.length"
       :row-component="SignoffNotificationRow"
       :title="$t('pages.notifications.signoff_received', signoffsDays)"
       :items="signoffs"
       :headers="signoffHeaders"
-      :no-items-msg="$t('pages.notifications.no_poas_to_review')"
       :row-msg="$t('pages.notifications.go_to_poa')"
     />
     <notification-list
+      v-if="somReviews.length"
       :row-component="NotificationRow"
       :title="$t('pages.notifications.som_reviews_received')"
       :items="somReviews"
       :headers="headers"
-      :no-items-msg="$t('pages.notifications.no_soms_to_review')"
       :row-msg="$t('pages.notifications.go_to_som')"
     />
     <notification-list
+      v-if="poaReviews.length"
       :row-component="NotificationRow"
       :title="$t('pages.notifications.poa_reviews_received')"
       :items="poaReviews"
       :headers="headers"
-      :no-items-msg="$t('pages.notifications.no_poas_to_review')"
       :row-msg="$t('pages.notifications.go_to_poa')"
     />
-    <!--
-     - SoM reviews received for current milestone
-     - PoA reviews received for current milestone
-    -->
+    <div v-if="notificationsCount === 0" class="tile is-ml is-parent">
+      <div class="tile is-child notification is-info">
+        <p>{{ $t('pages.notifications.no_notifications') }}</p>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -90,6 +91,16 @@ const somsToReview = computed(() => {
 
 const poasToReview = computed(() => {
   return poas.value.filter(poa => poa.my_reviews_count === 0)
+})
+
+const notificationsCount = computed(() => {
+  return (
+    somsToReview.value.length +
+    poasToReview.value.length +
+    somReviews.value.length +
+    poaReviews.value.length +
+    signoffs.value.length
+  )
 })
 
 onMounted(async () => {
