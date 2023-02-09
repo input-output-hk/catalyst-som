@@ -1,51 +1,19 @@
 <template>
   <section class="section">
-    <div class="content">
-      <h2>SoM to be reviewed</h2>
-      <table v-if="somsToReview.length > 0" class="table is-bordered is-striped">
-        <thead>
-          <tr>
-            <th v-for="header in headers" :key="header">{{header}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in somsToReview" :key="item.id">
-            <td>{{ item.title }}</td>
-            <td>{{ item.milestone }}</td>
-            <td>{{$d(item.created_at, 'long')}}</td>
-            <td>
-              <router-link :to="{name: 'proposal-milestones-detail', params: {id: item.project_id, milestone: item.milestone}}">
-                {{ $t('pages.notifications.go_to_milestone') }}
-              </router-link>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <p v-if="!somsToReview.length">{{ $t('pages.notifications.no_soms_to_review') }}</p>
-    </div>
-    <div class="content">
-      <h2>PoA to be reviewed</h2>
-      <table v-if="poasToReview.length > 0" class="table is-bordered is-striped">
-        <thead>
-          <tr>
-            <th v-for="header in headers" :key="header">{{header}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in poasToReview" :key="item.id">
-            <td>{{ item.title }}</td>
-            <td>{{ item.milestone }}</td>
-            <td>{{$d(item.created_at, 'long')}}</td>
-            <td>
-              <router-link :to="{name: 'proposal-milestones-detail', params: {id: item.project_id, milestone: item.milestone}}">
-                {{ $t('pages.notifications.go_to_poa') }}
-              </router-link>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <p v-if="!poasToReview.length">{{ $t('pages.notifications.no_poas_to_review') }}</p>
-    </div>
+    <notification-list
+      :title="$t('pages.notifications.som_to_review')"
+      :items="somsToReview"
+      :headers="headers"
+      :no-items-msg="$t('pages.notifications.no_soms_to_review')"
+      :row-msg="$t('pages.notifications.go_to_milestone')"
+    />
+    <notification-list
+      :title="$t('pages.notifications.poa_to_review')"
+      :items="poasToReview"
+      :headers="headers"
+      :no-items-msg="$t('pages.notifications.no_poas_to_review')"
+      :row-msg="$t('pages.notifications.go_to_poa')"
+    />
   </section>
 </template>
 
@@ -79,8 +47,11 @@ const poasToReview = computed(() => {
 
 onMounted(async () => {
   soms.value = await getSomsByAllocation()
-  // draft
   poas.value = await getPoasByAllocation()
 })
 
+</script>
+
+<script>
+import NotificationList from '@/components/notifications/NotificationList.vue'
 </script>

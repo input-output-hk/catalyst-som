@@ -254,6 +254,8 @@ export default {
       submitted_at: "Submitted at",
       no_poas_to_review: "No PoA to review!",
       no_soms_to_review: "No SoM to review!",
+      poa_to_review: "PoA to be reviewed",
+      som_to_review: "SoM to be reviewed"
     }
   }
 }
