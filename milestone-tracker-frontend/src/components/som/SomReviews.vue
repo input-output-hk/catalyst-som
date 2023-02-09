@@ -6,7 +6,7 @@
         :not-approves="somReviewsNotApproved" />
       <o-collapse v-model:open="reviewsVisible">
         <template #trigger="props">
-          <o-button size="small" variant="primary">{{ (props.open) ? 'Close' : 'Open'}} <i>{{property}}</i> reviews</o-button>
+          <o-button size="small" variant="primary">{{ (props.open) ? 'Close' : 'Open'}} <i>{{ $t(`som.${property}`) }}</i> reviews</o-button>
         </template>
         <div v-for="review in som.som_reviews" :key="review.id" class="reviews mt-3">
           <som-review :review="review" :properties="[property]" />
