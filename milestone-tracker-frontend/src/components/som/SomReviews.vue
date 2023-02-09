@@ -43,6 +43,6 @@ const reviewsVisible = ref(false)
 </script>
 
 <script>
-import SomReview from '@/components/SomReview.vue'
-import ApprovalCounters from '@/components/reviews/ApprovalCounters.vue'
+import SomReview from '@/components/som/SomReview.vue'
+import ApprovalCounters from '@/components/shared/ApprovalCounters.vue'
 </script>

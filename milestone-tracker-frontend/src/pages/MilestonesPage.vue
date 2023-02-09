@@ -70,7 +70,7 @@ onMounted(async () => {
 </script>
 
 <script>
-import SingleMilestone from '@/components/SingleMilestone.vue'
+import SingleMilestone from '@/components/proposal/SingleMilestone.vue'
 import ProposalRecap from '@/components/proposal/ProposalRecap.vue'
 </script>
 

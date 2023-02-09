@@ -34,8 +34,8 @@
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUser } from '@/store/user.js'
-import ProposalRow from '@/components/ProposalRow.vue'
-import PaginatedTable from '@/components/PaginatedTable.vue'
+import ProposalRow from '@/components/proposal/ProposalRow.vue'
+import PaginatedTable from '@/components/shared/PaginatedTable.vue'
 import {
   preparePaymentsData
  } from '@/utils/exportProposals.js'

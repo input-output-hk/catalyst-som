@@ -72,6 +72,6 @@ onMounted(async () => {
 
 <script>
 import ProposalRecap from '@/components/proposal/ProposalRecap.vue'
-import MilestonesRecap from '@/components/MilestonesRecap.vue'
+import MilestonesRecap from '@/components/proposal/MilestonesRecap.vue'
 import nextPayment from '@/components/proposal/NextPayment.vue'
 </script>

@@ -138,6 +138,6 @@ watch(props, () => getSoms(props.proposal.id, props.milestone, 5))
 </script>
 
 <script>
-import SingleSom from '@/components/SingleSom.vue'
+import SingleSom from '@/components/som/SingleSom.vue'
 import NewSom from '@/components/forms/NewSom.vue'
 </script>

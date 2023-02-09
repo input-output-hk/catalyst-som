@@ -22,7 +22,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import NavBar from '@/components/NavBar.vue'
+import NavBar from '@/components/shared/NavBar.vue'
 
 const activeMsg = ref(false)
 </script>

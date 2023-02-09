@@ -60,7 +60,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import PoaReviews from '@/components/PoaReviews.vue'
+import PoaReviews from '@/components/poa/PoaReviews.vue'
 import NewPoaReview from '@/components/forms/NewPoaReview.vue'
 import NewSignoff from '@/components/forms/NewSignoff.vue'
 const props = defineProps({

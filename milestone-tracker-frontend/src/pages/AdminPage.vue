@@ -24,7 +24,7 @@
 
 <script setup>
 import UserItem from '@/components/admin/UserItem.vue'
-import PaginatedTable from '@/components/PaginatedTable.vue'
+import PaginatedTable from '@/components/shared/PaginatedTable.vue'
 import { useUsers } from '@/store/users.js'
 import { storeToRefs } from 'pinia'
 const userStore = useUsers()

@@ -46,7 +46,7 @@
 <script setup>
 import { onMounted, computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import ApprovalCounters from '@/components/reviews/ApprovalCounters.vue'
+import ApprovalCounters from '@/components/shared/ApprovalCounters.vue'
 import SignoffRecap from '@/components/proposal/SignoffRecap.vue'
 
 const props = defineProps({

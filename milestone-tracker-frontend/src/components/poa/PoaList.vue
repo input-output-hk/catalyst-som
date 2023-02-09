@@ -62,5 +62,5 @@ const renderedPoas = computed(() => {
 </script>
 
 <script>
-import PoaSingle from '@/components/PoaSingle.vue'
+import PoaSingle from '@/components/poa/PoaSingle.vue'
 </script>

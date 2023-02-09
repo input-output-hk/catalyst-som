@@ -51,6 +51,6 @@ const reviewsVisible = ref(false)
 </script>
 
 <script>
-import PoaReview from '@/components/PoaReview.vue'
-import ApprovalCounters from '@/components/reviews/ApprovalCounters.vue'
+import PoaReview from '@/components/poa/PoaReview.vue'
+import ApprovalCounters from '@/components/shared/ApprovalCounters.vue'
 </script>
