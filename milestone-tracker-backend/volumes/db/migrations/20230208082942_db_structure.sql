@@ -1236,13 +1236,13 @@ CREATE OR REPLACE FUNCTION public.getsignedoff(_date timestamp)
 AS $BODY$
     BEGIN
         RETURN QUERY
-          select poas.id as poa_id, soms.id as som_id, proposals.project_id as project_id, proposals.title, soms.milestone, poa_soms.milestone as poa_milestone, signoffs.created_at from signoffs
+          SELECT poas.id AS poa_id, soms.id AS som_id, proposals.project_id AS project_id, proposals.title, soms.milestone, poa_soms.milestone AS poa_milestone, signoffs.created_at FROM signoffs
           LEFT OUTER JOIN poas ON signoffs.poa_id = poas.id
           LEFT OUTER JOIN soms ON signoffs.som_id = soms.id
-          LEFT OUTER JOIN soms as poa_soms ON poa_soms.id = poas.som_id
+          LEFT OUTER JOIN soms AS poa_soms ON poa_soms.id = poas.som_id
           LEFT OUTER JOIN proposals ON poas.proposal_id = proposals.id OR soms.proposal_id = proposals.id
           LEFT outer join proposals_users ON proposals_users.proposal_id = proposals.id
-          where
+          WHERE
           signoffs.created_at >= _date
           AND proposals_users.user_id = auth.uid();
 
@@ -1261,3 +1261,77 @@ GRANT EXECUTE ON FUNCTION public.getsignedoff(timestamp) TO authenticated;
 GRANT EXECUTE ON FUNCTION public.getsignedoff(timestamp) TO postgres;
 
 GRANT EXECUTE ON FUNCTION public.getsignedoff(timestamp) TO service_role;
+
+
+CREATE OR REPLACE FUNCTION public.getsomsreviews()
+    RETURNS TABLE(project_id bigint, title character varying, milestone bigint, created_at timestamp with time zone)
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+
+AS $BODY$
+    BEGIN
+        RETURN QUERY
+          SELECT proposals.project_id, proposals.title, soms.milestone, som_reviews.created_at FROM som_reviews
+            LEFT OUTER JOIN soms ON som_reviews.som_id = soms.id
+            LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
+            LEFT outer join proposals_users ON proposals_users.proposal_id = proposals.id
+            LEFT OUTER JOIN signoffs ON signoffs.som_id = soms.id
+            WHERE
+            proposals_users.user_id = auth.uid() AND
+            soms.current = true
+            GROUP BY proposals.project_id, proposals.title, soms.milestone, som_reviews.created_at
+            HAVING count(distinct signoffs.id) = 0;
+  END;
+$BODY$;
+
+ALTER FUNCTION public.getsomsreviews()
+    OWNER TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.getsomsreviews() TO PUBLIC;
+
+GRANT EXECUTE ON FUNCTION public.getsomsreviews() TO anon;
+
+GRANT EXECUTE ON FUNCTION public.getsomsreviews() TO authenticated;
+
+GRANT EXECUTE ON FUNCTION public.getsomsreviews() TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.getsomsreviews() TO service_role;
+
+CREATE OR REPLACE FUNCTION public.getpoasreviews()
+    RETURNS TABLE(project_id bigint, title character varying, milestone bigint, created_at timestamp with time zone)
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+
+AS $BODY$
+    BEGIN
+        RETURN QUERY
+          SELECT proposals.project_id, proposals.title, soms.milestone, poas_reviews.created_at FROM poas_reviews
+            LEFT OUTER JOIN poas ON poas_reviews.poas_id = poas.id
+            LEFT OUTER JOIN soms ON poas.som_id = soms.id
+            LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
+            LEFT outer join proposals_users ON proposals_users.proposal_id = proposals.id
+            LEFT OUTER JOIN signoffs ON signoffs.poa_id = poas.id
+            where
+            proposals_users.user_id = auth.uid() AND
+            soms.current = true
+            GROUP by proposals.project_id, proposals.title, soms.milestone, poas_reviews.created_at
+            HAVING count(distinct signoffs.id) = 0;
+  END;
+$BODY$;
+
+ALTER FUNCTION public.getpoasreviews()
+    OWNER TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.getpoasreviews() TO PUBLIC;
+
+GRANT EXECUTE ON FUNCTION public.getpoasreviews() TO anon;
+
+GRANT EXECUTE ON FUNCTION public.getpoasreviews() TO authenticated;
+
+GRANT EXECUTE ON FUNCTION public.getpoasreviews() TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.getpoasreviews() TO service_role;

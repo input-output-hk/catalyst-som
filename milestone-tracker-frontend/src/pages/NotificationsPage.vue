@@ -24,17 +24,23 @@
       :no-items-msg="$t('pages.notifications.no_poas_to_review')"
       :row-msg="$t('pages.notifications.go_to_poa')"
     />
+    <notification-list
+      :row-component="NotificationRow"
+      :title="$t('pages.notifications.som_reviews_received')"
+      :items="somReviews"
+      :headers="headers"
+      :no-items-msg="$t('pages.notifications.no_soms_to_review')"
+      :row-msg="$t('pages.notifications.go_to_som')"
+    />
+    <notification-list
+      :row-component="NotificationRow"
+      :title="$t('pages.notifications.poa_reviews_received')"
+      :items="poaReviews"
+      :headers="headers"
+      :no-items-msg="$t('pages.notifications.no_poas_to_review')"
+      :row-msg="$t('pages.notifications.go_to_poa')"
+    />
     <!--
-    For proposals I am a proposer
-     - Poa signed off in last month
-     select signoffs.id, poas.id, soms.id, signoffs.poa_id, signoffs.som_id, proposals.title, proposals.id as proposal_id, proposals_users.user_id from signoffs
-LEFT OUTER JOIN poas ON signoffs.poa_id = poas.id
-LEFT OUTER JOIN soms ON signoffs.som_id = soms.id
-LEFT OUTER JOIN proposals ON poas.proposal_id = proposals.id OR soms.proposal_id = proposals.id
-LEFT outer join proposals_users ON proposals_users.proposal_id = proposals.id AND proposals_users.user_id =
-where
-signoffs.created_at >= '2022-01-01 00:00:00';
-     - SoM signed off in last month
      - SoM reviews received for current milestone
      - PoA reviews received for current milestone
     -->
@@ -51,10 +57,16 @@ const { t } = useI18n()
 
 const { getSomsByAllocation } = useSoms()
 const { getPoasByAllocation } = usePoas()
-const { getSignoffNotifications } = useUser()
+const {
+  getSignoffNotifications,
+  getSomReviewsNotifications,
+  getPoaReviewsNotifications
+} = useUser()
 
 const soms = ref([])
 const poas = ref([])
+const poaReviews = ref([])
+const somReviews = ref([])
 const signoffs = ref([])
 const signoffsDays = ref(30)
 
@@ -86,6 +98,8 @@ onMounted(async () => {
   const now = new Date()
   const from = new Date(now.setDate(now.getDate() - signoffsDays.value))
   signoffs.value = await getSignoffNotifications(from.toISOString())
+  somReviews.value = await getSomReviewsNotifications()
+  poaReviews.value = await getPoaReviewsNotifications()
 })
 
 </script>

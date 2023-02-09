@@ -181,6 +181,30 @@ export const useUser = defineStore('user-store', {
         errorNotification(this.$i18n.t('errors.fetching_soms'))
       }
     },
+    async getSomReviewsNotifications() {
+      try {
+        const { data, error } = await supabase
+          .rpc('getsomsreviews')
+        if (error) {
+          throw(error)
+        }
+        return data
+      } catch(error) {
+        errorNotification(this.$i18n.t('errors.fetching_soms'))
+      }
+    },
+    async getPoaReviewsNotifications() {
+      try {
+        const { data, error } = await supabase
+          .rpc('getpoasreviews')
+        if (error) {
+          throw(error)
+        }
+        return data
+      } catch(error) {
+        errorNotification(this.$i18n.t('errors.fetching_poas'))
+      }
+    },
     async initUser() {
       if (this.logged) {
         try {
