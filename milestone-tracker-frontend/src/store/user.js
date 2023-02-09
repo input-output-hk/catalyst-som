@@ -167,6 +167,20 @@ export const useUser = defineStore('user-store', {
         }
       }
     },
+    async getSignoffNotifications(from) {
+      try {
+        const { data, error } = await supabase
+          .rpc('getsignedoff', {
+            _date: from
+          })
+        if (error) {
+          throw(error)
+        }
+        return data
+      } catch(error) {
+        errorNotification(this.$i18n.t('errors.fetching_soms'))
+      }
+    },
     async initUser() {
       if (this.logged) {
         try {

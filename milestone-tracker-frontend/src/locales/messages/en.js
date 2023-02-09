@@ -247,15 +247,17 @@ export default {
       reset: "Reset"
     },
     notifications: {
-      go_to_milestone: "Go to Milestone",
+      go_to_som: "Go to SoM",
       go_to_poa: "Go to PoA",
       proposal: "Proposal",
       milestone: "Milestone",
       submitted_at: "Submitted at",
+      signedoff_at: "Signed off at",
       no_poas_to_review: "No PoA to review!",
       no_soms_to_review: "No SoM to review!",
       poa_to_review: "PoA to be reviewed",
-      som_to_review: "SoM to be reviewed"
+      som_to_review: "SoM to be reviewed",
+      signoff_received: "Signoff received in the last day | Signoff received in the last {count} days"
     }
   }
 }

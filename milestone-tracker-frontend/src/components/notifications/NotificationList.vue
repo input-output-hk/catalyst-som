@@ -8,7 +8,8 @@
         </tr>
       </thead>
       <tbody>
-        <notification-row
+        <component
+          :is="rowComponent"
           v-for="item in items"
           :key="item.id"
           :item="item"
@@ -21,7 +22,6 @@
 </template>
 
 <script setup>
-import NotificationRow from '@/components/notifications/NotificationRow.vue'
 
 defineProps({
   title: {
@@ -41,6 +41,10 @@ defineProps({
     default: () => []
   },
   items: {
+    type: Object,
+    default: () => {}
+  },
+  rowComponent: {
     type: Object,
     default: () => {}
   }

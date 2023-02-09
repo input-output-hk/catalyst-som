@@ -1224,3 +1224,40 @@ GRANT EXECUTE ON FUNCTION public.getallocatedpoas() TO authenticated;
 GRANT EXECUTE ON FUNCTION public.getallocatedpoas() TO postgres;
 
 GRANT EXECUTE ON FUNCTION public.getallocatedpoas() TO service_role;
+
+
+CREATE OR REPLACE FUNCTION public.getsignedoff(_date timestamp)
+    RETURNS TABLE(poa_id bigint, som_id bigint, project_id bigint, title character varying, milestone bigint, poa_milestone bigint, created_at timestamp with time zone)
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+
+AS $BODY$
+    BEGIN
+        RETURN QUERY
+          select poas.id as poa_id, soms.id as som_id, proposals.project_id as project_id, proposals.title, soms.milestone, poa_soms.milestone as poa_milestone, signoffs.created_at from signoffs
+          LEFT OUTER JOIN poas ON signoffs.poa_id = poas.id
+          LEFT OUTER JOIN soms ON signoffs.som_id = soms.id
+          LEFT OUTER JOIN soms as poa_soms ON poa_soms.id = poas.som_id
+          LEFT OUTER JOIN proposals ON poas.proposal_id = proposals.id OR soms.proposal_id = proposals.id
+          LEFT outer join proposals_users ON proposals_users.proposal_id = proposals.id
+          where
+          signoffs.created_at >= _date
+          AND proposals_users.user_id = auth.uid();
+
+  END;
+$BODY$;
+
+ALTER FUNCTION public.getsignedoff(timestamp)
+    OWNER TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.getsignedoff(timestamp) TO PUBLIC;
+
+GRANT EXECUTE ON FUNCTION public.getsignedoff(timestamp) TO anon;
+
+GRANT EXECUTE ON FUNCTION public.getsignedoff(timestamp) TO authenticated;
+
+GRANT EXECUTE ON FUNCTION public.getsignedoff(timestamp) TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.getsignedoff(timestamp) TO service_role;
