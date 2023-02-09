@@ -7,7 +7,6 @@
         class-style="users-list"
         :headers="[
           $t('pages.admin.email'),
-          $t('pages.admin.username'),
           $t('pages.admin.role'),
           $t('pages.admin.challenges'),
           $t('pages.admin.proposals_as_owner'),

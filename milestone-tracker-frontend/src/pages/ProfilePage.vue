@@ -8,10 +8,10 @@
             <th>{{ $t('pages.profile.email') }}</th>
             <td>{{ localUser.email }}</td>
           </tr>
-          <tr>
+          <!-- <tr>
             <th>{{ $t('pages.profile.username') }}</th>
             <td>{{ localUser.username }}</td>
-          </tr>
+          </tr> -->
           <tr>
             <th>{{ $t('pages.profile.role') }}</th>
             <td>{{ role }}</td>

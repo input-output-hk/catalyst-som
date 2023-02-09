@@ -1,7 +1,6 @@
 <template>
   <tr>
     <td>{{item.email}}</td>
-    <td>{{item.username}}</td>
     <td>
       <o-select v-model="role" :placeholder="$t('admin.select_role')">
         <option v-for="r in Object.keys(roles)" :key="r" :value="r">
