@@ -62,13 +62,25 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const { createSom } = useSoms()
 
+const otherSoms = computed(() => {
+  return props.soms.filter((som) => props.som.id !== som.id)
+})
+
+const otherSomsBudget = computed(() => {
+  return otherSoms.value.reduce((acc, som) => acc + som.cost, 0)
+})
+
 // Form validation rules
 
 const costRule = computed(() => {
   const rule = yup.number().required().min(1)
+  const availableBudget = props.proposal.budget - otherSomsBudget.value
   const maxMilestoneBudget = parseFloat(import.meta.env.VITE_MAX_MILESTONE_BUDGET)
+  const budgetRule = Math.min(
+    (props.proposal.budget * maxMilestoneBudget), availableBudget
+  )
   if (props.milestone < 5 && props.proposal.budget > 0) {
-    return rule.max(props.proposal.budget * maxMilestoneBudget)
+    return rule.max(budgetRule)
   }
   return rule
 })
