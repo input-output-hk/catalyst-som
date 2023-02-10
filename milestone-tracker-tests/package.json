@@ -1,7 +1,7 @@
 {
-  "name": "nightwatch-typescript-page-object-model-example",
+  "name": "milestone-tracker-tests",
   "version": "1.0.0",
-  "description": "Nightwatch TypeScript test examples using the page object model and @types/nightwatch from DefinitelyTyped",
+  "description": "Nightwatch TypeScript test for the milestone module.",
   "main": "index.js",
   "scripts": {
     "test": "tsc && nightwatch"
@@ -21,7 +21,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/nightwatch": "^2.3.12",
-    "chromedriver": "^108.0.0",
+    "chromedriver": "^110.0.0",
     "geckodriver": "^3.2.0",
     "nightwatch": "^2.4.2",
     "typescript": "^4.6.4"

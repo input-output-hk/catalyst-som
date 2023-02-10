@@ -1,12 +1,14 @@
 import { PageObjectModel, EnhancedPageObject } from 'nightwatch';
 
+import { stringBase, numberBase } from '../utils/seeds.js'
+
 const milestonePageCommands = {
-  startSomSubmission(this: MilestonePage) {
-    return this.waitForElementVisible('@newSomButton', 10000)
-      .click('@newSomButton')
+  startSomSubmission(this: MilestonePage, ml: number) {
+    return this.waitForElementVisible(`@newSomButton${ml}`, 10000)
+      .click(`@newSomButton${ml}`)
       .waitForElementVisible('@newSomPopup', 10000)
   },
-  fillSom(this: MilestonePage) {
+  fillSom(this: MilestonePage, stringSeed: String, numberSeed: number) {
     return this.waitForElementVisible('@titleInput', 10000)
       .waitForElementVisible('@outputsInput', 10000)
       .waitForElementVisible('@successCriteriaInput', 10000)
@@ -14,14 +16,14 @@ const milestonePageCommands = {
       .waitForElementVisible('@costInput', 10000)
       .waitForElementVisible('@monthInput', 10000)
       .waitForElementVisible('@completionInput', 10000)
-      .setValue('@titleInput', 'Lorem ipsum')
+      .setValue('@titleInput', `Lorem ipsum ${stringSeed}`)
       .click('@outputsInput')
-      .sendKeys('@outputsInput', 'Lorem ipsum')
+      .sendKeys('@outputsInput', `${stringBase}${stringSeed}`)
       .click('@successCriteriaInput')
-      .sendKeys('@successCriteriaInput', 'Lorem ipsum')
+      .sendKeys('@successCriteriaInput', `${stringBase}${stringSeed}`)
       .click('@evidenceInput')
-      .sendKeys('@evidenceInput', 'Lorem ipsum')
-      .setValue('@costInput', '1000')
+      .sendKeys('@evidenceInput', `${stringBase}${stringSeed}`)
+      .setValue('@costInput', `${numberBase+numberSeed}`)
       .click('@monthOption')
       .dragAndDrop('@completionInput', {x: 100, y: 0})
   },
@@ -35,9 +37,6 @@ const milestonePageCommands = {
 const milestonePage: PageObjectModel = {
   commands: [milestonePageCommands],
   elements: {
-    newSomButton: {
-      selector: '.new-som',
-    },
     newSomPopup: {
       selector: '.new-som-popup',
     },
@@ -76,6 +75,26 @@ const milestonePage: PageObjectModel = {
     }
   }
 };
+
+// Dynamic fields generation
+const mlFields = ['title', 'outputs', 'success_criteria', 'evidence', 'month', 'cost', 'completion']
+const mls = [1, 2, 3, 4, 5]
+
+
+mls.forEach((ml) => {
+  mlFields.forEach((field) => {
+    if (milestonePage.elements) {
+      milestonePage.elements[`${field}${ml}`] = {
+        selector: `[data-id="tab-${ml}"] .som-recap .som-${field}`
+      }
+    }
+  })
+  if (milestonePage.elements) {
+    milestonePage.elements[`newSomButton${ml}`] = {
+      selector: `[data-id="tab-${ml}"] .new-som`
+    }
+  }
+})
 
 export default milestonePage;
 
