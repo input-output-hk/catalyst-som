@@ -63,7 +63,15 @@ const { t } = useI18n()
 const { createSom } = useSoms()
 
 const otherSoms = computed(() => {
-  return props.soms.filter((som) => props.som.id !== som.id)
+  if (props.som) {
+    return props.soms.filter((som) => {
+      if (som) {
+        return props.som.id !== som.id
+      }
+      return false
+    })
+  }
+  return []
 })
 
 const otherSomsBudget = computed(() => {

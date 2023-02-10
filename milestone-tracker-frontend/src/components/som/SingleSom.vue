@@ -10,12 +10,12 @@
           </tr>
           <tr>
             <th>{{ $t('som.title') }}</th>
-            <td><span class="is-size-5 has-text-weight-semibold">{{som.title}}</span></td>
+            <td class="som-title"><span class="is-size-5 has-text-weight-semibold">{{som.title}}</span></td>
             <td v-if="somReviewsVisible"></td>
           </tr>
           <tr v-for="criterium in criteria" :key="criterium">
             <th>{{ $t(`som.${criterium}`) }}</th>
-            <td v-html="$sanitize(som[criterium])"></td>
+            <td :class="`som-${criterium}`" v-html="$sanitize(som[criterium])"></td>
             <td v-if="somReviewsVisible">
               <som-reviews
                 :som="som"
@@ -24,7 +24,7 @@
           </tr>
           <tr>
             <th>{{ $t('som.month') }}</th>
-            <td>
+            <td class="som-month">
               <span class="is-size-3 mr-4 has-text-weight-semibold">{{som.month}}</span>
             </td>
             <td v-if="somReviewsVisible"></td>
@@ -36,7 +36,7 @@
                 <span class="is-size-3 mr-4 has-text-weight-semibold">{{somCost}}%</span>
                 <progress class="progress is-primary is-medium" :value="somCost" max="100">{{somCost}}%</progress>
               </div>
-              <div>
+              <div class="som-cost">
                 <span class="is-size-3 mr-4 has-text-weight-semibold">{{$n(som.cost, 'currency')}}</span>
               </div>
             </td>
@@ -44,7 +44,7 @@
           </tr>
           <tr>
             <th>{{ $t('som.completion') }}</th>
-            <td>
+            <td class="som-completion">
               <div class="is-flex is-align-items-center">
                 <span class="is-size-3 mr-4 has-text-weight-semibold">{{som.completion}}%</span>
                 <progress class="progress is-primary is-medium" :value="som.completion" max="100">{{som.completion}}%</progress>
