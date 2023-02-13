@@ -52,7 +52,7 @@ const somSubmissionTest: NightwatchTests = {
     fillAndSubmit(browser, 900002, 4, 'proposer-1')
   },
   'Proposer 1 fail SoM submission'(browser: NightwatchBrowser) {
-    // Navigate to a proposal not owned
+    // submit a som in proposals not owned, always fails
     goCantSubmit(browser, 900003, 1, 'proposer-1')
     goCantSubmit(browser, 900005, 2, 'proposer-1')
     goCantSubmit(browser, 900007, 3, 'proposer-1')
