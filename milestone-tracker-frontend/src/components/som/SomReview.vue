@@ -5,8 +5,12 @@
     </tr>
     <tr v-for="property in properties" :key="property">
       <td>
-        <span class="is-size-5 has-text-weight-semibold">{{ (review[`${property}_approves`]) ? $t('som_review.approved') : $t('som_review.not_approved') }}</span>
-        <div v-html="$sanitize(review[`${property}_comment`])" />
+        <span class="is-size-5 has-text-weight-semibold" :class="`${property}_approves`">
+          {{ (review[`${property}_approves`]) ? $t('som_review.approved') : $t('som_review.not_approved') }}
+        </span>
+        <div
+          :class="`${property}_comment`"
+          v-html="$sanitize(review[`${property}_comment`])" />
       </td>
     </tr>
     <tr>

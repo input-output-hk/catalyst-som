@@ -67,11 +67,11 @@
         <div v-if="som.som_reviews.length > 0" class="columns">
           <div class="column is-12">
             <o-button
-              class="is-small"
+              class="is-small show-som-reviews"
               @click="reviewsVisible = !reviewsVisible">
               {{ $t('som.open_reviews') }}
             </o-button>
-            <o-modal :active="reviewsVisible" scroll="keep">
+            <o-modal class="som-reviews-popup" :active="reviewsVisible" scroll="keep">
               <div class="container scrollable-modal">
                 <div v-for="review in som.som_reviews" :key="review.id" class="reviews">
                   <som-review
@@ -89,6 +89,7 @@
         <div class="block buttons">
           <div v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current && !locked" class="mr-4">
             <o-button
+              class="new-som-review-button"
               variant="primary"
               size="medium"
               @click="newReviewVisible = !newReviewVisible">

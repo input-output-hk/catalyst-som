@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content new-som-review">
     <div class="box">
       <h3>{{ $t('new_som_review.title') }}</h3>
       <schema-form
@@ -9,7 +9,7 @@
         >
         <template #afterForm>
           <div class="buttons">
-            <o-button variant="primary" native-type="submit">
+            <o-button class="new-som-review-submit" variant="primary" native-type="submit">
               <span>{{ $t('new_som_review.submit') }}</span>
             </o-button>
             <o-button @click="clearForm">

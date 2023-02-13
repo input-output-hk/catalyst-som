@@ -2,8 +2,8 @@
   <div>
     <nav-bar />
     <o-notification
-      closable
       v-if="activeMsg"
+      closable
       variant="warning"
       aria-close-label="Close notification"
       role="alert">
