@@ -36,6 +36,11 @@ export default {
     admin: "Admin",
     logout: "Logout {name}"
   },
+  next_payment: {
+    to_be_distributed: "to be distributed in next batch.",
+    as_poa_completion: "as PoA completion.",
+    as_monthly_chunk: "as monthly payment."
+  },
   admin: {
     select_role: "Select role",
     add_challenge: "Add a challenge",
@@ -49,7 +54,7 @@ export default {
   milestone_recap: {
     title: "M {nr}",
     cost: "Milestone cost:",
-    delivery: "Delivery on:",
+    delivery: "Stated delivery on:",
     month: "Month {month}",
     payment: "Payments schedule:",
     payment_starts: "Payments starts after previous milestone PoA approval.",
@@ -69,6 +74,9 @@ export default {
     signed_off_at: "Signed off at:",
     submit: "Submit review for this PoA",
     signoff: "Signoff"
+  },
+  signoff: {
+    poa_signed_off_at: "PoA signed off at:"
   },
   new_poa: {
     title: "New Proof of Achivement for Milestone {nr}",
@@ -111,7 +119,7 @@ export default {
     submitted_at: "SoM Submitted at",
     title: "Milestone Title",
     outputs: "Milestone Outputs",
-    acceptance_criteria: "Acceptance criteria",
+    success_criteria: "Acceptance criteria",
     evidence: "Milestone Evidence",
     month: "Delivery Month",
     cost: "Milestone Cost",
@@ -170,7 +178,8 @@ export default {
     open_ideascale: "Open in Ideascale",
     challenge: "Challenge",
     budget: "Budget",
-    completion: "Completion date"
+    completion: "Completion date",
+    funds_distributed: "Funds distributed"
   },
   reviews_counter: {
     approvals: "approval | approvals",
@@ -222,7 +231,7 @@ export default {
       milestone_recap: "Milestones Recap"
     },
     proposals: {
-      title: "Proposals",
+      page_title: "Proposals",
       description: "All the proposals in the Statement of Milestone pilot.",
       export: "Export CSV",
       id: "ID",
@@ -238,13 +247,16 @@ export default {
       reset: "Reset"
     },
     notifications: {
-      go_to_milestone: "Go to Milestone",
+      go_to_som: "Go to SoM",
       go_to_poa: "Go to PoA",
       proposal: "Proposal",
       milestone: "Milestone",
       submitted_at: "Submitted at",
-      no_poas_to_review: "No PoA to review!",
-      no_soms_to_review: "No SoM to review!",
+      signedoff_at: "Signed off at",
+      poa_to_review: "PoA to be reviewed",
+      som_to_review: "SoM to be reviewed",
+      signoff_received: "Signoff received in the last day | Signoff received in the last {count} days",
+      no_notifications: "No notifications, no relevant events happened from your last visit."
     }
   }
 }

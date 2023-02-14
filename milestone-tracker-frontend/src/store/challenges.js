@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { supabase } from '@/utils/supabase'
-import { errorNotification, successNotification } from '@/utils/notifications'
+import { errorNotification } from '@/utils/notifications'
 
 export const useChallenges = defineStore('challenges-store', {
   state: () => {
@@ -21,6 +21,7 @@ export const useChallenges = defineStore('challenges-store', {
         const { data, error } = await supabase
           .from('challenges')
           .select('*')
+        if (error) throw(error)
         this._challenges = data
       } catch(error) {
         errorNotification(this.$i18n.t('errors.fetching_proposals'))

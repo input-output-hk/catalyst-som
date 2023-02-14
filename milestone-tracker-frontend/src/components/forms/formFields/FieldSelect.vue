@@ -20,8 +20,8 @@
 
       <option
         v-for="option in props.options"
-        :value="option.value"
         :key="option.value"
+        :value="option.value"
       >
         {{ option.label }}
       </option>

@@ -30,7 +30,20 @@
 import { ref, computed } from 'vue'
 import { SchemaFormFactory, useSchemaForm } from "formvuelate"
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
-const props = defineProps(['proposal', 'som', 'milestone'])
+const props = defineProps({
+  proposal: {
+    type: Object,
+    default: () => {}
+  },
+  som: {
+    type: Object,
+    default: () => {}
+  },
+  milestone: {
+    type: Number,
+    default: 0
+  },
+})
 import { useFormFields } from '@/composables/useFormFields.js'
 import { usePoas } from '@/store/poas.js'
 import { useI18n } from 'vue-i18n'

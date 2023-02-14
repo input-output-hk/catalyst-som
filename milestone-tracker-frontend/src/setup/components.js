@@ -3,5 +3,5 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 export default function setupComponents(app) {
   app.component('QuillEditor', QuillEditor)
-  app.component('vue-fontawesome', FontAwesomeIcon)
+  app.component('VueFontawesome', FontAwesomeIcon)
 }

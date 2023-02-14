@@ -12,11 +12,12 @@ const loginPageCommands = {
   },
 
   loginAsAdmin(this: LoginPage) {
-    return this.login('admin@example.org', 'ciaociao1')
+    return this.loginAs('admin')
   },
 
-  loginAsProposer1(this: LoginPage) {
-    return this.login('proposer-1@example.org', 'ciaociao1')
+  loginAs(this: LoginPage, name: String) {
+    return this.login(`${name}@example.org`, 'ciaociao1')
+      .waitForElementPresent('@logoutButton');
   },
 
   logout(this: LoginPage) {
@@ -44,6 +45,9 @@ const loginPage: PageObjectModel = {
     },
     logoutButton: {
       selector: '#main-nav span.logout'
+    },
+    adminButton: {
+      selector: '#main-nav .navbar-start a:nth-child(5)'
     }
   }
 };

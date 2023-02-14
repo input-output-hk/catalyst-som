@@ -1,61 +1,61 @@
 import {createRouter} from 'vue-router'
-import Home from '@/pages/Home.vue';
-import Login from '@/pages/Login.vue';
-import ResetPassword from '@/pages/ResetPassword.vue';
-import Profile from '@/pages/Profile.vue';
-import Proposals from '@/pages/Proposals.vue';
-import Proposal from '@/pages/Proposal.vue';
-import Milestones from '@/pages/Milestones.vue';
-import Notifications from '@/pages/Notifications.vue';
-import Admin from '@/pages/Admin.vue';
+import HomePage from '@/pages/HomePage.vue';
+import LoginPage from '@/pages/LoginPage.vue';
+import ResetPasswordPage from '@/pages/ResetPasswordPage.vue';
+import ProfilePage from '@/pages/ProfilePage.vue';
+import ProposalsPage from '@/pages/ProposalsPage.vue';
+import ProposalPage from '@/pages/ProposalPage.vue';
+import MilestonesPage from '@/pages/MilestonesPage.vue';
+import NotificationsPage from '@/pages/NotificationsPage.vue';
+import AdminPage from '@/pages/AdminPage.vue';
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home
+    component: HomePage
   },
   {
     path: '/login',
     name: 'login',
-    component: Login
+    component: LoginPage
   },
   {
     path: '/reset-password',
-    component: ResetPassword
+    component: ResetPasswordPage
   },
   {
     path: '/profile',
-    component: Profile
+    component: ProfilePage
   },
   {
     path: '/proposals',
     name: 'proposals',
-    component: Proposals
+    component: ProposalsPage
   },
   {
     path: '/proposals/:id',
-    component: Proposal,
+    component: ProposalPage,
     name: 'proposal'
   },
   {
     path: '/proposals/:id/milestones',
-    component: Milestones,
+    component: MilestonesPage,
     name: 'proposal-milestones'
   },
   {
     path: '/proposals/:id/milestones/:milestone',
-    component: Milestones,
+    component: MilestonesPage,
     name: 'proposal-milestones-detail'
   },
   {
     path: '/admin',
-    component: Admin,
+    component: AdminPage,
     name: 'admin'
   },
   {
     path: '/notifications',
-    component: Notifications,
+    component: NotificationsPage,
     name: 'notifications'
   }
 ]

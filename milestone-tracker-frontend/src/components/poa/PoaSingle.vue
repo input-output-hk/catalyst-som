@@ -1,0 +1,109 @@
+<template>
+  <div class="content">
+    <table v-if="poa" class="table is-bordered is-striped poa-table">
+      <tbody class="poa-recap">
+        <tr>
+          <th>{{ $t('poa.poa') }}</th>
+          <td>
+            <div v-html="$sanitize(poa.content)"></div>
+          </td>
+        </tr>
+        <tr>
+          <th>{{ $t('poa.submitted_at') }}</th>
+          <td>{{$d(poa.created_at, 'long')}}</td>
+        </tr>
+        <tr v-if="poa.poas_reviews.length > 0">
+          <th>{{ $t('poa.reviews') }}</th>
+          <td>
+            <poa-reviews :poa="poa" :reviews="poa.poas_reviews" />
+          </td>
+        </tr>
+        <tr v-if="locked">
+          <th>{{ $t('poa.signed_off_at') }}</th>
+          <td>
+            {{$d(poa.signoffs[0].created_at, 'long')}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="block buttons">
+      <o-button
+        v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current && !locked"
+        size="medium"
+        variant="primary"
+        @click="newReviewVisible = !newReviewVisible">
+          {{ $t('poa.submit') }}
+        </o-button>
+        <div v-if="current && canSignoff && !locked">
+          <o-button
+            variant="primary"
+            size="medium"
+            @click="confirmSignoff = !confirmSignoff">
+            {{ $t('poa.signoff') }}
+          </o-button>
+          <o-modal v-model:active="confirmSignoff">
+            <new-signoff :som="som" :poa="poa" @clear-signoff="confirmSignoff = false" />
+          </o-modal>
+        </div>
+    </div>
+    <section
+      v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current && !locked && newReviewVisible"
+      class="section pr-0 pl-0">
+      <new-poa-review
+        :som="som"
+        :poa="poa"
+        @poa-review-submitted="newReviewVisible = false"
+      />
+    </section>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+import PoaReviews from '@/components/poa/PoaReviews.vue'
+import NewPoaReview from '@/components/forms/NewPoaReview.vue'
+import NewSignoff from '@/components/forms/NewSignoff.vue'
+const props = defineProps({
+  poa: {
+    type: Object,
+    default: () => {}
+  },
+  proposal: {
+    type: Object,
+    default: () => {}
+  },
+  current: {
+    type: Boolean,
+    default: false
+  },
+  som: {
+    type: Object,
+    default: () => {}
+  },
+})
+import { useUser } from '@/store/user.js'
+const { canWriteSomReview, canSignoff } = useUser()
+
+const newReviewVisible = ref(false)
+const confirmSignoff = ref(false)
+
+const locked = computed(() => {
+  return props.poa.signoffs.length
+})
+
+</script>
+
+<style lang="scss" scoped>
+.poa-table {
+  tr {
+    td, th {
+      &:nth-child(1) {
+        width: 30%;
+      }
+      &:nth-child(2) {
+        width: 70%;
+      }
+    }
+  }
+}
+</style>

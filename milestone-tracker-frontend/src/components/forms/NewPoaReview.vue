@@ -24,7 +24,16 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-const props = defineProps(['poa', 'som'])
+const props = defineProps({
+  poa: {
+    type: Object,
+    default: () => {}
+  },
+  som: {
+    type: Object,
+    default: () => {}
+  }
+})
 const emit = defineEmits(['poaReviewSubmitted'])
 import { useFormFields } from '@/composables/useFormFields.js'
 import { usePoaReviews } from '@/store/poaReviews.js'
@@ -33,6 +42,7 @@ import { SchemaFormFactory, useSchemaForm } from "formvuelate"
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const { createPoaReview } = usePoaReviews()
+import * as yup from 'yup'
 
 const initialSchema = computed(() => {
   return {
@@ -42,7 +52,16 @@ const initialSchema = computed(() => {
     },
     content_comment: {
       type: 'html',
-      label: t('new_poa_review.comment') 
+      label: t('new_poa_review.comment'),
+      validations: yup.string().when('_', {
+        is: true,
+        otherwise: (schema) => {
+          if (!formData.value.content_approved) {
+            return schema.required()
+          }
+          return schema
+        }
+      })
     }
   }
 })

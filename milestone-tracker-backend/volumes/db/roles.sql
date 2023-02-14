@@ -1,7 +1,10 @@
 -- NOTE: change to your own passwords for production environments
-\set pgpass `echo "$PGPASSWORD"`
+\set pgpass `echo "$POSTGRES_PASSWORD"`
 
 ALTER USER authenticator WITH PASSWORD :'pgpass';
 ALTER USER pgbouncer WITH PASSWORD :'pgpass';
 ALTER USER supabase_auth_admin WITH PASSWORD :'pgpass';
 ALTER USER supabase_storage_admin WITH PASSWORD :'pgpass';
+
+\i /volumes/migrations/20230208082942_db_structure.sql
+\i /volumes/migrations/`echo "$RUNNING_ENV"`.sql

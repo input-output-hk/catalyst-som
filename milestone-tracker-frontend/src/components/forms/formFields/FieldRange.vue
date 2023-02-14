@@ -76,7 +76,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits({
-  "update:modelValue": (value) => true,
+  "update:modelValue": () => true,
 });
 
 const value = ref(props.modelValue);
