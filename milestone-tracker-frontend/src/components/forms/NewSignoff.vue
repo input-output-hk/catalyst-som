@@ -1,5 +1,5 @@
 <template>
-  <div class="block">
+  <div class="block new-signoff-popup">
     <div class="card">
       <header class="card-header">
         <p class="card-header-title">
@@ -18,6 +18,7 @@
         </p>
         <div class="buttons">
           <o-button
+            class="submit-signoff"
             variant="primary"
             size="medium"
             @click="signoff">

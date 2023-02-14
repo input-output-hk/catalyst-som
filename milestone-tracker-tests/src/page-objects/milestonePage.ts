@@ -66,6 +66,16 @@ const milestonePageCommands = {
       .click(`@somReviewsPopupClose${ml}`)
       .waitForElementNotPresent(`@somReviewsPopup${ml}`);
   },
+  openSomSignoff(this: MilestonePage, ml: number) {
+    return this.waitForElementVisible(`@newSomSignoff${ml}`, 10000)
+      .click(`@newSomSignoff${ml}`)
+      .waitForElementPresent(`@signoffPopup${ml}`);
+  },
+  submitSomSignoff(this: MilestonePage, ml: number) {
+    return this.waitForElementVisible(`@signoffSubmit${ml}`, 10000)
+      .click(`@signoffSubmit${ml}`)
+      .waitForElementNotPresent(`@signoffPopup${ml}`);
+  }
 };
 
 const milestonePage: PageObjectModel = {
@@ -150,6 +160,11 @@ mls.forEach((ml) => {
     [`lastSomReview${ml}`]: `${mlEl} .som-reviews-popup reviews:first-child`
   }
   Object.assign(mlSelectors, somReviewsEls)
+  mlSelectors[`newSomSignoff${ml}`] = `${mlEl} .new-som-signoff`
+  mlSelectors[`signoffPopup${ml}`] = `${mlEl} .new-signoff-popup`
+  mlSelectors[`signoffSubmit${ml}`] = `${mlEl} .submit-signoff`
+
+  // For SoM Signoff
 
   // Shape the selector object for the fields
   Object.keys(mlSelectors).forEach((k) => {

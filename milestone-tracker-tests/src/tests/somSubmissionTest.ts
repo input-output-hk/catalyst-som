@@ -1,7 +1,7 @@
 import { NightwatchTests, NightwatchBrowser } from 'nightwatch';
 import { MilestonePage } from '../page-objects/milestonePage';
 import { LoginPage } from '../page-objects/loginPage';
-import { stringSeed, stringBase, numberSeed, numberBase } from '../utils/seeds.js'
+import { stringSeed, stringBase, numberSeed, numberBase } from '../utils/seeds'
 
 const milestoneUrl = (proposalId: number, milestoneId: number) => {
   return `http://localhost:5173/proposals/${proposalId}/milestones/${milestoneId}`

@@ -109,6 +109,7 @@
           </div>
           <div v-if="current && canSignoff && !locked">
             <o-button
+              class="new-som-signoff"
               variant="primary"
               size="medium"
               @click="confirmSignoff = !confirmSignoff">

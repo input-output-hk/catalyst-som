@@ -1,5 +1,5 @@
 const stringSeed = () => {
-  return (Math.random() + 1).toString(36).substring()
+  return (Math.random() + 1).toString(36).substring(0)
 }
 
 const numberSeed = () => {
