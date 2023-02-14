@@ -32,6 +32,20 @@ const fillAndSubmit = (
   loginPage.logout();
 }
 
+const goCantSubmit = (
+  browser: NightwatchBrowser,
+  proposalId: number,
+  milestoneId: number,
+  user: String
+) => {
+  const loginPage = browser.page.loginPage();
+  const milestonePage = browser.page.milestonePage()
+  loginPage.navigate().loginAs(user);
+  browser.navigateTo(milestoneUrl(proposalId, milestoneId));
+  milestonePage.assert.not.elementPresent(`@newSomReviewButton${milestoneId}`);
+  loginPage.logout();
+}
+
 const somReviewSubmissionTest: NightwatchTests = {
   tags: ['som-review'],
   before(this: NightwatchTests, browser: NightwatchBrowser) {
@@ -39,12 +53,27 @@ const somReviewSubmissionTest: NightwatchTests = {
   },
   'CT 1 SoM Review submission'(browser: NightwatchBrowser) {
     fillAndSubmit(browser, 900002, 4, 'challenge-team-1')
+    goCantSubmit(browser, 900002, 1, 'challenge-team-1')
+    goCantSubmit(browser, 900002, 2, 'challenge-team-1')
+    goCantSubmit(browser, 900003, 4, 'challenge-team-1')
   },
   'CT 2 SoM Review submission'(browser: NightwatchBrowser) {
+    fillAndSubmit(browser, 900003, 4, 'challenge-team-2')
+    goCantSubmit(browser, 900002, 1, 'challenge-team-2')
+    goCantSubmit(browser, 900002, 2, 'challenge-team-2')
+    goCantSubmit(browser, 900002, 4, 'challenge-team-2')
   },
   'IO SoM Review submission'(browser: NightwatchBrowser) {
+    fillAndSubmit(browser, 900002, 4, 'iog')
+    goCantSubmit(browser, 900002, 1, 'iog')
+    fillAndSubmit(browser, 900003, 4, 'iog')
+    goCantSubmit(browser, 900003, 1, 'iog')
   },
   'Admin SoM Review submission'(browser: NightwatchBrowser) {
+    fillAndSubmit(browser, 900002, 4, 'admin')
+    goCantSubmit(browser, 900002, 1, 'admin')
+    fillAndSubmit(browser, 900003, 4, 'admin')
+    goCantSubmit(browser, 900003, 1, 'admin')
   },
   'Proposer 2 notifications'(browser: NightwatchBrowser) {
   },

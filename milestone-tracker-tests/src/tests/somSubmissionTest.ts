@@ -61,7 +61,7 @@ const somSubmissionTest: NightwatchTests = {
   'Admin SoM submissions'(browser: NightwatchBrowser) {
     // submit a som in each proposal, can't fail
     fillAndSubmit(browser, 900002, 4, 'admin')
-    fillAndSubmit(browser, 900003, 1, 'admin')
+    fillAndSubmit(browser, 900003, 4, 'admin')
     fillAndSubmit(browser, 900007, 2, 'admin')
   },
   'CT SoM submissions': () => {
