@@ -2,6 +2,7 @@
   <section class="section">
     <notification-list
       v-if="somsToReview.length"
+      class="som-to-review-notifications"
       :row-component="NotificationRow"
       :title="$t('pages.notifications.som_to_review')"
       :items="somsToReview"
@@ -10,6 +11,7 @@
     />
     <notification-list
       v-if="poasToReview.length"
+      class="poa-to-review-notifications"
       :row-component="NotificationRow"
       :title="$t('pages.notifications.poa_to_review')"
       :items="poasToReview"
@@ -18,6 +20,7 @@
     />
     <notification-list
       v-if="signoffs.length"
+      class="signoff-received-notifications"
       :row-component="SignoffNotificationRow"
       :title="$t('pages.notifications.signoff_received', signoffsDays)"
       :items="signoffs"
@@ -26,6 +29,7 @@
     />
     <notification-list
       v-if="somReviews.length"
+      class="som-reviews-received-notifications"
       :row-component="NotificationRow"
       :title="$t('pages.notifications.som_reviews_received')"
       :items="somReviews"

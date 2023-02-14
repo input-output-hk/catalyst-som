@@ -1,6 +1,7 @@
 import { NightwatchTests, NightwatchBrowser } from 'nightwatch';
 import { MilestonePage } from '../page-objects/milestonePage';
 import { LoginPage } from '../page-objects/loginPage';
+import { NotificationsPage } from '../page-objects/notificationsPage';
 import { stringSeed, stringBase, numberSeed, numberBase } from '../utils/seeds.js'
 
 const milestoneUrl = (proposalId: number, milestoneId: number) => {
@@ -46,10 +47,60 @@ const goCantSubmit = (
   loginPage.logout();
 }
 
+const prepareNotificationsCount = async (
+  browser: NightwatchBrowser, user: string, count: {[k: string]: any}, element: String
+) => {
+  const loginPage = browser.page.loginPage();
+  const notificationsPage = browser.page.notificationsPage()
+  loginPage.navigate().loginAs(user);
+  const result = await notificationsPage.getCurrentNotificationsCount(element)
+  loginPage.logout();
+  count[`${user}@${element}`] = result
+}
+
+const checkNotifications = (
+  browser: NightwatchBrowser,
+  user: string,
+  count: {[k: string]: any},
+  element: string,
+  offset: number,
+) => {
+  const loginPage = browser.page.loginPage();
+  const notificationsPage = browser.page.notificationsPage()
+  loginPage.navigate().loginAs(user);
+  notificationsPage.navigate()
+  notificationsPage.assert.elementsCount(
+    element,
+    count[`${user}${element}`] + offset
+  )
+  loginPage.logout();
+}
+
+
 const somReviewSubmissionTest: NightwatchTests = {
   tags: ['som-review'],
-  before(this: NightwatchTests, browser: NightwatchBrowser) {
+  before: async function(this: NightwatchTests, browser: NightwatchBrowser) {
     browser.resizeWindow(1280, 800);
+    this.count = {}
+    await prepareNotificationsCount(
+      browser,
+      'proposer-2',
+      this.count,
+      'somReviewsNotifications'
+    )
+    await prepareNotificationsCount(
+      browser,
+      'proposer-1',
+      this.count,
+      'somReviewsNotifications'
+    )
+    await prepareNotificationsCount(
+      browser,
+      'proposer-2',
+      this.count,
+      'signoffReceivedNotifications'
+    )
+
   },
   'CT 1 SoM Review submission'(browser: NightwatchBrowser) {
     fillAndSubmit(browser, 900002, 4, 'challenge-team-1')
@@ -75,9 +126,16 @@ const somReviewSubmissionTest: NightwatchTests = {
     fillAndSubmit(browser, 900003, 4, 'admin')
     goCantSubmit(browser, 900003, 1, 'admin')
   },
-  'Proposer 2 notifications'(browser: NightwatchBrowser) {
+  'Proposer 2 notifications'(this: NightwatchTests, browser: NightwatchBrowser) {
+    checkNotifications(browser, 'proposer-2', this.count, '@somReviewsNotifications', 3)
+    checkNotifications(browser, 'proposer-1', this.count, '@somReviewsNotifications', 3)
+    checkNotifications(browser, 'proposer-2', this.count, '@signoffReceivedNotifications', 0)
   },
   'Proposer 2 SoM Review submission'(browser: NightwatchBrowser) {
+    goCantSubmit(browser, 900002, 1, 'proposer-2')
+    goCantSubmit(browser, 900002, 4, 'proposer-2')
+    goCantSubmit(browser, 900003, 1, 'proposer-2')
+    goCantSubmit(browser, 900003, 4, 'proposer-2')
   },
 };
 
