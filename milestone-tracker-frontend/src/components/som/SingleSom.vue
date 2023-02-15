@@ -98,12 +98,13 @@
           </div>
           <div v-if="current && canWriteSom(proposal.id) && locked && !poaLocked" class="mr-4">
             <o-button
+              class="new-poa"
               variant="primary"
               size="medium"
               @click="newPoAVisible = !newPoAVisible">
               {{ $t('som.submit_poa') }}
             </o-button>
-            <o-modal v-model:active="newPoAVisible">
+            <o-modal v-model:active="newPoAVisible" class="new-poa-popup" >
               <new-poa :proposal="proposal" :som="som" :milestone="som.milestone" />
             </o-modal>
           </div>

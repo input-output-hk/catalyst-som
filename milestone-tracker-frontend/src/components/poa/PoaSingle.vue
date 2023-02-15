@@ -5,7 +5,7 @@
         <tr>
           <th>{{ $t('poa.poa') }}</th>
           <td>
-            <div v-html="$sanitize(poa.content)"></div>
+            <div class="poa-content" v-html="$sanitize(poa.content)"></div>
           </td>
         </tr>
         <tr>

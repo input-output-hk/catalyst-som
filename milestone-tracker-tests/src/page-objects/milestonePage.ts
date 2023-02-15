@@ -75,7 +75,25 @@ const milestonePageCommands = {
     return this.waitForElementVisible(`@signoffSubmit${ml}`, 10000)
       .click(`@signoffSubmit${ml}`)
       .waitForElementNotPresent(`@signoffPopup${ml}`);
-  }
+  },
+  startPoASubmission(this: MilestonePage, ml: number) {
+    return this.waitForElementVisible(`@newPoA${ml}`, 10000)
+      .click(`@newPoA${ml}`)
+      .waitForElementPresent(`@newPoAPopup${ml}`);
+  },
+  fillPoA(this: MilestonePage, ml: number, stringSeed: String) {
+    return this.waitForElementVisible(`@newPoAContent${ml}`, 10000)
+      .waitForElementVisible(`@newPoASubmit${ml}`, 10000)
+      .click(`@newPoAContent${ml}`)
+      .sendKeys(`@newPoAContent${ml}`, `${stringBase}${stringSeed}`)
+  },
+  submitPoA(this: MilestonePage, ml: number, stringSeed: String) {
+    return this.waitForElementVisible(`@newPoASubmit${ml}`, 10000)
+      .click(`@newPoASubmit${ml}`)
+      .waitForElementNotVisible(`@newPoAPopup${ml}`)
+      .waitForElementPresent(`@currentPoA${ml}`)
+      .waitForElementPresent(`@currentPoAContent${ml}`);
+  },
 };
 
 const milestonePage: PageObjectModel = {
@@ -160,11 +178,20 @@ mls.forEach((ml) => {
     [`lastSomReview${ml}`]: `${mlEl} .som-reviews-popup reviews:first-child`
   }
   Object.assign(mlSelectors, somReviewsEls)
+
+
+  // For SoM Signoff
   mlSelectors[`newSomSignoff${ml}`] = `${mlEl} .new-som-signoff`
   mlSelectors[`signoffPopup${ml}`] = `${mlEl} .new-signoff-popup`
   mlSelectors[`signoffSubmit${ml}`] = `${mlEl} .submit-signoff`
 
-  // For SoM Signoff
+  // For PoA submission
+  mlSelectors[`newPoA${ml}`] = `${mlEl} .new-poa`
+  mlSelectors[`newPoAPopup${ml}`] = `${mlEl} .new-poa-popup`
+  mlSelectors[`newPoAContent${ml}`] = `${mlEl} .new-poa-popup [model="content"] .ql-editor`,
+  mlSelectors[`newPoASubmit${ml}`] = `${mlEl} .new-poa-submit`
+  mlSelectors[`currentPoA${ml}`] = `${mlEl} .current-poa`
+  mlSelectors[`currentPoAContent${ml}`] = `${mlEl} .current-poa .poa-content`
 
   // Shape the selector object for the fields
   Object.keys(mlSelectors).forEach((k) => {

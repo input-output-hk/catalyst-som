@@ -3,6 +3,7 @@
     <section class="section has-background-white-ter">
       <h3 class="subtitle">{{ $t('poas.title') }}</h3>
       <poa-single
+        class="current-poa"
         :current="true"
         :poa="renderedPoas.current"
         :som="som"

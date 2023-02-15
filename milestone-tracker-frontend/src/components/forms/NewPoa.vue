@@ -13,7 +13,7 @@
         >
         <template #afterForm>
           <div class="buttons">
-            <o-button variant="primary" native-type="submit">
+            <o-button class="new-poa-submit" variant="primary" native-type="submit">
               <span>{{ $t('new_poa.submit') }}</span>
             </o-button>
             <o-button @click="_clearForm">
