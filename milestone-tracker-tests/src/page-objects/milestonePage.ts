@@ -94,6 +94,33 @@ const milestonePageCommands = {
       .waitForElementPresent(`@currentPoA${ml}`)
       .waitForElementPresent(`@currentPoAContent${ml}`);
   },
+  startPoAReviewSubmission(this: MilestonePage, ml: number) {
+    return this.waitForElementVisible(`@newPoAReview${ml}`, 10000)
+      .click(`@newPoAReview${ml}`)
+      .waitForElementPresent(`@newPoAReviewPopup${ml}`);
+  },
+  fillPoAReview(this: MilestonePage, ml: number, stringSeed: String) {
+    return this.waitForElementVisible(`@newPoAReviewContent${ml}`, 10000)
+      .waitForElementVisible(`@newPoAReviewSubmit${ml}`, 10000)
+      .click(`@newPoAReviewContent${ml}`)
+      .sendKeys(`@newPoAReviewContent${ml}`, `${stringBase}${stringSeed}`)
+  },
+  submitPoAReview(this: MilestonePage, ml: number, stringSeed: String) {
+    return this.waitForElementVisible(`@newPoAReviewSubmit${ml}`, 10000)
+      .click(`@newPoAReviewSubmit${ml}`)
+      .waitForElementNotPresent(`@newPoAReviewPopup${ml}`)
+      .waitForElementPresent(`@poAReviewContent${ml}`);
+  },
+  openPoAReviews(this: MilestonePage, ml: number) {
+    return this.waitForElementVisible(`@poAReviewShowButton${ml}`, 10000)
+      .click(`@poAReviewShowButton${ml}`)
+      .waitForElementPresent(`@poAReviewContent${ml}`);
+  },
+  closePoAReviews(this: MilestonePage, ml: number) {
+    return this.waitForElementVisible(`@poAReviewShowButton${ml}`, 10000)
+      .click(`@poAReviewShowButton${ml}`)
+      .waitForElementNotVisible(`@poAReviewContent${ml}`);
+  },
 };
 
 const milestonePage: PageObjectModel = {
@@ -192,6 +219,14 @@ mls.forEach((ml) => {
   mlSelectors[`newPoASubmit${ml}`] = `${mlEl} .new-poa-submit`
   mlSelectors[`currentPoA${ml}`] = `${mlEl} .current-poa`
   mlSelectors[`currentPoAContent${ml}`] = `${mlEl} .current-poa .poa-content`
+
+  // For PoA Review submission
+  mlSelectors[`newPoAReview${ml}`] = `${mlEl} .new-poa-review-button`
+  mlSelectors[`newPoAReviewPopup${ml}`] = `${mlEl} .new-poa-review-popup`
+  mlSelectors[`newPoAReviewContent${ml}`] = `${mlEl} .new-poa-review-popup [model="content_comment"] .ql-editor`
+  mlSelectors[`newPoAReviewSubmit${ml}`] = `${mlEl} .new-poa-review-submit`
+  mlSelectors[`poAReviewShowButton${ml}`] = `${mlEl} .current-poa .open-poa-reviews`
+  mlSelectors[`poAReviewContent${ml}`] = `${mlEl} .current-poa .single-poa-review:last-child .poa-review-content`
 
   // Shape the selector object for the fields
   Object.keys(mlSelectors).forEach((k) => {

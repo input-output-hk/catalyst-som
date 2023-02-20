@@ -37,7 +37,8 @@
       :row-msg="$t('pages.notifications.go_to_som')"
     />
     <notification-list
-      v-if="poaReviews.length"
+      v-show="poaReviews.length"
+      class="poa-reviews-received-notifications"
       :row-component="NotificationRow"
       :title="$t('pages.notifications.poa_reviews_received')"
       :items="poaReviews"

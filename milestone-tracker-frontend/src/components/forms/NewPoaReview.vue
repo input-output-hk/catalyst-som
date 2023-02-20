@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content new-poa-review-popup">
     <div class="box">
       <h3>{{ $t('new_poa_review.title') }}</h3>
       <schema-form
@@ -9,7 +9,9 @@
         >
         <template #afterForm>
           <div class="buttons">
-            <o-button variant="primary" native-type="submit">
+            <o-button
+              class="new-poa-review-submit"
+              variant="primary" native-type="submit">
               <span>{{ $t('new_poa_review.submit') }}</span>
             </o-button>
             <o-button @click="clearForm">

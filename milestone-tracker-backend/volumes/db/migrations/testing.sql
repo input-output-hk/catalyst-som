@@ -102,7 +102,9 @@ INSERT INTO public.poas (content, proposal_id, som_id, challenge_id, user_id, cu
 INSERT INTO public.poas_reviews (content_approved, content_comment, poas_id, user_id)
   VALUES
     (true, 'Lorem ipsum dolor sit amet', 1, (SELECT user_id FROM public.users WHERE email = 'iog@example.org' LIMIT 1)),
-    (true, 'Lorem ipsum dolor sit amet', 3, (SELECT user_id FROM public.users WHERE email = 'iog@example.org' LIMIT 1));
+    (true, 'Lorem ipsum dolor sit amet', 3, (SELECT user_id FROM public.users WHERE email = 'iog@example.org' LIMIT 1)),
+    (true, 'Lorem ipsum dolor sit amet', 2, (SELECT user_id FROM public.users WHERE email = 'iog@example.org' LIMIT 1)),
+    (true, 'Lorem ipsum dolor sit amet', 4, (SELECT user_id FROM public.users WHERE email = 'iog@example.org' LIMIT 1));
 
 INSERT INTO public.signoffs (poa_id, user_id)
   VALUES

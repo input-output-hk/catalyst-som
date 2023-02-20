@@ -3,7 +3,7 @@ import { PageObjectModel, EnhancedPageObject } from 'nightwatch';
 const notificationsPageCommands = {
   async getCurrentNotificationsCount(this: NotificationsPage, el: string) {
     this.navigate()
-    this.waitForElementVisible(`@${el}`, 10000)
+    this.waitForElementPresent(`@${el}`, 10000)
     const count = new Promise(resolve => {
       this.api.elements(
         this.elements[el].locateStrategy,
@@ -31,6 +31,9 @@ const notificationsPage: PageObjectModel = {
     },
     somReviewsNotifications: {
       selector: '.som-reviews-received-notifications tr',
+    },
+    poaReviewsNotifications: {
+      selector: '.poa-reviews-received-notifications tr',
     }
   }
 };
