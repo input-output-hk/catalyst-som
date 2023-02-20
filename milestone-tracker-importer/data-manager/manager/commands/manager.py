@@ -3,7 +3,46 @@ import csv
 import re
 from datetime import datetime
 from itertools import groupby
+from pydantic import BaseModel, Field, HttpUrl, validator, ValidationError
+
 from manager.utils.sb import SB
+
+class Proposal(BaseModel):
+    title: str = Field(alias='title')
+    url: HttpUrl
+    project_id: int = Field(900000, gte=900001, alias='id')
+    budget: int
+    challenge_id: int
+
+    @validator('budget', pre=True)
+    @classmethod
+    def parse_budget(cls, value):
+        '''
+        Parse a budget that comes in this form: $20,000
+        '''
+        digits = re.findall(r'\b\d+\b', value)
+        return ''.join(digits) if (digits) else 0
+
+class Som(BaseModel):
+    proposal_id: int
+    milestone: int = Field(1, gte=1, lte=5)
+    title: str
+    outputs: str
+    success_criteria: str
+    evidence: str
+    month: int = Field(1, gte=1, lte=24)
+    cost: int
+    completion: int = Field(0, gt=0, lte=100)
+    created_at: datetime
+
+    @validator('month', pre=True)
+    @classmethod
+    def parse_budget(cls, value):
+        '''
+        Parse a budget that comes in this form: $20,000
+        '''
+        month = re.findall(r'^Month ([0-9]{1,2})( 202[0-9])?$', value)
+        return month[0][0] if month else 1
 
 app = typer.Typer()
 sb = SB()
@@ -16,19 +55,16 @@ def push_proposals(
     results = []
     proposals_urls = proposals_url_map(proposals_urls_map)
     with open(proposals, mode='r') as infile:
-        reader = csv.reader(infile)
+        reader = csv.DictReader(infile)
         for row in reader:
-            if (row[0] != 'id'):
-                proposal = {
-                    'title': row[1],
-                    'url': proposals_urls[row[0]],
-                    'project_id': int(row[0]),
-                    'budget': int(row[2].replace('$', '').replace(',','')),
-                    'challenge_id': int(row[3])
-                }
-                results.append(proposal)
+            try:
+                row['url'] = proposals_urls[row['id']]
+                proposal = Proposal(**row)
+                results.append(proposal.dict())
+            except ValidationError as e:
+                print(row)
+                print(e)
     sb.push_proposals(results)
-    print(results)
 
 @app.command()
 def push_soms(

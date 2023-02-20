@@ -8,8 +8,7 @@ class Settings(BaseSettings):
     """
     supabase_url: str = Field(..., env='SUPABASE_URL')
     supabase_key: str = Field(..., env='SUPABASE_KEY')
-    admin_email: str = Field(..., env='ADMIN_EMAIL')
-    admin_password: str = Field(..., env='ADMIN_PASSWORD')
+    service_role_key: str = Field(..., env='SERVICE_ROLE_KEY')
 
     class Config:
         """Sub class to define the `.env` file"""

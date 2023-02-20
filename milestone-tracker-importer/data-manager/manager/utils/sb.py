@@ -9,7 +9,7 @@ class AttrDict(dict):
 
 class SB():
     def __init__(self):
-        self.client = create_client(settings.supabase_url, settings.supabase_key)
+        self.client = create_client(settings.supabase_url, settings.service_role_key)
         #self.user = self.client.auth.sign_in(email=settings.admin_email, password=settings.admin_password)
         #postgrest_client = self.client.postgrest
         #postgrest_client.auth(self.user.access_token)
