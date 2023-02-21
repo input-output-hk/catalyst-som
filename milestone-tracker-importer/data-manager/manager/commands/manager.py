@@ -3,12 +3,13 @@ import csv
 import re
 from datetime import datetime
 from itertools import groupby
-from pydantic import BaseModel, Field, HttpUrl, validator, ValidationError
+from pydantic import BaseModel, Field, HttpUrl, ValidationError, validator, root_validator
+import orjson
 
 from manager.utils.sb import SB
 
 class Proposal(BaseModel):
-    title: str = Field(alias='title')
+    title: str
     url: HttpUrl
     project_id: int = Field(900000, gte=900001, alias='id')
     budget: int
@@ -32,17 +33,58 @@ class Som(BaseModel):
     evidence: str
     month: int = Field(1, gte=1, lte=24)
     cost: int
-    completion: int = Field(0, gt=0, lte=100)
+    completion: int = Field(..., gt=0, lte=100)
+    current: bool = Field(True)
     created_at: datetime
 
     @validator('month', pre=True)
     @classmethod
-    def parse_budget(cls, value):
-        '''
-        Parse a budget that comes in this form: $20,000
-        '''
+    def parse_month(cls, value):
         month = re.findall(r'^Month ([0-9]{1,2})( 202[0-9])?$', value)
         return month[0][0] if month else 1
+
+    @validator('created_at', pre=True)
+    @classmethod
+    def parse_date(cls, value):
+        return datetime.strptime(value, '%m/%d/%Y %H:%M:%S')
+
+    @validator('completion', 'cost', pre=True)
+    @classmethod
+    def parse_completion(cls, value):
+        digits = re.findall(r'\b\d+\b', value)
+        return ''.join(digits) if (digits) else 0
+
+    @root_validator(pre=True)
+    def assign_values_based_on_milestone(cls, values):
+        ml = 'Final' if values['milestone'] == 5 else values['milestone']
+        values['title'] = values[f"Milestone {ml} - Title"]
+        values['success_criteria'] = values[f"Milestone {ml} - Success Criteria"]
+        values['evidence'] = values[f"Milestone {ml} - Evidence of Milestone completion"]
+        values['month'] = values[f"Milestone {ml} - month"]
+        values['cost'] = values[f"Milestone {ml} - cost"]
+        values['created_at'] = values["Timestamp"]
+        if ml == 'Final':
+            values['completion'] = '100'
+            values['outputs'] = values["Project completion - Outputs"] + values["Project completion - Final output"]
+        else:
+            values['completion'] = values[f"Milestone {ml} - % completion"]
+            values['outputs'] = values[f"Milestone {ml} - Outputs"]
+        return values
+
+class SomReview(BaseModel):
+    outputs_approves: bool
+    outputs_comment: str
+    success_criteria_approves: bool
+    success_criteria_comment: str
+    evidence_approves: bool
+    evidence_comment: str
+    som_id: int
+    created_at: datetime
+
+    @root_validator(pre=True)
+    def assign_values_based_on_milestone(cls, values):
+        return values
+
 
 app = typer.Typer()
 sb = SB()
@@ -58,8 +100,7 @@ def push_proposals(
         reader = csv.DictReader(infile)
         for row in reader:
             try:
-                row['url'] = proposals_urls[row['id']]
-                proposal = Proposal(**row)
+                proposal = Proposal(**row, url=proposals_urls[row['id']])
                 results.append(proposal.dict())
             except ValidationError as e:
                 print(row)
@@ -74,95 +115,24 @@ def push_soms(
     proposals = sb.get_proposals()
     new_proposals = []
     with open(soms, mode='r') as infile:
-        reader = csv.reader(infile)
+        reader = csv.DictReader(infile)
         for row in reader:
-            if (row[0] != 'Timestamp'):
-                proposal_id = int(row[2])
-                proposal = get_proposal(proposal_id, proposals)
-                if (proposal is not False):
-                    proposal['completion_date'] = datetime.strftime(datetime.strptime(row[4], '%m/%d/%Y'), '%m/%d/%Y 0:0:0')
-                    print(proposal['completion_date'])
-                    submitted_at = row[0]
-                    som1 = {
-                        'proposal_id': proposal['id'],
-                        'milestone': 1,
-                        'title': row[5],
-                        'outputs': row[6],
-                        'success_criteria': row[7],
-                        'evidence': row[8],
-                        'month': int(''.join(re.findall(r'\d+', row[9].replace(' 2022', '').replace(' 2023', '')))),
-                        'cost': int(''.join(re.findall(r'\d+', row[10]))),
-                        'completion': int(row[11].replace('%', '')),
-                        'created_at': submitted_at
-                    }
-                    results.append(som1)
-                    som2 = {
-                        'proposal_id': proposal['id'],
-                        'milestone': 2,
-                        'title': row[12],
-                        'outputs': row[13],
-                        'success_criteria': row[14],
-                        'evidence': row[15],
-                        'month': int(''.join(re.findall(r'\d+', row[16].replace(' 2022', '').replace(' 2023', '')))),
-                        'cost': int(''.join(re.findall(r'\d+', row[17]))),
-                        'completion': int(row[18].replace('%', '')),
-                        'created_at': submitted_at
-                    }
-                    results.append(som2)
-                    som3 = {
-                        'proposal_id': proposal['id'],
-                        'milestone': 3,
-                        'title': row[19],
-                        'outputs': row[20],
-                        'success_criteria': row[21],
-                        'evidence': row[22],
-                        'month': int(''.join(re.findall(r'\d+', row[23].replace(' 2022', '').replace(' 2023', '')))),
-                        'cost': int(''.join(re.findall(r'\d+', row[24]))),
-                        'completion': int(row[25].replace('%', '')),
-                        'created_at': submitted_at
-                    }
-                    results.append(som3)
-                    if (row[26] == 'Yes'):
-                        try:
-                            cost4 = int(''.join(re.findall(r'\d+', row[32])))
-                        except:
-                            cost4 = 0
-                        som4 = {
-                            'proposal_id': proposal['id'],
-                            'milestone': 4,
-                            'title': row[27],
-                            'outputs': row[28],
-                            'success_criteria': row[29],
-                            'evidence': row[30],
-                            'month': int(''.join(re.findall(r'\d+', row[31].replace(' 2022', '').replace(' 2023', '')))),
-                            'cost': cost4,
-                            'completion': int(row[33].replace('%', '')),
-                            'created_at': submitted_at
-                        }
-                        results.append(som4)
-                    try:
-                        cost5 = int(''.join(re.findall(r'\d+', row[40])))
-                    except:
-                        cost5 = 0
-                    som5 = {
-                        'proposal_id': proposal['id'],
-                        'milestone': 5,
-                        'title': row[35],
-                        'outputs': row[45],
-                        'success_criteria': row[37],
-                        'evidence': row[38],
-                        'month': int(''.join(re.findall(r'\d+', row[39].replace(' 2022', '').replace(' 2023', '')))),
-                        'cost': cost5,
-                        'completion': 100,
-                        'created_at': submitted_at
-                    }
-                    results.append(som5)
-                else:
-                    print(f"Error finding {row[2]}")
-    #print(results)
+            try:
+                proposal = get_proposal(row['Project ID'], proposals)
+                if proposal:
+                    proposal.completion_date = row['Completion Date']
+                    for i in range(1,6):
+                        if i != 4 or row['Do you have M4?'] == 'Yes':
+                            som = Som(
+                                **row,
+                                proposal_id = proposal['id'],
+                                milestone = i
+                            )
+                            results.append(orjson.loads(som.json()))
+            except ValidationError as e:
+                print(e)
     sb.upsert_proposals(proposals)
     sb.push_soms(results)
-    #print(proposals)
 
 @app.command()
 def push_som_reviews(
@@ -247,7 +217,7 @@ def proposals_url_map(urls_map):
 
 def get_proposal(id, proposals):
     for p in proposals:
-        if p['project_id'] == id:
+        if p['project_id'] == int(id):
             return p
     return False
 
