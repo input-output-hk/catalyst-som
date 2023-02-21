@@ -179,14 +179,6 @@ def push_som_reviews(
                             )
                             # Passing though JSON to serialize datetime correctly
                             results.append(orjson.loads(som_review.json()))
-                    else:
-                        print('####')
-                        print(proposal['project_id'])
-                        #print([(j['created_at'], j['id']) for j in p_soms])
-                        #print(row)
-                        print(f"SoM related not found")
-                        print('####')
-                    #print([ps['id'] for ps in p_soms])
                 else:
                     print(f"Error finding soms for {proposal['title']}")
             else:
