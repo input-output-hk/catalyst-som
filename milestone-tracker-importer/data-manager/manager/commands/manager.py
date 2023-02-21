@@ -81,8 +81,21 @@ class SomReview(BaseModel):
     som_id: int
     created_at: datetime
 
+    @validator('created_at', pre=True)
+    @classmethod
+    def parse_date(cls, value):
+        return datetime.strptime(value, '%m/%d/%Y %H:%M:%S')
+
     @root_validator(pre=True)
     def assign_values_based_on_milestone(cls, values):
+        ml = 'Final Milestone' if values['milestone'] == 5 else f"Milestone {values['milestone']}"
+        values['outputs_approves'] = (values[f"Is {ml} - Outputs valid?"] == "Yes")
+        values['outputs_comment'] = values[f"Comments for {ml} - Outputs"]
+        values['success_criteria_approves'] = (values[f"Is {ml} - Acceptance Criteria valid?"] == "Yes")
+        values['success_criteria_comment'] = values[f"Comments for {ml} - Acceptance Criteria"]
+        values['evidence_approves'] = (values[f"Is {ml} - Evidence of Milestone completion valid?"] == "Yes")
+        values['evidence_comment'] = values[f"Comments for {ml} - Evidence of Milestone completion"]
+        values['created_at'] = values["Timestamp"]
         return values
 
 
@@ -128,6 +141,7 @@ def push_soms(
                                 proposal_id = proposal['id'],
                                 milestone = i
                             )
+                            # Passing though JSON to serialize datetime correctly
                             results.append(orjson.loads(som.json()))
             except ValidationError as e:
                 print(e)
@@ -138,74 +152,45 @@ def push_soms(
 def push_som_reviews(
     som_reviews: str = typer.Option("", help="Som reviews file"),
 ):
+    project_id_key = 'What is the project ID number? This is a 6 digit number starting with 9******'
     results = []
     proposals = sb.get_proposals()
     soms = sb.get_soms()
     new_proposals = []
-    soms_assigned = []
     with open(som_reviews, mode='r') as infile:
-        reader = csv.reader(infile)
+        reader = csv.DictReader(infile)
         for row in reader:
-            if (row[0] != 'Timestamp'):
-                try:
-                    project_id = int(row[2])
-                except:
-                    project_id = False
-                if project_id:
-                    proposal = get_proposal(project_id, proposals)
-                    if proposal:
-                        p_soms = get_soms(proposal['id'], soms)
-                        if len(p_soms) > 0:
-                            groups = {}
-                            grouped = groupby(p_soms, key=lambda x:x['created_at'])
-                            for key, group in grouped:
-                                groups[key] = list(group)
-                            sr_submission = datetime.strptime(row[0], '%m/%d/%Y %H:%M:%S')
-                            #print(sr_submission)
-                            s = get_related_som(groups, sr_submission, soms_assigned)
-                            if s is not False:
-                                '''
-                                print(proposal['project_id'])
-                                print(sr_submission)
-                                print([(j['created_at'], j['id']) for j in p_soms])
-                                print([n['id'] for n in s])
-                                print('####')
-                                '''
-                                for som in s:
-                                    soms_assigned.append(som['id'])
-                                    start = 0
-                                    if som['milestone'] == 1:
-                                        start = 3
-                                    if som['milestone'] == 2:
-                                        start = 9
-                                    if som['milestone'] == 3:
-                                        start = 15
-                                    if som['milestone'] == 4:
-                                        start = 22
-                                    if som['milestone'] == 5:
-                                        start = 28
-                                    results.append({
-                                        'outputs_approves': (row[start] == 'Yes'),
-                                        'outputs_comment': row[start+1],
-                                        'success_criteria_approves': (row[start+2] == 'Yes'),
-                                        'success_criteria_comment': row[start+3],
-                                        'evidence_approves': (row[start+4] == 'Yes'),
-                                        'evidence_comment': row[start+5],
-                                        'som_id': som['id'],
-                                        'created_at': row[0]
-                                    })
-                            else:
-                                print('####')
-                                #print(proposal['project_id'])
-                                #print([(j['created_at'], j['id']) for j in p_soms])
-                                #print(row)
-                                print(f"SoM related not found")
-                                print('####')
-                            #print([ps['id'] for ps in p_soms])
-                        else:
-                            print(f"Error finding soms for {proposal['title']}")
+            proposal = get_proposal(row[project_id_key], proposals)
+            if proposal:
+                p_soms = get_soms(proposal['id'], soms)
+                if len(p_soms) > 0:
+                    groups = {}
+                    grouped = groupby(p_soms, key=lambda x:x['created_at'])
+                    for key, group in grouped:
+                        groups[key] = list(group)
+                    sr_submission = datetime.strptime(row['Timestamp'], '%m/%d/%Y %H:%M:%S')
+                    s = get_related_som(groups, sr_submission)
+                    if s is not False and len(s) > 0:
+                        for som in s:
+                            som_review = SomReview(
+                                **row,
+                                som_id = som['id'],
+                                milestone = som['milestone']
+                            )
+                            # Passing though JSON to serialize datetime correctly
+                            results.append(orjson.loads(som_review.json()))
                     else:
-                        print(f"Error finding {row[2]}")
+                        print('####')
+                        print(proposal['project_id'])
+                        #print([(j['created_at'], j['id']) for j in p_soms])
+                        #print(row)
+                        print(f"SoM related not found")
+                        print('####')
+                    #print([ps['id'] for ps in p_soms])
+                else:
+                    print(f"Error finding soms for {proposal['title']}")
+            else:
+                print(f"Proposal {row[project_id_key]} not found")
     sb.push_som_reviews(results)
 
 
@@ -216,9 +201,10 @@ def proposals_url_map(urls_map):
         return proposals
 
 def get_proposal(id, proposals):
-    for p in proposals:
-        if p['project_id'] == int(id):
-            return p
+    if id != '':
+        for p in proposals:
+            if p['project_id'] == int(id):
+                return p
     return False
 
 def get_soms(id, soms):
@@ -226,13 +212,34 @@ def get_soms(id, soms):
     for s in soms:
         if s['proposal_id'] == id:
             results.append(s)
-    return results
+    return sorted(results, key=lambda r: r['created_at'])
 
-def get_related_som(groups, submission_date, soms_assigned):
-    l = list(groups.keys())
-    l.reverse()
-    for k in l:
-        if groups[k][0]['id'] not in soms_assigned:
-            if (datetime.fromisoformat(k).timestamp() < submission_date.timestamp()):
-                return groups[k]
+def create_intervals(groups):
+    # Assumes groups of submissions grouped in a dictionary by a key
+    # representing a datetime
+    som_dates = list(groups.keys())
+    som_dates.reverse()
+    intervals = {}
+    last = False
+    # Create the interval relative to each SoM in order to correctly associate
+    # the som review.
+    for idx, som_date in enumerate(som_dates):
+        current = datetime.fromisoformat(som_date).timestamp()
+        if idx == 0:
+            intervals[som_date] = (datetime.now().timestamp(), current)
+        elif idx == (len(som_dates) - 1):
+            intervals[som_date] = (last, datetime.strptime('01/01/1990', '%m/%d/%Y').timestamp())
+        else:
+            intervals[som_date] = (last, current)
+        last = current - 1
+    return intervals
+
+
+def get_related_som(groups, submission_date):
+    intervals = create_intervals(groups)
+    submission_date_ts = submission_date.timestamp()
+    for k in intervals:
+        if (submission_date_ts >= intervals[k][1]) and (submission_date_ts < intervals[k][0]):
+            return groups[k]
+
     return False
