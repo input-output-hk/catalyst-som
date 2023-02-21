@@ -3,101 +3,10 @@ import csv
 import re
 from datetime import datetime
 from itertools import groupby
-from pydantic import BaseModel, Field, HttpUrl, ValidationError, validator, root_validator
 import orjson
 
 from manager.utils.sb import SB
-
-class Proposal(BaseModel):
-    title: str
-    url: HttpUrl
-    project_id: int = Field(900000, gte=900001, alias='id')
-    budget: int
-    challenge_id: int
-
-    @validator('budget', pre=True)
-    @classmethod
-    def parse_budget(cls, value):
-        '''
-        Parse a budget that comes in this form: $20,000
-        '''
-        digits = re.findall(r'\b\d+\b', value)
-        return ''.join(digits) if (digits) else 0
-
-class Som(BaseModel):
-    proposal_id: int
-    milestone: int = Field(1, gte=1, lte=5)
-    title: str
-    outputs: str
-    success_criteria: str
-    evidence: str
-    month: int = Field(1, gte=1, lte=24)
-    cost: int
-    completion: int = Field(..., gt=0, lte=100)
-    current: bool = Field(True)
-    created_at: datetime
-
-    @validator('month', pre=True)
-    @classmethod
-    def parse_month(cls, value):
-        month = re.findall(r'^Month ([0-9]{1,2})( 202[0-9])?$', value)
-        return month[0][0] if month else 1
-
-    @validator('created_at', pre=True)
-    @classmethod
-    def parse_date(cls, value):
-        return datetime.strptime(value, '%m/%d/%Y %H:%M:%S')
-
-    @validator('completion', 'cost', pre=True)
-    @classmethod
-    def parse_completion(cls, value):
-        digits = re.findall(r'\b\d+\b', value)
-        return ''.join(digits) if (digits) else 0
-
-    @root_validator(pre=True)
-    def assign_values_based_on_milestone(cls, values):
-        ml = 'Final' if values['milestone'] == 5 else values['milestone']
-        values['title'] = values[f"Milestone {ml} - Title"]
-        values['success_criteria'] = values[f"Milestone {ml} - Success Criteria"]
-        values['evidence'] = values[f"Milestone {ml} - Evidence of Milestone completion"]
-        values['month'] = values[f"Milestone {ml} - month"]
-        values['cost'] = values[f"Milestone {ml} - cost"]
-        values['created_at'] = values["Timestamp"]
-        if ml == 'Final':
-            values['completion'] = '100'
-            values['outputs'] = values["Project completion - Outputs"] + values["Project completion - Final output"]
-        else:
-            values['completion'] = values[f"Milestone {ml} - % completion"]
-            values['outputs'] = values[f"Milestone {ml} - Outputs"]
-        return values
-
-class SomReview(BaseModel):
-    outputs_approves: bool
-    outputs_comment: str
-    success_criteria_approves: bool
-    success_criteria_comment: str
-    evidence_approves: bool
-    evidence_comment: str
-    som_id: int
-    created_at: datetime
-
-    @validator('created_at', pre=True)
-    @classmethod
-    def parse_date(cls, value):
-        return datetime.strptime(value, '%m/%d/%Y %H:%M:%S')
-
-    @root_validator(pre=True)
-    def assign_values_based_on_milestone(cls, values):
-        ml = 'Final Milestone' if values['milestone'] == 5 else f"Milestone {values['milestone']}"
-        values['outputs_approves'] = (values[f"Is {ml} - Outputs valid?"] == "Yes")
-        values['outputs_comment'] = values[f"Comments for {ml} - Outputs"]
-        values['success_criteria_approves'] = (values[f"Is {ml} - Acceptance Criteria valid?"] == "Yes")
-        values['success_criteria_comment'] = values[f"Comments for {ml} - Acceptance Criteria"]
-        values['evidence_approves'] = (values[f"Is {ml} - Evidence of Milestone completion valid?"] == "Yes")
-        values['evidence_comment'] = values[f"Comments for {ml} - Evidence of Milestone completion"]
-        values['created_at'] = values["Timestamp"]
-        return values
-
+from manager.utils.models import Proposal, Som, SomReview, Poa
 
 app = typer.Typer()
 sb = SB()
@@ -186,6 +95,35 @@ def push_som_reviews(
     sb.push_som_reviews(results)
 
 
+@app.command()
+def push_poas(
+    poas: str = typer.Option("", help="PoAs file"),
+):
+    project_id_key = 'What is your project ID number?'
+    milestone_key = 'Which Milestone are you reporting here as being completed?'
+    results = []
+    proposals = sb.get_proposals()
+    soms = sb.get_soms()
+    with open(poas, mode='r') as infile:
+        reader = csv.DictReader(infile)
+        for row in reader:
+            proposal = get_proposal(row[project_id_key], proposals)
+            if proposal:
+                som = get_som(proposal['id'], row[milestone_key], soms)
+                if som:
+                    poa = Poa(
+                        **row,
+                        proposal_id = proposal['id'],
+                        som_id = som['id']
+                    )
+                    # Passing though JSON to serialize datetime correctly
+                    results.append(orjson.loads(poa.json()))
+                else:
+                    print('No som found')
+    sb.push_poas(results)
+    #print(results)
+
+
 def proposals_url_map(urls_map):
     with open(urls_map, mode='r') as infile:
         reader = csv.reader(infile)
@@ -205,6 +143,17 @@ def get_soms(id, soms):
         if s['proposal_id'] == id:
             results.append(s)
     return sorted(results, key=lambda r: r['created_at'])
+
+def get_som(proposal_id, milestone, soms):
+    ml = int(''.join(re.findall(r'\b\d+\b', milestone.replace('Final', '5'))))
+    for s in soms:
+        if (
+            s['proposal_id'] == proposal_id and
+            s['milestone'] == ml and
+            s['current'] == True
+        ):
+            return s
+    return False
 
 def create_intervals(groups):
     # Assumes groups of submissions grouped in a dictionary by a key

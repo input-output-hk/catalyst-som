@@ -25,6 +25,10 @@ class SB():
         results = self.client.table("soms").insert(soms).execute()
         return results.data
 
+    def push_poas(self, poas):
+        results = self.client.table("poas").insert(poas).execute()
+        return results.data
+
     def upsert_proposals(self, proposals):
         results = self.client.table("proposals").upsert(proposals).execute()
         return results.data
