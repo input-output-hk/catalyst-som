@@ -1,5 +1,13 @@
+import re
 from datetime import datetime
 from pydantic import BaseModel, Field, HttpUrl, ValidationError, validator, root_validator
+
+class Fund(BaseModel):
+    title: str
+
+class Challenge(BaseModel):
+    title: str
+    fund_id: int
 
 class Proposal(BaseModel):
     title: str
@@ -104,3 +112,21 @@ class Poa(BaseModel):
     @classmethod
     def parse_date(cls, value):
         return datetime.strptime(value, '%m/%d/%Y %H:%M:%S')
+
+class PoaReview(BaseModel):
+    content_approved: bool = Field(alias='Is the PoA Milestone approved by Challenge Team')
+    content_comment: str = Field(alias='Rationale for Approval / Non Approval')
+    poas_id: int
+    created_at: datetime = Field(alias='Timestamp')
+    #user_id: int
+    #role: int
+
+    @validator('created_at', pre=True)
+    @classmethod
+    def parse_date(cls, value):
+        return datetime.strptime(value, '%m/%d/%Y %H:%M:%S')
+
+    @validator('content_approved', pre=True)
+    @classmethod
+    def parse_approval(cls, value):
+        return (value == 'Yes')

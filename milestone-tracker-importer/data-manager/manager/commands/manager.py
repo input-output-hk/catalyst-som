@@ -5,11 +5,49 @@ from datetime import datetime
 from itertools import groupby
 import orjson
 
+from rich import print
+
 from manager.utils.sb import SB
-from manager.utils.models import Proposal, Som, SomReview, Poa
+from manager.utils.models import Fund, Challenge, Proposal, Som, SomReview, Poa, PoaReview
+
+from pydantic import ValidationError
 
 app = typer.Typer()
 sb = SB()
+
+@app.command()
+def push_funds(
+    funds: str = typer.Option("", help="Funds file"),
+):
+    results = []
+    with open(funds, mode='r') as infile:
+        reader = csv.DictReader(infile)
+        for row in reader:
+            try:
+                fund = Fund(**row)
+                results.append(fund.dict())
+            except ValidationError as e:
+                print(row)
+                print(e)
+    sb.push_entities(results, 'funds')
+    print("[bold green]Funds successfully added to DB.[/bold green]")
+
+@app.command()
+def push_challenges(
+    challenges: str = typer.Option("", help="Challenges file"),
+):
+    results = []
+    with open(challenges, mode='r') as infile:
+        reader = csv.DictReader(infile)
+        for row in reader:
+            try:
+                challenge = Challenge(**row)
+                results.append(challenge.dict())
+            except ValidationError as e:
+                print(row)
+                print(e)
+    sb.push_entities(results, 'challenges')
+    print("[bold green]Challenges successfully added to DB.[/bold green]")
 
 @app.command()
 def push_proposals(
@@ -27,35 +65,36 @@ def push_proposals(
             except ValidationError as e:
                 print(row)
                 print(e)
-    sb.push_proposals(results)
+    sb.push_entities(results, 'proposals')
+    print("[bold green]Proposals successfully added to DB.[/bold green]")
 
 @app.command()
 def push_soms(
     soms: str = typer.Option("", help="Soms file"),
 ):
     results = []
-    proposals = sb.get_proposals()
-    new_proposals = []
+    proposals = sb.get_entity('proposals')
     with open(soms, mode='r') as infile:
         reader = csv.DictReader(infile)
         for row in reader:
             try:
                 proposal = get_proposal(row['Project ID'], proposals)
-                if proposal:
-                    proposal.completion_date = row['Completion Date']
-                    for i in range(1,6):
-                        if i != 4 or row['Do you have M4?'] == 'Yes':
-                            som = Som(
-                                **row,
-                                proposal_id = proposal['id'],
-                                milestone = i
-                            )
-                            # Passing though JSON to serialize datetime correctly
-                            results.append(orjson.loads(som.json()))
+                proposal.completion_date = row['Completion Date']
+                for i in range(1,6):
+                    if i != 4 or row['Do you have M4?'] == 'Yes':
+                        som = Som(
+                            **row,
+                            proposal_id = proposal['id'],
+                            milestone = i
+                        )
+                        # Passing though JSON to serialize datetime correctly
+                        results.append(orjson.loads(som.json()))
             except ValidationError as e:
                 print(e)
-    sb.upsert_proposals(proposals)
-    sb.push_soms(results)
+            except Exception as e:
+                print(e)
+    sb.upsert_entities(proposals, 'proposals')
+    sb.push_entities(results, 'soms')
 
 @app.command()
 def push_som_reviews(
@@ -63,36 +102,28 @@ def push_som_reviews(
 ):
     project_id_key = 'What is the project ID number? This is a 6 digit number starting with 9******'
     results = []
-    proposals = sb.get_proposals()
-    soms = sb.get_soms()
-    new_proposals = []
+    proposals = sb.get_entity('proposals')
+    soms = sb.get_entity('soms')
     with open(som_reviews, mode='r') as infile:
         reader = csv.DictReader(infile)
         for row in reader:
-            proposal = get_proposal(row[project_id_key], proposals)
-            if proposal:
-                p_soms = get_soms(proposal['id'], soms)
-                if len(p_soms) > 0:
-                    groups = {}
-                    grouped = groupby(p_soms, key=lambda x:x['created_at'])
-                    for key, group in grouped:
-                        groups[key] = list(group)
-                    sr_submission = datetime.strptime(row['Timestamp'], '%m/%d/%Y %H:%M:%S')
-                    s = get_related_som(groups, sr_submission)
-                    if s is not False and len(s) > 0:
-                        for som in s:
-                            som_review = SomReview(
-                                **row,
-                                som_id = som['id'],
-                                milestone = som['milestone']
-                            )
-                            # Passing though JSON to serialize datetime correctly
-                            results.append(orjson.loads(som_review.json()))
-                else:
-                    print(f"Error finding soms for {proposal['title']}")
-            else:
-                print(f"Proposal {row[project_id_key]} not found")
-    sb.push_som_reviews(results)
+            try:
+                proposal = get_proposal(row[project_id_key], proposals)
+                project_soms = get_soms(proposal['id'], soms)
+                groups_by_creation = make_groups_by(project_soms, 'created_at')
+                sr_submission = datetime.strptime(row['Timestamp'], '%m/%d/%Y %H:%M:%S')
+                related_soms = get_related(groups_by_creation, sr_submission)
+                for som in related_soms:
+                    som_review = SomReview(
+                        **row,
+                        som_id = som['id'],
+                        milestone = som['milestone']
+                    )
+                    # Passing though JSON to serialize datetime correctly
+                    results.append(orjson.loads(som_review.json()))
+            except Exception as e:
+                print(e)
+    sb.push_entities(results, 'som_reviews')
 
 
 @app.command()
@@ -102,26 +133,57 @@ def push_poas(
     project_id_key = 'What is your project ID number?'
     milestone_key = 'Which Milestone are you reporting here as being completed?'
     results = []
-    proposals = sb.get_proposals()
-    soms = sb.get_soms()
+    proposals = sb.get_entity('proposals')
+    soms = sb.get_entity('soms')
     with open(poas, mode='r') as infile:
         reader = csv.DictReader(infile)
         for row in reader:
-            proposal = get_proposal(row[project_id_key], proposals)
-            if proposal:
+            try:
+                proposal = get_proposal(row[project_id_key], proposals)
                 som = get_som(proposal['id'], row[milestone_key], soms)
-                if som:
-                    poa = Poa(
+                poa = Poa(
+                    **row,
+                    proposal_id = proposal['id'],
+                    som_id = som['id']
+                )
+                # Passing though JSON to serialize datetime correctly
+                results.append(orjson.loads(poa.json()))
+            except Exception as e:
+                print(e)
+    sb.push_entities(results, 'poas')
+
+
+@app.command()
+def push_poa_reviews(
+    poa_reviews: str = typer.Option("", help="Poa reviews file"),
+):
+    project_id_key = 'What is the project ID number? This is a 6 digit number starting with 9******'
+    milestone_key = 'For which Milestone are you submitting approval of PoM (Proof of Milestone)?'
+    results = []
+    proposals = sb.get_entity('proposals')
+    soms = sb.get_entity('soms')
+    poas = sb.get_entity('poas')
+    with open(poa_reviews, mode='r') as infile:
+        reader = csv.DictReader(infile)
+        for row in reader:
+            try:
+                proposal = get_proposal(row[project_id_key], proposals)
+                som = get_som(proposal['id'], row[milestone_key], soms)
+                project_poas = get_poas(som['id'], poas)
+                groups_by_creation = make_groups_by(project_poas, 'created_at')
+                sr_submission = datetime.strptime(row['Timestamp'], '%m/%d/%Y %H:%M:%S')
+                related_poas = get_related(groups_by_creation, sr_submission)
+                for poa in related_poas:
+                    poa_review = PoaReview(
                         **row,
-                        proposal_id = proposal['id'],
-                        som_id = som['id']
+                        poas_id = poa['id']
                     )
                     # Passing though JSON to serialize datetime correctly
-                    results.append(orjson.loads(poa.json()))
-                else:
-                    print('No som found')
-    sb.push_poas(results)
-    #print(results)
+                    results.append(orjson.loads(poa_review.json()))
+            except Exception as e:
+                print(e)
+                #print(f"Proposal {row[project_id_key]} not found")
+    sb.push_entities(results, 'poas_reviews')
 
 
 def proposals_url_map(urls_map):
@@ -131,16 +193,23 @@ def proposals_url_map(urls_map):
         return proposals
 
 def get_proposal(id, proposals):
-    if id != '':
+    if len(id) > 0:
         for p in proposals:
             if p['project_id'] == int(id):
                 return p
-    return False
+    raise Exception(f"Proposal with id {id} not found")
 
 def get_soms(id, soms):
     results = []
     for s in soms:
         if s['proposal_id'] == id:
+            results.append(s)
+    return sorted(results, key=lambda r: r['created_at'])
+
+def get_poas(id, poas):
+    results = []
+    for s in poas:
+        if s['som_id'] == id:
             results.append(s)
     return sorted(results, key=lambda r: r['created_at'])
 
@@ -153,7 +222,15 @@ def get_som(proposal_id, milestone, soms):
             s['current'] == True
         ):
             return s
-    return False
+    raise Exception(f"SoM for proposal {proposal_id} and milestone {milestone} not found")
+
+def make_groups_by(elements, group_key):
+    groups = {}
+    if len(elements) > 0:
+        grouped = groupby(elements, key=lambda x:x[group_key])
+        for key, group in grouped:
+            groups[key] = list(group)
+    return groups
 
 def create_intervals(groups):
     # Assumes groups of submissions grouped in a dictionary by a key
@@ -176,11 +253,12 @@ def create_intervals(groups):
     return intervals
 
 
-def get_related_som(groups, submission_date):
+def get_related(groups, submission_date):
     intervals = create_intervals(groups)
     submission_date_ts = submission_date.timestamp()
     for k in intervals:
         if (submission_date_ts >= intervals[k][1]) and (submission_date_ts < intervals[k][0]):
             return groups[k]
 
-    return False
+    print("Not related elements found")
+    return []
