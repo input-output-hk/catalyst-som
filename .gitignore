@@ -28,6 +28,7 @@ dist-ssr
 .env.production
 meta/
 milestone-tracker-importer/data
+milestone-tracker-importer/google-accounts
 __pycache__
 
 # Type script generated js

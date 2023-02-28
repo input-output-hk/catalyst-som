@@ -2,6 +2,14 @@ import re
 from datetime import datetime
 from pydantic import BaseModel, Field, HttpUrl, ValidationError, validator, root_validator
 
+ml_rows_map = {
+    1: 9,
+    2: 16,
+    3: 23,
+    4: 31,
+    5: 39
+}
+
 class Fund(BaseModel):
     title: str
 
@@ -97,6 +105,44 @@ class SomReview(BaseModel):
         values['evidence_approves'] = (values[f"Is {ml} - Evidence of Milestone completion valid?"] == "Yes")
         values['evidence_comment'] = values[f"Comments for {ml} - Evidence of Milestone completion"]
         values['created_at'] = values["Timestamp"]
+        return values
+
+class IoSomReview(BaseModel):
+    outputs_approves: bool
+    outputs_comment: str
+    success_criteria_approves: bool
+    success_criteria_comment: str
+    evidence_approves: bool
+    evidence_comment: str
+    som_id: int
+    created_at: datetime
+
+    @root_validator(pre=True)
+    def assign_values_based_on_milestone(cls, values):
+        keys = ['outputs', 'success_criteria', 'evidence']
+        row = ml_rows_map[values['milestone']]
+        true_count = 0
+        chars_count = 0
+        for index, key in enumerate(keys):
+            values[f"{key}_approves"] = values['csv'][row + index][4] == 'TRUE'
+            values[f"{key}_comment"] = values['csv'][row + index][5].strip()
+            true_count += values[f"{key}_approves"]
+            chars_count += len(values[f"{key}_comment"])
+        if (true_count == 0 and chars_count == 0):
+            raise ValueError('Empty review')
+        return values
+
+class IoPoaReview(BaseModel):
+    content_approved: bool
+    content_comment: str
+    poas_id: int
+    created_at: datetime
+
+    @root_validator(pre=True)
+    def assign_values_based_on_milestone(cls, values):
+        row = ml_rows_map[values['milestone']]
+        values['content_approved'] = values['csv'][row][9] == 'TRUE'
+        values['content_comment'] = values['csv'][row][10]
         return values
 
 class Poa(BaseModel):
