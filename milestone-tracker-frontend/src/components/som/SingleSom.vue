@@ -15,7 +15,7 @@
           </tr>
           <tr v-for="criterium in criteria" :key="criterium">
             <th>{{ $t(`som.${criterium}`) }}</th>
-            <td :class="`som-${criterium}`" v-html="$sanitize(som[criterium])"></td>
+            <td :class="`som-${criterium}`" class="html-text" v-html="$sanitize(som[criterium])"></td>
             <td v-if="somReviewsVisible">
               <som-reviews
                 :som="som"
