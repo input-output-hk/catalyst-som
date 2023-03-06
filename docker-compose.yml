@@ -112,14 +112,6 @@ services:
       GOTRUE_SMS_AUTOCONFIRM: ${ENABLE_PHONE_AUTOCONFIRM}
       MFA_ENABLED: ${MFA_ENABLED}
 
-  smtp:
-    container_name: smtp
-    image: schickling/mailcatcher
-    restart: unless-stopped
-    ports:
-      - 1025:1025/tcp
-      - 1080:1080/tcp
-
   rest:
     container_name: supabase-rest
     image: postgrest/postgrest:v9.0.1.20220717
