@@ -15,7 +15,7 @@
           </tr>
           <tr v-for="criterium in criteria" :key="criterium">
             <th>{{ $t(`som.${criterium}`) }}</th>
-            <td :class="`som-${criterium}`" v-html="$sanitize(som[criterium])"></td>
+            <td :class="`som-${criterium}`" class="html-text" v-html="$sanitize(som[criterium])"></td>
             <td v-if="somReviewsVisible">
               <som-reviews
                 :som="som"
@@ -98,12 +98,13 @@
           </div>
           <div v-if="current && canWriteSom(proposal.id) && locked && !poaLocked" class="mr-4">
             <o-button
+              class="new-poa"
               variant="primary"
               size="medium"
               @click="newPoAVisible = !newPoAVisible">
               {{ $t('som.submit_poa') }}
             </o-button>
-            <o-modal v-model:active="newPoAVisible">
+            <o-modal v-model:active="newPoAVisible" class="new-poa-popup" >
               <new-poa :proposal="proposal" :som="som" :milestone="som.milestone" />
             </o-modal>
           </div>

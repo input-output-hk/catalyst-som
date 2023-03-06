@@ -10,6 +10,7 @@
         </span>
         <div
           :class="`${property}_comment`"
+          class="html-text"
           v-html="$sanitize(review[`${property}_comment`])" />
       </td>
     </tr>

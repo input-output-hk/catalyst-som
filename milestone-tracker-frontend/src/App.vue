@@ -32,4 +32,9 @@ const activeMsg = ref(false)
   overflow: auto !important;
   max-height: 90vh
 }
+
+.html-text {
+  white-space: pre-wrap;
+}
+
 </style>

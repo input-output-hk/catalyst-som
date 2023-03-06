@@ -6,7 +6,9 @@
         :not-approves="poaReviewsNotApproved" />
       <o-collapse v-model:open="reviewsVisible">
         <template #trigger="props">
-          <o-button size="small" variant="primary">
+          <o-button
+            class="open-poa-reviews"
+            size="small" variant="primary">
             {{ $t(
               'poa_reviews.poa_reviews',
               {
@@ -15,7 +17,7 @@
             }}
           </o-button>
         </template>
-        <div v-for="review in reviews" :key="review.id" class="reviews mt-3">
+        <div v-for="review in reviews" :key="review.id" class="reviews single-poa-review mt-3">
           <poa-review :review="review" />
         </div>
       </o-collapse>

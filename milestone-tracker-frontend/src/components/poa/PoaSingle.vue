@@ -5,7 +5,7 @@
         <tr>
           <th>{{ $t('poa.poa') }}</th>
           <td>
-            <div v-html="$sanitize(poa.content)"></div>
+            <div class="poa-content html-text" v-html="$sanitize(poa.content)"></div>
           </td>
         </tr>
         <tr>
@@ -29,6 +29,7 @@
     <div class="block buttons">
       <o-button
         v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current && !locked"
+        class="new-poa-review-button"
         size="medium"
         variant="primary"
         @click="newReviewVisible = !newReviewVisible">
