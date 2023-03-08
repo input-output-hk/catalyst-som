@@ -36,3 +36,15 @@ milestone-tracker-tests/distrib
 
 # Test Report
 milestone-tracker-tests/tests_output
+
+# Nix
+result/**
+.direnv/**
+
+# nixago: ignore-linked-files
+.prettierrc
+lefthook.yml
+.conform.yaml
+treefmt.toml
+# nixago-auto-created: mdbook-build-folder
+book/**
