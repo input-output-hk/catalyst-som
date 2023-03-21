@@ -62,6 +62,8 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const { createSom } = useSoms()
 
+import { env } from '@/env'
+
 const otherSoms = computed(() => {
   if (props.som) {
     return props.soms.filter((som) => {
@@ -83,7 +85,7 @@ const otherSomsBudget = computed(() => {
 const costRule = computed(() => {
   const rule = yup.number().required().min(1)
   const availableBudget = props.proposal.budget - otherSomsBudget.value
-  const maxMilestoneBudget = parseFloat(import.meta.env.VITE_MAX_MILESTONE_BUDGET)
+  const maxMilestoneBudget = parseFloat(env.VITE_MAX_MILESTONE_BUDGET)
   const budgetRule = Math.min(
     (props.proposal.budget * maxMilestoneBudget), availableBudget
   )
