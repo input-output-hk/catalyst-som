@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { supabase } from '@/utils/supabase'
 import { errorNotification, successNotification } from '@/utils/notifications'
 
+import { env } from '@/env'
+
 export const useUser = defineStore('user-store', {
   state: () => {
     return {
@@ -131,7 +133,7 @@ export const useUser = defineStore('user-store', {
       try {
         const { error } = await supabase.auth.resetPasswordForEmail(
           email,
-          { redirectTo: `${import.meta.env.VITE_LOCAL_BASEURL}/reset-password/` }
+          { redirectTo: `${env.VITE_LOCAL_BASEURL}/reset-password/` }
         )
         if (error) throw(error)
         successNotification(this.$i18n.t('notifications.check_email'))
