@@ -143,6 +143,8 @@
 
 <script setup>
 import { ref, watch, computed } from 'vue'
+import { useUser } from '@/store/user.js'
+import useEventsBus from '@/eventBus'
 const props = defineProps({
   som: {
     type: [Object, Boolean],
@@ -157,10 +159,8 @@ const props = defineProps({
     default: () => {}
   }
 })
-import { useUser } from '@/store/user.js'
 const { canWriteSom, canWriteSomReview, canSignoff } = useUser()
 
-import useEventsBus from '@/eventBus'
 const { bus } = useEventsBus()
 
 const reviewsVisible = ref(false)

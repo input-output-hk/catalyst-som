@@ -47,11 +47,13 @@ const initialSchema = computed(() => {
   keys.forEach((key) => {
     schema[`${key}_approves`] = {
       type: 'checkbox',
-      label: t(`new_som_review.${key}_approved`)
+      label: t(`new_som_review.${key}_approved`),
+      help: t(`new_som_review.${key}_approved_help`),
     }
     schema[`${key}_comment`] = {
       type: 'html',
       label: t(`new_som_review.${key}_comment`),
+      help: t(`new_som_review.${key}_comment_help`),
       validations: yup.string().when('_', {
         is: true,
         otherwise: (schema) => {

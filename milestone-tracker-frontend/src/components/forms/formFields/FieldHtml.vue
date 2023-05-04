@@ -89,6 +89,5 @@ watch(
 
 <style scoped>
 .quill-wrapper {
-  margin-bottom: 0px;
 }
 </style>
