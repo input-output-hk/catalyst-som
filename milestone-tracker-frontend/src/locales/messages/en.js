@@ -82,7 +82,8 @@ export default {
     title: "New Proof of Achivement for Milestone {nr}",
     submit: "Submit PoA",
     reset: "Reset",
-    content: "Content"
+    content: "Content",
+    content_help: "Please describe the Proof of Achivement, including links to resources (if any). Remember that the PoA has to satisfy the \"Outputs\", the \"Acceptance Criteria\" and the \"Evidence of Milestone Completion\" indicated in the SoM.",
   },
   poas: {
     title: "Proof of Achivement",
@@ -99,7 +100,9 @@ export default {
     submit: "Submit PoA review",
     reset: "Reset",
     poa_approved: "PoA Approved?",
+    poa_approved_help: "Tick the checkbox if the PoA for the SoM is approved.",
     comment: "Comment:",
+    comment_help: "In case the PoA is not approved, please describe what is missing and how the proposer can amend it in order to get the approval.",
   },
   poa_reviews: {
     open: "Open",
@@ -149,7 +152,7 @@ export default {
     evidence_help: "The evidence you submit must show clearly and visibly that this milestone has been completed.",
     month_help: "In which month do you plan to complete this milestone. Month 1 of your project should be the same month as the initial payment. Month 2 is the next month after your initial payment.",
     cost_help: "What is the cost forecast in US$ to complete this milestone? The cost of the milestone cannot exceed 30% of the whole budget. For this milestone you cannot exceed {maxCost}.",
-    completion_help: "Once you have completed this milestone, how much in % terms will you have completed of your project?"
+    completion_help: "Once you have completed this milestone, how much in % terms will you have completed of your project? The completion must be at least 10% more than the previous milestone."
   },
   som_review: {
     from: "From",
@@ -181,7 +184,7 @@ export default {
   roles: {
     funded_proposer: "Funded proposer",
     ct_member: "Challenge Team member",
-    io_member: "IOG Team member",
+    io_member: "Catalyst Team member",
     admin: "Admin",
     signoff: "Signoff"
   },
@@ -221,7 +224,7 @@ export default {
     },
     login: {
       title: "Login",
-      description: "Login as Funded Proposer, Challenge Team member or IOG member to interact with milestones.",
+      description: "Login as Funded Proposer, Challenge Team member or Catalyst team member to interact with milestones.",
       email: "Email",
       password: "Password",
       login: "Login",

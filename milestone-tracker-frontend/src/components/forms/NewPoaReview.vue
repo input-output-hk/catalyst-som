@@ -50,11 +50,13 @@ const initialSchema = computed(() => {
   return {
     content_approved: {
       type: 'checkbox',
-      label: t('new_poa_review.poa_approved')
+      label: t('new_poa_review.poa_approved'),
+      help: t('new_poa_review.poa_approved_help')
     },
     content_comment: {
       type: 'html',
       label: t('new_poa_review.comment'),
+      help: t('new_poa_review.comment_help'),
       validations: yup.string().when('_', {
         is: true,
         otherwise: (schema) => {
