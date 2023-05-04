@@ -79,7 +79,7 @@ const otherSomsBudget = computed(() => {
 })
 
 const isLastMilestone = computed(() => {
-  const lastMilestone = (props.proposal.milestones_qty) ? props.proposal.milestones_qty : 5
+  const lastMilestone = props.proposal.milestones_qty
   return props.milestone === lastMilestone
 })
 

@@ -272,6 +272,7 @@ CREATE TABLE IF NOT EXISTS public.proposals
     created_at timestamp with time zone DEFAULT now(),
     challenge_id bigint,
     budget bigint,
+    milestones_qty bigint DEFAULT 5,
     funds_distributed bigint DEFAULT 0,
     CONSTRAINT proposals_pkey PRIMARY KEY (id),
     CONSTRAINT proposals_challenge_id_fkey FOREIGN KEY (challenge_id)

@@ -20,7 +20,7 @@
     <div class="content columns is-multiline">
       <div class="column is-12 milestones-wrapper">
         <o-tabs v-model="activeTab" type="boxed">
-          <o-tab-item v-for="ml in [...Array(5).keys()]" :key="ml">
+          <o-tab-item v-for="ml in [...Array(proposal.milestones_qty).keys()]" :key="ml">
             <template
               #header>
               <span>{{ $t('pages.milestones.milestone', {nr: ml + 1}) }}</span>
