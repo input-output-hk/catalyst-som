@@ -85,7 +85,7 @@ export default {
     content: "Content"
   },
   poas: {
-    title: "Proof of Achivements",
+    title: "Proof of Achivement",
     hide_archived: "Hide archived PoAs",
     show_archived: "Show archived PoAs",
     archived: "Archived Proof of Achivements"
@@ -139,10 +139,17 @@ export default {
     title: "Title:",
     outputs: "Outputs:",
     success_criteria: "Acceptance Criteria:",
-    evidence: "Evidence:",
+    evidence: "Evidence of milestone completion:",
     cost: "Cost:",
     month: "Delivery month:",
-    completion: "Completion %"
+    completion: "Completion %",
+    title_help: "A milestone is the key deliverable(s) required to complete this phase of the project and position your project towards the next milestone. Please make sure the milestone is very clearly described to avoid any delays in payment at the milestone completion stage.",
+    outputs_help: "You should specify the context and number of outputs you will produce. For example: new UIUX designs, customer/user-centred research, work package technical outputs, documentation, prototypes, demonstrators/pilots, white-paper, business/tokenomics model, events, research papers, measurable engagement, reference/production software implementation or any other outputs you will provide.",
+    success_criteria_help: "Acceptance criteria are linked to intended outcomes and targets and are standards/levels by which to judge whether an objective/goal/ target/outcome has been achieved/successful.",
+    evidence_help: "The evidence you submit must show clearly and visibly that this milestone has been completed.",
+    month_help: "In which month do you plan to complete this milestone. Month 1 of your project should be the same month as the initial payment. Month 2 is the next month after your initial payment.",
+    cost_help: "What is the cost forecast in US$ to complete this milestone? The cost of the milestone cannot exceed 30% of the whole budget. For this milestone you cannot exceed {maxCost}.",
+    completion_help: "Once you have completed this milestone, how much in % terms will you have completed of your project?"
   },
   som_review: {
     from: "From",

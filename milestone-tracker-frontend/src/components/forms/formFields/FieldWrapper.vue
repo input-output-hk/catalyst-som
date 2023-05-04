@@ -3,17 +3,18 @@
     :class="{
       required: props.required,
     }"
-    :label="props.label"
     :variant="variant"
     :clearable="!props.required"
+    class="field-wrapper"
   >
     <slot />
 
-    <template #message>
-      <p>
-        {{ props.help }}
+    <template #label>
+      <p>{{ props.label }}<br />
+        <span class="help-description" v-if="props.help">{{ props.help }}</span>
       </p>
-
+    </template>
+    <template #message>
       <ul v-if="props.validation.errors.length">
         <li
           v-for="error in props.validation.errors"
@@ -57,3 +58,15 @@ const variant = computed(() => {
   return "";
 });
 </script>
+
+<style lang="scss" scoped>
+.field-wrapper {
+  margin-bottom: 1rem;
+}
+label {
+  .help-description {
+    font-weight: 400;
+    font-size: 0.8em;
+  }
+}
+</style>
