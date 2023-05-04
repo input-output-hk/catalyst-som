@@ -195,7 +195,8 @@ export default {
     challenge: "Challenge",
     budget: "Budget",
     completion: "Completion date",
-    funds_distributed: "Funds distributed"
+    funds_distributed: "Funds distributed",
+    allocated_budget_error: "Total budget allocated in SoMs"
   },
   reviews_counter: {
     approvals: "approval | approvals",

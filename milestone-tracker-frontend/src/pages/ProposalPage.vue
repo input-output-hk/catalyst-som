@@ -14,7 +14,7 @@
         <next-payment :payment="payment" />
       </div>
       <div class="column is-6">
-        <proposal-recap :proposal="proposal" />
+        <proposal-recap :proposal="proposal" :snapshot="snapshot" />
       </div>
       <div class="column is-12">
         <h3 class="title is-size-2">{{ $t('pages.proposal.milestone_recap') }}</h3>
