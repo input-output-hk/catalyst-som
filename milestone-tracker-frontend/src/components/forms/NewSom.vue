@@ -78,6 +78,11 @@ const otherSomsBudget = computed(() => {
   return otherSoms.value.reduce((acc, som) => acc + som.cost, 0)
 })
 
+const isLastMilestone = computed(() => {
+  const lastMilestone = (props.proposal.milestones_qty) ? props.proposal.milestones_qty : 5
+  return props.milestone === lastMilestone
+})
+
 // Form validation rules
 
 const maxMilestoneCost = computed(() => {
@@ -86,7 +91,7 @@ const maxMilestoneCost = computed(() => {
   const budgetRule = Math.min(
     (props.proposal.budget * maxMilestoneBudget), availableBudget
   )
-  if (props.milestone < 5 && props.proposal.budget > 0) {
+  if (!isLastMilestone.value && props.proposal.budget > 0) {
     return budgetRule
   } else {
     return availableBudget
@@ -102,6 +107,13 @@ const monthRule = computed(() => {
   const rule = yup.number().required()
   const min = getPrevMilestone(props.soms, props.milestone)
   return rule.min((min) ? parseInt(min.month) : 1)
+})
+
+const completionRule = computed(() => {
+  const rule = yup.number().required()
+  const min = getPrevMilestone(props.soms, props.milestone)
+  const offset = (isLastMilestone.value) ? 0 : 10
+  return rule.min((min) ? parseInt(min.completion) + offset : 10)
 })
 
 const initialSchema = computed(() => {
@@ -137,6 +149,7 @@ const initialSchema = computed(() => {
     },
     completion: {
       type: 'range',
+      validations: completionRule.value,
       default: 10,
       min: 0,
       max: 100,

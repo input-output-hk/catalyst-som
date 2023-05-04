@@ -87,7 +87,3 @@ watch(
 );
 </script>
 
-<style scoped>
-.quill-wrapper {
-}
-</style>
