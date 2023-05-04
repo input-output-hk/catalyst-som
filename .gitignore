@@ -26,6 +26,7 @@ dist-ssr
 .env
 .env.prod
 .env.production
+.env.staging
 meta/
 milestone-tracker-importer/data
 milestone-tracker-importer/google-accounts
