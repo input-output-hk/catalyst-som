@@ -25,7 +25,7 @@ const milestonePageCommands = {
       .sendKeys('@evidenceInput', `${stringBase}${stringSeed}`)
       .setValue('@costInput', `${numberBase+numberSeed}`)
       .click('@monthOption')
-      .dragAndDrop('@completionInput', {x: 100, y: 0})
+      .dragAndDrop('@completionInput', {x: 400, y: 0})
   },
   submitSom(this: MilestonePage) {
     return this.waitForElementVisible('@submitSomInput', 10000)

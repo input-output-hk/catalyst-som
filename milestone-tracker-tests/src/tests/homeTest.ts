@@ -2,6 +2,7 @@ import { NightwatchTests, NightwatchBrowser } from 'nightwatch';
 import { HomePage } from '../page-objects/homePage';
 
 const homeTest: NightwatchTests = {
+  tags: ['home'],
   'Home test': (browser: NightwatchBrowser) => {
     browser.resizeWindow(1280, 800);
     const homePage: HomePage = browser.page.homePage();
@@ -32,7 +33,7 @@ const homeTest: NightwatchTests = {
       .clickNavLogin()
       .expect.element('body')
       .text.to.contain(
-        'Login as Funded Proposer, Challenge Team member or IOG member to interact with milestones.'
+        'Login as Funded Proposer, Challenge Team member or Catalyst team member to interact with milestones.'
       );
 
     browser.assert.urlContains('/login');
