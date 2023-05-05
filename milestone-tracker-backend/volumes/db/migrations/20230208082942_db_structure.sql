@@ -1265,7 +1265,7 @@ GRANT EXECUTE ON FUNCTION public.getsignedoff(timestamp) TO service_role;
 
 
 CREATE OR REPLACE FUNCTION public.getsomsreviews()
-    RETURNS TABLE(project_id bigint, title character varying, milestone bigint, created_at timestamp with time zone)
+    RETURNS TABLE(project_id bigint, title character varying, milestone bigint, created_at timestamp with time zone, outputs_approved boolean, evidence_approved boolean, success_criteria_approved boolean)
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
@@ -1274,7 +1274,7 @@ CREATE OR REPLACE FUNCTION public.getsomsreviews()
 AS $BODY$
     BEGIN
         RETURN QUERY
-          SELECT proposals.project_id, proposals.title, soms.milestone, som_reviews.created_at FROM som_reviews
+          SELECT proposals.project_id, proposals.title, soms.milestone, som_reviews.created_at, som_reviews.outputs_approves, som_reviews.evidence_approves, som_reviews.success_criteria_approves FROM som_reviews
             LEFT OUTER JOIN soms ON som_reviews.som_id = soms.id
             LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
             LEFT outer join proposals_users ON proposals_users.proposal_id = proposals.id
@@ -1282,7 +1282,7 @@ AS $BODY$
             WHERE
             proposals_users.user_id = auth.uid() AND
             soms.current = true
-            GROUP BY proposals.project_id, proposals.title, soms.milestone, som_reviews.created_at
+            GROUP BY proposals.project_id, proposals.title, soms.milestone, som_reviews.created_at, som_reviews.outputs_approves, som_reviews.evidence_approves, som_reviews.success_criteria_approves
             HAVING count(distinct signoffs.id) = 0;
   END;
 $BODY$;
@@ -1301,7 +1301,7 @@ GRANT EXECUTE ON FUNCTION public.getsomsreviews() TO postgres;
 GRANT EXECUTE ON FUNCTION public.getsomsreviews() TO service_role;
 
 CREATE OR REPLACE FUNCTION public.getpoasreviews()
-    RETURNS TABLE(project_id bigint, title character varying, milestone bigint, created_at timestamp with time zone)
+    RETURNS TABLE(project_id bigint, title character varying, milestone bigint, created_at timestamp with time zone, content_approved boolean)
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
@@ -1310,7 +1310,7 @@ CREATE OR REPLACE FUNCTION public.getpoasreviews()
 AS $BODY$
     BEGIN
         RETURN QUERY
-          SELECT proposals.project_id, proposals.title, soms.milestone, poas_reviews.created_at FROM poas_reviews
+          SELECT proposals.project_id, proposals.title, soms.milestone, poas_reviews.created_at, poas_reviews.content_approved FROM poas_reviews
             LEFT OUTER JOIN poas ON poas_reviews.poas_id = poas.id
             LEFT OUTER JOIN soms ON poas.som_id = soms.id
             LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
@@ -1319,7 +1319,7 @@ AS $BODY$
             where
             proposals_users.user_id = auth.uid() AND
             soms.current = true
-            GROUP by proposals.project_id, proposals.title, soms.milestone, poas_reviews.created_at
+            GROUP by proposals.project_id, proposals.title, soms.milestone, poas_reviews.created_at, poas_reviews.content_approved
             HAVING count(distinct signoffs.id) = 0;
   END;
 $BODY$;

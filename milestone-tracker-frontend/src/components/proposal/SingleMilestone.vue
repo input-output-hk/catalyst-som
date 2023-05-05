@@ -55,12 +55,12 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useSoms } from '@/store/soms.js'
-const { getSoms, proposals } = useSoms()
 import { useUser } from '@/store/user.js'
-const { canWriteSom } = useUser()
 import useEventsBus from '@/eventBus'
+const { getSoms, proposals } = useSoms()
+const { canWriteSom } = useUser()
 const { bus } = useEventsBus()
 
 const props = defineProps({
@@ -129,11 +129,17 @@ watch(()=>bus.value.get('getSomsBus'), (val) => {
     (getSomsBus.value.proposal_id === props.proposal.id) &&
     (getSomsBus.value.milestone === props.milestone)
   ) {
-    getSoms(props.proposal.id, props.milestone, 5)
+    getSoms(props.proposal.id, props.milestone, 10)
   }
 })
 
-watch(props, () => getSoms(props.proposal.id, props.milestone, 5))
+watch(props, () => {
+  getSoms(props.proposal.id, props.milestone, 10)
+})
+
+onMounted(async () => {
+  getSoms(props.proposal.id, props.milestone, 10)
+})
 
 </script>
 

@@ -264,8 +264,8 @@ export default {
       reset: "Reset"
     },
     notifications: {
-      go_to_som: "Go to SoM",
-      go_to_poa: "Go to PoA",
+      go_to_som: "Open SoM",
+      go_to_poa: "Open PoA",
       proposal: "Proposal",
       milestone: "Milestone",
       submitted_at: "Submitted at",
@@ -273,7 +273,11 @@ export default {
       poa_to_review: "PoA to be reviewed",
       som_to_review: "SoM to be reviewed",
       signoff_received: "Signoff received in the last day | Signoff received in the last {count} days",
-      no_notifications: "No notifications, no relevant events happened from your last visit."
+      no_notifications: "No notifications, no relevant events happened from your last visit.",
+      som_reviews_received: "SoM reviews received",
+      poa_reviews_received: "PoA reviews received",
+      approved: "Approved",
+      not_approved: "Not Approved",
     }
   }
 }

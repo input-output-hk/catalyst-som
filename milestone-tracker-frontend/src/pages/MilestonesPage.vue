@@ -17,10 +17,10 @@
         </div>
       </div>
     </section>
-    <div class="content columns is-multiline">
+    <div class="content columns is-multiline" v-if="proposal.milestones_qty">
       <div class="column is-12 milestones-wrapper">
         <o-tabs v-model="activeTab" type="boxed">
-          <o-tab-item v-for="ml in [...Array(proposal.milestones_qty).keys()]" :key="ml">
+          <o-tab-item v-for="ml in [...Array(proposal.milestones_qty).keys()]" :key="`ml-${ml + 1}`">
             <template
               #header>
               <span>{{ $t('pages.milestones.milestone', {nr: ml + 1}) }}</span>
@@ -47,6 +47,16 @@ const router = useRouter()
 const proposalId = computed(() => {
   return router.currentRoute.value.params.id;
 })
+
+/*
+const noOfMilestones = computed(() => {
+  if (proposal.value.milestones_qty) {
+    return [1,2]
+  } else {
+    return []
+  }
+})
+*/
 
 const activeTab = computed({
   get() {

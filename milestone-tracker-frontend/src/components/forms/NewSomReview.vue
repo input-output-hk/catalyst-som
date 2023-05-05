@@ -3,7 +3,7 @@
     <div class="box">
       <h3>{{ $t('new_som_review.title') }}</h3>
       <schema-form
-        class="card-content scrollable-modal"
+        class="card-content"
         :schema="schema"
         @submit="handleCreateSomReview"
         >
