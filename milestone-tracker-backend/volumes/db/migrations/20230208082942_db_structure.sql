@@ -557,6 +557,7 @@ CREATE TABLE IF NOT EXISTS public.som_reviews
     success_criteria_comment text COLLATE pg_catalog."default",
     evidence_approves boolean,
     evidence_comment text COLLATE pg_catalog."default",
+    current boolean DEFAULT false,
     som_id bigint,
     role bigint,
     created_at timestamp with time zone DEFAULT now(),
@@ -592,6 +593,42 @@ GRANT ALL ON TABLE public.som_reviews TO anon;
 GRANT ALL ON TABLE public.som_reviews TO service_role;
 
 GRANT ALL ON TABLE public.som_reviews TO postgres;
+
+CREATE OR REPLACE FUNCTION public.set_old_som_reviews_not_current()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+begin
+  update public.som_reviews
+  set current=false
+  where som_id = new.som_id
+  and user_id = new.user_id
+  and current
+  and id != new.id;
+  return new;
+end;
+$BODY$;
+
+ALTER FUNCTION public.set_old_som_reviews_not_current()
+    OWNER TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.set_old_som_reviews_not_current() TO authenticated;
+
+GRANT EXECUTE ON FUNCTION public.set_old_som_reviews_not_current() TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.set_old_som_reviews_not_current() TO PUBLIC;
+
+GRANT EXECUTE ON FUNCTION public.set_old_som_reviews_not_current() TO anon;
+
+GRANT EXECUTE ON FUNCTION public.set_old_som_reviews_not_current() TO service_role;
+
+CREATE TRIGGER on_som_reviews_created
+    BEFORE INSERT
+    ON public.som_reviews
+    FOR EACH ROW
+    EXECUTE FUNCTION public.set_old_som_reviews_not_current();
 
 CREATE OR REPLACE FUNCTION public.is_in_challenge_ct(
 	_challenge_ids bigint[])
@@ -689,6 +726,24 @@ CREATE POLICY "Insert SoMs reviews"
   WHERE (soms.id = som_reviews.som_id))) OR is_proposal_allocated(( SELECT soms.proposal_id
    FROM soms
   WHERE (soms.id = som_reviews.som_id))) OR is_io_member(auth.uid()) OR is_admin(auth.uid())));
+
+CREATE POLICY "Update SoMs reviews"
+    ON public.som_reviews
+    AS PERMISSIVE
+    FOR UPDATE
+    TO public
+    USING ((is_in_challenge_ct(( SELECT array_agg(soms.challenge_id) AS array_agg
+   FROM soms
+  WHERE (soms.id = som_reviews.som_id))) OR is_proposal_allocated(( SELECT soms.proposal_id
+   FROM soms
+  WHERE (soms.id = som_reviews.som_id))) OR is_io_member(auth.uid()) OR is_admin(auth.uid())))
+    WITH CHECK ((is_in_challenge_ct(( SELECT array_agg(soms.challenge_id) AS array_agg
+   FROM soms
+  WHERE (soms.id = som_reviews.som_id))) OR is_proposal_allocated(( SELECT soms.proposal_id
+   FROM soms
+  WHERE (soms.id = som_reviews.som_id))) OR is_io_member(auth.uid()) OR is_admin(auth.uid())));
+
+
 CREATE POLICY public
     ON public.som_reviews
     AS PERMISSIVE
@@ -938,6 +993,7 @@ CREATE TABLE IF NOT EXISTS public.poas_reviews
     role bigint,
     created_at timestamp with time zone DEFAULT now(),
     user_id uuid DEFAULT auth.uid(),
+    current boolean DEFAULT false,
     CONSTRAINT poas_review_pkey PRIMARY KEY (id),
     CONSTRAINT poas_reviews_poas_id_fkey FOREIGN KEY (poas_id)
         REFERENCES public.poas (id) MATCH SIMPLE
@@ -964,6 +1020,44 @@ GRANT ALL ON TABLE public.poas_reviews TO authenticated;
 GRANT ALL ON TABLE public.poas_reviews TO postgres;
 
 GRANT ALL ON TABLE public.poas_reviews TO service_role;
+
+CREATE OR REPLACE FUNCTION public.set_old_poa_reviews_not_current()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+begin
+  update public.poas_reviews
+  set current=false
+  where poas_id = new.poas_id
+  and user_id = new.user_id
+  and current
+  and id != new.id;
+  return new;
+end;
+$BODY$;
+
+ALTER FUNCTION public.set_old_poa_reviews_not_current()
+    OWNER TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.set_old_poa_reviews_not_current() TO authenticated;
+
+GRANT EXECUTE ON FUNCTION public.set_old_poa_reviews_not_current() TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.set_old_poa_reviews_not_current() TO PUBLIC;
+
+GRANT EXECUTE ON FUNCTION public.set_old_poa_reviews_not_current() TO anon;
+
+GRANT EXECUTE ON FUNCTION public.set_old_poa_reviews_not_current() TO service_role;
+
+CREATE TRIGGER on_poa_reviews_created
+    BEFORE INSERT
+    ON public.poas_reviews
+    FOR EACH ROW
+    EXECUTE FUNCTION public.set_old_poa_reviews_not_current();
+
+
 CREATE POLICY "Insert PoAs reviews"
     ON public.poas_reviews
     AS PERMISSIVE
@@ -974,6 +1068,23 @@ CREATE POLICY "Insert PoAs reviews"
   WHERE (poas.id = poas_reviews.poas_id))) OR is_proposal_allocated(( SELECT poas.proposal_id
    FROM poas
   WHERE (poas.id = poas_reviews.poas_id))) OR is_io_member(auth.uid()) OR is_admin(auth.uid())));
+
+CREATE POLICY "Update PoAs reviews"
+    ON public.poas_reviews
+    AS PERMISSIVE
+    FOR UPDATE
+    TO public
+    USING ((is_in_challenge_ct(( SELECT array_agg(poas.challenge_id) AS array_agg
+   FROM poas
+  WHERE (poas.id = poas_reviews.poas_id))) OR is_proposal_allocated(( SELECT poas.proposal_id
+   FROM poas
+  WHERE (poas.id = poas_reviews.poas_id))) OR is_io_member(auth.uid()) OR is_admin(auth.uid())))
+    WITH CHECK ((is_in_challenge_ct(( SELECT array_agg(poas.challenge_id) AS array_agg
+   FROM poas
+  WHERE (poas.id = poas_reviews.poas_id))) OR is_proposal_allocated(( SELECT poas.proposal_id
+   FROM poas
+  WHERE (poas.id = poas_reviews.poas_id))) OR is_io_member(auth.uid()) OR is_admin(auth.uid())));
+
 CREATE POLICY "Public list"
     ON public.poas_reviews
     AS PERMISSIVE

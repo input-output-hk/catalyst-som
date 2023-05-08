@@ -72,16 +72,16 @@ INSERT INTO public.soms (outputs, success_criteria, evidence, month, cost, compl
     ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 20000, 30, 2, 4, 'Title ipsum 4', 2, (SELECT user_id FROM public.users WHERE email = 'proposer-2@example.org' LIMIT 1), true),
     ('Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', 'Lorem ipsum dolor sit amet', '3', 20000, 30, 2, 5, 'Title ipsum 5', 2, (SELECT user_id FROM public.users WHERE email = 'proposer-2@example.org' LIMIT 1), true);
 
-INSERT INTO public.som_reviews (outputs_approves, outputs_comment, success_criteria_approves, success_criteria_comment, evidence_approves, evidence_comment, som_id, challenge_id, user_id)
+INSERT INTO public.som_reviews (outputs_approves, outputs_comment, success_criteria_approves, success_criteria_comment, evidence_approves, evidence_comment, som_id, challenge_id, user_id, current)
   VALUES
-    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 2, 1, (SELECT user_id FROM public.users WHERE email = 'challenge-team-1@example.org' LIMIT 1)),
-    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 3, 1, (SELECT user_id FROM public.users WHERE email = 'challenge-team-1@example.org' LIMIT 1)),
-    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 4, 1, (SELECT user_id FROM public.users WHERE email = 'challenge-team-1@example.org' LIMIT 1)),
-    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 5, 1, (SELECT user_id FROM public.users WHERE email = 'challenge-team-1@example.org' LIMIT 1)),
-    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 8, 2, (SELECT user_id FROM public.users WHERE email = 'challenge-team-2@example.org' LIMIT 1)),
-    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 9, 2, (SELECT user_id FROM public.users WHERE email = 'challenge-team-2@example.org' LIMIT 1)),
-    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 10, 2, (SELECT user_id FROM public.users WHERE email = 'challenge-team-2@example.org' LIMIT 1)),
-    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 11, 2, (SELECT user_id FROM public.users WHERE email = 'challenge-team-2@example.org' LIMIT 1));
+    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 2, 1, (SELECT user_id FROM public.users WHERE email = 'challenge-team-1@example.org' LIMIT 1), true),
+    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 3, 1, (SELECT user_id FROM public.users WHERE email = 'challenge-team-1@example.org' LIMIT 1), true),
+    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 4, 1, (SELECT user_id FROM public.users WHERE email = 'challenge-team-1@example.org' LIMIT 1), true),
+    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 5, 1, (SELECT user_id FROM public.users WHERE email = 'challenge-team-1@example.org' LIMIT 1), true),
+    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 8, 2, (SELECT user_id FROM public.users WHERE email = 'challenge-team-2@example.org' LIMIT 1), true),
+    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 9, 2, (SELECT user_id FROM public.users WHERE email = 'challenge-team-2@example.org' LIMIT 1), true),
+    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 10, 2, (SELECT user_id FROM public.users WHERE email = 'challenge-team-2@example.org' LIMIT 1), true),
+    (true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', true, 'Lorem ipsum dolor sit amet', 11, 2, (SELECT user_id FROM public.users WHERE email = 'challenge-team-2@example.org' LIMIT 1), true);
 
 INSERT INTO public.signoffs (som_id, user_id)
   VALUES
@@ -99,12 +99,12 @@ INSERT INTO public.poas (content, proposal_id, som_id, challenge_id, user_id, cu
     ('Lorem ipsum dolor sit amet', 2, 8, 2, (SELECT user_id FROM public.users WHERE email = 'proposer-2@example.org' LIMIT 1), true),
     ('Lorem ipsum dolor sit amet', 2, 9, 2, (SELECT user_id FROM public.users WHERE email = 'proposer-2@example.org' LIMIT 1), true);
 
-INSERT INTO public.poas_reviews (content_approved, content_comment, poas_id, user_id)
+INSERT INTO public.poas_reviews (content_approved, content_comment, poas_id, user_id, current)
   VALUES
-    (true, 'Lorem ipsum dolor sit amet', 1, (SELECT user_id FROM public.users WHERE email = 'iog@example.org' LIMIT 1)),
-    (true, 'Lorem ipsum dolor sit amet', 3, (SELECT user_id FROM public.users WHERE email = 'iog@example.org' LIMIT 1)),
-    (true, 'Lorem ipsum dolor sit amet', 2, (SELECT user_id FROM public.users WHERE email = 'iog@example.org' LIMIT 1)),
-    (true, 'Lorem ipsum dolor sit amet', 4, (SELECT user_id FROM public.users WHERE email = 'iog@example.org' LIMIT 1));
+    (true, 'Lorem ipsum dolor sit amet', 1, (SELECT user_id FROM public.users WHERE email = 'iog@example.org' LIMIT 1), true),
+    (true, 'Lorem ipsum dolor sit amet', 3, (SELECT user_id FROM public.users WHERE email = 'iog@example.org' LIMIT 1), true),
+    (true, 'Lorem ipsum dolor sit amet', 2, (SELECT user_id FROM public.users WHERE email = 'iog@example.org' LIMIT 1), true),
+    (true, 'Lorem ipsum dolor sit amet', 4, (SELECT user_id FROM public.users WHERE email = 'iog@example.org' LIMIT 1), true);
 
 INSERT INTO public.signoffs (poa_id, user_id)
   VALUES
