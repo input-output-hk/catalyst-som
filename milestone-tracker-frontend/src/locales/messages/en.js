@@ -55,7 +55,10 @@ export default {
     resubmission_title: "SoM resubmission confirm",
     resubmission_msg: "Are you sure you want to resubmit this SoM? The current SoM and all its reviews will be archived. The new SoM submission will have to go through the review process again.",
     resubmission_confirm: "Proceed with resubmission",
-    resubmission_clear: "Cancel"
+    resubmission_clear: "Cancel",
+    all_approvals: "At the moment your SoM was approved by all the reviewers. Please wait for additional reviews or for SoM signoff. After the SoM will be signed off you will be able to submit Proof of Achivement.",
+    some_approvals: "Your SoM was partially approved. Please proceed with a new submission of the SoM addressing the comments made by reviewers by using the button on the right.",
+    no_approvals: "Your SoM was not approved. Please resubmit it addressing the comments made on reviews by using the button on the right."
   },
   milestone_recap: {
     title: "M {nr}",

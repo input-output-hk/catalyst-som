@@ -5,6 +5,13 @@
         <div class="column is-8">
           <h2 class="is-size-3 mb-2 mt-2">{{ $t('milestone.som', {nr: milestone}) }}</h2>
           <p class="mb-5">{{ $t('milestone.latest_som', {nr: milestone}) }}</p>
+          <p
+            v-if="currentSom && currentSom.som_reviews.length > 0"
+            :class="{'is-danger': currentSomStatus === 'no_approvals', 'is-success': currentSomStatus === 'all_approvals'}"
+            class="notification is-light"
+          >
+            {{ $t(`milestone.${currentSomStatus}`) }}
+          </p>
         </div>
         <div v-if="canSubmitSom" class="column is-4 has-text-right mt-4">
           <o-button
@@ -113,6 +120,21 @@ const otherSoms = computed(() => {
 const currentSom = computed(() => {
   try {
     return soms.value.find(som => som.current)
+  } catch {
+    return null
+  }
+})
+
+const currentSomStatus = computed(() => {
+  try {
+    const reviews = currentSom.value.som_reviews.map((r) => (r.outputs_approves && r.evidence_approves && r.success_criteria_approves))
+    if (reviews.every((r) => (r))) {
+      return 'all_approvals'
+    } else if (reviews.some((r) => (r))) {
+      return 'some_approvals'
+    } else {
+      return 'no_approvals'
+    }
   } catch {
     return null
   }
