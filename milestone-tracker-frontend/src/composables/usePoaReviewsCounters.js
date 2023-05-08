@@ -5,7 +5,7 @@ export function usePoaReviewsCounters(poa, boolKey) {
 
   const poaReviewsApproved = computed(() => {
     try {
-      return poa.value.poas_reviews.filter((r) => {
+      return poa.value.poas_reviews.filter(r => r.current).filter((r) => {
         return boolKeys.map((el) => r[`${el}_approved`]).every(el => el)
       }).length
     } catch {
@@ -22,7 +22,7 @@ export function usePoaReviewsCounters(poa, boolKey) {
 
   const poaReviewsTot = computed(() => {
     try {
-      return poa.value.poas_reviews.length
+      return poa.value.poas_reviews.filter(r => r.current).length
     } catch {
       return 0
     }

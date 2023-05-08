@@ -5,7 +5,7 @@ export function useSomReviewsCounters(som, boolKey) {
 
   const somReviewsApproved = computed(() => {
     try {
-      return som.value.som_reviews.filter((r) => {
+      return som.value.som_reviews.filter(r => r.current).filter((r) => {
         return boolKeys.map((el) => r[`${el}_approves`]).every(el => el)
       }).length
     } catch {
@@ -22,7 +22,7 @@ export function useSomReviewsCounters(som, boolKey) {
 
   const somReviewsTot = computed(() => {
     try {
-      return som.value.som_reviews.length
+      return som.value.som_reviews.filter(r => r.current).length
     } catch {
       return 0
     }

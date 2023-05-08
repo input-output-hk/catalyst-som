@@ -120,7 +120,9 @@ export default {
     open: "Open",
     close: "Close",
     poa_reviews: "{action} PoA reviews",
-    no_reviews: "No PoA reviews"
+    no_reviews: "No PoA reviews",
+    poa_archived_reviews: "Open archived PoA reviews",
+    archived_reviews: "These reviews are not active anymore and are archived. Each reviewer assigned to this project can have only one review active at a time and can't modify previous submissions. Every time a new review is submitted, the previous ones become archived.",
   },
   new_signoff: {
     title: "Signoff",
@@ -140,7 +142,9 @@ export default {
     cost: "Milestone Cost",
     completion: "Project Completion",
     signed_off_at: "Signed off at:",
-    open_reviews: "Open reviews for this Milestone",
+    open_reviews: "Open active reviews for this Milestone",
+    open_archived_reviews: "Open archived reviews for this Milestone",
+    archived_reviews: "These reviews are not active anymore and are archived. Each reviewer assigned to this project can have only one review active at a time and can't modify previous submissions. Every time a new review is submitted, the previous ones become archived.",
     submit_review: "Submit review for this SoM",
     resubmit_review: "Resubmit review for this SoM",
     submit_poa: "Submit new PoA",

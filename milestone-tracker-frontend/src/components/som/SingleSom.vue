@@ -19,7 +19,7 @@
             <td v-if="somReviewsVisible">
               <som-reviews
                 :som="som"
-                :reviews="som.som_reviews" :property="criterium" />
+                :reviews="activeSomReviews" :property="criterium" />
             </td>
           </tr>
           <tr>
@@ -67,17 +67,41 @@
         <div v-if="som.som_reviews.length > 0" class="columns">
           <div class="column is-12">
             <o-button
-              class="is-small show-som-reviews"
+              class="is-small show-som-reviews mr-3"
               @click="reviewsVisible = !reviewsVisible">
               {{ $t('som.open_reviews') }}
             </o-button>
+            <o-button
+              v-if="archivedSomReviews.length > 0"
+              class="is-small show-som-reviews"
+              @click="archivedReviewsVisible = !archivedReviewsVisible">
+              {{ $t('som.open_archived_reviews') }}
+            </o-button>
             <o-modal class="som-reviews-popup" :active="reviewsVisible" scroll="keep">
               <div class="container scrollable-modal">
-                <div v-for="review in som.som_reviews" :key="review.id" class="reviews">
+                <div v-for="review in activeSomReviews" :key="review.id" class="reviews">
                   <som-review
                     class="mb-6"
                     :review="review"
                     :properties="['outputs', 'success_criteria', 'evidence']" />
+                </div>
+              </div>
+            </o-modal>
+            <o-modal
+              v-if="archivedSomReviews.length > 0"
+              class="som-reviews-popup"
+              :active="archivedReviewsVisible"
+              scroll="keep"
+            >
+              <div class="container scrollable-modal">
+                <div class="card">
+                  <div class="card-content">{{ $t('som.archived_reviews') }}</div>
+                  <div v-for="review in archivedSomReviews" :key="review.id" class="reviews">
+                    <som-review
+                      class="mb-6"
+                      :review="review"
+                      :properties="['outputs', 'success_criteria', 'evidence']" />
+                  </div>
                 </div>
               </div>
             </o-modal>
@@ -164,6 +188,7 @@ const { canWriteSom, canWriteSomReview, canSignoff } = useUser()
 const { bus } = useEventsBus()
 
 const reviewsVisible = ref(false)
+const archivedReviewsVisible = ref(false)
 const newReviewVisible = ref(false)
 const newPoAVisible = ref(false)
 const confirmSignoff = ref(false)
@@ -194,6 +219,14 @@ const currentUserReviewSubmission = computed(() => {
     return (currentUserReview)
   }
   return false
+})
+
+const activeSomReviews = computed(() => {
+  return props.som.som_reviews.filter(review => review.current)
+})
+
+const archivedSomReviews = computed(() => {
+  return props.som.som_reviews.filter(review => !review.current)
 })
 
 watch(()=>bus.value.get('getSomsBus'), () => {

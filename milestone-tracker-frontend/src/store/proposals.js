@@ -39,6 +39,7 @@ export const useProposals = defineStore('proposals-store', {
         const { data, error } = await supabase
           .from('proposals')
           .select('*, challenges(title), allocations(*, users(id, user_id, email))')
+          .order('project_id')
           .range(from, to)
         if (error) throw(error)
         this._proposals = data
