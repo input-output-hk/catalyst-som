@@ -6,7 +6,7 @@
           <h2 class="is-size-3 mb-2 mt-2">{{ $t('milestone.som', {nr: milestone}) }}</h2>
           <p class="mb-5">{{ $t('milestone.latest_som', {nr: milestone}) }}</p>
           <p
-            v-if="currentSom && currentSom.som_reviews.length > 0"
+            v-if="currentSom && currentSom.som_reviews.length > 0 && canSubmitSom"
             :class="{'is-danger': currentSomStatus === 'no_approvals', 'is-success': currentSomStatus === 'all_approvals'}"
             class="notification is-light"
           >
@@ -35,7 +35,7 @@
       <o-button
         size="medium"
         @click="othersVisible = !othersVisible">
-        {{(othersVisible) ? 'Hide archived SoMs' : 'Show archived SoMs'}}
+        {{(othersVisible) ? $t('milestone.hide_archived_soms') : $t('milestone.show_archived_soms')}}
       </o-button>
       <div v-if="othersVisible">
         <h3 class="mt-6 subtitle">{{ $t('milestone.archived', {nr: milestone}) }}</h3>

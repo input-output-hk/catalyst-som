@@ -58,7 +58,9 @@ export default {
     resubmission_clear: "Cancel",
     all_approvals: "At the moment your SoM was approved by all the reviewers. Please wait for additional reviews or for SoM signoff. After the SoM will be signed off you will be able to submit Proof of Achivement.",
     some_approvals: "Your SoM was partially approved. Please proceed with a new submission of the SoM addressing the comments made by reviewers by using the button on the right.",
-    no_approvals: "Your SoM was not approved. Please resubmit it addressing the comments made on reviews by using the button on the right."
+    no_approvals: "Your SoM was not approved. Please resubmit it addressing the comments made on reviews by using the button on the right.",
+    show_archived_soms: "Show archived SoMs",
+    hide_archived_soms: "Hide archived SoMs"
   },
   milestone_recap: {
     title: "M {nr}",
@@ -82,6 +84,7 @@ export default {
     reviews: "PoA reviews",
     signed_off_at: "Signed off at:",
     submit: "Submit review for this PoA",
+    resubmit: "Resubmit review for this PoA",
     signoff: "Signoff"
   },
   signoff: {
@@ -139,6 +142,7 @@ export default {
     signed_off_at: "Signed off at:",
     open_reviews: "Open reviews for this Milestone",
     submit_review: "Submit review for this SoM",
+    resubmit_review: "Resubmit review for this SoM",
     submit_poa: "Submit new PoA",
     signoff: "Signoff",
     not_submitted: "Statement of Milestone not submitted yet!"

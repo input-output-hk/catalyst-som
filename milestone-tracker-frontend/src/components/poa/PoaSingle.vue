@@ -33,7 +33,7 @@
         size="medium"
         variant="primary"
         @click="newReviewVisible = !newReviewVisible">
-          {{ $t('poa.submit') }}
+          {{ (currentUserReviewSubmission) ? $t('poa.resubmit') : $t('poa.submit') }}
         </o-button>
         <div v-if="current && canSignoff && !locked">
           <o-button
@@ -90,6 +90,14 @@ const confirmSignoff = ref(false)
 
 const locked = computed(() => {
   return props.poa.signoffs.length
+})
+
+const currentUserReviewSubmission = computed(() => {
+  if (props.poa.poas_reviews.length > 0) {
+    const currentUserReview = props.poa.poas_reviews.find(review => review.user_id === useUser().user.id)
+    return (currentUserReview)
+  }
+  return false
 })
 
 </script>

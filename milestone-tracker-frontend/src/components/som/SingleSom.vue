@@ -93,7 +93,7 @@
               variant="primary"
               size="medium"
               @click="newReviewVisible = !newReviewVisible">
-              {{ $t('som.submit_review') }}
+              {{ (currentUserReviewSubmission) ? $t('som.resubmit_review') : $t('som.submit_review') }}
             </o-button>
           </div>
           <div v-if="current && canWriteSom(proposal.id) && locked && !poaLocked" class="mr-4">
@@ -186,6 +186,14 @@ const poaLocked = computed(() => {
 
 const somReviewsVisible = computed(() => {
   return props.som.som_reviews.length > 0
+})
+
+const currentUserReviewSubmission = computed(() => {
+  if (somReviewsVisible.value) {
+    const currentUserReview = props.som.som_reviews.find(review => review.user_id === useUser().user.id)
+    return (currentUserReview)
+  }
+  return false
 })
 
 watch(()=>bus.value.get('getSomsBus'), () => {
