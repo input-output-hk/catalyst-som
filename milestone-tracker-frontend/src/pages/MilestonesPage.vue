@@ -17,7 +17,7 @@
         </div>
       </div>
     </section>
-    <div class="content columns is-multiline" v-if="proposal.milestones_qty">
+    <div v-if="proposal.milestones_qty" class="content columns is-multiline">
       <div class="column is-12 milestones-wrapper">
         <o-tabs v-model="activeTab" type="boxed">
           <o-tab-item v-for="ml in [...Array(proposal.milestones_qty).keys()]" :key="`ml-${ml + 1}`">

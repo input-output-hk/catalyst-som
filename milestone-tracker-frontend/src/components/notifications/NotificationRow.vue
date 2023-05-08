@@ -5,8 +5,8 @@
     <td>{{$d(item.created_at, 'long')}}</td>
     <td>
       <span v-if="isReview">
-        <span class="tag is-success" v-if="(approved)">{{ $t('pages.notifications.approved') }}</span>
-        <span class="tag is-danger" v-else>{{ $t('pages.notifications.not_approved') }}</span>
+        <span v-if="(approved)" class="tag is-success">{{ $t('pages.notifications.approved') }}</span>
+        <span v-else class="tag is-danger">{{ $t('pages.notifications.not_approved') }}</span>
         <br />
       </span>
       <router-link :to="{name: 'proposal-milestones-detail', params: {id: item.project_id, milestone: item.milestone}}">

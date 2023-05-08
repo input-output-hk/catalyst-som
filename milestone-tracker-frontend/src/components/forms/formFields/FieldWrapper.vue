@@ -11,7 +11,7 @@
 
     <template #label>
       <p>{{ props.label }}<br />
-        <span class="help-description" v-if="props.help">{{ props.help }}</span>
+        <span v-if="props.help" class="help-description">{{ props.help }}</span>
       </p>
     </template>
     <template #message>

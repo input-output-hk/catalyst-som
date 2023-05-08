@@ -49,7 +49,13 @@ export default {
   milestone: {
     som: "Statement of Milestone {nr}",
     latest_som: "Latest submission from proposers of the Statement of Milestone {nr}.",
-    archived: "Archived Statements of Milestone {nr}"
+    archived: "Archived Statements of Milestone {nr}",
+    submit_new_som: "Submit new SoM",
+    resubmit_som: "Resubmit SoM",
+    resubmission_title: "SoM resubmission confirm",
+    resubmission_msg: "Are you sure you want to resubmit this SoM? The current SoM and all its reviews will be archived. The new SoM submission will have to go through the review process again.",
+    resubmission_confirm: "Proceed with resubmission",
+    resubmission_clear: "Cancel"
   },
   milestone_recap: {
     title: "M {nr}",

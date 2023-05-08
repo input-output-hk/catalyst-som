@@ -11,8 +11,8 @@
             class="new-som"
             size="medium"
             variant="primary"
-            @click="newVisible = !newVisible">
-            {{(newVisible) ? 'Hide submit new SoMs' : 'Submit new SoM'}}
+            @click="_handleNewSom()">
+            {{(currentSom) ? $t('milestone.resubmit_som') : $t('milestone.submit_new_som')}}
           </o-button>
         </div>
       </div>
@@ -51,6 +51,9 @@
           />
       </div>
     </o-modal>
+    <o-modal v-model:active="confirmResubmission">
+      <resubmission-confirm @clear-confirm="confirmResubmission = false" @confirm="_handleResubmission()" />
+    </o-modal>
   </div>
 </template>
 
@@ -76,6 +79,20 @@ const props = defineProps({
 
 const othersVisible = ref(false)
 const newVisible = ref(false)
+const confirmResubmission = ref(false)
+
+const _handleNewSom = () => {
+  if (currentSom.value) {
+    confirmResubmission.value = true
+  } else {
+    newVisible.value = true
+  }
+}
+
+const _handleResubmission = () => {
+  confirmResubmission.value = false
+  newVisible.value = true
+}
 
 const soms = computed(() => {
   try {
@@ -146,4 +163,5 @@ onMounted(async () => {
 <script>
 import SingleSom from '@/components/som/SingleSom.vue'
 import NewSom from '@/components/forms/NewSom.vue'
+import ResubmissionConfirm from '@/components/proposal/ResubmissionConfirm.vue'
 </script>
