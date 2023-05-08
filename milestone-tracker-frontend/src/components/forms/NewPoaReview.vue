@@ -80,7 +80,8 @@ let SchemaForm = SchemaFormFactory([
 const handleCreatePoaReview = async () => {
   const response =  await createPoaReview({
     ...formData.value,
-    poas_id: props.poa.id
+    poas_id: props.poa.id,
+    current: true
   }, props.som)
   if (response) {
     _clearForm()

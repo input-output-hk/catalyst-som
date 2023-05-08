@@ -78,7 +78,8 @@ let SchemaForm = SchemaFormFactory([
 const handleCreateSomReview = async () => {
   const response =  await createSomReview({
     ...formData.value,
-    som_id: props.som.id
+    som_id: props.som.id,
+    current: true
   }, props.som)
   if (response) {
     _clearForm()
