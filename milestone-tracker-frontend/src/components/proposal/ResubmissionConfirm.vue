@@ -1,5 +1,5 @@
 <template>
-  <div class="block new-signoff-popup">
+  <div class="block som-resubmission-popup">
     <div class="card">
       <header class="card-header">
         <p class="card-header-title">

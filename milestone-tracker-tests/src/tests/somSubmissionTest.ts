@@ -7,6 +7,28 @@ const milestoneUrl = (proposalId: number, milestoneId: number) => {
   return `http://localhost:5173/proposals/${proposalId}/milestones/${milestoneId}`
 }
 
+const fillAndResubmit = (
+  browser: NightwatchBrowser,
+  proposalId: number,
+  milestoneId: number,
+  user: String
+) => {
+  const loginPage = browser.page.loginPage();
+  const milestonePage = browser.page.milestonePage();
+  const sSeed = stringSeed();
+  const nSeed = numberSeed();
+  loginPage.navigate().loginAs(user);
+  browser.navigateTo(milestoneUrl(proposalId, milestoneId));
+  milestonePage.assert.elementPresent(`@newSomButton${milestoneId}`);
+  milestonePage.startSomResubmission(milestoneId).fillSom(sSeed, nSeed).submitSom()
+    .expect.element(`@title${milestoneId}`).text.to.contain(`${stringBase}${sSeed}`)
+    .expect.element(`@outputs${milestoneId}`).text.to.contain(`${stringBase}${sSeed}`)
+    .expect.element(`@success_criteria${milestoneId}`).text.to.contain(`${stringBase}${sSeed}`)
+    .expect.element(`@evidence${milestoneId}`).text.to.contain(`${stringBase}${sSeed}`)
+    //.expect.element(`@cost${ml}`).text.to.contain(`${numberBase+nSeed}`)
+  loginPage.logout();
+}
+
 const fillAndSubmit = (
   browser: NightwatchBrowser,
   proposalId: number,
@@ -49,7 +71,7 @@ const somSubmissionTest: NightwatchTests = {
     browser.resizeWindow(1280, 800);
   },
   'Proposer 1 SoM submission'(browser: NightwatchBrowser) {
-    fillAndSubmit(browser, 900002, 4, 'proposer-1')
+    fillAndResubmit(browser, 900002, 4, 'proposer-1') // resubmission
   },
   'Proposer 1 fail SoM submission'(browser: NightwatchBrowser) {
     // submit a som in proposals not owned, always fails
@@ -60,9 +82,9 @@ const somSubmissionTest: NightwatchTests = {
   },
   'Admin SoM submissions'(browser: NightwatchBrowser) {
     // submit a som in each proposal, can't fail
-    fillAndSubmit(browser, 900002, 4, 'admin')
-    fillAndSubmit(browser, 900003, 4, 'admin')
-    fillAndSubmit(browser, 900007, 2, 'admin')
+    fillAndResubmit(browser, 900002, 4, 'admin') // resubmission
+    fillAndResubmit(browser, 900003, 4, 'admin') // resubmission
+    fillAndSubmit(browser, 900007, 2, 'admin') // submission
   },
   'CT SoM submissions': () => {
     // submit a som in each proposal, always fails

@@ -8,6 +8,13 @@ const milestonePageCommands = {
       .click(`@newSomButton${ml}`)
       .waitForElementVisible('@newSomPopup', 10000)
   },
+  startSomResubmission(this: MilestonePage, ml: number) {
+    return this.waitForElementVisible(`@newSomButton${ml}`, 10000)
+      .click(`@newSomButton${ml}`)
+      .waitForElementVisible('@newSomResubmissionPopup', 10000)
+      .waitForElementVisible('@newSomResubmissionPopupProceed', 10000)
+      .click(`@newSomResubmissionPopupProceed`)
+  },
   fillSom(this: MilestonePage, stringSeed: String, numberSeed: number) {
     return this.waitForElementVisible('@titleInput', 10000)
       .waitForElementVisible('@outputsInput', 10000)
@@ -128,6 +135,12 @@ const milestonePage: PageObjectModel = {
   elements: {
     newSomPopup: {
       selector: '.new-som-popup',
+    },
+    newSomResubmissionPopup: {
+      selector: '.som-resubmission-popup',
+    },
+    newSomResubmissionPopupProceed: {
+      selector: '.som-resubmission-popup .button.is-primary',
     },
     titleInput: {
       selector: '[model="title"] input'

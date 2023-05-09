@@ -98,8 +98,8 @@ const somReviewSubmissionTest: NightwatchTests = {
     goCantSubmit(browser, 900003, 1, 'admin')
   },
   'Proposers notifications'(this: NightwatchTests, browser: NightwatchBrowser) {
-    checkNotifications(browser, 'proposer-2', this.count, '@somReviewsNotifications', 3)
-    checkNotifications(browser, 'proposer-1', this.count, '@somReviewsNotifications', 3)
+    checkNotifications(browser, 'proposer-2', this.count, '@somReviewsNotifications', 2)
+    checkNotifications(browser, 'proposer-1', this.count, '@somReviewsNotifications', 2)
     checkNotifications(browser, 'proposer-2', this.count, '@signoffReceivedNotifications', 0)
   },
   'Proposer 2 SoM Review submission'(browser: NightwatchBrowser) {

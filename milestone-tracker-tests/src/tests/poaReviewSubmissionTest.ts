@@ -86,8 +86,8 @@ const poaReviewSubmissionTest: NightwatchTests = {
     goCantSubmit(browser, 900003, 1, 'iog')
   },
   'Proposer 2 notifications'(this: NightwatchTests, browser: NightwatchBrowser) {
-    checkNotifications(browser, 'proposer-2', this.count, '@poaReviewsNotifications', 3)
-    checkNotifications(browser, 'proposer-1', this.count, '@poaReviewsNotifications', 3)
+    checkNotifications(browser, 'proposer-2', this.count, '@poaReviewsNotifications', 1)
+    checkNotifications(browser, 'proposer-1', this.count, '@poaReviewsNotifications', 1)
   },
   'Proposer 2 PoA Review submission'(browser: NightwatchBrowser) {
     goCantSubmit(browser, 900002, 2, 'proposer-2')
