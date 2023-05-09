@@ -1392,9 +1392,11 @@ AS $BODY$
             LEFT OUTER JOIN signoffs ON signoffs.som_id = soms.id
             WHERE
             proposals_users.user_id = auth.uid() AND
-            soms.current = true
+            soms.current = true AND
+            som_reviews.current = true
             GROUP BY proposals.project_id, proposals.title, soms.milestone, som_reviews.created_at, som_reviews.outputs_approves, som_reviews.evidence_approves, som_reviews.success_criteria_approves
-            HAVING count(distinct signoffs.id) = 0;
+            HAVING count(distinct signoffs.id) = 0
+            ORDER BY som_reviews.created_at DESC;
   END;
 $BODY$;
 
@@ -1429,9 +1431,11 @@ AS $BODY$
             LEFT OUTER JOIN signoffs ON signoffs.poa_id = poas.id
             where
             proposals_users.user_id = auth.uid() AND
-            soms.current = true
+            soms.current = true AND
+            poas_reviews.current = true
             GROUP by proposals.project_id, proposals.title, soms.milestone, poas_reviews.created_at, poas_reviews.content_approved
-            HAVING count(distinct signoffs.id) = 0;
+            HAVING count(distinct signoffs.id) = 0
+            ORDER BY poas_reviews.created_at DESC;
   END;
 $BODY$;
 

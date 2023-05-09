@@ -21,7 +21,7 @@
           <poa-review :review="review" />
         </div>
       </o-collapse>
-      <o-collapse v-model:open="archivedReviewsVisible" v-if="archivedReviews.length > 0">
+      <o-collapse v-if="archivedReviews.length > 0" v-model:open="archivedReviewsVisible">
         <template #trigger="props">
           <o-button
             class="open-poa-reviews mt-2"

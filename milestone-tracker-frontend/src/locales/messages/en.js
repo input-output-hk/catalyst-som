@@ -85,7 +85,11 @@ export default {
     signed_off_at: "Signed off at:",
     submit: "Submit review for this PoA",
     resubmit: "Resubmit review for this PoA",
-    signoff: "Signoff"
+    signoff: "Signoff",
+    all_approvals: "At the moment your PoA was approved by all the reviewers. Please wait for additional reviews or for PoA signoff.",
+    some_approvals: "Your PoA was partially approved. Please proceed with a new submission of the PoA addressing the comments made by reviewers by using the button on the right.",
+    no_approvals: "Your PoA was not approved. Please resubmit it addressing the comments made on reviews by using the button on the right.",
+
   },
   signoff: {
     poa_signed_off_at: "PoA signed off at:"
