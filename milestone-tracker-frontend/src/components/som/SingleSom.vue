@@ -157,7 +157,6 @@
         </div>
       </section>
       <section v-if="newReviewVisible" class="section pt-0">
-        
         <new-som-review
           :som="som"
           @som-review-submitted="newReviewVisible = false" />

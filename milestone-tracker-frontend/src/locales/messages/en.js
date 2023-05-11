@@ -87,8 +87,8 @@ export default {
     resubmit: "Resubmit review for this PoA",
     signoff: "Signoff",
     all_approvals: "At the moment your PoA was approved by all the reviewers. Please wait for additional reviews or for PoA signoff.",
-    some_approvals: "Your PoA was partially approved. Please proceed with a new submission of the PoA addressing the comments made by reviewers by using the button on the right.",
-    no_approvals: "Your PoA was not approved. Please resubmit it addressing the comments made on reviews by using the button on the right.",
+    some_approvals: "Your PoA was partially approved. Please proceed with a new submission of the PoA addressing the comments made by reviewers by using the button above.",
+    no_approvals: "Your PoA was not approved. Please resubmit it addressing the comments made on reviews by using the button above.",
 
   },
   signoff: {
@@ -109,7 +109,11 @@ export default {
   },
   poa_review: {
     from: "From",
-    submitted_at: "Submitted at:"
+    submitted_at: "Submitted at:",
+    resubmission_title: "PoA review resubmission",
+    resubmission_msg: "You have already submitted a review for this PoA. Do you want to resubmit it? The previous submission will be archived.",
+    resubmission_confirm: "Proceed with resubmission",
+    resubmission_clear: "Cancel"
   },
   new_poa_review: {
     title: "New Review for Proof of Achievement",
