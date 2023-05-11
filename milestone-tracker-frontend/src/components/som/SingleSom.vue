@@ -116,9 +116,19 @@
               class="new-som-review-button"
               variant="primary"
               size="medium"
-              @click="newReviewVisible = !newReviewVisible">
+              @click="_handleSomReviewSubmission()">
               {{ (currentUserReviewSubmission) ? $t('som.resubmit_review') : $t('som.submit_review') }}
             </o-button>
+            <o-modal v-model:active="confirmSomReviewResubmission">
+              <resubmission-confirm
+                :title="$t('som_review.resubmission_title')"
+                :msg="$t('som_review.resubmission_msg')"
+                :confirm-msg="$t('som_review.resubmission_confirm')"
+                :clear-msg="$t('som_review.resubmission_clear')"
+                @clear-confirm="confirmSomReviewResubmission = false"
+                @confirm="_handleSomReviewResubmission()"
+              />
+            </o-modal>
           </div>
           <div v-if="current && canWriteSom(proposal.id) && locked && !poaLocked" class="mr-4">
             <o-button
@@ -147,6 +157,7 @@
         </div>
       </section>
       <section v-if="newReviewVisible" class="section pt-0">
+        
         <new-som-review
           :som="som"
           @som-review-submitted="newReviewVisible = false" />
@@ -190,6 +201,7 @@ const { bus } = useEventsBus()
 const reviewsVisible = ref(false)
 const archivedReviewsVisible = ref(false)
 const newReviewVisible = ref(false)
+const confirmSomReviewResubmission = ref(false)
 const newPoAVisible = ref(false)
 const confirmSignoff = ref(false)
 const criteria = ref(['outputs', 'success_criteria', 'evidence'])
@@ -229,6 +241,23 @@ const archivedSomReviews = computed(() => {
   return props.som.som_reviews.filter(review => !review.current)
 })
 
+const _handleSomReviewResubmission = () => {
+  confirmSomReviewResubmission.value = false
+  newReviewVisible.value = true
+}
+
+const _handleSomReviewSubmission = () => {
+  if (newReviewVisible.value) {
+    newReviewVisible.value = false
+  } else {
+    if (currentUserReviewSubmission.value) {
+      confirmSomReviewResubmission.value = true
+    } else {
+      newReviewVisible.value = true
+    }
+  }
+}
+
 watch(()=>bus.value.get('getSomsBus'), () => {
   newPoAVisible.value = false
 })
@@ -242,6 +271,7 @@ import NewSomReview from '@/components/forms/NewSomReview.vue'
 import NewPoa from '@/components/forms/NewPoa.vue'
 import PoaList from '@/components/poa/PoaList.vue'
 import NewSignoff from '@/components/forms/NewSignoff.vue'
+import ResubmissionConfirm from '@/components/proposal/ResubmissionConfirm.vue'
 </script>
 
 <style lang="scss" scoped>

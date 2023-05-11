@@ -183,7 +183,11 @@ export default {
     system: "System",
     outputs: "outputs",
     acceptance_criteria: "acceptance criteria",
-    evidence: "evidence"
+    evidence: "evidence",
+    resubmission_title: "SoM review resubmission",
+    resubmission_msg: "You have already submitted a review for this SoM. Do you want to resubmit it? The previous submission will be archived.",
+    resubmission_confirm: "Proceed with resubmission",
+    resubmission_clear: "Cancel"
   },
   new_som_review: {
     title: "New Review for Statement of Milestone",

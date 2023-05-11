@@ -60,7 +60,14 @@
       </div>
     </o-modal>
     <o-modal v-model:active="confirmResubmission">
-      <resubmission-confirm @clear-confirm="confirmResubmission = false" @confirm="_handleResubmission()" />
+      <resubmission-confirm
+        :title="$t('milestone.resubmission_title')"
+        :msg="$t('milestone.resubmission_msg')"
+        :confirm-msg="$t('milestone.resubmission_confirm')"
+        :clear-msg="$t('milestone.resubmission_clear')"
+        @clear-confirm="confirmResubmission = false"
+        @confirm="_handleResubmission()"
+      />
     </o-modal>
   </div>
 </template>
