@@ -1185,7 +1185,8 @@ AS $BODY$
               )
               and soms.current = true
               group by soms.milestone, soms.proposal_id, soms.title, soms.created_at, proposals.project_id
-              having count(distinct signoffs.id) = 0;
+              having count(distinct signoffs.id) = 0
+              order by soms.created_at desc;
   END;
 $BODY$;
 
@@ -1320,7 +1321,8 @@ AS $BODY$
               )
               and poas.current = true
               group by soms.milestone, soms.proposal_id, soms.title, poas.created_at, proposals.project_id
-              having count(distinct signoffs.id) = 0;
+              having count(distinct signoffs.id) = 0
+              order by poas.created_at DESC;
   END;
 $BODY$;
 
@@ -1356,7 +1358,8 @@ AS $BODY$
           LEFT outer join proposals_users ON proposals_users.proposal_id = proposals.id
           WHERE
           signoffs.created_at >= _date
-          AND proposals_users.user_id = auth.uid();
+          AND proposals_users.user_id = auth.uid()
+          ORDER BY signoffs.created_at DESC;
 
   END;
 $BODY$;
