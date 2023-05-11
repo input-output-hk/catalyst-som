@@ -25,7 +25,7 @@
               #header>
               <span>{{ $t('pages.milestones.milestone', {nr: ml + 1}) }}</span>
             </template>
-            <single-milestone :proposal="proposal" :milestone="ml + 1" />
+            <single-milestone :proposal="proposal" :milestone="ml + 1" @refresh-recap="refreshRecap" />
           </o-tab-item>
         </o-tabs>
       </div>
@@ -74,10 +74,16 @@ const activeTab = computed({
   }
 })
 
+const refreshRecap = async () => {
+  console.log('refreshRecap')
+  snapshot.value = await getProposalSnapshot(proposalId.value)
+}
+
 onMounted(async () => {
   proposal.value = await getProposal(proposalId.value)
   snapshot.value = await getProposalSnapshot(proposalId.value)
 })
+
 
 </script>
 

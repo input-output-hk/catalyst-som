@@ -55,6 +55,7 @@
           :soms="otherMilestonesSoms"
           :som="currentSom"
           @som-submitted="newVisible = false"
+          @refresh-recap="emit('refreshRecap')"
           />
       </div>
     </o-modal>
@@ -83,6 +84,8 @@ const props = defineProps({
     default: 0
   }
 })
+
+const emit = defineEmits(['refreshRecap'])
 
 const othersVisible = ref(false)
 const newVisible = ref(false)

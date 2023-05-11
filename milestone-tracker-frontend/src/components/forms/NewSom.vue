@@ -54,7 +54,7 @@ const props = defineProps({
     default: () => []
   },
 })
-const emit = defineEmits(['somSubmitted'])
+const emit = defineEmits(['somSubmitted', 'refreshRecap'])
 import { useSoms } from '@/store/soms.js'
 import { useFormFields } from '@/composables/useFormFields.js'
 import { getPrevMilestone } from '@/utils/milestones'
@@ -63,10 +63,14 @@ const { t, n } = useI18n()
 const { createSom } = useSoms()
 
 const otherSoms = computed(() => {
-  if (props.som) {
+  if (props.soms) {
     return props.soms.filter((som) => {
       if (som) {
-        return props.som.id !== som.id
+        if (props.som) {
+          return props.som.id !== som.id
+        } else {
+          return true
+        }
       }
       return false
     })
@@ -99,14 +103,20 @@ const maxMilestoneCost = computed(() => {
 })
 
 const costRule = computed(() => {
-  const rule = yup.number().required().min(1)
-  return rule.max(maxMilestoneCost.value)
+  const rule = yup.number().integer().required().min(1)
+  return rule.max(maxMilestoneCost.value).test(
+    'Only digits',
+    'Error: field can contain only digits',
+    (value) => {
+      return /^\d+$/.test(value)
+    }
+  )
 })
 
 const monthRule = computed(() => {
   const rule = yup.number().required()
   const min = getPrevMilestone(props.soms, props.milestone)
-  return rule.min((min) ? parseInt(min.month) : 1)
+  return rule.min((min) ? parseInt(min.month) + 1 : 1)
 })
 
 const completionRule = computed(() => {
@@ -137,6 +147,7 @@ const initialSchema = computed(() => {
     cost: {
       type: 'number',
       validations: costRule.value,
+      step: 1,
       help: t('new_som.cost_help', {maxCost: n(maxMilestoneCost.value, 'currency')}),
     },
     month: {
@@ -190,14 +201,19 @@ const clone = () => {
 const handleCreateSom = async () => {
   const response =  await createSom({
     ...formData.value,
+    cost: parseInt(formData.value.cost),
     current: true,
     proposal_id: props.proposal.id,
     challenge_id: props.proposal.challenge_id,
     milestone: props.milestone
   })
   if (response) {
-    _clearForm()
     emit('somSubmitted')
+    const fullSubmissions = (props.proposal.milestones_qty === otherSoms.value.length + 1)
+    if (fullSubmissions) {
+      emit('refreshRecap')
+    }
+    _clearForm()
   }
 }
 
