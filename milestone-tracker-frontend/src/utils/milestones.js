@@ -56,37 +56,39 @@ const getCurrentMilestone = (milestones) => {
 
 const getNextPayment = (milestones, current) => {
   if (current && milestones.length > 0) {
-    const lastMilestone = Math.max(...milestones.map(m => m.milestone))
-    let chunkPayment = 0
-    const poaPayment = roundAmounts(
-      Math.max(current.availablePoAPayments - milestones[0].funds_distributed, 0)
-    )
-    const excludeCurrent = (
-      (current.milestone.milestone === lastMilestone) &&
-      (current.milestone.poa_signoff_count > 0)
-    )
-    const currentDistributedFunds = (
-      milestones[0].funds_distributed +
-      poaPayment -
-      ((excludeCurrent) ? 0 : current.availablePoAPayments)
-    )
-    let currentChunksPayed = 0
-    if (currentDistributedFunds > 0) {
-      currentChunksPayed = Math.round(currentDistributedFunds / current.milestone.monthly_payment * 1)/1
-    }
-    const currentLeftToPay = roundAmounts(current.milestone.cost - currentDistributedFunds)
-    if (currentChunksPayed < current.milestone.duration) {
-      chunkPayment = Math.min(current.milestone.monthly_payment, currentLeftToPay)
-      if (current.milestone.milestone === lastMilestone) {
-        if ((current.milestone.duration - currentChunksPayed) === 1) {
-          chunkPayment = 0
+    if (current.milestone) {
+      const lastMilestone = Math.max(...milestones.map(m => m.milestone))
+      let chunkPayment = 0
+      const poaPayment = roundAmounts(
+        Math.max(current.availablePoAPayments - milestones[0].funds_distributed, 0)
+      )
+      const excludeCurrent = (
+        (current.milestone.milestone === lastMilestone) &&
+        (current.milestone.poa_signoff_count > 0)
+      )
+      const currentDistributedFunds = (
+        milestones[0].funds_distributed +
+        poaPayment -
+        ((excludeCurrent) ? 0 : current.availablePoAPayments)
+      )
+      let currentChunksPayed = 0
+      if (currentDistributedFunds > 0) {
+        currentChunksPayed = Math.round(currentDistributedFunds / current.milestone.monthly_payment * 1)/1
+      }
+      const currentLeftToPay = roundAmounts(current.milestone.cost - currentDistributedFunds)
+      if (currentChunksPayed < current.milestone.duration) {
+        chunkPayment = Math.min(current.milestone.monthly_payment, currentLeftToPay)
+        if (current.milestone.milestone === lastMilestone) {
+          if ((current.milestone.duration - currentChunksPayed) === 1) {
+            chunkPayment = 0
+          }
         }
       }
-    }
-    return {
-      poaPayment,
-      chunkPayment,
-      currentLeftToPay
+      return {
+        poaPayment,
+        chunkPayment,
+        currentLeftToPay
+      }
     }
   }
 }
