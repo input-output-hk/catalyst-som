@@ -125,6 +125,7 @@
                 :msg="$t('som_review.resubmission_msg')"
                 :confirm-msg="$t('som_review.resubmission_confirm')"
                 :clear-msg="$t('som_review.resubmission_clear')"
+                :entity="'som-review'"
                 @clear-confirm="confirmSomReviewResubmission = false"
                 @confirm="_handleSomReviewResubmission()"
               />

@@ -34,6 +34,7 @@ const milestonePageCommands = {
       .click('@monthOption')
       .dragAndDrop('@completionInput', {x: 400, y: 0})
   },
+  
   submitSom(this: MilestonePage) {
     return this.waitForElementVisible('@submitSomInput', 10000)
       .click('@submitSomInput')
@@ -43,6 +44,13 @@ const milestonePageCommands = {
     return this.waitForElementVisible(`@newSomReviewButton${ml}`, 10000)
       .click(`@newSomReviewButton${ml}`)
       .waitForElementVisible(`@newSomReview${ml}`, 10000)
+  },
+  startSomReviewResubmission(this: MilestonePage, ml: number) {
+    return this.waitForElementVisible(`@newSomReviewButton${ml}`, 10000)
+      .click(`@newSomReviewButton${ml}`)
+      .waitForElementVisible('@newSomReviewResubmissionPopup', 10000)
+      .waitForElementVisible('@newSomReviewResubmissionPopupProceed', 10000)
+      .click(`@newSomReviewResubmissionPopupProceed`)
   },
   fillSomReview(this: MilestonePage, ml: number, stringSeed: String) {
     return this.waitForElementVisible(`@outputs_approved${ml}`, 10000)
@@ -168,6 +176,12 @@ const milestonePage: PageObjectModel = {
     },
     newPoAReviewResubmissionPopupProceed: {
       selector: '.poa-review-resubmission-popup .button.is-primary',
+    },
+    newSomReviewResubmissionPopup: {
+      selector: '.som-review-resubmission-popup',
+    },
+    newSomReviewResubmissionPopupProceed: {
+      selector: '.som-review-resubmission-popup .button.is-primary',
     },
     titleInput: {
       selector: '[model="title"] input'
