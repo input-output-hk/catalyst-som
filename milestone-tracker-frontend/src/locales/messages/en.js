@@ -89,7 +89,10 @@ export default {
     all_approvals: "At the moment your PoA was approved by all the reviewers. Please wait for additional reviews or for PoA signoff.",
     some_approvals: "Your PoA was partially approved. Please proceed with a new submission of the PoA addressing the comments made by reviewers by using the button above.",
     no_approvals: "Your PoA was not approved. Please resubmit it addressing the comments made on reviews by using the button above.",
-
+    resubmission_title: "PoA resubmission",
+    resubmission_msg: "Are you sure you want to resubmit this PoA? The current PoA and all its reviews will be archived. The new PoA submission will have to go through the review process again.",
+    resubmission_confirm: "Proceed with resubmission",
+    resubmission_clear: "Cancel"
   },
   signoff: {
     poa_signed_off_at: "PoA signed off at:"
@@ -156,6 +159,7 @@ export default {
     submit_review: "Submit review for this SoM",
     resubmit_review: "Resubmit review for this SoM",
     submit_poa: "Submit new PoA",
+    resubmit_poa: "Resubmit PoA",
     signoff: "Signoff",
     not_submitted: "Statement of Milestone not submitted yet!"
   },

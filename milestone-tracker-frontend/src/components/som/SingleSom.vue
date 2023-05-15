@@ -135,11 +135,21 @@
               class="new-poa"
               variant="primary"
               size="medium"
-              @click="newPoAVisible = !newPoAVisible">
-              {{ $t('som.submit_poa') }}
+              @click="_handlePoaSubmission()">
+              {{ (som.poas.length > 0) ? $t('som.resubmit_poa') : $t('som.submit_poa') }}
             </o-button>
             <o-modal v-model:active="newPoAVisible" class="new-poa-popup" >
               <new-poa :proposal="proposal" :som="som" :milestone="som.milestone" />
+            </o-modal>
+            <o-modal v-model:active="confirmPoaResubmission">
+              <resubmission-confirm
+                :title="$t('poa.resubmission_title')"
+                :msg="$t('poa.resubmission_msg')"
+                :confirm-msg="$t('poa.resubmission_confirm')"
+                :clear-msg="$t('poa.resubmission_clear')"
+                @clear-confirm="confirmPoaResubmission = false"
+                @confirm="_handlePoaResubmission()"
+              />
             </o-modal>
           </div>
           <div v-if="current && canSignoff && !locked">
@@ -201,6 +211,7 @@ const reviewsVisible = ref(false)
 const archivedReviewsVisible = ref(false)
 const newReviewVisible = ref(false)
 const confirmSomReviewResubmission = ref(false)
+const confirmPoaResubmission = ref(false)
 const newPoAVisible = ref(false)
 const confirmSignoff = ref(false)
 const criteria = ref(['outputs', 'success_criteria', 'evidence'])
@@ -253,6 +264,23 @@ const _handleSomReviewSubmission = () => {
       confirmSomReviewResubmission.value = true
     } else {
       newReviewVisible.value = true
+    }
+  }
+}
+
+const _handlePoaResubmission = () => {
+  confirmPoaResubmission.value = false
+  newPoAVisible.value = true
+}
+
+const _handlePoaSubmission = () => {
+  if (newPoAVisible.value) {
+    newPoAVisible.value = false
+  } else {
+    if (props.som.poas.length > 0) {
+      confirmPoaResubmission.value = true
+    } else {
+      newPoAVisible.value = true
     }
   }
 }
