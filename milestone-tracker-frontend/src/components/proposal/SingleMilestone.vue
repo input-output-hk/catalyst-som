@@ -137,13 +137,17 @@ const currentSom = computed(() => {
 
 const currentSomStatus = computed(() => {
   try {
-    const reviews = currentSom.value.som_reviews.map((r) => (r.outputs_approves && r.evidence_approves && r.success_criteria_approves))
-    if (reviews.every((r) => (r))) {
-      return 'all_approvals'
-    } else if (reviews.some((r) => (r))) {
-      return 'some_approvals'
+    if (currentSom.value.som_reviews.length === 1) {
+      return 'waiting_reviews'
     } else {
-      return 'no_approvals'
+      const reviews = currentSom.value.som_reviews.map((r) => (r.outputs_approves && r.evidence_approves && r.success_criteria_approves))
+      if (reviews.every((r) => (r))) {
+        return 'all_approvals'
+      } else if (reviews.some((r) => (r))) {
+        return 'some_approvals'
+      } else {
+        return 'no_approvals'
+      }
     }
   } catch {
     return null

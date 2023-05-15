@@ -62,13 +62,17 @@ const othersVisible = ref(false)
 
 const currentPoaStatus = computed(() => {
   try {
-    const reviews = renderedPoas.value.current.poas_reviews.filter((r) => r.current).map((r) => (r.content_approved))
-    if (reviews.every((r) => (r))) {
-      return 'all_approvals'
-    } else if (reviews.some((r) => (r))) {
-      return 'some_approvals'
+    if (renderedPoas.value.current.poas_reviews.length === 1) {
+      return 'waiting_reviews'
     } else {
-      return 'no_approvals'
+      const reviews = renderedPoas.value.current.poas_reviews.filter((r) => r.current).map((r) => (r.content_approved))
+      if (reviews.every((r) => (r))) {
+        return 'all_approvals'
+      } else if (reviews.some((r) => (r))) {
+        return 'some_approvals'
+      } else {
+        return 'no_approvals'
+      }
     }
   } catch {
     return null

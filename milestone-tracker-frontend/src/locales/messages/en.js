@@ -59,6 +59,7 @@ export default {
     all_approvals: "At the moment your SoM was approved by all the reviewers. Please wait for additional reviews or for SoM signoff. After the SoM will be signed off you will be able to submit Proof of Achivement.",
     some_approvals: "Your SoM was partially approved. Please proceed with a new submission of the SoM addressing the comments made by reviewers by using the button on the right.",
     no_approvals: "Your SoM was not approved. Please resubmit it addressing the comments made on reviews by using the button on the right.",
+    waiting_reviews: "Please wait for additional reviews or for SoM signoff.",
     show_archived_soms: "Show archived SoMs",
     hide_archived_soms: "Hide archived SoMs"
   },
@@ -89,6 +90,7 @@ export default {
     all_approvals: "At the moment your PoA was approved by all the reviewers. Please wait for additional reviews or for PoA signoff.",
     some_approvals: "Your PoA was partially approved. Please proceed with a new submission of the PoA addressing the comments made by reviewers by using the button above.",
     no_approvals: "Your PoA was not approved. Please resubmit it addressing the comments made on reviews by using the button above.",
+    waiting_reviews: "Please wait for additional reviews or for PoA signoff.",
     resubmission_title: "PoA resubmission",
     resubmission_msg: "Are you sure you want to resubmit this PoA? The current PoA and all its reviews will be archived. The new PoA submission will have to go through the review process again.",
     resubmission_confirm: "Proceed with resubmission",
