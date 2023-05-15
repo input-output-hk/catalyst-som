@@ -147,6 +147,7 @@
                 :msg="$t('poa.resubmission_msg')"
                 :confirm-msg="$t('poa.resubmission_confirm')"
                 :clear-msg="$t('poa.resubmission_clear')"
+                :entity="'poa'"
                 @clear-confirm="confirmPoaResubmission = false"
                 @confirm="_handlePoaResubmission()"
               />

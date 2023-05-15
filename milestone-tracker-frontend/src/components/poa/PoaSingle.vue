@@ -44,6 +44,7 @@
             :msg="$t('poa_review.resubmission_msg')"
             :confirm-msg="$t('poa_review.resubmission_confirm')"
             :clear-msg="$t('poa_review.resubmission_clear')"
+            :entity="'poa-review'"
             @clear-confirm="confirmPoaReviewResubmission = false"
             @confirm="_handlePoaReviewResubmission()"
           />

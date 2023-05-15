@@ -1,5 +1,5 @@
 <template>
-  <div class="block som-resubmission-popup">
+  <div :class="`${entity}-resubmission-popup`" class="block">
     <div class="card">
       <header class="card-header">
         <p class="card-header-title">
@@ -45,6 +45,10 @@ defineProps({
   clearMsg: {
     type: String,
     default: ''
+  },
+  entity: {
+    type: String,
+    default: 'som'
   }
 })
 const emit = defineEmits(['clearConfirm', 'confirm'])

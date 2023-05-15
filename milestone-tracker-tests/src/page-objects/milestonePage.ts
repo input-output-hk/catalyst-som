@@ -88,6 +88,13 @@ const milestonePageCommands = {
       .click(`@newPoA${ml}`)
       .waitForElementPresent(`@newPoAPopup${ml}`);
   },
+  startPoAResubmission(this: MilestonePage, ml: number) {
+    return this.waitForElementVisible(`@newPoA${ml}`, 10000)
+      .click(`@newPoA${ml}`)
+      .waitForElementVisible('@newPoAResubmissionPopup', 10000)
+      .waitForElementVisible('@newPoAResubmissionPopupProceed', 10000)
+      .click(`@newPoAResubmissionPopupProceed`)
+  },
   fillPoA(this: MilestonePage, ml: number, stringSeed: String) {
     return this.waitForElementVisible(`@newPoAContent${ml}`, 10000)
       .waitForElementVisible(`@newPoASubmit${ml}`, 10000)
@@ -104,6 +111,14 @@ const milestonePageCommands = {
   startPoAReviewSubmission(this: MilestonePage, ml: number) {
     return this.waitForElementVisible(`@newPoAReview${ml}`, 10000)
       .click(`@newPoAReview${ml}`)
+      .waitForElementPresent(`@newPoAReviewPopup${ml}`);
+  },
+  startPoAReviewResubmission(this: MilestonePage, ml: number) {
+    return this.waitForElementVisible(`@newPoAReview${ml}`, 10000)
+      .click(`@newPoAReview${ml}`)
+      .waitForElementVisible('@newPoAReviewResubmissionPopup', 10000)
+      .waitForElementVisible('@newPoAReviewResubmissionPopupProceed', 10000)
+      .click(`@newPoAReviewResubmissionPopupProceed`)
       .waitForElementPresent(`@newPoAReviewPopup${ml}`);
   },
   fillPoAReview(this: MilestonePage, ml: number, stringSeed: String) {
@@ -141,6 +156,18 @@ const milestonePage: PageObjectModel = {
     },
     newSomResubmissionPopupProceed: {
       selector: '.som-resubmission-popup .button.is-primary',
+    },
+    newPoAResubmissionPopup: {
+      selector: '.poa-resubmission-popup',
+    },
+    newPoAResubmissionPopupProceed: {
+      selector: '.poa-resubmission-popup .button.is-primary',
+    },
+    newPoAReviewResubmissionPopup: {
+      selector: '.poa-review-resubmission-popup',
+    },
+    newPoAReviewResubmissionPopupProceed: {
+      selector: '.poa-review-resubmission-popup .button.is-primary',
     },
     titleInput: {
       selector: '[model="title"] input'
