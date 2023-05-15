@@ -122,7 +122,7 @@ const monthRule = computed(() => {
 const completionRule = computed(() => {
   const rule = yup.number().required()
   const min = getPrevMilestone(props.soms, props.milestone)
-  const offset = (isLastMilestone.value) ? 0 : 10
+  const offset = (isLastMilestone.value) ? 1 : 10
   return rule.min((min) ? parseInt(min.completion) + offset : 10)
 })
 

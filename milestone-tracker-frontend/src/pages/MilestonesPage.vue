@@ -75,7 +75,6 @@ const activeTab = computed({
 })
 
 const refreshRecap = async () => {
-  console.log('refreshRecap')
   snapshot.value = await getProposalSnapshot(proposalId.value)
 }
 
