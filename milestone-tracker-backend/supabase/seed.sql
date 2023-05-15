@@ -30,20 +30,27 @@ INSERT INTO public.proposals (id, title, url, project_id, completion_date, creat
 
 -- SEED USERS
 
-INSERT INTO auth.users (id, email, encrypted_password, instance_id, aud, role, confirmation_sent_at, raw_app_meta_data, created_at, updated_at, confirmed_at, invited_at, confirmation_token, recovery_token, email_change, raw_user_meta_data, email_change_token)
+INSERT INTO auth.users (id, email, encrypted_password, instance_id, aud, role, confirmation_sent_at, raw_app_meta_data, created_at, updated_at, invited_at, confirmation_token, recovery_token, email_change, raw_user_meta_data)
   VALUES
-    (gen_random_uuid(), 'admin@example.org', '$2a$10$I/tkOhdTJFF63NhXLCcoI.Izp8nIns0OIn73dct3k7bNKoFUjCEWu', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', '2022-11-25 12:01:31.354313+00', '{"provider":"email","providers":["email"]}', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '', '', '', '{}', ''),
-    (gen_random_uuid(), 'challenge-team-1@example.org', '$2a$10$I/tkOhdTJFF63NhXLCcoI.Izp8nIns0OIn73dct3k7bNKoFUjCEWu', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', '2022-11-25 12:01:31.354313+00', '{"provider":"email","providers":["email"]}', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '', '', '', '{}', ''),
-    (gen_random_uuid(), 'challenge-team-2@example.org', '$2a$10$I/tkOhdTJFF63NhXLCcoI.Izp8nIns0OIn73dct3k7bNKoFUjCEWu', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', '2022-11-25 12:01:31.354313+00', '{"provider":"email","providers":["email"]}', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '', '', '', '{}', ''),
-    (gen_random_uuid(), 'proposer-1@example.org', '$2a$10$I/tkOhdTJFF63NhXLCcoI.Izp8nIns0OIn73dct3k7bNKoFUjCEWu', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', '2022-11-25 12:01:31.354313+00', '{"provider":"email","providers":["email"]}', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '', '', '', '{}', ''),
-    (gen_random_uuid(), 'proposer-2@example.org', '$2a$10$I/tkOhdTJFF63NhXLCcoI.Izp8nIns0OIn73dct3k7bNKoFUjCEWu', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', '2022-11-25 12:01:31.354313+00', '{"provider":"email","providers":["email"]}', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '', '', '', '{}', ''),
-    (gen_random_uuid(), 'iog@example.org', '$2a$10$I/tkOhdTJFF63NhXLCcoI.Izp8nIns0OIn73dct3k7bNKoFUjCEWu', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', '2022-11-25 12:01:31.354313+00', '{"provider":"email","providers":["email"]}', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '', '', '', '{}', ''),
-    (gen_random_uuid(), 'signoff@example.org', '$2a$10$I/tkOhdTJFF63NhXLCcoI.Izp8nIns0OIn73dct3k7bNKoFUjCEWu', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', '2022-11-25 12:01:31.354313+00', '{"provider":"email","providers":["email"]}', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '', '', '', '{}', '');
+    (gen_random_uuid(), 'admin@example.org', '$2a$10$I/tkOhdTJFF63NhXLCcoI.Izp8nIns0OIn73dct3k7bNKoFUjCEWu', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', '2022-11-25 12:01:31.354313+00', '{"provider":"email","providers":["email"]}', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '', '', '', '{}'),
+    (gen_random_uuid(), 'challenge-team-1@example.org', '$2a$10$I/tkOhdTJFF63NhXLCcoI.Izp8nIns0OIn73dct3k7bNKoFUjCEWu', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', '2022-11-25 12:01:31.354313+00', '{"provider":"email","providers":["email"]}', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '', '', '', '{}'),
+    (gen_random_uuid(), 'challenge-team-2@example.org', '$2a$10$I/tkOhdTJFF63NhXLCcoI.Izp8nIns0OIn73dct3k7bNKoFUjCEWu', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', '2022-11-25 12:01:31.354313+00', '{"provider":"email","providers":["email"]}', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '', '', '', '{}'),
+    (gen_random_uuid(), 'proposer-1@example.org', '$2a$10$I/tkOhdTJFF63NhXLCcoI.Izp8nIns0OIn73dct3k7bNKoFUjCEWu', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', '2022-11-25 12:01:31.354313+00', '{"provider":"email","providers":["email"]}', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '', '', '', '{}'),
+    (gen_random_uuid(), 'proposer-2@example.org', '$2a$10$I/tkOhdTJFF63NhXLCcoI.Izp8nIns0OIn73dct3k7bNKoFUjCEWu', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', '2022-11-25 12:01:31.354313+00', '{"provider":"email","providers":["email"]}', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '', '', '', '{}'),
+    (gen_random_uuid(), 'iog@example.org', '$2a$10$I/tkOhdTJFF63NhXLCcoI.Izp8nIns0OIn73dct3k7bNKoFUjCEWu', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', '2022-11-25 12:01:31.354313+00', '{"provider":"email","providers":["email"]}', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '', '', '', '{}'),
+    (gen_random_uuid(), 'signoff@example.org', '$2a$10$I/tkOhdTJFF63NhXLCcoI.Izp8nIns0OIn73dct3k7bNKoFUjCEWu', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', '2022-11-25 12:01:31.354313+00', '{"provider":"email","providers":["email"]}', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '2022-11-25 12:01:31.351593+00', '', '', '', '{}');
 
 UPDATE public.users SET role = 1 WHERE email = 'challenge-team-1@example.org' OR email = 'challenge-team-2@example.org';
 UPDATE public.users SET role = 2 WHERE email = 'iog@example.org';
 UPDATE public.users SET role = 3 WHERE email = 'admin@example.org';
 UPDATE public.users SET role = 4 WHERE email = 'signoff@example.org';
+
+-- ACTIVATE USERS
+
+UPDATE auth.users SET email_confirmed_at = '2022-11-25 12:01:31.354313+00';
+UPDATE auth.users SET email_change_token_new = '';
+
+-- SEED CHALLENGES_USERS
 
 INSERT INTO public.challenges_users (challenge_id, user_id, user_idd)
   VALUES
