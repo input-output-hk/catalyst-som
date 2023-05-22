@@ -16,7 +16,7 @@
         >
         <template #afterForm>
           <div class="buttons">
-            <o-button variant="primary" native-type="submit">
+            <o-button :disabled="submitting" variant="primary" native-type="submit">
               <span>{{ $t('new_som.submit') }}</span>
             </o-button>
             <o-button @click="_clearForm">
@@ -77,6 +77,8 @@ const otherSoms = computed(() => {
   }
   return []
 })
+
+const submitting = ref(false)
 
 const otherSomsBudget = computed(() => {
   return otherSoms.value.reduce((acc, som) => acc + som.cost, 0)
@@ -199,6 +201,7 @@ const clone = () => {
 }
 
 const handleCreateSom = async () => {
+  submitting.value = true
   const response =  await createSom({
     ...formData.value,
     cost: parseInt(formData.value.cost),
@@ -219,6 +222,7 @@ const handleCreateSom = async () => {
 
 const _clearForm = () => {
   clearForm(formData, updateFormModel)
+  submitting.value = false
 }
 
 </script>

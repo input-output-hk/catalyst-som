@@ -13,7 +13,7 @@
         >
         <template #afterForm>
           <div class="buttons">
-            <o-button class="new-poa-submit" variant="primary" native-type="submit">
+            <o-button :disabled="submitting" class="new-poa-submit" variant="primary" native-type="submit">
               <span>{{ $t('new_poa.submit') }}</span>
             </o-button>
             <o-button @click="_clearForm">
@@ -60,6 +60,7 @@ const initialSchema = computed(() => {
   }
 })
 
+const submitting = ref(false)
 
 const { schema, clearForm } = useFormFields(initialSchema.value)
 const formData = ref({})
@@ -69,6 +70,7 @@ let SchemaForm = SchemaFormFactory([
 ])
 
 const handleCreatePoa = async () => {
+  submitting.value = true
   const response = await createPoa({
     ...formData.value,
     current: true,
@@ -83,5 +85,6 @@ const handleCreatePoa = async () => {
 
 const _clearForm = () => {
   clearForm(formData, updateFormModel)
+  submitting.value = false
 }
 </script>

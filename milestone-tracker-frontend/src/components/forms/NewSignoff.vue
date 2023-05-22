@@ -18,6 +18,7 @@
         </p>
         <div class="buttons">
           <o-button
+            :disabled="submitting"
             class="submit-signoff"
             variant="primary"
             size="medium"
@@ -36,6 +37,8 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import { useSignoffs } from '@/store/signoffs.js'
 const props = defineProps({
   som: {
     type: Object,
@@ -47,11 +50,12 @@ const props = defineProps({
   }
 })
 const emit = defineEmits(['clearSignoff'])
-import { useSignoffs } from '@/store/signoffs.js'
-const { createSignoff } = useSignoffs()
 
+const { createSignoff } = useSignoffs()
+const submitting = ref(false)
 
 const signoff = async () => {
+  submitting.value = true
   let data
   if (props.poa) {
     data = { poa_id: props.poa.id }
@@ -61,6 +65,7 @@ const signoff = async () => {
   const response = await createSignoff(data, props.som)
   if (response) {
     emit('clearSignoff')
+    submitting.value = false
   }
 }
 </script>

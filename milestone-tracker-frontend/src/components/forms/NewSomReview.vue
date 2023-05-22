@@ -9,7 +9,7 @@
         >
         <template #afterForm>
           <div class="buttons">
-            <o-button class="new-som-review-submit" variant="primary" native-type="submit">
+            <o-button :disabled="submitting" class="new-som-review-submit" variant="primary" native-type="submit">
               <span>{{ $t('new_som_review.submit') }}</span>
             </o-button>
             <o-button @click="clearForm">
@@ -40,6 +40,8 @@ const props = defineProps({
 })
 const emit = defineEmits(['somReviewSubmitted'])
 const { createSomReview } = useSomReviews()
+
+const submitting = ref(false)
 
 const initialSchema = computed(() => {
   const schema = {}
@@ -76,6 +78,7 @@ let SchemaForm = SchemaFormFactory([
 ])
 
 const handleCreateSomReview = async () => {
+  submitting.value = true
   const response =  await createSomReview({
     ...formData.value,
     som_id: props.som.id,
@@ -88,6 +91,7 @@ const handleCreateSomReview = async () => {
 }
 
 const _clearForm = () => {
+  submitting.value = false
   clearForm(formData, updateFormModel)
 }
 

@@ -10,6 +10,7 @@
         <template #afterForm>
           <div class="buttons">
             <o-button
+              :disabled="submitting"
               class="new-poa-review-submit"
               variant="primary" native-type="submit">
               <span>{{ $t('new_poa_review.submit') }}</span>
@@ -70,6 +71,8 @@ const initialSchema = computed(() => {
   }
 })
 
+const submitting = ref(false)
+
 const { schema, clearForm } = useFormFields(initialSchema.value)
 const formData = ref({})
 const { updateFormModel } = useSchemaForm(formData)
@@ -78,6 +81,7 @@ let SchemaForm = SchemaFormFactory([
 ])
 
 const handleCreatePoaReview = async () => {
+  submitting.value = true
   const response =  await createPoaReview({
     ...formData.value,
     poas_id: props.poa.id,
@@ -91,6 +95,7 @@ const handleCreatePoaReview = async () => {
 
 const _clearForm = () => {
   clearForm(formData, updateFormModel)
+  submitting.value = false
 }
 
 </script>
