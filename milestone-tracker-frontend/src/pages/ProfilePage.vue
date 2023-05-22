@@ -30,12 +30,30 @@
               </ul>
             </td>
           </tr>
+          <!--
           <tr>
             <th>{{ $t('pages.profile.challenges') }}</th>
             <td>
               <ul>
                 <li v-for="challenge in challenges" :key="challenge.id">
                   {{challenge.title}}
+                </li>
+              </ul>
+            </td>
+          </tr>
+          -->
+          <tr>
+            <th>{{ $t('pages.profile.proposals_allocated') }}</th>
+            <td>
+              <ul>
+                <li v-for="proposal in allocatedProposals" :key="proposal.id">
+                  <router-link
+                    class="navbar-item" :to="{
+                      name: 'proposal',
+                      params: {id: proposal.project_id}
+                    }">
+                    {{proposal.title}}
+                  </router-link>
                 </li>
               </ul>
             </td>
@@ -56,7 +74,12 @@
   const proposals = computed(() => {
     return getUserInfo.proposals_users.map((el) => el.proposals)
   })
+  const allocatedProposals = computed(() => {
+    return getUserInfo.allocations.map((el) => el.proposals)
+  })
+  /*
   const challenges = computed(() => {
     return getUserInfo.challenges_users.map((el) => el.challenges)
   })
+  */
 </script>

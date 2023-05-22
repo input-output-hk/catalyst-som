@@ -276,7 +276,8 @@ export default {
       username: "Username",
       role: "Role",
       proposals: "Proposals (as Funded Proposer):",
-      challenges: "Challenges (as Challenge Team):"
+      challenges: "Challenges (as Challenge Team):",
+      proposals_allocated: "Proposals allocated to review:"
     },
     proposal: {
       open_details: "Open Milestones Details",
