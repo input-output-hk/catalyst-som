@@ -54,7 +54,8 @@ const initialSchema = computed(() => {
   return {
     content: {
       type: 'html',
-      label: t('new_poa.content')
+      label: t('new_poa.content'),
+      help: t('new_poa.content_help'),
     }
   }
 })

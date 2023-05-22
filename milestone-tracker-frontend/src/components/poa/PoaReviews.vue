@@ -17,7 +17,25 @@
             }}
           </o-button>
         </template>
-        <div v-for="review in reviews" :key="review.id" class="reviews single-poa-review mt-3">
+        <div v-for="review in activeReviews" :key="review.id" class="reviews single-poa-review mt-3">
+          <poa-review :review="review" />
+        </div>
+      </o-collapse>
+      <o-collapse v-if="archivedReviews.length > 0" v-model:open="archivedReviewsVisible">
+        <template #trigger="props">
+          <o-button
+            class="open-poa-reviews mt-2"
+            size="small" variant="">
+            {{ $t(
+              'poa_reviews.poa_archived_reviews',
+              {
+                action: (props.open) ? $t('poa_reviews.close') : $t('poa_reviews.open')
+              })
+            }}
+          </o-button>
+        </template>
+        <p class="mt-2">{{ $t('poa_reviews.archived_reviews') }}</p>
+        <div v-for="review in archivedReviews" :key="review.id" class="reviews single-poa-review mt-3">
           <poa-review :review="review" />
         </div>
       </o-collapse>
@@ -29,7 +47,9 @@
 </template>
 
 <script setup>
-import { ref, toRef } from 'vue'
+import { ref, toRef, computed } from 'vue'
+import { usePoaReviewsCounters } from '@/composables/usePoaReviewsCounters.js'
+
 const componentProps = defineProps({
   poa: {
     type: Object,
@@ -40,7 +60,6 @@ const componentProps = defineProps({
     default: () => []
   }
 })
-import { usePoaReviewsCounters } from '@/composables/usePoaReviewsCounters.js'
 
 const {
   poaReviewsApproved,
@@ -49,6 +68,19 @@ const {
 } = usePoaReviewsCounters(toRef(componentProps, 'poa'))
 
 const reviewsVisible = ref(false)
+const archivedReviewsVisible = ref(false)
+
+const activeReviews = computed(() => {
+  try {
+    return componentProps.reviews.filter(r => r.current)
+  } catch {
+    return []
+  }
+})
+
+const archivedReviews = computed(() => {
+  return componentProps.reviews.filter(r => !r.current)
+})
 
 </script>
 

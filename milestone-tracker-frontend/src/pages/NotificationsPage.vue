@@ -74,7 +74,7 @@ const poas = ref([])
 const poaReviews = ref([])
 const somReviews = ref([])
 const signoffs = ref([])
-const signoffsDays = ref(30)
+const signoffsDays = ref(10)
 
 const headers = ref([
   t('pages.notifications.proposal'),

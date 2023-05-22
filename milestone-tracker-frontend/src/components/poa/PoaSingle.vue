@@ -32,9 +32,23 @@
         class="new-poa-review-button"
         size="medium"
         variant="primary"
-        @click="newReviewVisible = !newReviewVisible">
-          {{ $t('poa.submit') }}
+        @click="_handlePoaReviewSubmission()">
+          {{ (currentUserReviewSubmission) ? $t('poa.resubmit') : $t('poa.submit') }}
         </o-button>
+        <o-modal
+          v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current && !locked"
+          v-model:active="confirmPoaReviewResubmission"
+        >
+          <resubmission-confirm
+            :title="$t('poa_review.resubmission_title')"
+            :msg="$t('poa_review.resubmission_msg')"
+            :confirm-msg="$t('poa_review.resubmission_confirm')"
+            :clear-msg="$t('poa_review.resubmission_clear')"
+            :entity="'poa-review'"
+            @clear-confirm="confirmPoaReviewResubmission = false"
+            @confirm="_handlePoaReviewResubmission()"
+          />
+        </o-modal>
         <div v-if="current && canSignoff && !locked">
           <o-button
             variant="primary"
@@ -64,6 +78,8 @@ import { ref, computed } from 'vue'
 import PoaReviews from '@/components/poa/PoaReviews.vue'
 import NewPoaReview from '@/components/forms/NewPoaReview.vue'
 import NewSignoff from '@/components/forms/NewSignoff.vue'
+import ResubmissionConfirm from '@/components/proposal/ResubmissionConfirm.vue'
+
 const props = defineProps({
   poa: {
     type: Object,
@@ -87,10 +103,36 @@ const { canWriteSomReview, canSignoff } = useUser()
 
 const newReviewVisible = ref(false)
 const confirmSignoff = ref(false)
+const confirmPoaReviewResubmission = ref(false)
 
 const locked = computed(() => {
   return props.poa.signoffs.length
 })
+
+const currentUserReviewSubmission = computed(() => {
+  if (props.poa.poas_reviews.length > 0) {
+    const currentUserReview = props.poa.poas_reviews.find(review => review.user_id === useUser().user.id)
+    return (currentUserReview)
+  }
+  return false
+})
+
+const _handlePoaReviewResubmission = () => {
+  confirmPoaReviewResubmission.value = false
+  newReviewVisible.value = true
+}
+
+const _handlePoaReviewSubmission = () => {
+  if (newReviewVisible.value) {
+    newReviewVisible.value = false
+  } else {
+    if (currentUserReviewSubmission.value) {
+      confirmPoaReviewResubmission.value = true
+    } else {
+      newReviewVisible.value = true
+    }
+  }
+}
 
 </script>
 

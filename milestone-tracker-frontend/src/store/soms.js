@@ -31,6 +31,8 @@ export const useSoms = defineStore('soms-store', {
           .select('*, signoffs(id, created_at), som_reviews(*), poas(*, poas_reviews(*), signoffs(id, created_at))')
           .eq('proposal_id', proposal_id)
           .eq('milestone', milestone)
+          //.eq('som_reviews.current', true)
+          //.eq('poas.poas_reviews.current', true)
           .order('current', { ascending: false })
           .order('created_at', { ascending: false })
           .order('created_at', { foreignTable: 'poas', ascending: false })
@@ -49,11 +51,13 @@ export const useSoms = defineStore('soms-store', {
       try {
         const { data, error } = await supabase
           .from('soms')
-          .select('month, cost, completion, som_reviews(outputs_approves, success_criteria_approves, evidence_approves), poas(poas_reviews(content_approved), signoffs(created_at))')
+          .select('month, cost, completion, som_reviews(outputs_approves, success_criteria_approves, evidence_approves, current), poas(poas_reviews(content_approved, current), signoffs(created_at))')
           .eq('proposal_id', proposal_id)
           .eq('milestone', milestone)
           .order('current', { ascending: false })
           .order('created_at', { ascending: false })
+          .eq('som_reviews.current', true)
+          .eq('poas.poas_reviews.current', true)
           .order('current', { foreignTable: 'poas', ascending: false })
           .order('created_at', { foreignTable: 'poas', ascending: false })
           .order('created_at', { foreignTable: 'som_reviews', ascending: false })

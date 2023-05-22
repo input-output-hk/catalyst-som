@@ -19,7 +19,7 @@
             <td v-if="somReviewsVisible">
               <som-reviews
                 :som="som"
-                :reviews="som.som_reviews" :property="criterium" />
+                :reviews="activeSomReviews" :property="criterium" />
             </td>
           </tr>
           <tr>
@@ -67,17 +67,41 @@
         <div v-if="som.som_reviews.length > 0" class="columns">
           <div class="column is-12">
             <o-button
-              class="is-small show-som-reviews"
+              class="is-small show-som-reviews mr-3"
               @click="reviewsVisible = !reviewsVisible">
               {{ $t('som.open_reviews') }}
             </o-button>
+            <o-button
+              v-if="archivedSomReviews.length > 0"
+              class="is-small show-som-reviews"
+              @click="archivedReviewsVisible = !archivedReviewsVisible">
+              {{ $t('som.open_archived_reviews') }}
+            </o-button>
             <o-modal class="som-reviews-popup" :active="reviewsVisible" scroll="keep">
               <div class="container scrollable-modal">
-                <div v-for="review in som.som_reviews" :key="review.id" class="reviews">
+                <div v-for="review in activeSomReviews" :key="review.id" class="reviews">
                   <som-review
                     class="mb-6"
                     :review="review"
                     :properties="['outputs', 'success_criteria', 'evidence']" />
+                </div>
+              </div>
+            </o-modal>
+            <o-modal
+              v-if="archivedSomReviews.length > 0"
+              class="som-reviews-popup"
+              :active="archivedReviewsVisible"
+              scroll="keep"
+            >
+              <div class="container scrollable-modal">
+                <div class="card">
+                  <div class="card-content">{{ $t('som.archived_reviews') }}</div>
+                  <div v-for="review in archivedSomReviews" :key="review.id" class="reviews">
+                    <som-review
+                      class="mb-6"
+                      :review="review"
+                      :properties="['outputs', 'success_criteria', 'evidence']" />
+                  </div>
                 </div>
               </div>
             </o-modal>
@@ -92,20 +116,42 @@
               class="new-som-review-button"
               variant="primary"
               size="medium"
-              @click="newReviewVisible = !newReviewVisible">
-              {{ $t('som.submit_review') }}
+              @click="_handleSomReviewSubmission()">
+              {{ (currentUserReviewSubmission) ? $t('som.resubmit_review') : $t('som.submit_review') }}
             </o-button>
+            <o-modal v-model:active="confirmSomReviewResubmission">
+              <resubmission-confirm
+                :title="$t('som_review.resubmission_title')"
+                :msg="$t('som_review.resubmission_msg')"
+                :confirm-msg="$t('som_review.resubmission_confirm')"
+                :clear-msg="$t('som_review.resubmission_clear')"
+                :entity="'som-review'"
+                @clear-confirm="confirmSomReviewResubmission = false"
+                @confirm="_handleSomReviewResubmission()"
+              />
+            </o-modal>
           </div>
           <div v-if="current && canWriteSom(proposal.id) && locked && !poaLocked" class="mr-4">
             <o-button
               class="new-poa"
               variant="primary"
               size="medium"
-              @click="newPoAVisible = !newPoAVisible">
-              {{ $t('som.submit_poa') }}
+              @click="_handlePoaSubmission()">
+              {{ (som.poas.length > 0) ? $t('som.resubmit_poa') : $t('som.submit_poa') }}
             </o-button>
             <o-modal v-model:active="newPoAVisible" class="new-poa-popup" >
               <new-poa :proposal="proposal" :som="som" :milestone="som.milestone" />
+            </o-modal>
+            <o-modal v-model:active="confirmPoaResubmission">
+              <resubmission-confirm
+                :title="$t('poa.resubmission_title')"
+                :msg="$t('poa.resubmission_msg')"
+                :confirm-msg="$t('poa.resubmission_confirm')"
+                :clear-msg="$t('poa.resubmission_clear')"
+                :entity="'poa'"
+                @clear-confirm="confirmPoaResubmission = false"
+                @confirm="_handlePoaResubmission()"
+              />
             </o-modal>
           </div>
           <div v-if="current && canSignoff && !locked">
@@ -129,7 +175,7 @@
       </section>
       <div v-if="som.poas.length > 0" class="columns">
         <div class="column is-12" :id="`poa-${som.milestone}`">
-          <poa-list :som="som" :poas="som.poas" :proposal="proposal" />
+          <poa-list :som="som" :poas="som.poas" :proposal="proposal" :submittable-poa="current && canWriteSom(proposal.id) && locked && !poaLocked" />
         </div>
       </div>
     </div>
@@ -143,6 +189,8 @@
 
 <script setup>
 import { ref, watch, computed } from 'vue'
+import { useUser } from '@/store/user.js'
+import useEventsBus from '@/eventBus'
 const props = defineProps({
   som: {
     type: [Object, Boolean],
@@ -157,14 +205,15 @@ const props = defineProps({
     default: () => {}
   }
 })
-import { useUser } from '@/store/user.js'
 const { canWriteSom, canWriteSomReview, canSignoff } = useUser()
 
-import useEventsBus from '@/eventBus'
 const { bus } = useEventsBus()
 
 const reviewsVisible = ref(false)
+const archivedReviewsVisible = ref(false)
 const newReviewVisible = ref(false)
+const confirmSomReviewResubmission = ref(false)
+const confirmPoaResubmission = ref(false)
 const newPoAVisible = ref(false)
 const confirmSignoff = ref(false)
 const criteria = ref(['outputs', 'success_criteria', 'evidence'])
@@ -188,6 +237,56 @@ const somReviewsVisible = computed(() => {
   return props.som.som_reviews.length > 0
 })
 
+const currentUserReviewSubmission = computed(() => {
+  if (somReviewsVisible.value) {
+    const currentUserReview = props.som.som_reviews.find(review => review.user_id === useUser().user.id)
+    return (currentUserReview)
+  }
+  return false
+})
+
+const activeSomReviews = computed(() => {
+  return props.som.som_reviews.filter(review => review.current)
+})
+
+const archivedSomReviews = computed(() => {
+  return props.som.som_reviews.filter(review => !review.current)
+})
+
+const _handleSomReviewResubmission = () => {
+  confirmSomReviewResubmission.value = false
+  newReviewVisible.value = true
+}
+
+const _handleSomReviewSubmission = () => {
+  if (newReviewVisible.value) {
+    newReviewVisible.value = false
+  } else {
+    if (currentUserReviewSubmission.value) {
+      confirmSomReviewResubmission.value = true
+    } else {
+      newReviewVisible.value = true
+    }
+  }
+}
+
+const _handlePoaResubmission = () => {
+  confirmPoaResubmission.value = false
+  newPoAVisible.value = true
+}
+
+const _handlePoaSubmission = () => {
+  if (newPoAVisible.value) {
+    newPoAVisible.value = false
+  } else {
+    if (props.som.poas.length > 0) {
+      confirmPoaResubmission.value = true
+    } else {
+      newPoAVisible.value = true
+    }
+  }
+}
+
 watch(()=>bus.value.get('getSomsBus'), () => {
   newPoAVisible.value = false
 })
@@ -201,6 +300,7 @@ import NewSomReview from '@/components/forms/NewSomReview.vue'
 import NewPoa from '@/components/forms/NewPoa.vue'
 import PoaList from '@/components/poa/PoaList.vue'
 import NewSignoff from '@/components/forms/NewSignoff.vue'
+import ResubmissionConfirm from '@/components/proposal/ResubmissionConfirm.vue'
 </script>
 
 <style lang="scss" scoped>

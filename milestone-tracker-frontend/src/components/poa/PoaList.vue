@@ -2,6 +2,14 @@
   <div class="content mb-0">
     <section class="section has-background-white-ter">
       <h3 class="subtitle">{{ $t('poas.title') }}</h3>
+      <p
+        v-if="renderedPoas.current && renderedPoas.current.poas_reviews.length > 0 && submittablePoa"
+        :class="{'is-danger': currentPoaStatus === 'no_approvals', 'is-success': currentPoaStatus === 'all_approvals'}"
+        class="notification is-light"
+      >
+        {{ $t(`poa.${currentPoaStatus}`) }}
+      </p>
+    
       <poa-single
         class="current-poa"
         :current="true"
@@ -43,10 +51,33 @@ const props = defineProps({
   som: {
     type: Object,
     default: () => {}
+  },
+  submittablePoa: {
+    type: Boolean,
+    default: false
   }
 })
 
 const othersVisible = ref(false)
+
+const currentPoaStatus = computed(() => {
+  try {
+    if (renderedPoas.value.current.poas_reviews.length === 1) {
+      return 'waiting_reviews'
+    } else {
+      const reviews = renderedPoas.value.current.poas_reviews.filter((r) => r.current).map((r) => (r.content_approved))
+      if (reviews.every((r) => (r))) {
+        return 'all_approvals'
+      } else if (reviews.some((r) => (r))) {
+        return 'some_approvals'
+      } else {
+        return 'no_approvals'
+      }
+    }
+  } catch {
+    return null
+  }
+})
 
 const renderedPoas = computed(() => {
   let current = false

@@ -54,19 +54,23 @@ const props = defineProps({
     default: () => []
   },
 })
-const emit = defineEmits(['somSubmitted'])
+const emit = defineEmits(['somSubmitted', 'refreshRecap'])
 import { useSoms } from '@/store/soms.js'
 import { useFormFields } from '@/composables/useFormFields.js'
 import { getPrevMilestone } from '@/utils/milestones'
 import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
+const { t, n } = useI18n()
 const { createSom } = useSoms()
 
 const otherSoms = computed(() => {
-  if (props.som) {
+  if (props.soms) {
     return props.soms.filter((som) => {
       if (som) {
-        return props.som.id !== som.id
+        if (props.som) {
+          return props.som.id !== som.id
+        } else {
+          return true
+        }
       }
       return false
     })
@@ -78,58 +82,90 @@ const otherSomsBudget = computed(() => {
   return otherSoms.value.reduce((acc, som) => acc + som.cost, 0)
 })
 
+const isLastMilestone = computed(() => {
+  const lastMilestone = props.proposal.milestones_qty
+  return props.milestone === lastMilestone
+})
+
 // Form validation rules
 
-const costRule = computed(() => {
-  const rule = yup.number().required().min(1)
+const maxMilestoneCost = computed(() => {
   const availableBudget = props.proposal.budget - otherSomsBudget.value
   const maxMilestoneBudget = parseFloat(import.meta.env.VITE_MAX_MILESTONE_BUDGET)
   const budgetRule = Math.min(
     (props.proposal.budget * maxMilestoneBudget), availableBudget
   )
-  if (props.milestone < 5 && props.proposal.budget > 0) {
-    return rule.max(budgetRule)
+  if (!isLastMilestone.value && props.proposal.budget > 0) {
+    return budgetRule
+  } else {
+    return availableBudget
   }
-  return rule
+})
+
+const costRule = computed(() => {
+  const rule = yup.number().integer().required().min(1)
+  return rule.max(maxMilestoneCost.value).test(
+    'Only digits',
+    'Error: field can contain only digits',
+    (value) => {
+      return /^\d+$/.test(value)
+    }
+  )
 })
 
 const monthRule = computed(() => {
   const rule = yup.number().required()
   const min = getPrevMilestone(props.soms, props.milestone)
-  return rule.min((min) ? parseInt(min.month) : 1)
+  return rule.min((min) ? parseInt(min.month) + 1 : 1)
+})
+
+const completionRule = computed(() => {
+  const rule = yup.number().required()
+  const min = getPrevMilestone(props.soms, props.milestone)
+  const offset = (isLastMilestone.value) ? 1 : 10
+  return rule.min((min) ? parseInt(min.completion) + offset : 10)
 })
 
 const initialSchema = computed(() => {
   const localSchema = {
     title: {
-      type: 'string'
+      type: 'string',
+      help: t('new_som.title_help')
     },
     outputs: {
-      type: 'html'
+      type: 'html',
+      help: t('new_som.outputs_help')
     },
     success_criteria: {
-      type: 'html'
+      type: 'html',
+      help: t('new_som.success_criteria_help')
     },
     evidence: {
-      type: 'html'
+      type: 'html',
+      help: t('new_som.evidence_help')
     },
     cost: {
       type: 'number',
-      validations: costRule.value
+      validations: costRule.value,
+      step: 1,
+      help: t('new_som.cost_help', {maxCost: n(maxMilestoneCost.value, 'currency')}),
     },
     month: {
       type: 'select',
       validations: monthRule.value,
       required: true,
       default: 1,
-      options: [...Array(24).keys()].map((m) => ({value: m + 1, label: `Month ${m + 1}`}))
+      options: [...Array(24).keys()].map((m) => ({value: m + 1, label: `Month ${m + 1}`})),
+      help: t('new_som.month_help')
     },
     completion: {
       type: 'range',
+      validations: completionRule.value,
       default: 10,
       min: 0,
       max: 100,
-      step: 1
+      step: 1,
+      help: t('new_som.completion_help')
     }
   }
   Object.keys(localSchema).forEach((field) => {
@@ -165,14 +201,19 @@ const clone = () => {
 const handleCreateSom = async () => {
   const response =  await createSom({
     ...formData.value,
+    cost: parseInt(formData.value.cost),
     current: true,
     proposal_id: props.proposal.id,
     challenge_id: props.proposal.challenge_id,
     milestone: props.milestone
   })
   if (response) {
-    _clearForm()
     emit('somSubmitted')
+    const fullSubmissions = (props.proposal.milestones_qty === otherSoms.value.length + 1)
+    if (fullSubmissions) {
+      emit('refreshRecap')
+    }
+    _clearForm()
   }
 }
 

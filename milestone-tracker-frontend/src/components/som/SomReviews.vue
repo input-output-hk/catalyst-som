@@ -8,7 +8,7 @@
         <template #trigger="props">
           <o-button size="small" variant="primary">{{ (props.open) ? 'Close' : 'Open'}} <i>{{ $t(`som.${property}`) }}</i> reviews</o-button>
         </template>
-        <div v-for="review in som.som_reviews" :key="review.id" class="reviews mt-3">
+        <div v-for="review in reviews" :key="review.id" class="reviews mt-3">
           <som-review :review="review" :properties="[property]" />
         </div>
       </o-collapse>
@@ -26,6 +26,10 @@ const componentProps = defineProps({
   som: {
     type: Object,
     default: () => {}
+  },
+  reviews: {
+    type: Array,
+    default: () => []
   },
   property: {
     type: String,

@@ -9,6 +9,31 @@ const milestoneUrl = (proposalId: number, milestoneId: number) => {
   return `http://localhost:5173/proposals/${proposalId}/milestones/${milestoneId}`
 }
 
+const fillAndResubmit = (
+  browser: NightwatchBrowser,
+  proposalId: number,
+  milestoneId: number,
+  user: String
+) => {
+  const loginPage = browser.page.loginPage();
+  const milestonePage = browser.page.milestonePage();
+  const sSeed = stringSeed();
+  loginPage.navigate().loginAs(user);
+  browser.navigateTo(milestoneUrl(proposalId, milestoneId));
+  milestonePage.assert.elementPresent(`@newSomReviewButton${milestoneId}`);
+  milestonePage.startSomReviewResubmission(milestoneId)
+    .fillSomReview(milestoneId, sSeed)
+    .submitSomReview(milestoneId)
+    .openSomReviews(milestoneId)
+    .expect.element(`@lastSomReviewoutputs_approved${milestoneId}`).text.to.contain('Approved')
+    .expect.element(`@lastSomReviewsuccess_criteria_approved${milestoneId}`).text.to.contain('Not Approved')
+    .expect.element(`@lastSomReviewsuccess_criteria_comment${milestoneId}`).text.to.contain(`${stringBase}${sSeed}`)
+    .expect.element(`@lastSomReviewevidence_approved${milestoneId}`).text.to.contain('Approved')
+    .expect.element(`@lastSomReviewevidence_comment${milestoneId}`).text.to.contain(`${stringBase}${sSeed}`)
+    .closeSomReviews(milestoneId)
+  loginPage.logout();
+}
+
 const fillAndSubmit = (
   browser: NightwatchBrowser,
   proposalId: number,
@@ -74,13 +99,13 @@ const somReviewSubmissionTest: NightwatchTests = {
 
   },
   'CT 1 SoM Review submission'(browser: NightwatchBrowser) {
-    fillAndSubmit(browser, 900002, 4, 'challenge-team-1')
+    fillAndResubmit(browser, 900002, 4, 'challenge-team-1')
     goCantSubmit(browser, 900002, 1, 'challenge-team-1')
     goCantSubmit(browser, 900002, 2, 'challenge-team-1')
     goCantSubmit(browser, 900003, 4, 'challenge-team-1')
   },
   'CT 2 SoM Review submission'(browser: NightwatchBrowser) {
-    fillAndSubmit(browser, 900003, 4, 'challenge-team-2')
+    fillAndResubmit(browser, 900003, 4, 'challenge-team-2')
     goCantSubmit(browser, 900002, 1, 'challenge-team-2')
     goCantSubmit(browser, 900002, 2, 'challenge-team-2')
     goCantSubmit(browser, 900002, 4, 'challenge-team-2')
@@ -98,8 +123,8 @@ const somReviewSubmissionTest: NightwatchTests = {
     goCantSubmit(browser, 900003, 1, 'admin')
   },
   'Proposers notifications'(this: NightwatchTests, browser: NightwatchBrowser) {
-    checkNotifications(browser, 'proposer-2', this.count, '@somReviewsNotifications', 3)
-    checkNotifications(browser, 'proposer-1', this.count, '@somReviewsNotifications', 3)
+    checkNotifications(browser, 'proposer-2', this.count, '@somReviewsNotifications', 2)
+    checkNotifications(browser, 'proposer-1', this.count, '@somReviewsNotifications', 2)
     checkNotifications(browser, 'proposer-2', this.count, '@signoffReceivedNotifications', 0)
   },
   'Proposer 2 SoM Review submission'(browser: NightwatchBrowser) {

@@ -3,7 +3,7 @@
     <div class="box">
       <h3>{{ $t('new_som_review.title') }}</h3>
       <schema-form
-        class="card-content scrollable-modal"
+        class="card-content"
         :schema="schema"
         @submit="handleCreateSomReview"
         >
@@ -47,11 +47,13 @@ const initialSchema = computed(() => {
   keys.forEach((key) => {
     schema[`${key}_approves`] = {
       type: 'checkbox',
-      label: t(`new_som_review.${key}_approved`)
+      label: t(`new_som_review.${key}_approved`),
+      help: t(`new_som_review.${key}_approved_help`),
     }
     schema[`${key}_comment`] = {
       type: 'html',
       label: t(`new_som_review.${key}_comment`),
+      help: t(`new_som_review.${key}_comment_help`),
       validations: yup.string().when('_', {
         is: true,
         otherwise: (schema) => {
@@ -76,7 +78,8 @@ let SchemaForm = SchemaFormFactory([
 const handleCreateSomReview = async () => {
   const response =  await createSomReview({
     ...formData.value,
-    som_id: props.som.id
+    som_id: props.som.id,
+    current: true
   }, props.som)
   if (response) {
     _clearForm()

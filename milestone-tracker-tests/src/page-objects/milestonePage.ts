@@ -8,6 +8,13 @@ const milestonePageCommands = {
       .click(`@newSomButton${ml}`)
       .waitForElementVisible('@newSomPopup', 10000)
   },
+  startSomResubmission(this: MilestonePage, ml: number) {
+    return this.waitForElementVisible(`@newSomButton${ml}`, 10000)
+      .click(`@newSomButton${ml}`)
+      .waitForElementVisible('@newSomResubmissionPopup', 10000)
+      .waitForElementVisible('@newSomResubmissionPopupProceed', 10000)
+      .click(`@newSomResubmissionPopupProceed`)
+  },
   fillSom(this: MilestonePage, stringSeed: String, numberSeed: number) {
     return this.waitForElementVisible('@titleInput', 10000)
       .waitForElementVisible('@outputsInput', 10000)
@@ -25,8 +32,9 @@ const milestonePageCommands = {
       .sendKeys('@evidenceInput', `${stringBase}${stringSeed}`)
       .setValue('@costInput', `${numberBase+numberSeed}`)
       .click('@monthOption')
-      .dragAndDrop('@completionInput', {x: 100, y: 0})
+      .dragAndDrop('@completionInput', {x: 400, y: 0})
   },
+  
   submitSom(this: MilestonePage) {
     return this.waitForElementVisible('@submitSomInput', 10000)
       .click('@submitSomInput')
@@ -36,6 +44,13 @@ const milestonePageCommands = {
     return this.waitForElementVisible(`@newSomReviewButton${ml}`, 10000)
       .click(`@newSomReviewButton${ml}`)
       .waitForElementVisible(`@newSomReview${ml}`, 10000)
+  },
+  startSomReviewResubmission(this: MilestonePage, ml: number) {
+    return this.waitForElementVisible(`@newSomReviewButton${ml}`, 10000)
+      .click(`@newSomReviewButton${ml}`)
+      .waitForElementVisible('@newSomReviewResubmissionPopup', 10000)
+      .waitForElementVisible('@newSomReviewResubmissionPopupProceed', 10000)
+      .click(`@newSomReviewResubmissionPopupProceed`)
   },
   fillSomReview(this: MilestonePage, ml: number, stringSeed: String) {
     return this.waitForElementVisible(`@outputs_approved${ml}`, 10000)
@@ -81,6 +96,13 @@ const milestonePageCommands = {
       .click(`@newPoA${ml}`)
       .waitForElementPresent(`@newPoAPopup${ml}`);
   },
+  startPoAResubmission(this: MilestonePage, ml: number) {
+    return this.waitForElementVisible(`@newPoA${ml}`, 10000)
+      .click(`@newPoA${ml}`)
+      .waitForElementVisible('@newPoAResubmissionPopup', 10000)
+      .waitForElementVisible('@newPoAResubmissionPopupProceed', 10000)
+      .click(`@newPoAResubmissionPopupProceed`)
+  },
   fillPoA(this: MilestonePage, ml: number, stringSeed: String) {
     return this.waitForElementVisible(`@newPoAContent${ml}`, 10000)
       .waitForElementVisible(`@newPoASubmit${ml}`, 10000)
@@ -97,6 +119,14 @@ const milestonePageCommands = {
   startPoAReviewSubmission(this: MilestonePage, ml: number) {
     return this.waitForElementVisible(`@newPoAReview${ml}`, 10000)
       .click(`@newPoAReview${ml}`)
+      .waitForElementPresent(`@newPoAReviewPopup${ml}`);
+  },
+  startPoAReviewResubmission(this: MilestonePage, ml: number) {
+    return this.waitForElementVisible(`@newPoAReview${ml}`, 10000)
+      .click(`@newPoAReview${ml}`)
+      .waitForElementVisible('@newPoAReviewResubmissionPopup', 10000)
+      .waitForElementVisible('@newPoAReviewResubmissionPopupProceed', 10000)
+      .click(`@newPoAReviewResubmissionPopupProceed`)
       .waitForElementPresent(`@newPoAReviewPopup${ml}`);
   },
   fillPoAReview(this: MilestonePage, ml: number, stringSeed: String) {
@@ -128,6 +158,30 @@ const milestonePage: PageObjectModel = {
   elements: {
     newSomPopup: {
       selector: '.new-som-popup',
+    },
+    newSomResubmissionPopup: {
+      selector: '.som-resubmission-popup',
+    },
+    newSomResubmissionPopupProceed: {
+      selector: '.som-resubmission-popup .button.is-primary',
+    },
+    newPoAResubmissionPopup: {
+      selector: '.poa-resubmission-popup',
+    },
+    newPoAResubmissionPopupProceed: {
+      selector: '.poa-resubmission-popup .button.is-primary',
+    },
+    newPoAReviewResubmissionPopup: {
+      selector: '.poa-review-resubmission-popup',
+    },
+    newPoAReviewResubmissionPopupProceed: {
+      selector: '.poa-review-resubmission-popup .button.is-primary',
+    },
+    newSomReviewResubmissionPopup: {
+      selector: '.som-review-resubmission-popup',
+    },
+    newSomReviewResubmissionPopupProceed: {
+      selector: '.som-review-resubmission-popup .button.is-primary',
     },
     titleInput: {
       selector: '[model="title"] input'

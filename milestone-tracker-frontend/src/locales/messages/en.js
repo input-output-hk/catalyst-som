@@ -49,7 +49,19 @@ export default {
   milestone: {
     som: "Statement of Milestone {nr}",
     latest_som: "Latest submission from proposers of the Statement of Milestone {nr}.",
-    archived: "Archived Statements of Milestone {nr}"
+    archived: "Archived Statements of Milestone {nr}",
+    submit_new_som: "Submit new SoM",
+    resubmit_som: "Resubmit SoM",
+    resubmission_title: "SoM resubmission confirm",
+    resubmission_msg: "Are you sure you want to resubmit this SoM? The current SoM and all its reviews will be archived. The new SoM submission will have to go through the review process again.",
+    resubmission_confirm: "Proceed with resubmission",
+    resubmission_clear: "Cancel",
+    all_approvals: "At the moment your SoM was approved by all the reviewers. Please wait for additional reviews or for SoM signoff. After the SoM will be signed off you will be able to submit Proof of Achivement.",
+    some_approvals: "Your SoM was partially approved. Please proceed with a new submission of the SoM addressing the comments made by reviewers by using the button on the right.",
+    no_approvals: "Your SoM was not approved. Please resubmit it addressing the comments made on reviews by using the button on the right.",
+    waiting_reviews: "Please wait for additional reviews or for SoM signoff.",
+    show_archived_soms: "Show archived SoMs",
+    hide_archived_soms: "Hide archived SoMs"
   },
   milestone_recap: {
     title: "M {nr}",
@@ -73,7 +85,16 @@ export default {
     reviews: "PoA reviews",
     signed_off_at: "Signed off at:",
     submit: "Submit review for this PoA",
-    signoff: "Signoff"
+    resubmit: "Resubmit review for this PoA",
+    signoff: "Signoff",
+    all_approvals: "At the moment your PoA was approved by all the reviewers. Please wait for additional reviews or for PoA signoff.",
+    some_approvals: "Your PoA was partially approved. Please proceed with a new submission of the PoA addressing the comments made by reviewers by using the button above.",
+    no_approvals: "Your PoA was not approved. Please resubmit it addressing the comments made on reviews by using the button above.",
+    waiting_reviews: "Please wait for additional reviews or for PoA signoff.",
+    resubmission_title: "PoA resubmission",
+    resubmission_msg: "Are you sure you want to resubmit this PoA? The current PoA and all its reviews will be archived. The new PoA submission will have to go through the review process again.",
+    resubmission_confirm: "Proceed with resubmission",
+    resubmission_clear: "Cancel"
   },
   signoff: {
     poa_signed_off_at: "PoA signed off at:"
@@ -82,30 +103,39 @@ export default {
     title: "New Proof of Achivement for Milestone {nr}",
     submit: "Submit PoA",
     reset: "Reset",
-    content: "Content"
+    content: "Content",
+    content_help: "Please describe the Proof of Achivement, including links to resources (if any). Remember that the PoA has to satisfy the \"Outputs\", the \"Acceptance Criteria\" and the \"Evidence of Milestone Completion\" indicated in the SoM.",
   },
   poas: {
-    title: "Proof of Achivements",
+    title: "Proof of Achivement",
     hide_archived: "Hide archived PoAs",
     show_archived: "Show archived PoAs",
     archived: "Archived Proof of Achivements"
   },
   poa_review: {
     from: "From",
-    submitted_at: "Submitted at:"
+    submitted_at: "Submitted at:",
+    resubmission_title: "PoA review resubmission",
+    resubmission_msg: "You have already submitted a review for this PoA. Do you want to resubmit it? The previous submission will be archived.",
+    resubmission_confirm: "Proceed with resubmission",
+    resubmission_clear: "Cancel"
   },
   new_poa_review: {
     title: "New Review for Proof of Achievement",
     submit: "Submit PoA review",
     reset: "Reset",
     poa_approved: "PoA Approved?",
+    poa_approved_help: "Tick the checkbox if the PoA for the SoM is approved.",
     comment: "Comment:",
+    comment_help: "In case the PoA is not approved, please describe what is missing and how the proposer can amend it in order to get the approval.",
   },
   poa_reviews: {
     open: "Open",
     close: "Close",
     poa_reviews: "{action} PoA reviews",
-    no_reviews: "No PoA reviews"
+    no_reviews: "No PoA reviews",
+    poa_archived_reviews: "Open archived PoA reviews",
+    archived_reviews: "These reviews are not active anymore and are archived. Each reviewer assigned to this project can have only one review active at a time and can't modify previous submissions. Every time a new review is submitted, the previous ones become archived.",
   },
   new_signoff: {
     title: "Signoff",
@@ -120,14 +150,18 @@ export default {
     title: "Milestone Title",
     outputs: "Milestone Outputs",
     success_criteria: "Acceptance criteria",
-    evidence: "Milestone Evidence",
+    evidence: "Evidence of milestone completion",
     month: "Delivery Month",
     cost: "Milestone Cost",
     completion: "Project Completion",
     signed_off_at: "Signed off at:",
-    open_reviews: "Open reviews for this Milestone",
+    open_reviews: "Open active reviews for this Milestone",
+    open_archived_reviews: "Open archived reviews for this Milestone",
+    archived_reviews: "These reviews are not active anymore and are archived. Each reviewer assigned to this project can have only one review active at a time and can't modify previous submissions. Every time a new review is submitted, the previous ones become archived.",
     submit_review: "Submit review for this SoM",
+    resubmit_review: "Resubmit review for this SoM",
     submit_poa: "Submit new PoA",
+    resubmit_poa: "Resubmit PoA",
     signoff: "Signoff",
     not_submitted: "Statement of Milestone not submitted yet!"
   },
@@ -138,11 +172,18 @@ export default {
     reset: "Reset",
     title: "Title:",
     outputs: "Outputs:",
-    success_criteria: "Success Criteria:",
-    evidence: "Evidence:",
+    success_criteria: "Acceptance Criteria:",
+    evidence: "Evidence of milestone completion:",
     cost: "Cost:",
     month: "Delivery month:",
-    completion: "Completion %"
+    completion: "Completion %",
+    title_help: "A milestone is the key deliverable(s) required to complete this phase of the project and position your project towards the next milestone. Please make sure the milestone is very clearly described to avoid any delays in payment at the milestone completion stage.",
+    outputs_help: "You should specify the context and number of outputs you will produce. For example: new UIUX designs, customer/user-centred research, work package technical outputs, documentation, prototypes, demonstrators/pilots, white-paper, business/tokenomics model, events, research papers, measurable engagement, reference/production software implementation or any other outputs you will provide.",
+    success_criteria_help: "Acceptance criteria are linked to intended outcomes and targets and are standards/levels by which to judge whether an objective/goal/ target/outcome has been achieved/successful.",
+    evidence_help: "The evidence you submit must show clearly and visibly that this milestone has been completed.",
+    month_help: "In which month do you plan to complete this milestone. Month 1 of your project should be the same month as the initial payment. Month 2 is the next month after your initial payment.",
+    cost_help: "What is the cost forecast in US$ to complete this milestone? The cost of the milestone cannot exceed 30% of the whole budget. For this milestone you cannot exceed {maxCost}.",
+    completion_help: "Once you have completed this milestone, how much in % terms will you have completed of your project? The completion must be at least 10% more than the previous milestone."
   },
   som_review: {
     from: "From",
@@ -152,23 +193,33 @@ export default {
     system: "System",
     outputs: "outputs",
     acceptance_criteria: "acceptance criteria",
-    evidence: "evidence"
+    evidence: "evidence",
+    resubmission_title: "SoM review resubmission",
+    resubmission_msg: "You have already submitted a review for this SoM. Do you want to resubmit it? The previous submission will be archived.",
+    resubmission_confirm: "Proceed with resubmission",
+    resubmission_clear: "Cancel"
   },
   new_som_review: {
     title: "New Review for Statement of Milestone",
     submit: "Submit",
     reset: "Reset",
     outputs_approved: "Outputs approved?",
-    outputs_comment: "Outputs comment:",
-    success_criteria_approved: "Success criteria approved?",
-    success_criteria_comment: "Success criteria comment:",
-    evidence_approved: "Evidence approved?",
-    evidence_comment: "Evidence comment:",
+    outputs_approved_help: "Tick the checkbox if the \"Outputs\" of the SoM are approved.",
+    outputs_comment: "Comment on \"Outputs\":",
+    outputs_comment_help: "In case the \"Outputs\" are not approved, please describe what is missing and how the proposer can amend them in order to get the approval.",
+    success_criteria_approved: "\"Acceptance criteria\" approved?",
+    success_criteria_approved_help: "Tick the checkbox if the \"Acceptance Criteria\" of the SoM are approved.",
+    success_criteria_comment: "Comment on \"Acceptance criteria\":",
+    success_criteria_comment_help: "In case the \"Acceptance criteria\" are not approved, please describe what is missing and how the proposer can amend them in order to get the approval.",
+    evidence_approved: "\"Evidence of milestone completion\" approved?",
+    evidence_approved_help: "Tick the checkbox if the \"Evidence of milestone completion\" of the SoM are approved.",
+    evidence_comment: "Comment on \"Evidence of milestone completion\":",
+    evidence_comment_help: "In case the \"Evidence of milestone completion\" are not approved, please describe what is missing and how the proposer can amend them in order to get the approval.",
   },
   roles: {
     funded_proposer: "Funded proposer",
     ct_member: "Challenge Team member",
-    io_member: "IOG Team member",
+    io_member: "Catalyst Team member",
     admin: "Admin",
     signoff: "Signoff"
   },
@@ -179,7 +230,8 @@ export default {
     challenge: "Challenge",
     budget: "Budget",
     completion: "Completion date",
-    funds_distributed: "Funds distributed"
+    funds_distributed: "Funds distributed",
+    allocated_budget_error: "Total budget allocated in SoMs"
   },
   reviews_counter: {
     approvals: "approval | approvals",
@@ -208,7 +260,7 @@ export default {
     },
     login: {
       title: "Login",
-      description: "Login as Funded Proposer, Challenge Team member or IOG member to interact with milestones.",
+      description: "Login as Funded Proposer, Challenge Team member or Catalyst team member to interact with milestones.",
       email: "Email",
       password: "Password",
       login: "Login",
@@ -247,8 +299,8 @@ export default {
       reset: "Reset"
     },
     notifications: {
-      go_to_som: "Go to SoM",
-      go_to_poa: "Go to PoA",
+      go_to_som: "Open SoM",
+      go_to_poa: "Open PoA",
       proposal: "Proposal",
       milestone: "Milestone",
       submitted_at: "Submitted at",
@@ -256,7 +308,11 @@ export default {
       poa_to_review: "PoA to be reviewed",
       som_to_review: "SoM to be reviewed",
       signoff_received: "Signoff received in the last day | Signoff received in the last {count} days",
-      no_notifications: "No notifications, no relevant events happened from your last visit."
+      no_notifications: "No notifications, no relevant events happened from your last visit.",
+      som_reviews_received: "SoM reviews received",
+      poa_reviews_received: "PoA reviews received",
+      approved: "Approved",
+      not_approved: "Not Approved",
     }
   }
 }
