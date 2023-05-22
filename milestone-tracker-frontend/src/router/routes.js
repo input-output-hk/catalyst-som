@@ -49,6 +49,11 @@ const routes = [
     name: 'proposal-milestones-detail'
   },
   {
+    path: '/proposals/:id/milestones/:milestone/:section',
+    component: MilestonesPage,
+    name: 'proposal-milestones-detail-section'
+  },
+  {
     path: '/admin',
     component: AdminPage,
     name: 'admin'
@@ -63,6 +68,18 @@ const routes = [
 export default function (history) {
   return createRouter({
     history,
-    routes
+    routes,
+    scrollBehavior(to) {
+      if(to.name === 'proposal-milestones-detail-section') {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve({
+              el: `#${to.params.section}`,
+              behavior: 'smooth'
+            })
+          }, 200)
+        })
+      }
+    }
   })
 }

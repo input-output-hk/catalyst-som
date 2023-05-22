@@ -4,7 +4,7 @@
     <td>{{ milestone }}</td>
     <td>{{$d(item.created_at, 'long')}}</td>
     <td>
-      <router-link :to="{name: 'proposal-milestones-detail', params: {id: item.project_id, milestone: milestone}}">
+      <router-link :to="{name: 'proposal-milestones-detail-section', params: {id: item.project_id, milestone: milestone, section: targetSection}}">
         {{ msg }}
       </router-link>
     </td>
@@ -33,5 +33,9 @@ const msg = computed(() => {
 
 const milestone = computed(() => {
   return (entityType.value === 'som') ? props.item.milestone : props.item.poa_milestone
+})
+
+const targetSection = computed(() => {
+  return `${entityType.value}-${milestone.value}`
 })
 </script>

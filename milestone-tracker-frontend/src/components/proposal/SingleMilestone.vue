@@ -5,6 +5,11 @@
         <div class="column is-8">
           <h2 class="is-size-3 mb-2 mt-2">{{ $t('milestone.som', {nr: milestone}) }}</h2>
           <p class="mb-5">{{ $t('milestone.latest_som', {nr: milestone}) }}</p>
+          <p v-if="withPoas">
+            <router-link :to="{name: 'proposal-milestones-detail-section', params: {id: proposal.id, milestone: milestone, section: `poa-${milestone}`}}">
+              Jump to PoA
+            </router-link>
+          </p>
         </div>
         <div v-if="canSubmitSom" class="column is-4 has-text-right mt-4">
           <o-button
@@ -98,6 +103,14 @@ const currentSom = computed(() => {
     return soms.value.find(som => som.current)
   } catch {
     return null
+  }
+})
+
+const withPoas = computed(() => {
+  try {
+    return (currentSom.value.poas.length > 0)
+  } catch {
+    return false
   }
 })
 
