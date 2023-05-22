@@ -35,7 +35,13 @@ import { ref, computed } from 'vue'
 import { SchemaFormFactory, useSchemaForm } from "formvuelate"
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
 
-import * as yup from 'yup';
+import * as yup from 'yup'
+
+import { useSoms } from '@/store/soms.js'
+import { useFormFields } from '@/composables/useFormFields.js'
+import { getPrevMilestone } from '@/utils/milestones'
+import { useI18n } from 'vue-i18n'
+
 const props = defineProps({
   proposal: {
     type: Object,
@@ -55,10 +61,7 @@ const props = defineProps({
   },
 })
 const emit = defineEmits(['somSubmitted', 'refreshRecap'])
-import { useSoms } from '@/store/soms.js'
-import { useFormFields } from '@/composables/useFormFields.js'
-import { getPrevMilestone } from '@/utils/milestones'
-import { useI18n } from 'vue-i18n'
+
 const { t, n } = useI18n()
 const { createSom } = useSoms()
 

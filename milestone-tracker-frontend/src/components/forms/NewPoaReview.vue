@@ -27,6 +27,13 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useFormFields } from '@/composables/useFormFields.js'
+import { usePoaReviews } from '@/store/poaReviews.js'
+import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
+import { SchemaFormFactory, useSchemaForm } from "formvuelate"
+import { useI18n } from 'vue-i18n'
+import * as yup from 'yup'
+
 const props = defineProps({
   poa: {
     type: Object,
@@ -38,14 +45,10 @@ const props = defineProps({
   }
 })
 const emit = defineEmits(['poaReviewSubmitted'])
-import { useFormFields } from '@/composables/useFormFields.js'
-import { usePoaReviews } from '@/store/poaReviews.js'
-import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
-import { SchemaFormFactory, useSchemaForm } from "formvuelate"
-import { useI18n } from 'vue-i18n'
+
 const { t } = useI18n()
 const { createPoaReview } = usePoaReviews()
-import * as yup from 'yup'
+
 
 const initialSchema = computed(() => {
   return {

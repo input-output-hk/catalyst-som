@@ -30,6 +30,10 @@
 import { ref, computed } from 'vue'
 import { SchemaFormFactory, useSchemaForm } from "formvuelate"
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
+import { useFormFields } from '@/composables/useFormFields.js'
+import { usePoas } from '@/store/poas.js'
+import { useI18n } from 'vue-i18n'
+
 const props = defineProps({
   proposal: {
     type: Object,
@@ -44,9 +48,7 @@ const props = defineProps({
     default: 0
   },
 })
-import { useFormFields } from '@/composables/useFormFields.js'
-import { usePoas } from '@/store/poas.js'
-import { useI18n } from 'vue-i18n'
+
 const { t } = useI18n()
 const { createPoa } = usePoas()
 
