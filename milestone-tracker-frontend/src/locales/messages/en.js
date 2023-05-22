@@ -32,7 +32,7 @@ export default {
     proposals: "Proposals",
     login: "Login",
     profile: "Profile",
-    notifications: "Notifications",
+    to_do_list_updates: "Todo list / Updates",
     admin: "Admin",
     logout: "Logout {name}"
   },
@@ -313,6 +313,8 @@ export default {
       poa_reviews_received: "PoA reviews received",
       approved: "Approved",
       not_approved: "Not Approved",
+      open_som_to_resubmit: "Open and resubmit SoM",
+      open_poa_to_resubmit: "Open and resubmit PoA",
     }
   }
 }

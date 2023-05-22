@@ -10,7 +10,7 @@
         <br />
       </span>
       <router-link :to="{name: 'proposal-milestones-detail-section', params: {id: item.project_id, milestone: item.milestone, section: targetSection}}">
-        {{ msg }}
+        {{ _msg }}
       </router-link>
     </td>
   </tr>
@@ -18,6 +18,10 @@
 
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 const props = defineProps({
   item: {
     type: Object,
@@ -41,6 +45,15 @@ const approved = computed(() => {
 const isReview = computed(() => {
   const keys = Object.keys(props.item)
   return (keys.includes('content_approved') || keys.includes('outputs_approved'))
+})
+
+const _msg = computed(() => {
+  if (isReview.value) {
+    if (!approved.value) {
+      return (props.entityType === 'som') ? t('pages.notifications.open_som_to_resubmit') : t('pages.notifications.open_poa_to_resubmit')
+    }
+  }
+  return props.msg
 })
 
 const targetSection = computed(() => {
