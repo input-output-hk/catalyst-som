@@ -8,6 +8,7 @@
       :items="somsToReview"
       :headers="headers"
       :row-msg="$t('pages.notifications.go_to_som')"
+      :entity-type="'som'"
     />
     <notification-list
       v-if="poasToReview.length"
@@ -17,6 +18,7 @@
       :items="poasToReview"
       :headers="headers"
       :row-msg="$t('pages.notifications.go_to_poa')"
+      :entity-type="'poa'"
     />
     <notification-list
       v-if="signoffs.length"
@@ -35,6 +37,7 @@
       :items="somReviews"
       :headers="headers"
       :row-msg="$t('pages.notifications.go_to_som')"
+      :entity-type="'som'"
     />
     <notification-list
       v-show="poaReviews.length"
@@ -44,6 +47,7 @@
       :items="poaReviews"
       :headers="headers"
       :row-msg="$t('pages.notifications.go_to_poa')"
+      :entity-type="'poa'"
     />
     <div v-if="notificationsCount === 0" class="tile is-ml is-parent">
       <div class="tile is-child notification is-info">

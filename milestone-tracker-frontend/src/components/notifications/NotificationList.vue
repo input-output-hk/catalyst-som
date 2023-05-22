@@ -14,6 +14,7 @@
           :key="item.id"
           :item="item"
           :msg="rowMsg"
+          :entity-type="entityType"
           />
       </tbody>
     </table>
@@ -42,6 +43,10 @@ defineProps({
   rowComponent: {
     type: Object,
     default: () => {}
+  },
+  entityType: {
+    type: String,
+    default: 'som'
   }
 })
 </script>

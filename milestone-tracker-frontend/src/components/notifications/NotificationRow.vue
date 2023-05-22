@@ -9,7 +9,7 @@
         <span v-else class="tag is-danger">{{ $t('pages.notifications.not_approved') }}</span>
         <br />
       </span>
-      <router-link :to="{name: 'proposal-milestones-detail', params: {id: item.project_id, milestone: item.milestone}}">
+      <router-link :to="{name: 'proposal-milestones-detail-section', params: {id: item.project_id, milestone: item.milestone, section: targetSection}}">
         {{ msg }}
       </router-link>
     </td>
@@ -26,6 +26,10 @@ const props = defineProps({
   msg: {
     type: String,
     default: 'Go to'
+  },
+  entityType: {
+    type: String,
+    default: 'som'
   }
 })
 
@@ -37,6 +41,10 @@ const approved = computed(() => {
 const isReview = computed(() => {
   const keys = Object.keys(props.item)
   return (keys.includes('content_approved') || keys.includes('outputs_approved'))
+})
+
+const targetSection = computed(() => {
+  return `${props.entityType}-${props.item.milestone}`
 })
 
 </script>
