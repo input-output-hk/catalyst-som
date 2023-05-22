@@ -241,6 +241,9 @@ export default {
     allocation: "Allocation",
     add_allocation: "Add allocation"
   },
+  validations: {
+    text_required: "This is a required field"
+  },
   pages: {
     admin: {
       title: "Admin",

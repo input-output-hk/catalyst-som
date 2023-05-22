@@ -40,6 +40,7 @@ import * as yup from 'yup'
 import { useSoms } from '@/store/soms.js'
 import { useFormFields } from '@/composables/useFormFields.js'
 import { getPrevMilestone } from '@/utils/milestones'
+import { HTMLNotEmpty } from '@/utils/validations.js'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
@@ -139,15 +140,18 @@ const initialSchema = computed(() => {
     },
     outputs: {
       type: 'html',
-      help: t('new_som.outputs_help')
+      help: t('new_som.outputs_help'),
+      validations: yup.string().test('len', t('validations.text_required'), HTMLNotEmpty)
     },
     success_criteria: {
       type: 'html',
-      help: t('new_som.success_criteria_help')
+      help: t('new_som.success_criteria_help'),
+      validations: yup.string().test('len', t('validations.text_required'), HTMLNotEmpty)
     },
     evidence: {
       type: 'html',
-      help: t('new_som.evidence_help')
+      help: t('new_som.evidence_help'),
+      validations: yup.string().test('len', t('validations.text_required'), HTMLNotEmpty)
     },
     cost: {
       type: 'number',

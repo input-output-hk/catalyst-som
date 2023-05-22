@@ -26,6 +26,7 @@
 import { ref, computed } from 'vue'
 import { useFormFields } from '@/composables/useFormFields.js'
 import { useSomReviews } from '@/store/somReviews.js'
+import { HTMLNotEmpty } from '@/utils/validations.js'
 import VeeValidatePlugin from '@formvuelate/plugin-vee-validate'
 import { SchemaFormFactory, useSchemaForm } from 'formvuelate'
 import { useI18n } from 'vue-i18n'
@@ -60,9 +61,11 @@ const initialSchema = computed(() => {
         is: true,
         otherwise: (schema) => {
           if (!formData.value[`${key}_approves`]) {
-            return schema.required()
+            return schema.required().test('len', t('validations.text_required'), HTMLNotEmpty)
           }
-          return schema
+          // same output just to not lose logic.
+          // this branch can be be simple `schema` if it is not required for approved review.
+          return schema.required().test('len', t('validations.text_required'), HTMLNotEmpty)
         }
       })
     }

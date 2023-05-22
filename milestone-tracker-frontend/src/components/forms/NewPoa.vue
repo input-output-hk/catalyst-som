@@ -31,8 +31,10 @@ import { ref, computed } from 'vue'
 import { SchemaFormFactory, useSchemaForm } from "formvuelate"
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
 import { useFormFields } from '@/composables/useFormFields.js'
+import { HTMLNotEmpty } from '@/utils/validations.js'
 import { usePoas } from '@/store/poas.js'
 import { useI18n } from 'vue-i18n'
+import * as yup from 'yup'
 
 const props = defineProps({
   proposal: {
@@ -58,6 +60,7 @@ const initialSchema = computed(() => {
       type: 'html',
       label: t('new_poa.content'),
       help: t('new_poa.content_help'),
+      validations: yup.string().test('len', t('validations.text_required'), HTMLNotEmpty)
     }
   }
 })
