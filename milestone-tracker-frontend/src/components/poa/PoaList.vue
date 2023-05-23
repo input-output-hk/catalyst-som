@@ -4,8 +4,13 @@
       <h3 class="subtitle">{{ $t('poas.title') }}</h3>
       <p
         v-if="renderedPoas.current && renderedPoas.current.poas_reviews.length > 0 && submittablePoa"
-        :class="{'is-danger': currentPoaStatus === 'no_approvals', 'is-success': currentPoaStatus === 'all_approvals'}"
-        class="notification is-light"
+        :class="{
+          'is-danger': currentPoaStatus === 'no_approvals',
+          'is-success': currentPoaStatus === 'all_approvals',
+          'is-warning': currentPoaStatus === 'some_approvals',
+          'is-light': ['no_approvals', 'all_approvals'].includes(currentPoaStatus)
+        }"
+        class="notification"
       >
         {{ $t(`poa.${currentPoaStatus}`) }}
       </p>

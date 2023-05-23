@@ -16,8 +16,13 @@
           </p>
           <p
             v-if="currentSom && currentSom.som_reviews.length > 0 && canSubmitSom"
-            :class="{'is-danger': currentSomStatus === 'no_approvals', 'is-success': currentSomStatus === 'all_approvals'}"
-            class="notification is-light"
+            :class="{
+              'is-danger': currentSomStatus === 'no_approvals',
+              'is-success': currentSomStatus === 'all_approvals',
+              'is-warning': currentSomStatus === 'some_approvals',
+              'is-light': ['no_approvals', 'all_approvals'].includes(currentSomStatus)
+            }"
+            class="notification"
           >
             {{ $t(`milestone.${currentSomStatus}`) }}
           </p>
