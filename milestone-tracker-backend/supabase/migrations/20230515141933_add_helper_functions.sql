@@ -56,7 +56,7 @@ AS $BODY$
           SELECT
               soms.milestone,
               soms.proposal_id,
-              soms.title,
+              proposals.title,
               soms.created_at,
               proposals.project_id,
               count(distinct som_reviews.id) as my_reviews_count
@@ -76,7 +76,7 @@ AS $BODY$
                 select allocations.proposal_id from allocations where allocations.user_id = auth.uid()
               )
               and soms.current = true
-              group by soms.milestone, soms.proposal_id, soms.title, soms.created_at, proposals.project_id
+              group by soms.milestone, soms.proposal_id, proposals.title, soms.created_at, proposals.project_id
               having count(distinct signoffs.id) = 0
               order by soms.created_at desc;
   END;
@@ -188,7 +188,7 @@ AS $BODY$
           SELECT
               soms.milestone,
               soms.proposal_id,
-              soms.title,
+              proposals.title,
               poas.created_at,
               proposals.project_id,
               count(distinct poas_reviews.id) as my_reviews_count
@@ -210,7 +210,7 @@ AS $BODY$
                 select allocations.proposal_id from allocations where allocations.user_id = auth.uid()
               )
               and poas.current = true
-              group by soms.milestone, soms.proposal_id, soms.title, poas.created_at, proposals.project_id
+              group by soms.milestone, soms.proposal_id, proposals.title, poas.created_at, proposals.project_id
               having count(distinct signoffs.id) = 0
               order by poas.created_at DESC;
   END;
