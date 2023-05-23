@@ -231,7 +231,10 @@ export default {
     budget: "Budget",
     completion: "Completion date",
     funds_distributed: "Funds distributed",
-    allocated_budget_error: "Total budget allocated in SoMs"
+    allocated_budget_error: "Total budget allocated in SoMs",
+    budget_error: "Error in budget allocated to SoMs.",
+    budget_error_msg: "The budget currently allocated in SoMs ({allocated}) doesn't correspond to the total budget of the proposal ({total}). Please resubmit SoMs to address this error.",
+    ok: "OK"
   },
   reviews_counter: {
     approvals: "approval | approvals",

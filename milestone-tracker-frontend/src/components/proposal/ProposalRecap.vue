@@ -27,6 +27,7 @@
           </span>
         </td>
       </tr>
+
       <tr v-if="budgetError > 0" class="is-error">
         <th>{{ $t('proposal_recap.allocated_budget_error') }}</th>
         <td>
@@ -57,10 +58,38 @@
       </tr>
     </tbody>
   </table>
+  <o-modal class="budget-error" :active="budgetError > 0 && !dismissed && canWriteSom(proposal.id)" scroll="keep">
+    <div class="card">
+      <header class="card-header is-error is-light">
+        <p class="card-header-title">
+          {{ $t('proposal_recap.budget_error') }}
+        </p>
+      </header>
+      <div class="card-content">
+        <p>
+          {{ $t(
+              'proposal_recap.budget_error_msg',
+              {
+                allocated: $n(budgetError, "currency"),
+                total: $n(proposal.budget, "currency")
+              }
+            )
+          }}
+        </p>
+        <div class="buttons">
+          <o-button
+            size="medium"
+            @click="dismissed = true">
+            {{ $t('proposal_recap.ok') }}
+          </o-button>
+        </div>
+      </div>
+    </div>
+  </o-modal>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import AllocationForm from '@/components/proposal/AllocationForm.vue'
 import { useUser } from '@/store/user.js'
 
@@ -94,7 +123,9 @@ const budgetError = computed(() => {
   return 0
 })
 
-const { canSetAllocations } = useUser()
+const dismissed = ref(false)
+
+const { canSetAllocations, canWriteSom } = useUser()
 
 </script>
 
