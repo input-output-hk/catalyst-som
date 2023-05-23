@@ -6,8 +6,12 @@
           <h2 class="is-size-3 mb-2 mt-2">{{ $t('milestone.som', {nr: milestone}) }}</h2>
           <p class="mb-5">{{ $t('milestone.latest_som', {nr: milestone}) }}</p>
           <p v-if="withPoas">
-            <router-link :to="{name: 'proposal-milestones-detail-section', params: {id: proposal.project_id, milestone: milestone, section: `poa-${milestone}`}}">
-              Jump to PoA
+            <router-link
+              v-slot="{ navigate }"
+              :to="{name: 'proposal-milestones-detail-section', params: {id: proposal.project_id, milestone: milestone, section: `poa-${milestone}`}}">
+              <o-button variant="primary" size="small" @click="navigate">
+                Jump to PoA
+              </o-button>
             </router-link>
           </p>
           <p
