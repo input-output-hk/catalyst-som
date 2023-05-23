@@ -224,7 +224,7 @@ export default {
     signoff: "Signoff"
   },
   proposal_recap: {
-    proposal_id: "Proposal ID",
+    proposal_id: "Project ID",
     link: "Link",
     open_ideascale: "Open in Ideascale",
     challenge: "Challenge",
@@ -234,7 +234,9 @@ export default {
     allocated_budget_error: "Total budget allocated in SoMs",
     budget_error: "Error in budget allocated to SoMs.",
     budget_error_msg: "The budget currently allocated in SoMs ({allocated}) doesn't correspond to the total budget of the proposal ({total}). Please resubmit SoMs to address this error.",
-    ok: "OK"
+    ok: "OK",
+    starting_date: "Start date",
+    scheduled_starting_date: "Scheduled start date"
   },
   reviews_counter: {
     approvals: "approval | approvals",

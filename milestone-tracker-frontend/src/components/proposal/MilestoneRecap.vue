@@ -16,7 +16,7 @@
       </p>
       <p class="is-size-6 mb-0">{{ $t('milestone_recap.delivery') }}</p>
       <p class="is-size-4 has-text-weight-semibold">
-        {{ $t('milestone_recap.month', {month: som.month}) }}
+        {{ $t('milestone_recap.month', {month: som.month}) }} - {{ $d(literalMonth, 'month_only') }}
       </p>
       <div class="is-tile is-child notification is-info ml-0">
         <p class="is-size-5 mb-4 has-text-weight-semibold">
@@ -95,6 +95,14 @@ const startingMonth = computed(() => {
     return props.milestone.progress - props.milestone.duration + 1
   }
   return 0
+})
+
+const literalMonth = computed(() => {
+  if (props.milestone) {
+    const startDate = new Date(props.proposal.starting_date)
+    return new Date(startDate.setMonth(startDate.getMonth() + parseInt(som.value.month)))
+  }
+  return ''
 })
 
 </script>

@@ -63,7 +63,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['somSubmitted', 'refreshRecap'])
 
-const { t, n } = useI18n()
+const { t, n, d } = useI18n()
 const { createSom } = useSoms()
 
 const otherSoms = computed(() => {
@@ -132,6 +132,17 @@ const completionRule = computed(() => {
   return rule.min((min) ? parseInt(min.completion) + offset : 10)
 })
 
+const monthOptions = computed(() => {
+  return [...Array(24).keys()].map((m) => {
+    const startDate = new Date(props.proposal.starting_date)
+    const monthName = d(new Date(startDate.setMonth(startDate.getMonth() + parseInt(m + 1))), 'month_only')
+    return {
+      value: m + 1,
+      label: `Month ${m + 1} - ${monthName}`
+    }
+  })
+})
+
 const initialSchema = computed(() => {
   const localSchema = {
     title: {
@@ -164,7 +175,7 @@ const initialSchema = computed(() => {
       validations: monthRule.value,
       required: true,
       default: 1,
-      options: [...Array(24).keys()].map((m) => ({value: m + 1, label: `Month ${m + 1}`})),
+      options: monthOptions.value,
       help: t('new_som.month_help')
     },
     completion: {

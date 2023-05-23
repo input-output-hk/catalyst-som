@@ -25,7 +25,7 @@
           <tr>
             <th>{{ $t('som.month') }}</th>
             <td class="som-month">
-              <span class="is-size-3 mr-4 has-text-weight-semibold">{{som.month}}</span>
+              <span class="is-size-3 mr-4 has-text-weight-semibold">{{som.month}} - {{ $d(literalMonth, 'month_only') }}</span>
             </td>
             <td v-if="somReviewsVisible"></td>
           </tr>
@@ -251,6 +251,11 @@ const activeSomReviews = computed(() => {
 
 const archivedSomReviews = computed(() => {
   return props.som.som_reviews.filter(review => !review.current)
+})
+
+const literalMonth = computed(() => {
+  const startDate = new Date(props.proposal.starting_date)
+  return new Date(startDate.setMonth(startDate.getMonth() + parseInt(props.som.month)))
 })
 
 const _handleSomReviewResubmission = () => {

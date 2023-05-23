@@ -45,6 +45,14 @@
         </td>
       </tr>
       <tr>
+        <th>{{ proposal.funds_distributed === 0 ? $t('proposal_recap.scheduled_starting_date') : $t('proposal_recap.starting_date') }}</th>
+        <td>
+          <span v-if="proposal.starting_date">
+            {{ $d(proposal.starting_date, 'short') }}
+          </span>
+        </td>
+      </tr>
+      <tr>
         <th>{{ $t('proposal_recap.completion') }}</th>
         <td>
           <span v-if="proposal.completion_date">

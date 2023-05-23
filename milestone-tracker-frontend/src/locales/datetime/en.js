@@ -10,5 +10,9 @@ export default {
     day: 'numeric',
     hour: 'numeric',
     minute: 'numeric'
+  },
+  month_only: {
+    year: 'numeric',
+    month: 'short'
   }
 }
