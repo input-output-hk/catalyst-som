@@ -1,6 +1,6 @@
 <template>
   <div class="content mb-0">
-    <section v-if="som" class="section" :id="`som-${som.milestone}`">
+    <section v-if="som" class="section">
       <table class="table is-bordered is-striped">
         <tbody class="som-recap">
           <tr>
@@ -174,7 +174,7 @@
           @som-review-submitted="newReviewVisible = false" />
       </section>
       <div v-if="som.poas.length > 0" class="columns">
-        <div class="column is-12" :id="`poa-${som.milestone}`">
+        <div :id="`poa-${som.milestone}`" class="column is-12">
           <poa-list :som="som" :poas="som.poas" :proposal="proposal" :submittable-poa="current && canWriteSom(proposal.id) && locked && !poaLocked" />
         </div>
       </div>

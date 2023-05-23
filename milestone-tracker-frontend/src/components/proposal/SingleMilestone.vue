@@ -1,5 +1,5 @@
 <template>
-  <div class="content mb-0">
+  <div :id="`som-${milestone}`" class="content mb-0">
     <section class="section pt-0">
       <div class="columns">
         <div class="column is-8">
