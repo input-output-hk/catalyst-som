@@ -325,6 +325,7 @@ AS $BODY$
             where
             proposals_users.user_id = auth.uid() AND
             soms.current = true AND
+            poas.current = true AND
             poas_reviews.current = true
             GROUP by proposals.project_id, proposals.title, soms.milestone, poas_reviews.created_at, poas_reviews.content_approved
             HAVING count(distinct signoffs.id) = 0
