@@ -5,6 +5,7 @@
         <h4 class="is-size-3 mr-4 has-text-weight-semibold mb-0">
           {{ $n(totPayment, "currency") }}
         </h4><p>{{ $t('next_payment.to_be_distributed') }}</p>
+        <!--
         <p>
           <strong>{{ $n(payment.poaPayment, "currency") }}</strong>
           {{ $t('next_payment.as_poa_completion') }}
@@ -13,6 +14,7 @@
           <strong>{{ $n(payment.chunkPayment, "currency") }}</strong>
           {{ $t('next_payment.as_monthly_chunk') }}
         </p>
+        -->
       </div>
     </div>
   </div>
