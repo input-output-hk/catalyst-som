@@ -3,8 +3,8 @@ export default {
     title: "Project Catalyst Milestone Module"
   },
   errors: {
-    fetching_proposals: "Error fetching proposals.",
-    fetching_proposals_count: "Error fetching proposals count.",
+    fetching_proposals: "Error fetching projects.",
+    fetching_proposals_count: "Error fetching projects count.",
     fetching_soms: "Error fetching soms.",
     fetching_users: "Error fetching users.",
     fetching_users_count: "Error fetching users count.",
@@ -13,7 +13,7 @@ export default {
     creating_signoff: "Error creating Signoff.",
     creating_som_review: "Error creating SoM review.",
     creating_som: "Error creating SoM.",
-    updating_allocations: "Error updatung allocations."
+    updating_allocations: "Error updating allocations."
   },
   notifications: {
     logged_in: "Logged in.",
@@ -29,7 +29,7 @@ export default {
   },
   nav: {
     home: "Home",
-    proposals: "Proposals",
+    proposals: "Projects",
     login: "Login",
     profile: "Profile",
     to_do_list_updates: "Todo list / Updates",
@@ -44,11 +44,11 @@ export default {
   admin: {
     select_role: "Select role",
     add_challenge: "Add a challenge",
-    add_proposal: "Add a proposal"
+    add_proposal: "Add a project"
   },
   milestone: {
     som: "Statement of Milestone {nr}",
-    latest_som: "Latest submission from proposers of the Statement of Milestone {nr}.",
+    latest_som: "Latest submission of the Statement of Milestone {nr}.",
     archived: "Archived Statements of Milestone {nr}",
     submit_new_som: "Submit new SoM",
     resubmit_som: "Resubmit SoM",
@@ -56,7 +56,7 @@ export default {
     resubmission_msg: "Are you sure you want to resubmit this SoM? The current SoM and all its reviews will be archived. The new SoM submission will have to go through the review process again.",
     resubmission_confirm: "Proceed with resubmission",
     resubmission_clear: "Cancel",
-    all_approvals: "At the moment your SoM was approved by all the reviewers. Please wait for additional reviews or for SoM signoff. After the SoM will be signed off you will be able to submit Proof of Achivement.",
+    all_approvals: "At the moment your SoM was approved by all the reviewers. Please wait for additional reviews or for SoM signoff. After the SoM will be signed off you will be able to submit Proof of Achievement.",
     some_approvals: "Your SoM was partially approved. Please proceed with a new submission of the SoM addressing the comments made by reviewers by using the button on the right.",
     no_approvals: "Your SoM was not approved. Please resubmit it addressing the comments made on reviews by using the button on the right.",
     waiting_reviews: "Please wait for additional reviews or for SoM signoff.",
@@ -100,17 +100,17 @@ export default {
     poa_signed_off_at: "PoA approved by Catalyst at:"
   },
   new_poa: {
-    title: "New Proof of Achivement for Milestone {nr}",
+    title: "New Proof of Achievement for Milestone {nr}",
     submit: "Submit PoA",
     reset: "Reset",
     content: "Content",
-    content_help: "Please describe the Proof of Achivement, including links to resources (if any). Remember that the PoA has to satisfy the \"Outputs\", the \"Acceptance Criteria\" and the \"Evidence of Milestone Completion\" indicated in the SoM.",
+    content_help: "Please describe the Proof of Achievement, including links to resources (if any). Remember that the PoA has to satisfy the \"Outputs\", the \"Acceptance Criteria\" and the \"Evidence of Milestone Completion\" indicated in the SoM.",
   },
   poas: {
-    title: "Proof of Achivement",
+    title: "Proof of Achievement",
     hide_archived: "Hide archived PoAs",
     show_archived: "Show archived PoAs",
-    archived: "Archived Proof of Achivements"
+    archived: "Archived Proof of Achievements"
   },
   poa_review: {
     from: "From",
@@ -233,7 +233,7 @@ export default {
     funds_distributed: "Funds distributed",
     allocated_budget_error: "Total budget allocated in SoMs",
     budget_error: "Error in budget allocated to SoMs.",
-    budget_error_msg: "The budget currently allocated in SoMs ({allocated}) doesn't correspond to the total budget of the proposal ({total}). Please resubmit SoMs to address this error.",
+    budget_error_msg: "The budget currently allocated in SoMs ({allocated}) doesn't correspond to the total budget of the project ({total}). Please resubmit SoMs to address this error.",
     ok: "OK",
     starting_date: "Start date",
     scheduled_starting_date: "Scheduled start date"
@@ -257,12 +257,12 @@ export default {
       username: "Username",
       role: "Role",
       challenges: "Challenges",
-      proposals_as_owner: "Proposals (as owner)",
-      proposals_allocated: "Proposals allocated (as reviewer)",
+      proposals_as_owner: "Projects (as owner)",
+      proposals_allocated: "Projects allocated (as reviewer)",
     },
     home: {
       title: "Project Catalyst<br />Milestone Module",
-      discover: "Discover proposals",
+      discover: "Discover projects",
       how: "How it works",
       faq: "FAQ"
     },
@@ -275,7 +275,7 @@ export default {
       reset: "Reset Password"
     },
     milestones: {
-      back: "Go back to main proposal page.",
+      back: "Go back to main paject page.",
       milestone: "Milestone {nr}"
     },
     profile: {
@@ -283,17 +283,17 @@ export default {
       email: "Email",
       username: "Username",
       role: "Role",
-      proposals: "Proposals (as Funded Proposer):",
+      proposals: "Projects (as Funded Proposer):",
       challenges: "Challenges (as Challenge Team):",
-      proposals_allocated: "Proposals allocated to review:"
+      proposals_allocated: "Projects allocated to review:"
     },
     proposal: {
       open_details: "Open Milestones Details",
       milestone_recap: "Milestones Recap"
     },
     proposals: {
-      page_title: "Proposals",
-      description: "All the proposals in the Statement of Milestone pilot.",
+      page_title: "Funded Projects",
+      description: "All the projects in the Statement of Milestone pilot.",
       export: "Export CSV",
       id: "ID",
       title: "Title",
@@ -310,7 +310,7 @@ export default {
     notifications: {
       go_to_som: "Open SoM",
       go_to_poa: "Open PoA",
-      proposal: "Proposal",
+      proposal: "Project",
       milestone: "Milestone",
       submitted_at: "Submitted at",
       signedoff_at: "Approved by Catalyst at",
