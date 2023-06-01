@@ -1,0 +1,15 @@
+VERSION 0.7
+# Use dind as supabase will spawn docker containers
+FROM earthly/dind:alpine
+WORKDIR /backend
+
+deps:
+    RUN apk add --update nodejs npm
+    COPY package.json ./
+    COPY package-lock.json ./
+    RUN npm install
+
+initialize:
+    FROM +deps
+    COPY supabase supabase
+ 
