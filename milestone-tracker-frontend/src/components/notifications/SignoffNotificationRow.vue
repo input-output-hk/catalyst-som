@@ -1,6 +1,10 @@
 <template>
   <tr>
-    <td>{{ item.title }}</td>
+    <td>
+      <router-link :to="{name: 'proposal-milestones-detail-section', params: {id: item.project_id, milestone: milestone, section: targetSection}}">
+        {{ item.title }}
+      </router-link>
+    </td>
     <td>{{ milestone }}</td>
     <td>{{$d(item.created_at, 'long')}}</td>
     <td>
