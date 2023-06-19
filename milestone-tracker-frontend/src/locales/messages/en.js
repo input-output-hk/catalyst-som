@@ -69,6 +69,7 @@ export default {
     cost: "Milestone cost:",
     delivery: "Stated delivery on:",
     month: "Month {month}",
+    payment_month: "Initial payment | Month {n} | Month {n}",
     payment: "Payments schedule:",
     payment_starts: "Payments starts after previous milestone PoA approval.",
     last_payment: "Last payment occurs after Project Closeout approval.",

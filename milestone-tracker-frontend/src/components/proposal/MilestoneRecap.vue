@@ -26,7 +26,7 @@
         <ul>
           <li v-for="x, i in Array.from({length: milestone.duration})" :key="i">
             <span class="is-size-6 has-text-weight-semibold">
-              {{$n(milestone.monthly_payment, 'currency')}} - {{ $t('milestone_recap.month', {month: startingMonth + i}) }}
+              {{$n(milestone.monthly_payment, 'currency')}} - {{ $t('milestone_recap.payment_month', startingMonth + i - 1) }}
             </span>
           </li>
         </ul>
