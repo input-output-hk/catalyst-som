@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS public.proposals
     title character varying COLLATE pg_catalog."default",
     url character varying COLLATE pg_catalog."default",
     project_id bigint,
-    completion_date timestamp without time zone,
     created_at timestamp with time zone DEFAULT now(),
     challenge_id bigint,
     budget bigint,

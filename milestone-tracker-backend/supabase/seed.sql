@@ -19,13 +19,13 @@ INSERT INTO public.challenges (id, title, created_at, fund_id) VALUES
 -- Data for Name: proposals; Type: TABLE DATA; Schema: public; Owner: supabase_admin
 --
 
-INSERT INTO public.proposals (id, title, url, project_id, completion_date, created_at, challenge_id, budget, starting_date) VALUES
-  (1, 'Proposal 1', 'https://cardano.ideascale.com/a/dtd/422294-48088', 900002, '2023-06-01 00:00:00', '2022-11-10 16:35:28.580163+00', 1, 100000, '2023-03-01 00:00:00'),
-  (2, 'Proposal 2', 'https://cardano.ideascale.com/a/dtd/419167-48088', 900003,	'2023-06-30 00:00:00', '2022-11-10 16:35:28.580163+00', 2, 100000, '2023-03-01 00:00:00'),
-  (3, 'Proposal 3', 'https://cardano.ideascale.com/a/dtd/418759-48088', 900005, '2023-06-01 00:00:00', '2022-11-10 16:35:28.580163+00', 3, 44000, '2023-04-01 00:00:00'),
-  (4, 'Proposal 4',	'https://cardano.ideascale.com/a/dtd/422294-48088', 900006, '2023-07-01 00:00:00', '2022-11-10 16:35:28.580163+00', 1, 100000, '2023-05-01 00:00:00'),
-  (5, 'Proposal 5', 'https://cardano.ideascale.com/a/dtd/419167-48088', 900007, '2023-06-30 00:00:00', '2022-11-10 16:35:28.580163+00', 2, 100000, '2023-03-01 00:00:00'),
-  (6, 'Proposal 6', 'https://cardano.ideascale.com/a/dtd/418759-48088', 900008, '2023-08-01 00:00:00', '2022-11-10 16:35:28.580163+00', 3, 100000, '2023-03-01 00:00:00');
+INSERT INTO public.proposals (id, title, url, project_id, created_at, challenge_id, budget, starting_date) VALUES
+  (1, 'Proposal 1', 'https://cardano.ideascale.com/a/dtd/422294-48088', 900002, '2022-11-10 16:35:28.580163+00', 1, 100000, '2023-03-01 00:00:00'),
+  (2, 'Proposal 2', 'https://cardano.ideascale.com/a/dtd/419167-48088', 900003, '2022-11-10 16:35:28.580163+00', 2, 100000, '2023-03-01 00:00:00'),
+  (3, 'Proposal 3', 'https://cardano.ideascale.com/a/dtd/418759-48088', 900005, '2022-11-10 16:35:28.580163+00', 3, 44000, '2023-04-01 00:00:00'),
+  (4, 'Proposal 4',	'https://cardano.ideascale.com/a/dtd/422294-48088', 900006, '2022-11-10 16:35:28.580163+00', 1, 100000, '2023-05-01 00:00:00'),
+  (5, 'Proposal 5', 'https://cardano.ideascale.com/a/dtd/419167-48088', 900007, '2022-11-10 16:35:28.580163+00', 2, 100000, '2023-03-01 00:00:00'),
+  (6, 'Proposal 6', 'https://cardano.ideascale.com/a/dtd/418759-48088', 900008, '2022-11-10 16:35:28.580163+00', 3, 100000, '2023-03-01 00:00:00');
 
 
 -- SEED USERS

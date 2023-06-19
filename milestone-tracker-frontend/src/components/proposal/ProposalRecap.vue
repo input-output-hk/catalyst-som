@@ -52,14 +52,6 @@
           </span>
         </td>
       </tr>
-      <tr>
-        <th>{{ $t('proposal_recap.completion') }}</th>
-        <td>
-          <span v-if="proposal.completion_date">
-            {{ $d(proposal.completion_date, 'short') }}
-          </span>
-        </td>
-      </tr>
       <tr v-if="canSetAllocations">
         <th>Reviewers allocations</th>
         <td><allocation-form :proposal="proposal" /></td>
