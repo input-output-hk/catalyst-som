@@ -67,7 +67,9 @@
         <div v-if="som.som_reviews.length > 0" class="columns">
           <div class="column is-12">
             <o-button
-              class="is-small show-som-reviews mr-3"
+              size="medium"
+              variant="primary"
+              class="show-som-reviews mr-3"
               @click="reviewsVisible = !reviewsVisible">
               {{ $t('som.open_reviews') }}
             </o-button>
