@@ -55,7 +55,8 @@ const getCurrentMilestone = (milestones) => {
 }
 
 const getNextPayment = (milestones, current) => {
-  if (current && milestones.length > 0) {
+  const somsApproved = milestones.map((m) => m.som_signoff_count).every((s) => s > 0)
+  if (current && milestones.length > 0 && somsApproved) {
     if (current.milestone) {
       const lastMilestone = Math.max(...milestones.map(m => m.milestone))
       let chunkPayment = 0
