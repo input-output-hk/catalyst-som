@@ -6,8 +6,8 @@
       </div>
     </div>
     <div class="tile is-6 is-parent">
-      <div class="tile is-child notification is-danger">
-        <h4 class="is-size-3 mr-4 has-text-weight-semibold mb-0 has-text-white">{{ notApproves }}</h4>{{ $t('reviews_counter.refusals', notApproves) }}<br />
+      <div :class="{'is-info': approved, 'is-danger': !approved}" class="tile is-child notification">
+        <h4 :class="{'has-text-white': !approved}" class="is-size-3 mr-4 has-text-weight-semibold mb-0 ">{{ notApproves }}</h4>{{ $t('reviews_counter.refusals', notApproves) }}<br />
       </div>
     </div>
   </div>

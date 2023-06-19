@@ -7,6 +7,7 @@
         </router-link>
       </h1>
       <approval-counters
+        :approved="milestone.som_signoff_count > 0"
         :approves="somReviewsApproved"
         :not-approves="somReviewsNotApproved" />
       <p class="is-size-4 mb-2 has-text-weight-semibold">{{som.title}}</p>
@@ -35,6 +36,7 @@
       <div v-if="poa">
         <p class="is-size-3 mb-0 has-text-weight-semibold">{{ $t('milestone_recap.poa') }}</p>
         <approval-counters
+          :approved="milestone.poa_signoff_count > 0"
           :approves="poaReviewsApproved"
           :not-approves="poaReviewsNotApproved" />
         <signoff-recap :signoffs="poa.signoffs" />
