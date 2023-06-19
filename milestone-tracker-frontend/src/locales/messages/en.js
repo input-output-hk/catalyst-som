@@ -248,7 +248,8 @@ export default {
     add_allocation: "Add allocation"
   },
   validations: {
-    text_required: "This is a required field"
+    text_required: "This is a required field",
+    min_text_required: "This field must be at least {min} characters long",
   },
   pages: {
     admin: {
