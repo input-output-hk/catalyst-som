@@ -23,7 +23,8 @@
           <o-tab-item v-for="ml in [...Array(proposal.milestones_qty).keys()]" :key="`ml-${ml + 1}`">
             <template
               #header>
-              <span>{{ $t('pages.milestones.milestone', {nr: ml + 1}) }}</span>
+              <span v-if="ml + 1 !== proposal.milestones_qty">{{ $t('pages.milestones.milestone', {nr: ml + 1}) }}</span>
+              <span v-if="ml + 1 === proposal.milestones_qty">{{ $t('pages.milestones.final_milestone') }}</span>
             </template>
             <single-milestone :proposal="proposal" :milestone="ml + 1" @refresh-recap="refreshRecap" />
           </o-tab-item>

@@ -62,10 +62,12 @@ export default {
     waiting_reviews: "Please wait for additional reviews or for SoM signoff.",
     show_archived_soms: "Show archived SoMs",
     hide_archived_soms: "Hide archived SoMs",
-    jump_to_poa: "Jump to Proof of Achievement"
+    jump_to_poa: "Jump to Proof of Achievement",
+    final_som: "Statement of Final Milestone"
   },
   milestone_recap: {
     title: "M {nr}",
+    final_title: "M Final",
     cost: "Milestone cost:",
     delivery: "Stated delivery on:",
     month: "Month {month}",
@@ -279,7 +281,8 @@ export default {
     },
     milestones: {
       back: "Go back to main project page.",
-      milestone: "Milestone {nr}"
+      milestone: "Milestone {nr}",
+      final_milestone: "Final Milestone"
     },
     profile: {
       title: "User Profile",

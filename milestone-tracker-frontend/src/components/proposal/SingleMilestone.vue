@@ -3,7 +3,8 @@
     <section class="section pt-0">
       <div class="columns">
         <div class="column is-8">
-          <h2 class="is-size-3 mb-2 mt-2">{{ $t('milestone.som', {nr: milestone}) }}</h2>
+          <h2 v-if="milestone !== proposal.milestones_qty" class="is-size-3 mb-2 mt-2">{{ $t('milestone.som', {nr: milestone}) }}</h2>
+          <h2 v-if="milestone === proposal.milestones_qty" class="is-size-3 mb-2 mt-2">{{ $t('milestone.final_som') }}</h2>
           <p class="mb-5">{{ $t('milestone.latest_som', {nr: milestone}) }}</p>
           <p v-if="withPoas">
             <router-link

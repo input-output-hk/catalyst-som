@@ -3,7 +3,8 @@
     <div class="tile is-child notification">
       <h1 class="title is-size-1 mb-2">
         <router-link :to="{name: 'proposal-milestones-detail', params: {id: proposal.project_id, milestone: milestone.milestone}}">
-          {{ $t('milestone_recap.title', {nr: milestone.milestone}) }}
+          <span v-if="milestone.milestone !== proposal.milestones_qty">{{ $t('milestone_recap.title', {nr: milestone.milestone}) }}</span>
+          <span v-if="milestone.milestone === proposal.milestones_qty">{{ $t('milestone_recap.final_title') }}</span>
         </router-link>
       </h1>
       <approval-counters
@@ -31,7 +32,7 @@
           </li>
         </ul>
         <p v-if="milestone.milestone > 1" class="is-size-7 mb-0">{{ $t('milestone_recap.payment_starts') }}</p>
-        <p v-if="milestone.milestone === 5" class="is-size-7 mb-0">{{ $t('milestone_recap.last_payment') }}</p>
+        <p v-if="milestone.milestone === proposal.milestones_qty" class="is-size-7 mb-0">{{ $t('milestone_recap.last_payment') }}</p>
       </div>
       <div v-if="poa">
         <p class="is-size-3 mb-0 has-text-weight-semibold">{{ $t('milestone_recap.poa') }}</p>
