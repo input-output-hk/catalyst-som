@@ -276,7 +276,7 @@ export default {
       reset: "Reset Password"
     },
     milestones: {
-      back: "Go back to main paject page.",
+      back: "Go back to main project page.",
       milestone: "Milestone {nr}"
     },
     profile: {
