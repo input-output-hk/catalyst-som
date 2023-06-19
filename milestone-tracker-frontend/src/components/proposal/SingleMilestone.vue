@@ -9,8 +9,8 @@
             <router-link
               v-slot="{ navigate }"
               :to="{name: 'proposal-milestones-detail-section', params: {id: proposal.project_id, milestone: milestone, section: `poa-${milestone}`}}">
-              <o-button variant="primary" size="small" @click="navigate">
-                Jump to PoA
+              <o-button variant="primary" size="medium" @click="navigate"  icon-right="arrow-down">
+                {{ $t('milestone.jump_to_poa') }}
               </o-button>
             </router-link>
           </p>

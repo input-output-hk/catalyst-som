@@ -61,7 +61,8 @@ export default {
     no_approvals: "Your SoM was not approved. Please resubmit it addressing the comments made on reviews by using the button on the right.",
     waiting_reviews: "Please wait for additional reviews or for SoM signoff.",
     show_archived_soms: "Show archived SoMs",
-    hide_archived_soms: "Hide archived SoMs"
+    hide_archived_soms: "Hide archived SoMs",
+    jump_to_poa: "Jump to Proof of Achievement"
   },
   milestone_recap: {
     title: "M {nr}",
