@@ -15,12 +15,12 @@
         <tr v-if="poa.poas_reviews.length > 0">
           <th>{{ $t('poa.reviews') }}</th>
           <td>
-            <poa-reviews :poa="poa" :reviews="poa.poas_reviews" />
+            <poa-reviews :poa="poa" :reviews="poa.poas_reviews" :approved="locked > 0" />
           </td>
         </tr>
         <tr v-if="locked">
-          <th>{{ $t('poa.signed_off_at') }}</th>
-          <td>
+          <th class="has-background-success has-text-white">{{ $t('poa.signed_off_at') }}</th>
+          <td class="has-background-success has-text-white">
             {{$d(poa.signoffs[0].created_at, 'long')}}
           </td>
         </tr>

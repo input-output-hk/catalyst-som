@@ -2,6 +2,7 @@
   <div class="content">
     <div v-if="poaReviewsTot > 0">
       <approval-counters
+        :approved="approved"
         :approves="poaReviewsApproved"
         :not-approves="poaReviewsNotApproved" />
       <o-collapse v-model:open="reviewsVisible">
@@ -58,6 +59,10 @@ const componentProps = defineProps({
   reviews: {
     type: Array,
     default: () => []
+  },
+  approved: {
+    type: Boolean,
+    default: false
   }
 })
 
