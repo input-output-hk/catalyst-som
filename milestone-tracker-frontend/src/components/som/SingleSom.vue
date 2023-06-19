@@ -82,7 +82,7 @@
               {{ $t('som.open_archived_reviews') }}
             </o-button>
             <o-modal class="som-reviews-popup" :active="reviewsVisible" scroll="keep">
-              <div class="container scrollable-modal">
+              <div class="container scrollable-modal has-background-light">
                 <div v-for="review in activeSomReviews" :key="review.id" class="reviews">
                   <som-review
                     class="mb-6"
@@ -327,5 +327,8 @@ import ResubmissionConfirm from '@/components/proposal/ResubmissionConfirm.vue'
       }
     }
   }
+}
+.reviews-wrapper {
+  background: #fff;
 }
 </style>
