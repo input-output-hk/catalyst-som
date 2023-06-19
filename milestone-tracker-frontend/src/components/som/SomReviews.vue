@@ -2,6 +2,7 @@
   <div class="content">
     <div v-if="somReviewsTot > 0">
       <approval-counters
+        :approved="approved"
         :approves="somReviewsApproved"
         :not-approves="somReviewsNotApproved" />
       <o-collapse v-model:open="reviewsVisible">
@@ -34,6 +35,10 @@ const componentProps = defineProps({
   property: {
     type: String,
     default: ''
+  },
+  approved: {
+    type: Boolean,
+    default: false
   }
 })
 

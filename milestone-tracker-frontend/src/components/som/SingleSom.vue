@@ -19,7 +19,9 @@
             <td v-if="somReviewsVisible">
               <som-reviews
                 :som="som"
-                :reviews="activeSomReviews" :property="criterium" />
+                :reviews="activeSomReviews"
+                :property="criterium"
+                :approved="locked > 0" />
             </td>
           </tr>
           <tr>
@@ -53,8 +55,8 @@
             <td v-if="somReviewsVisible"></td>
           </tr>
           <tr v-if="locked">
-            <th>{{ $t('som.signed_off_at') }}</th>
-            <td>
+            <th class="has-background-success has-text-white">{{ $t('som.signed_off_at') }}</th>
+            <td class="has-background-success has-text-white">
               {{$d(som.signoffs[0].created_at, 'long')}}
             </td>
             <td v-if="somReviewsVisible"></td>
