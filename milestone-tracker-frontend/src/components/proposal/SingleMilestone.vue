@@ -10,7 +10,7 @@
             <router-link
               v-slot="{ navigate }"
               :to="{name: 'proposal-milestones-detail-section', params: {id: proposal.project_id, milestone: milestone, section: `poa-${milestone}`}}">
-              <o-button variant="primary" size="medium" @click="navigate"  icon-right="arrow-down">
+              <o-button variant="primary" size="medium" icon-right="arrow-down" @click="navigate" >
                 {{ $t('milestone.jump_to_poa') }}
               </o-button>
             </router-link>
@@ -62,7 +62,7 @@
           :proposal="proposal" />
       </div>
     </section>
-    <o-modal v-model:active="newVisible" width="900">
+    <o-modal v-model:active="newVisible" width="900" :destroy-on-hide="false">
       <div class="block">
         <new-som
           :proposal="proposal"

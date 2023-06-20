@@ -5,7 +5,7 @@
         <h4 class="card-header-title mb-0">
           {{ $t('new_som.component_title', {nr: milestone}) }}
         </h4>
-        <o-button class="mt-2 mr-4" variant="primary" size="small" @click="clone">
+        <o-button v-if="props.som" class="mt-2 mr-4" variant="primary" size="small" @click="clone">
           {{ $t('new_som.clone_latest') }}
         </o-button>
       </header>
