@@ -345,3 +345,46 @@ GRANT EXECUTE ON FUNCTION public.getpoasreviews() TO authenticated;
 GRANT EXECUTE ON FUNCTION public.getpoasreviews() TO postgres;
 
 GRANT EXECUTE ON FUNCTION public.getpoasreviews() TO service_role;
+
+
+CREATE OR REPLACE FUNCTION public.getpoastobesignedoff(_from timestamp, _min_nr_reviews bigint, _min_nr_approvals bigint)
+    RETURNS TABLE(project_id bigint, title character varying, milestone bigint, created_at timestamp with time zone, nr_reviews bigint, nr_approvals bigint)
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+
+AS $BODY$
+    BEGIN
+        RETURN QUERY
+          SELECT proposals.project_id, proposals.title, soms.milestone, poas.created_at, count(distinct poas_reviews.id) as pp, count(poas_reviews.content_approved) filter (where poas_reviews.content_approved) FROM poas
+            LEFT OUTER JOIN poas_reviews ON poas.id = poas_reviews.poas_id
+            LEFT OUTER JOIN soms ON poas.som_id = soms.id
+            LEFT OUTER JOIN signoffs ON signoffs.poa_id = poas.id
+            LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
+            WHERE 
+            soms.current = true AND 
+            poas.current = true AND
+            poas_reviews.current = true AND 
+            poas.created_at >= _from
+            GROUP by proposals.project_id, proposals.title, soms.milestone, poas.created_at
+            HAVING (
+              count(distinct signoffs.id) = 0 AND
+              count(distinct poas_reviews.id) >= _min_nr_reviews AND
+              count(distinct poas_reviews.content_approved) filter (where poas_reviews.content_approved) >= _min_nr_approvals
+            );
+    END;
+$BODY$;
+
+ALTER FUNCTION public.getpoastobesignedoff(timestamp, bigint, bigint)
+    OWNER TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.getpoastobesignedoff(timestamp, bigint, bigint) TO PUBLIC;
+
+GRANT EXECUTE ON FUNCTION public.getpoastobesignedoff(timestamp, bigint, bigint) TO anon;
+
+GRANT EXECUTE ON FUNCTION public.getpoastobesignedoff(timestamp, bigint, bigint) TO authenticated;
+
+GRANT EXECUTE ON FUNCTION public.getpoastobesignedoff(timestamp, bigint, bigint) TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.getpoastobesignedoff(timestamp, bigint, bigint) TO service_role;

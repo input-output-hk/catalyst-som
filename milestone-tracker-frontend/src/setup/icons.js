@@ -7,7 +7,8 @@ import {
   faCheck,
   faMinus,
   faPlus,
-  faArrowDown
+  faArrowDown,
+  faCalendar
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -18,5 +19,6 @@ library.add(
   faCheck,
   faMinus,
   faPlus,
-  faArrowDown
+  faArrowDown,
+  faCalendar
 )

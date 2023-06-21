@@ -330,6 +330,13 @@ export default {
       not_approved: "Not Approved",
       open_som_to_resubmit: "Open and resubmit SoM",
       open_poa_to_resubmit: "Open and resubmit PoA",
+      nr_reviews: "# of reviews:",
+      nr_approvals: "# of approvals:",
+      from: "Submitted from:",
+      poa_to_signoff_received: "PoA to be signed off",
+      filter: "Apply filter",
+      no_filter_results: "No results found with current filters criteria",
+      open_poa_to_signoff: "Open and signoff PoA",
     }
   }
 }
