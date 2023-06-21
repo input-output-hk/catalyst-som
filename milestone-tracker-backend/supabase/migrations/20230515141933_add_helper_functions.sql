@@ -388,3 +388,58 @@ GRANT EXECUTE ON FUNCTION public.getpoastobesignedoff(timestamp, bigint, bigint)
 GRANT EXECUTE ON FUNCTION public.getpoastobesignedoff(timestamp, bigint, bigint) TO postgres;
 
 GRANT EXECUTE ON FUNCTION public.getpoastobesignedoff(timestamp, bigint, bigint) TO service_role;
+
+
+CREATE OR REPLACE FUNCTION public.getsomstobesignedoff(_from timestamp, _min_nr_reviews bigint, _min_nr_approvals bigint)
+    RETURNS TABLE(project_id bigint, title character varying, milestone bigint, created_at timestamp with time zone, nr_reviews bigint, nr_approvals bigint)
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+    ROWS 1000
+
+AS $BODY$
+    BEGIN
+        RETURN QUERY
+          SELECT proposals.project_id,
+              proposals.title,
+              soms.milestone,
+              soms.created_at,
+              count(distinct som_reviews.id) as sr,
+              count(som_reviews.id) filter (
+                where som_reviews.success_criteria_approves AND
+                som_reviews.evidence_approves AND
+                som_reviews.outputs_approves
+              ) as sa
+              FROM soms
+            LEFT OUTER JOIN som_reviews ON soms.id = som_reviews.som_id
+            LEFT OUTER JOIN signoffs ON signoffs.som_id = soms.id
+            LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
+            WHERE 
+            soms.current = true AND 
+            som_reviews.current = true AND 
+            soms.created_at >= _from
+            GROUP by proposals.project_id, proposals.title, soms.milestone, soms.created_at
+            HAVING (
+              count(distinct signoffs.id) = 0 AND
+              count(distinct som_reviews.id) >= _min_nr_reviews AND
+              count(som_reviews.id) filter (
+                where som_reviews.success_criteria_approves AND
+                som_reviews.evidence_approves AND
+                som_reviews.outputs_approves
+              ) >= _min_nr_approvals
+            );
+    END;
+$BODY$;
+
+ALTER FUNCTION public.getsomstobesignedoff(timestamp, bigint, bigint)
+    OWNER TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.getsomstobesignedoff(timestamp, bigint, bigint) TO PUBLIC;
+
+GRANT EXECUTE ON FUNCTION public.getsomstobesignedoff(timestamp, bigint, bigint) TO anon;
+
+GRANT EXECUTE ON FUNCTION public.getsomstobesignedoff(timestamp, bigint, bigint) TO authenticated;
+
+GRANT EXECUTE ON FUNCTION public.getsomstobesignedoff(timestamp, bigint, bigint) TO postgres;
+
+GRANT EXECUTE ON FUNCTION public.getsomstobesignedoff(timestamp, bigint, bigint) TO service_role;

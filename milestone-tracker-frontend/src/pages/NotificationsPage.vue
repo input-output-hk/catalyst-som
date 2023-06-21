@@ -58,8 +58,20 @@
       :headers="toSignoffHeaders"
       :row-msg="$t('pages.notifications.go_to_poa')"
       :entity-type="'poa'"
-      :filters="poasToSignoffFilters"
+      :filters="toSignoffFilters"
       @applyFilter="handlePoasToSignoffFilters"
+    />
+    <notification-list
+      v-show="canSignoff"
+      class="som-to-signoff-received-notifications"
+      :row-component="ToBeSignedOffRow"
+      :title="$t('pages.notifications.som_to_signoff_received')"
+      :items="somsToSignoff"
+      :headers="toSignoffHeaders"
+      :row-msg="$t('pages.notifications.go_to_som')"
+      :entity-type="'som'"
+      :filters="toSignoffFilters"
+      @applyFilter="handleSomsToSignoffFilters"
     />
     <div v-if="notificationsCount === 0" class="tile is-ml is-parent">
       <div class="tile is-child notification is-info">
@@ -84,7 +96,8 @@ const {
   getSignoffNotifications,
   getSomReviewsNotifications,
   getPoaReviewsNotifications,
-  getPoasToBeSignedOff
+  getPoasToBeSignedOff,
+  getSomsToBeSignedOff
 } = useUser()
 const userStore = useUser()
 const { canSignoff } = storeToRefs(userStore)
@@ -95,6 +108,7 @@ const poaReviews = ref([])
 const somReviews = ref([])
 const signoffs = ref([])
 const poasToSignoff = ref([])
+const somsToSignoff = ref([])
 const signoffsDays = ref(10)
 
 const headers = ref([
@@ -120,7 +134,7 @@ const toSignoffHeaders = ref([
   ''
 ])
 
-const poasToSignoffFilters = ref([
+const toSignoffFilters = ref([
   {
     type: 'number',
     key: '_nr_reviews',
@@ -167,6 +181,16 @@ const handlePoasToSignoffFilters = async (params) => {
   }
 }
 
+const handleSomsToSignoffFilters = async (params) => {
+  if (canSignoff) {
+    somsToSignoff.value = await getSomsToBeSignedOff(
+      params._from, 
+      params._nr_reviews || 0,
+      params._nr_approvals || 0
+    )
+  }
+}
+
 onMounted(async () => {
   soms.value = await getSomsByAllocation()
   poas.value = await getPoasByAllocation()
@@ -177,6 +201,7 @@ onMounted(async () => {
   poaReviews.value = await getPoaReviewsNotifications()
   if (canSignoff) {
     poasToSignoff.value = await getPoasToBeSignedOff()
+    somsToSignoff.value = await getSomsToBeSignedOff()
   }
 })
 

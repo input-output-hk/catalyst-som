@@ -222,6 +222,23 @@ export const useUser = defineStore('user-store', {
         errorNotification(this.$i18n.t('errors.fetching_poas'))
       }
     },
+    async getSomsToBeSignedOff(from = false, min_nr_reviews = 0, min_nr_approvals = 0) {
+      if (!from) {
+        from = new Date(null).toISOString()
+      }
+      try {
+        const { data, error } = await supabase
+          .rpc('getsomstobesignedoff', {
+            _from: from,
+            _min_nr_reviews: min_nr_reviews,
+            _min_nr_approvals: min_nr_approvals
+          })
+        if (error) throw(error)
+        return data
+      } catch(error) {
+        errorNotification(this.$i18n.t('errors.fetching_soms'))
+      }
+    },
     async initUser() {
       if (this.logged) {
         try {

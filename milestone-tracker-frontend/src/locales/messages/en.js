@@ -334,9 +334,11 @@ export default {
       nr_approvals: "# of approvals:",
       from: "Submitted from:",
       poa_to_signoff_received: "PoA to be signed off",
+      som_to_signoff_received: "SoM to be signed off",
       filter: "Apply filter",
       no_filter_results: "No results found with current filters criteria",
       open_poa_to_signoff: "Open and signoff PoA",
+      open_som_to_signoff: "Open and signoff SoM",
     }
   }
 }
