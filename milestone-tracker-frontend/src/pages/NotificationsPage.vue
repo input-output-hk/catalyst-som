@@ -59,7 +59,7 @@
       :row-msg="$t('pages.notifications.go_to_poa')"
       :entity-type="'poa'"
       :filters="toSignoffFilters"
-      @applyFilter="handlePoasToSignoffFilters"
+      @apply-filter="handlePoasToSignoffFilters"
     />
     <notification-list
       v-show="canSignoff"
@@ -71,7 +71,7 @@
       :row-msg="$t('pages.notifications.go_to_som')"
       :entity-type="'som'"
       :filters="toSignoffFilters"
-      @applyFilter="handleSomsToSignoffFilters"
+      @apply-filter="handleSomsToSignoffFilters"
     />
     <div v-if="notificationsCount === 0" class="tile is-ml is-parent">
       <div class="tile is-child notification is-info">

@@ -12,7 +12,7 @@
       <o-inputitems
         v-model="userChallenges"
         :data="filteredChallenges"
-        autocomplete
+        allow-autocomplete
         :allow-new="false"
         :open-on-focus="true"
         field="title"
@@ -25,7 +25,7 @@
       <o-inputitems
         v-model="userProposals"
         :data="selectProposals"
-        autocomplete
+        allow-autocomplete
         :allow-new="false"
         :open-on-focus="true"
         field="title"
@@ -38,7 +38,7 @@
       <o-inputitems
         v-model="userAllocatedProposals"
         :data="selectProposals"
-        autocomplete
+        allow-autocomplete
         :allow-new="false"
         :open-on-focus="true"
         field="title"
@@ -88,7 +88,7 @@ const role = computed({
 })
 
 const userChallenges = computed({
-  get: () => props.item.challenges_users.map((el) => el.challenges),
+  get: () => props.item.challenges_users.map((el) => el.challenges).filter((el) => (el)),
   set: val => {
     const toSend = val.map((el) => {
       return {
@@ -102,7 +102,7 @@ const userChallenges = computed({
 })
 
 const userProposals = computed({
-  get: () => props.item.proposals_users.map((el) => el.proposals),
+  get: () => props.item.proposals_users.map((el) => el.proposals).filter((el) => (el)),
   set: val => {
     const toSend = val.map((el) => {
       return {
@@ -116,7 +116,7 @@ const userProposals = computed({
 })
 
 const userAllocatedProposals = computed({
-  get: () => props.item.allocations.map((el) => el.proposals),
+  get: () => props.item.allocations.map((el) => el.proposals).filter((el) => (el)),
   set: val => {
     const toSend = val.map((el) => {
       return {

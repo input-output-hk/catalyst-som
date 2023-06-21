@@ -18,7 +18,8 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
       'path': './src/empty.js',
       'url': './src/empty.js',
-      'fs': './src/empty.js'
+      'fs': './src/empty.js',
+      'source-map-js': './src/empty.js'
     }
   },
   test: {

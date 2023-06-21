@@ -1,8 +1,9 @@
 <template>
   <o-inputitems
+    v-if="proposalAllocatedUsers"
     v-model="proposalAllocatedUsers"
     :data="selectUsers"
-    autocomplete
+    allow-autocomplete
     :allow-new="false"
     :open-on-focus="true"
     field="email"
@@ -33,7 +34,7 @@ const { updateProposalAllocations } = useProposals()
 const proposalAllocatedUsers = computed({
   get: () => {
     if (props.proposal.allocations) {
-      return props.proposal.allocations.map((el) => el.users)
+      return props.proposal.allocations.map((el) => el.users).filter((el) => (el))
     }
     return []
   },

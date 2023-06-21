@@ -9,7 +9,7 @@
     <td>{{ item.challenges.title }}</td>
     <td class="has-text-right">{{ $n(item.budget, "currency") }}</td>
     <td v-if="canSetAllocations">
-      <allocation-form :proposal="item" />
+     <allocation-form :proposal="item" />
     </td>
   </tr>
 </template>
