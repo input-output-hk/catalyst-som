@@ -81,9 +81,8 @@ watch(
   (newVal) => {
     if (typeof newVal === "object") {
       editor.value.setHTML(newVal.content)
-      value.value = newVal.content
     }
   },
-);
+)
 </script>
 
