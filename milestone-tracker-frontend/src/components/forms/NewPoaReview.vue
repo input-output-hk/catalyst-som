@@ -65,7 +65,7 @@ const initialSchema = computed(() => {
       validations: yup.string().when('_', {
         is: true,
         otherwise: (schema) => {
-          const minLength = 150
+          const minLength = 75
           const minLengthValidation = HTMLMinLen(minLength)
           if (!formData.value.content_approved) {
             return schema.required().test('len', t('validations.min_text_required', {min: minLength}), minLengthValidation)

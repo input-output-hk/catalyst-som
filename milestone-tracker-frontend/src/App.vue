@@ -29,8 +29,8 @@ const activeMsg = ref(false)
 
 <style lang="scss">
 .scrollable-modal {
-  overflow: auto !important;
-  max-height: 90vh
+  //overflow: auto !important;
+ // max-height: 90vh
 }
 
 .html-text {
