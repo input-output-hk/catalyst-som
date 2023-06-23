@@ -73,23 +73,22 @@ jobs:
           registry: ${{ env.ECR_REGISTRY }}
           tags: ${{ env.TAG }}
           target: ${{ env.EARTHLY_TARGET }}
-# TODO: uncomment when we have the deployment setup
-#   deploy:
-#     runs-on: ubuntu-latest
-#     needs: [discover, build]
-#     steps:
-#       - name: Setup CI
-#         uses: input-output-hk/catalyst-ci/actions/setup@master
-#         id: setup
-#         with:
-#           aws_role_arn: ${{ env.AWS_ROLE_ARN }}
-#           aws_region: ${{ env.AWS_REGION }}
-#           earthly_version: ${{ env.EARTHLY_VERSION }}
-#       - name: Deploy
-#         uses: input-output-hk/catalyst-ci/actions/deploy@master
-#         with:
-#           deployment_repo: input-output-hk/catalyst-world
-#           environment: dev
-#           images: milestone-module-frontend
-#           tag: ${{ env.TAG }}
-#           token: ${{ steps.setup.outputs.token }}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [discover, build]
+    steps:
+      - name: Setup CI
+        uses: input-output-hk/catalyst-ci/actions/setup@master
+        id: setup
+        with:
+          aws_role_arn: ${{ env.AWS_ROLE_ARN }}
+          aws_region: ${{ env.AWS_REGION }}
+          earthly_version: ${{ env.EARTHLY_VERSION }}
+      - name: Deploy
+        uses: input-output-hk/catalyst-ci/actions/deploy@master
+        with:
+          deployment_repo: input-output-hk/catalyst-world
+          environment: dev
+          images: milestone-module-frontend
+          tag: ${{ env.TAG }}
+          token: ${{ steps.setup.outputs.token }}
