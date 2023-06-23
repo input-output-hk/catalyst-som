@@ -87,7 +87,7 @@ export default {
     poa: "Content:",
     submitted_at: "Submitted at:",
     reviews: "PoA reviews",
-    signed_off_at: "Approved by Catalyst at:",
+    signed_off_at: "Approved by Catalyst sign off user at:",
     submit: "Submit review for this PoA",
     resubmit: "Resubmit review for this PoA",
     signoff: "Signoff",
@@ -101,7 +101,7 @@ export default {
     resubmission_clear: "Cancel"
   },
   signoff: {
-    poa_signed_off_at: "PoA approved by Catalyst at:"
+    poa_signed_off_at: "PoA approved by Catalyst sign off user at:"
   },
   new_poa: {
     title: "New Proof of Achievement for Milestone {nr}",
@@ -158,7 +158,7 @@ export default {
     month: "Delivery Month",
     cost: "Milestone Cost",
     completion: "Project Completion",
-    signed_off_at: "Approved by Catalyst at:",
+    signed_off_at: "Approved by Catalyst sign off user at:",
     open_reviews: "Open active reviews for this Milestone",
     open_archived_reviews: "Open archived reviews for this Milestone",
     archived_reviews: "These reviews are not active anymore and are archived. Each reviewer assigned to this project can have only one review active at a time and can't modify previous submissions. Every time a new review is submitted, the previous ones become archived.",
@@ -319,7 +319,7 @@ export default {
       proposal: "Project",
       milestone: "Milestone",
       submitted_at: "Submitted at",
-      signedoff_at: "Approved by Catalyst at",
+      signedoff_at: "Approved by Catalyst sign off user at",
       poa_to_review: "PoA to be reviewed",
       som_to_review: "SoM to be reviewed",
       signoff_received: "Final approvals received in the last day | Final approvals received in the last {count} days",
