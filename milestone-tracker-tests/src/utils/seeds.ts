@@ -8,7 +8,7 @@ const numberSeed = () => {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-const stringBase = 'Lorem ipsum '
+const stringBase = 'Lorem ipsum dolor sit amet, lorem ipsum dolor sit amet, lorem ipsum dolor sit amet '
 const numberBase = 1000
 
 export {

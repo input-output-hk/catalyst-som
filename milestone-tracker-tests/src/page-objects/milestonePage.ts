@@ -23,7 +23,7 @@ const milestonePageCommands = {
       .waitForElementVisible('@costInput', 10000)
       .waitForElementVisible('@monthInput', 10000)
       .waitForElementVisible('@completionInput', 10000)
-      .setValue('@titleInput', `Lorem ipsum ${stringSeed}`)
+      .setValue('@titleInput', `${stringBase}${stringSeed}`)
       .click('@outputsInput')
       .sendKeys('@outputsInput', `${stringBase}${stringSeed}`)
       .click('@successCriteriaInput')
@@ -60,6 +60,8 @@ const milestonePageCommands = {
       .waitForElementVisible(`@evidence_approved${ml}`, 10000)
       .waitForElementVisible(`@evidence_comment${ml}`, 10000)
       .click(`@outputs_approved${ml}`)
+      .click(`@outputs_comment${ml}`)
+      .sendKeys(`@outputs_comment${ml}`, `${stringBase}${stringSeed}`)
       .click(`@success_criteria_comment${ml}`)
       .sendKeys(`@success_criteria_comment${ml}`, `${stringBase}${stringSeed}`)
       .click(`@evidence_approved${ml}`)
@@ -151,6 +153,11 @@ const milestonePageCommands = {
       .click(`@poAReviewShowButton${ml}`)
       .waitForElementNotVisible(`@poAReviewContent${ml}`);
   },
+  dismissBudgetError(this: MilestonePage) {
+    return this.waitForElementVisible('@budgetError', 5000)
+      .click('@budgetErrorButton')
+      .waitForElementNotVisible('@budgetError');
+  }
 };
 
 const milestonePage: PageObjectModel = {
@@ -215,7 +222,13 @@ const milestonePage: PageObjectModel = {
     },
     cloneSomInput: {
       selector: '.new-som-popup .card-header-title button[type="button"]',
-    }
+    },
+    budgetError: {
+      selector: '.modal.budget-error',
+    },
+    budgetErrorButton: {
+      selector: '.modal.budget-error button[type="button"]',
+    },
   }
 };
 
