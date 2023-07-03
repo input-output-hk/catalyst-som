@@ -66,6 +66,8 @@ const emit = defineEmits(['somSubmitted', 'refreshRecap'])
 const { t, n, d } = useI18n()
 const { createSom } = useSoms()
 
+import { env } from '@/env'
+
 const otherSoms = computed(() => {
   if (props.soms) {
     return props.soms.filter((som) => {
@@ -97,7 +99,7 @@ const isLastMilestone = computed(() => {
 
 const maxMilestoneCost = computed(() => {
   const availableBudget = props.proposal.budget - otherSomsBudget.value
-  const maxMilestoneBudget = parseFloat(import.meta.env.VITE_MAX_MILESTONE_BUDGET)
+  const maxMilestoneBudget = parseFloat(env.VITE_MAX_MILESTONE_BUDGET)
   const budgetRule = Math.min(
     (props.proposal.budget * maxMilestoneBudget), availableBudget
   )

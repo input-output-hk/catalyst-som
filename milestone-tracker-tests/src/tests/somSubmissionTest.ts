@@ -7,6 +7,15 @@ const milestoneUrl = (proposalId: number, milestoneId: number) => {
   return `http://localhost:5173/proposals/${proposalId}/milestones/${milestoneId}`
 }
 
+const checkBudgetError = (browser: NightwatchBrowser, milestonePage: MilestonePage) => {
+  browser.elements('css selector', '.modal.is-active.budget-error', (res) => {
+    if (Object.keys(res.value).length > 0) {
+      milestonePage.dismissBudgetError()
+    }
+  })
+}
+
+
 const fillAndResubmit = (
   browser: NightwatchBrowser,
   proposalId: number,
@@ -19,6 +28,7 @@ const fillAndResubmit = (
   const nSeed = numberSeed();
   loginPage.navigate().loginAs(user);
   browser.navigateTo(milestoneUrl(proposalId, milestoneId));
+  checkBudgetError(browser, milestonePage);
   milestonePage.assert.elementPresent(`@newSomButton${milestoneId}`);
   milestonePage.startSomResubmission(milestoneId).fillSom(sSeed, nSeed).submitSom()
     .expect.element(`@title${milestoneId}`).text.to.contain(`${stringBase}${sSeed}`)
@@ -26,6 +36,7 @@ const fillAndResubmit = (
     .expect.element(`@success_criteria${milestoneId}`).text.to.contain(`${stringBase}${sSeed}`)
     .expect.element(`@evidence${milestoneId}`).text.to.contain(`${stringBase}${sSeed}`)
     //.expect.element(`@cost${ml}`).text.to.contain(`${numberBase+nSeed}`)
+  checkBudgetError(browser, milestonePage);
   loginPage.logout();
 }
 
@@ -41,6 +52,7 @@ const fillAndSubmit = (
   const nSeed = numberSeed();
   loginPage.navigate().loginAs(user);
   browser.navigateTo(milestoneUrl(proposalId, milestoneId));
+  checkBudgetError(browser, milestonePage);
   milestonePage.assert.elementPresent(`@newSomButton${milestoneId}`);
   milestonePage.startSomSubmission(milestoneId).fillSom(sSeed, nSeed).submitSom()
     .expect.element(`@title${milestoneId}`).text.to.contain(`${stringBase}${sSeed}`)
@@ -48,6 +60,7 @@ const fillAndSubmit = (
     .expect.element(`@success_criteria${milestoneId}`).text.to.contain(`${stringBase}${sSeed}`)
     .expect.element(`@evidence${milestoneId}`).text.to.contain(`${stringBase}${sSeed}`)
     //.expect.element(`@cost${ml}`).text.to.contain(`${numberBase+nSeed}`)
+  checkBudgetError(browser, milestonePage);
   loginPage.logout();
 }
 
