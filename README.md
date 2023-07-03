@@ -22,6 +22,10 @@ In the dev environment, env variables are pulled from the `.env` file.
   running the command:
   `VITE_SUPABASE_URL='http://example.org' npx vue-inject-env set`
   - `npm run build` to prepare the bundle.
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2549ae09426694dcff83d93365e1c2baa2e83f0d
 
 
 The Earthfile allow to build the project and saves the artifact in the `dist`
