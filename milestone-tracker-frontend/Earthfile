@@ -18,11 +18,16 @@ build:
     RUN npm run build
     SAVE ARTIFACT dist /dist AS LOCAL dist
 
+set-env:
+    FROM +build
+    RUN npx vue-inject-env set
+    SAVE ARTIFACT dist /dist AS LOCAL dist
+
 docker:
     ARG tag='latest'
     FROM +deps
     FROM nginx:stable-alpine3.17
-    COPY +build/dist /app
+    COPY +set-env/dist /app
     COPY ./nginx.conf /etc/nginx/nginx.conf
     EXPOSE 80
     SAVE IMAGE milestone-module-frontend:$tag
