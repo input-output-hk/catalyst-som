@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 
 # ---------------------------------------------------------------
-# Entrypoint script for migrations container
+# Entrypoint script for webapp variables setup.
 # ---------------------------------------------------------------
 #
-# This script serves as the entrypoint for the migrations container. It sets up
-# the environment, performing optional database initialization if configured,
-# and then runs the migrations.
+# This script serves as the entrypoint to set the variables necessary to run 
+# the webapp. It populates the `env.js` file in the bundle using the values
+# from the environment variables.
 #
 # It expects the following environment variables to be set except where noted:
+# VITE_SUPABASE_URL - The URL of the Supabase database
+# VITE_SUPABASE_ANON_KEY - The API key of the Supabase database
+# VITE_LOCAL_BASEURL - The base URL of the webapp
+# VITE_MAX_MILESTONE_BUDGET - The maximum budget for a milestone
 #
 # ---------------------------------------------------------------
 set +x
