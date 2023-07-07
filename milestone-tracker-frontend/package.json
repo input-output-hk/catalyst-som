@@ -41,7 +41,6 @@
     "sass": "^1.63.4",
     "vite": "^4.3.9",
     "vite-plugin-eslint": "^1.8.1",
-    "vitest": "^0.32.0",
-    "vue-inject-env": "github:coire1/vue-inject-env#master"
+    "vitest": "^0.32.0"
   }
 }
