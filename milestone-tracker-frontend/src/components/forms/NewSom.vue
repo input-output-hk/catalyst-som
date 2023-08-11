@@ -170,7 +170,13 @@ const initialSchema = computed(() => {
       type: 'number',
       validations: costRule.value,
       step: 1,
-      help: t('new_som.cost_help', {maxCost: n(maxMilestoneCost.value, 'currency')}),
+      help: t(
+        'new_som.cost_help',
+        {
+          currency: (props.proposal.currency === 'ada') ?  'ADA' : 'US$' ,
+          maxCost: n(maxMilestoneCost.value, 'currency', { currency: props.proposal.currency })
+        }
+      ),
     },
     month: {
       type: 'select',

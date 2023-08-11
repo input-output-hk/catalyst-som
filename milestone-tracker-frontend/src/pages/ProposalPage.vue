@@ -11,7 +11,7 @@
             {{ $t('pages.proposal.open_details') }}
           </o-button>
         </router-link>
-        <next-payment :payment="payment" />
+        <next-payment :payment="payment" :proposal="proposal" />
       </div>
       <div class="column is-6">
         <proposal-recap :proposal="proposal" :snapshot="snapshot" />

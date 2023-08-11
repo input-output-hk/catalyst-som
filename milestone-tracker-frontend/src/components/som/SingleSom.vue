@@ -39,7 +39,7 @@
                 <progress class="progress is-primary is-medium" :value="somCost" max="100">{{somCost}}%</progress>
               </div>
               <div class="som-cost">
-                <span class="is-size-3 mr-4 has-text-weight-semibold">{{$n(som.cost, 'currency')}}</span>
+                <span class="is-size-3 mr-4 has-text-weight-semibold">{{$n(som.cost, 'currency', { currency: proposal.currency })}}</span>
               </div>
             </td>
             <td v-if="somReviewsVisible"></td>

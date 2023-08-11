@@ -186,7 +186,7 @@ export default {
     success_criteria_help: "Acceptance criteria are linked to intended outcomes and targets and are standards/levels by which to judge whether an objective/goal/ target/outcome has been achieved/successful.",
     evidence_help: "The evidence you submit must show clearly and visibly that this milestone has been completed.",
     month_help: "In which month do you plan to complete this milestone. Month 1 of your project should be the same month as the initial payment. Month 2 is the next month after your initial payment.",
-    cost_help: "What is the cost forecast in US$ to complete this milestone? The cost of the milestone cannot exceed 30% of the whole budget. For this milestone you cannot exceed {maxCost}.",
+    cost_help: "What is the cost forecast in {currency} to complete this milestone? The cost of the milestone cannot exceed 30% of the whole budget. For this milestone you cannot exceed {maxCost}.",
     completion_help: "Once you have completed this milestone, how much in % terms will you have completed of your project? The completion must be at least 10% more than the previous milestone."
   },
   som_review: {

@@ -7,7 +7,7 @@
       </router-link>
     </td>
     <td>{{ item.challenges.title }}</td>
-    <td class="has-text-right">{{ $n(item.budget, "currency") }}</td>
+    <td class="has-text-right">{{ $n(item.budget, "currency", { style: "currency", currency: item.currency }) }}</td>
     <td v-if="canSetAllocations">
      <allocation-form :proposal="item" />
     </td>

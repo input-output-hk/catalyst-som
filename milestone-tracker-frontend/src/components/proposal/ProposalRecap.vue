@@ -23,7 +23,7 @@
         <th>{{ $t('proposal_recap.budget') }}</th>
         <td>
           <span v-if="proposal.budget">
-            {{ $n(proposal.budget, "currency") }}
+            {{ $n(proposal.budget, "currency", { currency: proposal.currency }) }}
           </span>
         </td>
       </tr>
@@ -32,15 +32,15 @@
         <th>{{ $t('proposal_recap.allocated_budget_error') }}</th>
         <td>
           <span>
-            {{ $n(budgetError, "currency") }}
+            {{ $n(budgetError, "currency", { currency: proposal.currency }) }}
           </span>
         </td>
       </tr>
       <tr>
         <th>{{ $t('proposal_recap.funds_distributed') }}</th>
         <td>
-          <span>
-            {{ $n((proposal.funds_distributed || 0), "currency") }}
+          <span v-if="proposal.currency">
+            {{ $n((proposal.funds_distributed || 0), "currency", { currency: proposal.currency }) }}
           </span>
         </td>
       </tr>
@@ -70,8 +70,8 @@
           {{ $t(
               'proposal_recap.budget_error_msg',
               {
-                allocated: $n(budgetError, "currency"),
-                total: $n(proposal.budget, "currency")
+                allocated: $n(budgetError, "currency", { currency: proposal.currency }),
+                total: $n(proposal.budget, "currency", { currency: proposal.currency })
               }
             )
           }}
