@@ -254,6 +254,11 @@ export default {
     text_required: "This is a required field",
     min_text_required: "This field must be at least {min} characters long",
   },
+  footer: {
+    website: 'Website',
+    knowledge_base: 'Knowledge Base',
+    privacy_policy: 'Privacy Policy'
+  },
   pages: {
     admin: {
       title: "Admin",
