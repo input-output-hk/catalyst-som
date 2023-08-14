@@ -53,8 +53,24 @@
         </td>
       </tr>
       <tr v-if="canSetAllocations">
-        <th>Reviewers allocations</th>
+        <th>{{ $t('proposal_recap.reviewers_allocations') }}</th>
         <td><allocation-form :proposal="proposal" /></td>
+      </tr>
+      <tr v-if="canSetChangeRequests">
+        <th>{{ $t('proposal_recap.change_request') }}</th>
+        <td>
+          <o-button variant="warning" @click="confirmChangeRequest = !confirmChangeRequest">
+            {{ $t('proposal_recap.activate_change_request') }}
+          </o-button>
+          <o-modal v-model:active="confirmChangeRequest">
+            <new-change-request :proposal="proposal" @clear-change-request="confirmChangeRequest = false" />
+          </o-modal>
+          <span v-if="proposal.change_request?.length > 0">
+            <br />
+            {{ $t('proposal_recap.last_change_request_on') }}
+            {{$d(proposal.change_request[proposal.change_request.length - 1].created_at, 'long')}}
+          </span>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -91,6 +107,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import AllocationForm from '@/components/proposal/AllocationForm.vue'
+import NewChangeRequest from '@/components/forms/NewChangeRequest.vue'
 import { useUser } from '@/store/user.js'
 
 const props = defineProps({
@@ -124,8 +141,9 @@ const budgetError = computed(() => {
 })
 
 const dismissed = ref(false)
+const confirmChangeRequest = ref(false)
 
-const { canSetAllocations, canWriteSom } = useUser()
+const { canSetAllocations, canWriteSom, canSetChangeRequests } = useUser()
 
 </script>
 

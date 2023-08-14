@@ -240,7 +240,18 @@ export default {
     budget_error_msg: "The budget currently allocated in Statements of Milestone (SoM) ({allocated}) doesn't correspond to the total budget of the project ({total}). Please resubmit SoMs to address this error.",
     ok: "OK",
     starting_date: "Start date",
-    scheduled_starting_date: "Scheduled start date"
+    scheduled_starting_date: "Scheduled start date",
+    reviewers_allocations: "Reviewers allocations",
+    change_request: "Change request",
+    activate_change_request: "Activate change request",
+    last_change_request_on: "Last Change Request activated on: "
+  },
+  change_requests: {
+    created: "Change Request created. Now proposers will be able to resubmit SoMs already signed off.",
+    new_title: "New Change Request",
+    new_confirm: "Do you confirm to create a new Change Request? By doing that proposers will be allowed to submit new Statements of Milestone for SoMs that are already signed off.",
+    new_create: "Create Change Request",
+    cancel: "Cancel"
   },
   reviews_counter: {
     approvals: "approval | approvals",

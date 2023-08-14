@@ -91,6 +91,7 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { useSoms } from '@/store/soms.js'
 import { useUser } from '@/store/user.js'
+import { canSubmitSomByChangeRequest } from '@/utils/milestones.js'
 import useEventsBus from '@/eventBus'
 const { getSoms, proposals } = useSoms()
 const { canWriteSom } = useUser()
@@ -191,7 +192,10 @@ const canSubmitSom = computed(() => {
   if (currentSom.value) {
     return (
       canWriteSom(props.proposal.id) &&
-      currentSom.value.signoffs?.length === 0
+      (
+        currentSom.value.signoffs?.length === 0 ||
+        canSubmitSomByChangeRequest(props.proposal, currentSom.value)
+      )
     )
   }
   return canWriteSom(props.proposal.id)
