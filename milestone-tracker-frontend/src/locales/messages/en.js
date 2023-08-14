@@ -87,7 +87,7 @@ export default {
     poa: "Content:",
     submitted_at: "Submitted at:",
     reviews: "Proof of Achievement reviews",
-    signed_off_at: "Approved by Catalyst sign off user on:",
+    signed_off_at: "Approved by Catalyst Team sign off user on:",
     submit: "Submit review for this Proof of Achievement",
     resubmit: "Resubmit review for this Proof of Achievement",
     signoff: "Signoff",
@@ -101,7 +101,7 @@ export default {
     resubmission_clear: "Cancel"
   },
   signoff: {
-    poa_signed_off_at: "Proof of Achievement approved by Catalyst sign off user on:"
+    poa_signed_off_at: "Proof of Achievement approved by Catalyst Team sign off user on:"
   },
   new_poa: {
     title: "New Proof of Achievement for Milestone {nr}",
@@ -158,7 +158,7 @@ export default {
     month: "Delivery Month",
     cost: "Milestone Cost",
     completion: "Project Completion",
-    signed_off_at: "Approved by Catalyst sign off user on:",
+    signed_off_at: "Approved by Catalyst Team sign off user on:",
     open_reviews: "Open active reviews for this Milestone",
     open_archived_reviews: "Open archived reviews for this Milestone",
     archived_reviews: "These reviews are not active anymore and are archived. Each reviewer assigned to this project can have only one review active at a time and can't modify previous submissions. Every time a new review is submitted, the previous ones become archived.",
@@ -222,8 +222,8 @@ export default {
   },
   roles: {
     funded_proposer: "Funded proposer",
-    ct_member: "Challenge Team member",
-    io_member: "Catalyst Team member",
+    ct_member: "SoM/PoA comunity reviewer",
+    io_member: "Catalyst Team reviewer",
     admin: "Admin",
     signoff: "Signoff"
   },
@@ -324,7 +324,7 @@ export default {
       proposal: "Project",
       milestone: "Milestone",
       submitted_at: "Submitted at",
-      signedoff_at: "Approved by Catalyst sign off user on",
+      signedoff_at: "Approved by Catalyst Team sign off user on",
       poa_to_review: "Proof of Achievement to be reviewed",
       som_to_review: "Statement of Milestone to be reviewed",
       signoff_received: "Final approvals received in the last day | Final approvals received in the last {count} days",
