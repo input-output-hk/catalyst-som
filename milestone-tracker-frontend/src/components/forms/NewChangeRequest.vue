@@ -10,47 +10,91 @@
         <p>
           {{ $t('change_requests.new_confirm') }}
         </p>
-        <div class="buttons">
-          <o-button
-            :disabled="submitting"
-            class="submit-change-request"
-            variant="primary"
-            size="medium"
-            @click="submitChangeRequest">
-            {{ $t('change_requests.new_create') }}
-          </o-button>
-          <o-button
-            size="medium"
-            @click="emit('clearChangeRequest')">
-            {{ $t('change_requests.cancel') }}
-          </o-button>
-        </div>
+        <schema-form
+          :schema="schema"
+          @submit="submitChangeRequest"
+        >
+          <template #afterForm>
+            <div class="buttons">
+              <o-button
+                :disabled="submitting"
+                class="submit-change-request"
+                variant="primary"
+                size="medium"
+                native-type="submit">
+                {{ $t('change_requests.new_create') }}
+              </o-button>
+              <o-button
+                size="medium"
+                @click="_clearForm">
+                {{ $t('change_requests.cancel') }}
+              </o-button>
+            </div>
+          </template>
+        </schema-form>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useChangeRequests } from '@/store/changeRequests.js'
+import { SchemaFormFactory, useSchemaForm } from "formvuelate"
+import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
+import { useFormFields } from '@/composables/useFormFields.js'
+import { useI18n } from 'vue-i18n'
+import * as yup from 'yup'
+
+const initialSchema = computed(() => {
+  return {
+    url: {
+      type: 'string',
+      label: t('change_requests.url'),
+      help: t('change_requests.url_help'),
+      validations: yup.string().url()
+    }
+  }
+})
+
 const props = defineProps({
   proposal: {
     type: Object,
     default: () => {}
   }
 })
+
+const { t } = useI18n()
+
+const { schema, clearForm } = useFormFields(initialSchema.value)
+const formData = ref({})
+const { updateFormModel } = useSchemaForm(formData)
+let SchemaForm = SchemaFormFactory([
+  VeeValidatePlugin()
+])
+
 const emit = defineEmits(['clearChangeRequest'])
 
 const { createChangeRequest } = useChangeRequests()
+
+
+
 const submitting = ref(false)
 
 const submitChangeRequest = async () => {
   submitting.value = true
-  const data = { proposal_id: props.proposal.id }
-  const response = await createChangeRequest(data)
+  const response = await createChangeRequest({
+    ...formData.value,
+    proposal_id: props.proposal.id
+  })
   if (response) {
-    emit('clearChangeRequest')
-    submitting.value = false
+    _clearForm()
   }
+}
+
+const _clearForm = () => {
+  clearForm(formData, updateFormModel)
+  submitting.value = false
+  emit('clearChangeRequest')
 }
 </script>

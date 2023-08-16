@@ -59,17 +59,7 @@
       <tr v-if="canSetChangeRequests">
         <th>{{ $t('proposal_recap.change_request') }}</th>
         <td>
-          <o-button variant="warning" @click="confirmChangeRequest = !confirmChangeRequest">
-            {{ $t('proposal_recap.activate_change_request') }}
-          </o-button>
-          <o-modal v-model:active="confirmChangeRequest">
-            <new-change-request :proposal="proposal" @clear-change-request="confirmChangeRequest = false" />
-          </o-modal>
-          <span v-if="proposal.change_request?.length > 0">
-            <br />
-            {{ $t('proposal_recap.last_change_request_on') }}
-            {{$d(proposal.change_request[proposal.change_request.length - 1].created_at, 'long')}}
-          </span>
+          <proposal-change-requests :proposal="proposal" />
         </td>
       </tr>
     </tbody>
@@ -107,7 +97,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import AllocationForm from '@/components/proposal/AllocationForm.vue'
-import NewChangeRequest from '@/components/forms/NewChangeRequest.vue'
+import ProposalChangeRequests from '@/components/proposal/ProposalChangeRequests.vue'
 import { useUser } from '@/store/user.js'
 
 const props = defineProps({
@@ -141,7 +131,6 @@ const budgetError = computed(() => {
 })
 
 const dismissed = ref(false)
-const confirmChangeRequest = ref(false)
 
 const { canSetAllocations, canWriteSom, canSetChangeRequests } = useUser()
 

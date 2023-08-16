@@ -243,15 +243,18 @@ export default {
     scheduled_starting_date: "Scheduled start date",
     reviewers_allocations: "Reviewers allocations",
     change_request: "Change request",
-    activate_change_request: "Activate change request",
-    last_change_request_on: "Last Change Request activated on: "
+    activate_change_request: "Create change request",
+    last_change_request_on: "Last Change Request activated on: ",
+    link_to_cr: "Link to Change Request"
   },
   change_requests: {
     created: "Change Request created. Now proposers will be able to resubmit SoMs already signed off.",
     new_title: "New Change Request",
     new_confirm: "Do you confirm to create a new Change Request? By doing that proposers will be allowed to submit new Statements of Milestone for SoMs that are already signed off.",
     new_create: "Create Change Request",
-    cancel: "Cancel"
+    cancel: "Cancel",
+    url: "Change Request URL",
+    url_help: "Please include the link to the approved Change Request and verify that the link is publicly accessible."
   },
   reviews_counter: {
     approvals: "approval | approvals",
