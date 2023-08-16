@@ -16,7 +16,7 @@
             </router-link>
           </p>
           <p
-            v-if="currentSom && currentSom.som_reviews.length > 0 && canSubmitSom"
+            v-if="currentSom && currentSom.som_reviews.length > 0 && canSubmitSom && currentSomStatus"
             :class="{
               'is-danger': currentSomStatus === 'no_approvals',
               'is-success': currentSomStatus === 'all_approvals',
@@ -91,6 +91,7 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { useSoms } from '@/store/soms.js'
 import { useUser } from '@/store/user.js'
+import { canSubmitSomByChangeRequest } from '@/utils/milestones.js'
 import useEventsBus from '@/eventBus'
 const { getSoms, proposals } = useSoms()
 const { canWriteSom } = useUser()
@@ -160,7 +161,9 @@ const withPoas = computed(() => {
 
 const currentSomStatus = computed(() => {
   try {
-    if (currentSom.value.som_reviews.length === 1 && currentSom.value.signoffs.length === 0) {
+    if (currentSom.value.signoffs.length > 0) {
+      return null
+    } else if (currentSom.value.som_reviews.length === 1 && currentSom.value.signoffs.length === 0) {
       return 'waiting_reviews'
     } else {
       const reviews = currentSom.value.som_reviews.map((r) => (r.outputs_approves && r.evidence_approves && r.success_criteria_approves))
@@ -191,7 +194,10 @@ const canSubmitSom = computed(() => {
   if (currentSom.value) {
     return (
       canWriteSom(props.proposal.id) &&
-      currentSom.value.signoffs?.length === 0
+      (
+        currentSom.value.signoffs?.length === 0 ||
+        canSubmitSomByChangeRequest(props.proposal, currentSom.value)
+      )
     )
   }
   return canWriteSom(props.proposal.id)

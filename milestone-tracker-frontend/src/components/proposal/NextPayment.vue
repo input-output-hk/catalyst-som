@@ -3,7 +3,7 @@
     <div class="tile is-6 is-parent">
       <div class="tile is-child notification is-info">
         <h4 class="is-size-3 mr-4 has-text-weight-semibold mb-0">
-          {{ $n(totPayment, "currency") }}
+          {{ $n(totPayment, "currency", { currency: proposal.currency }) }}
         </h4><p>{{ $t('next_payment.to_be_distributed') }}</p>
         <!--
         <p>
@@ -24,6 +24,10 @@
 import { computed } from 'vue'
 const props = defineProps({
   payment: {
+    type: Object,
+    default: () => {}
+  },
+  proposal: {
     type: Object,
     default: () => {}
   }

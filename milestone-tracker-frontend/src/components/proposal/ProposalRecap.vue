@@ -23,7 +23,7 @@
         <th>{{ $t('proposal_recap.budget') }}</th>
         <td>
           <span v-if="proposal.budget">
-            {{ $n(proposal.budget, "currency") }}
+            {{ $n(proposal.budget, "currency", { currency: proposal.currency }) }}
           </span>
         </td>
       </tr>
@@ -32,15 +32,15 @@
         <th>{{ $t('proposal_recap.allocated_budget_error') }}</th>
         <td>
           <span>
-            {{ $n(budgetError, "currency") }}
+            {{ $n(budgetError, "currency", { currency: proposal.currency }) }}
           </span>
         </td>
       </tr>
       <tr>
         <th>{{ $t('proposal_recap.funds_distributed') }}</th>
         <td>
-          <span>
-            {{ $n((proposal.funds_distributed || 0), "currency") }}
+          <span v-if="proposal.currency">
+            {{ $n((proposal.funds_distributed || 0), "currency", { currency: proposal.currency }) }}
           </span>
         </td>
       </tr>
@@ -53,8 +53,14 @@
         </td>
       </tr>
       <tr v-if="canSetAllocations">
-        <th>Reviewers allocations</th>
+        <th>{{ $t('proposal_recap.reviewers_allocations') }}</th>
         <td><allocation-form :proposal="proposal" /></td>
+      </tr>
+      <tr v-if="canSetChangeRequests">
+        <th>{{ $t('proposal_recap.change_request') }}</th>
+        <td>
+          <proposal-change-requests :proposal="proposal" />
+        </td>
       </tr>
     </tbody>
   </table>
@@ -70,8 +76,8 @@
           {{ $t(
               'proposal_recap.budget_error_msg',
               {
-                allocated: $n(budgetError, "currency"),
-                total: $n(proposal.budget, "currency")
+                allocated: $n(budgetError, "currency", { currency: proposal.currency }),
+                total: $n(proposal.budget, "currency", { currency: proposal.currency })
               }
             )
           }}
@@ -91,6 +97,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import AllocationForm from '@/components/proposal/AllocationForm.vue'
+import ProposalChangeRequests from '@/components/proposal/ProposalChangeRequests.vue'
 import { useUser } from '@/store/user.js'
 
 const props = defineProps({
@@ -125,7 +132,7 @@ const budgetError = computed(() => {
 
 const dismissed = ref(false)
 
-const { canSetAllocations, canWriteSom } = useUser()
+const { canSetAllocations, canWriteSom, canSetChangeRequests } = useUser()
 
 </script>
 

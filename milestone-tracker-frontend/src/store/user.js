@@ -89,6 +89,9 @@ export const useUser = defineStore('user-store', {
     },
     canSetAllocations(state) {
       return [2,3,4].includes(state.userInfo.role)
+    },
+    canSetChangeRequests(state) {
+      return [3,4].includes(state.userInfo.role)
     }
   },
 

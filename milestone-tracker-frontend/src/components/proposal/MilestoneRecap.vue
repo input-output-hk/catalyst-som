@@ -14,7 +14,7 @@
       <p class="is-size-4 mb-2 has-text-weight-semibold">{{som.title}}</p>
       <p class="is-size-6 mb-0">{{ $t('milestone_recap.cost') }}</p>
       <p class="is-size-4 mb-2 has-text-weight-semibold">
-        {{$n(som.cost, 'currency')}}
+        {{$n(som.cost, 'currency', { currency: proposal.currency })}}
       </p>
       <p class="is-size-6 mb-0">{{ $t('milestone_recap.delivery') }}</p>
       <p class="is-size-4 has-text-weight-semibold">
@@ -27,7 +27,7 @@
         <ul>
           <li v-for="x, i in Array.from({length: milestone.duration})" :key="i">
             <span class="is-size-6 has-text-weight-semibold">
-              {{$n(milestone.monthly_payment, 'currency')}} - {{ $t('milestone_recap.payment_month', startingMonth + i - 1) }}
+              {{$n(milestone.monthly_payment, 'currency', { currency: proposal.currency })}} - {{ $t('milestone_recap.payment_month', startingMonth + i - 1) }}
             </span>
           </li>
         </ul>

@@ -4,6 +4,13 @@ export default {
     month: 'short',
     day: 'numeric'
   },
+  long_compact: {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+  },
   long: {
     year: 'numeric',
     month: 'long',

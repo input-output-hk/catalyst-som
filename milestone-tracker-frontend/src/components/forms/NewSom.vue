@@ -95,23 +95,61 @@ const isLastMilestone = computed(() => {
   return props.milestone === lastMilestone
 })
 
+const milestoneRules = {
+  f9: {
+    minCost: () => 1,
+    maxCost: () => {
+      const availableBudget = props.proposal.budget - otherSomsBudget.value
+      const maxMilestoneBudget = parseFloat(env.VITE_MAX_MILESTONE_BUDGET)
+      const budgetRule = Math.min(
+        (props.proposal.budget * maxMilestoneBudget), availableBudget
+      )
+      if (!isLastMilestone.value && props.proposal.budget > 0) {
+        return budgetRule
+      } else {
+        return availableBudget
+      }
+    }
+  },
+  f10: {
+    minCost: () => {
+      let _min = props.proposal.budget * 0.05
+      if (props.milestone === 1) {
+        _min = Math.min(_min, 75000)
+      }
+      return _min
+    },
+    maxCost: () => {
+      const availableBudget = props.proposal.budget - otherSomsBudget.value
+      const maxMilestoneBudget = 0.30
+      const budgetRule = Math.min(
+        (props.proposal.budget * maxMilestoneBudget), availableBudget
+      )
+      const _max = (!isLastMilestone.value && props.proposal.budget > 0) ? budgetRule : availableBudget
+      if (props.milestone === 1) {
+        return Math.min(_max, 75000)
+      }
+      return _max
+    }
+  }
+}
+
+console.log(milestoneRules)
+
 // Form validation rules
 
 const maxMilestoneCost = computed(() => {
-  const availableBudget = props.proposal.budget - otherSomsBudget.value
-  const maxMilestoneBudget = parseFloat(env.VITE_MAX_MILESTONE_BUDGET)
-  const budgetRule = Math.min(
-    (props.proposal.budget * maxMilestoneBudget), availableBudget
-  )
-  if (!isLastMilestone.value && props.proposal.budget > 0) {
-    return budgetRule
-  } else {
-    return availableBudget
-  }
+  const fund = (props.proposal.challenges.fund_id === 1) ? 'f9' : 'f10'
+  return milestoneRules[fund].maxCost()
+})
+
+const minMilestoneCost = computed(() => {
+  const fund = (props.proposal.challenges.fund_id === 1) ? 'f9' : 'f10'
+  return milestoneRules[fund].minCost()
 })
 
 const costRule = computed(() => {
-  const rule = yup.number().integer().required().min(1)
+  const rule = yup.number().integer().required().min(minMilestoneCost.value)
   return rule.max(maxMilestoneCost.value).test(
     'Only digits',
     'Error: field can contain only digits',
@@ -170,7 +208,13 @@ const initialSchema = computed(() => {
       type: 'number',
       validations: costRule.value,
       step: 1,
-      help: t('new_som.cost_help', {maxCost: n(maxMilestoneCost.value, 'currency')}),
+      help: t(
+        'new_som.cost_help',
+        {
+          currency: (props.proposal.currency === 'ada') ?  'ADA' : 'US$' ,
+          maxCost: n(maxMilestoneCost.value, 'currency', { currency: props.proposal.currency })
+        }
+      ),
     },
     month: {
       type: 'select',
