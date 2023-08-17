@@ -288,7 +288,10 @@ export default {
       title: "Project Catalyst<br />Milestone Module",
       discover: "Discover projects",
       how: "How it works",
-      faq: "FAQ"
+      faq: "FAQ",
+      content: "<p>The Milestone module was created to manage each project's Statement of Milestones (SoM) easily. This new tool automates all processes for submitting, reviewing, approving and managing the SoM throughout the lifecycle of a project, shifting from spreadsheets into a fully integrated module.</p><p>The accountability of Catalyst Funded Proposers (FP) is crucial in preserving a fair and unbiased funding framework. This guide aims to assist Catalyst-funded projects in understanding the processes relevant to their SoM.</p><p>Milestone-based funding enables funded projects to lay out their critical path to delivering their promises, highlighting each key milestone, output, acceptance criteria, costs, and evidence of achievements. In this context, a milestone is an important event or action in a project or your business journey that marks a crucial stage of progress. It is a crucial reporting tool to  inform the Catalyst team and the community of the project's progress.</p>",
+      how_content: "<p>The list of milestone-based projects from the F9 pilot can currently be found in the <a href='/projects'>projects section</a>. From F10 onwards, each project will fall into milestone-based funding and will need to use the new Milestone module to submit a SoM. The Catalyst team and Community Reviewers will review the submitted SoM as part of the on-boarding process. Once Community Reviewers approve a SoM, the Catalyst team will sign off and provide final approval, at which point the FP may start submitting their Proof of Achievement (PoA) for each milestone. Funding is directly linked to the FP demonstrating that they have achieved the milestone they submitted.</p>",
+      faq_content: "<p>Check the appendix in the <a href='https://docs.projectcatalyst.io/project-funding/how-to-submit-project-milestones/the-statement-of-milestones-module-fund9-only/appendix' target='_blank'>Project Catalyst Knowledge base</a>.</p>"
     },
     login: {
       title: "Login",

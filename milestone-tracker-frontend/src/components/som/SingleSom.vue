@@ -179,7 +179,7 @@
       </section>
       <div v-if="som.poas.length > 0" class="columns">
         <div :id="`poa-${som.milestone}`" class="column is-12">
-          <poa-list :som="som" :poas="som.poas" :proposal="proposal" :submittable-poa="current && canWriteSom(proposal.id) && locked && !poaLocked" />
+          <poa-list :som="som" :poas="som.poas" :proposal="proposal" :submittable-poa="current && canWriteSom(proposal.id) && (locked > 0) && !poaLocked" />
         </div>
       </div>
     </div>

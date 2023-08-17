@@ -29,27 +29,27 @@ const routes = [
     component: ProfilePage
   },
   {
-    path: '/proposals',
+    path: '/projects',
     name: 'proposals',
     component: ProposalsPage
   },
   {
-    path: '/proposals/:id',
+    path: '/projects/:id',
     component: ProposalPage,
     name: 'proposal'
   },
   {
-    path: '/proposals/:id/milestones',
+    path: '/projects/:id/milestones',
     component: MilestonesPage,
     name: 'proposal-milestones'
   },
   {
-    path: '/proposals/:id/milestones/:milestone',
+    path: '/projects/:id/milestones/:milestone',
     component: MilestonesPage,
     name: 'proposal-milestones-detail'
   },
   {
-    path: '/proposals/:id/milestones/:milestone/:section',
+    path: '/projects/:id/milestones/:milestone/:section',
     component: MilestonesPage,
     name: 'proposal-milestones-detail-section'
   },

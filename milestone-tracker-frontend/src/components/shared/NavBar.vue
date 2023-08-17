@@ -19,7 +19,7 @@
     <div id="main-nav" class="navbar-menu" :class="{'is-active': navActive}">
       <div class="navbar-start">
         <router-link class="navbar-item" to="/">{{ $t('nav.home') }}</router-link>
-        <router-link class="navbar-item" to="/proposals">{{ $t('nav.proposals') }}</router-link>
+        <router-link class="navbar-item" to="/projects">{{ $t('nav.proposals') }}</router-link>
         <router-link v-if="!logged" class="navbar-item" to="/login">{{ $t('nav.login') }}</router-link>
         <router-link v-if="logged" class="navbar-item" to="/profile">{{ $t('nav.profile') }}</router-link>
         <router-link v-if="logged" class="navbar-item" to="/notifications">{{ $t('nav.to_do_list_updates') }}</router-link>
