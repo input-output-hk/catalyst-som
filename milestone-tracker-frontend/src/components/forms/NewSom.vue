@@ -117,6 +117,9 @@ const milestoneRules = {
       if (props.milestone === 1) {
         _min = Math.min(_min, 75000)
       }
+      if (isLastMilestone.value) {
+        _min = props.proposal.budget * 0.15
+      }
       return _min
     },
     maxCost: () => {
