@@ -295,7 +295,7 @@ export default {
     },
     login: {
       title: "Login",
-      description: "Login as Funded Proposer, Challenge Team member or Catalyst team member to interact with milestones.",
+      description: "Login as Funded Proposer, SoM/PoA Community Reviewer or Catalyst team member to interact with milestones.",
       email: "Email",
       password: "Password",
       login: "Login",
@@ -312,7 +312,7 @@ export default {
       username: "Username",
       role: "Role",
       proposals: "Projects (as Funded Proposer):",
-      challenges: "Challenges (as Challenge Team):",
+      challenges: "Challenges (as SoM/PoA Community Reviewer):",
       proposals_allocated: "Projects allocated to review:"
     },
     proposal: {
