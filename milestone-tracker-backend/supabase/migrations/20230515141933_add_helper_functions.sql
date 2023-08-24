@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION public.getproposalsnapshot(
 	_project_id bigint)
-    RETURNS TABLE(title character varying, project_id bigint, budget bigint, funds_distributed bigint, id bigint, milestone bigint, month bigint, cost bigint, completion bigint, poas_id bigint, som_signoff_count bigint, poa_signoff_count bigint)
+    RETURNS TABLE(title character varying, project_id bigint, budget bigint, funds_distributed float, id bigint, milestone bigint, month bigint, cost bigint, completion bigint, poas_id bigint, som_signoff_count bigint, poa_signoff_count bigint)
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
@@ -132,7 +132,7 @@ GRANT EXECUTE ON FUNCTION public.getmilestones() TO service_role;
 
 CREATE OR REPLACE FUNCTION public.getproposalssnapshot(
 	)
-    RETURNS TABLE(title character varying, project_id bigint, budget bigint, funds_distributed bigint, id bigint, milestone bigint, month bigint, cost bigint, completion bigint, poas_id bigint, som_signoff_count bigint, poa_signoff_count bigint)
+    RETURNS TABLE(title character varying, project_id bigint, budget bigint, funds_distributed float, id bigint, milestone bigint, month bigint, cost bigint, completion bigint, poas_id bigint, som_signoff_count bigint, poa_signoff_count bigint)
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
@@ -362,7 +362,8 @@ AS $BODY$
             LEFT OUTER JOIN soms ON poas.som_id = soms.id
             LEFT OUTER JOIN signoffs ON signoffs.poa_id = poas.id
             LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
-            WHERE 
+            WHERE
+            (SELECT role FROM users where user_id = auth.uid()) >= 3 AND
             soms.current = true AND 
             poas.current = true AND
             poas_reviews.current = true AND 
@@ -415,6 +416,7 @@ AS $BODY$
             LEFT OUTER JOIN signoffs ON signoffs.som_id = soms.id
             LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
             WHERE 
+            (SELECT role FROM users where user_id = auth.uid()) >= 3 AND
             soms.current = true AND 
             som_reviews.current = true AND 
             soms.created_at >= _from

@@ -271,7 +271,8 @@ export default {
   footer: {
     website: 'Website',
     knowledge_base: 'Knowledge Base',
-    privacy_policy: 'Privacy Policy'
+    privacy_policy: 'Privacy Policy',
+    feedback: 'Feedback'
   },
   pages: {
     admin: {
@@ -332,8 +333,11 @@ export default {
     reset_password: {
       title: "Reset password",
       description: "",
-      password: "Password",
-      reset: "Reset"
+      password: "New password",
+      password_confirmation: "New password confirmation",
+      reset: "Reset",
+      no_reset: "The current link to reset the password is expired. Please visit the login page, click on 'Reset Password' and follow the link you'll received via email.",
+      passwords_dont_match: "Passwords don't match."
     },
     notifications: {
       go_to_som: "Open Statement of Milestone",

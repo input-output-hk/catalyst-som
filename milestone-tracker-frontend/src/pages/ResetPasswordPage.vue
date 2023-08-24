@@ -7,23 +7,30 @@
           <p>{{ $t('pages.reset_password.description') }}</p>
         </div>
         <div class="column is-6">
-          <form class="content">
-            <div v-if="resetActive" class="col-6 form-widget">
-              <h2 class="title"></h2>
-              <div>
-                <o-field :label="$t('pages.reset_password.password')">
-                  <o-input v-model="password" type="password"></o-input>
-                </o-field>
-              </div>
-              <div class="buttons mt-6">
-                <o-button
-                  type="submit"
-                  @click="handleReset">
-                    {{ $t('pages.reset_password.reset') }}
-                </o-button>
-              </div>
+          <form @submit.prevent="handleReset" v-if="resetActive">
+            <o-field :label="$t('pages.reset_password.password')">
+              <o-input v-model="password" type="password" minlength="7" maxlength="100"></o-input>
+            </o-field>
+            <o-field
+              :variant="(password !== password_confirmation) ? 'danger' : ''"
+              :message="(password !== password_confirmation) ? $t('pages.reset_password.passwords_dont_match') : ''"
+              :label="$t('pages.reset_password.password_confirmation')">
+              <o-input v-model="password_confirmation" type="password" minlength="7" maxlength="100"></o-input>
+            </o-field>
+            <div class="buttons mt-6">
+              <o-button
+                class="login"
+                :disabled="password.length === 0 || (password !== password_confirmation) || loading"
+                variant="primary"
+                size="medium"
+                native-type="submit">
+                  {{ $t('pages.reset_password.reset') }}
+              </o-button>
             </div>
           </form>
+          <o-notification v-if="!resetActive">
+            {{ $t('pages.reset_password.no_reset') }}
+          </o-notification>
         </div>
       </div>
     </div>
@@ -36,11 +43,15 @@
   import { supabase } from '@/utils/supabase'
   const { updatePassword } = useUser()
 
-  const resetActive = ref(false)
+  const resetActive = ref(true)
   const password = ref('')
+  const password_confirmation = ref('')
+  const loading = ref(false)
 
   const handleReset = async () => {
-    return updatePassword(password.value)
+    loading.value = true
+    updatePassword(password.value)
+    loading.value = false
   }
 
   onMounted(async () => {

@@ -147,11 +147,12 @@ export const useUser = defineStore('user-store', {
     async updatePassword(password) {
       this.fetching = true
       try {
-        const { error } = await supabase.auth.update({
+        const { error } = await supabase.auth.updateUser({
           password: password,
         })
         if (error) throw(error)
         successNotification(this.$i18n.t('notifications.password_updated'))
+        this.$router.push({name: 'login'})
       } catch(error) {
         errorNotification(error.message)
       } finally {

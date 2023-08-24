@@ -30,3 +30,6 @@ GRANT ALL ON TABLE public.users TO authenticated;
 GRANT ALL ON TABLE public.users TO postgres;
 
 GRANT ALL ON TABLE public.users TO service_role;
+
+GRANT ALL ON SCHEMA public TO supabase_auth_admin;
+GRANT ALL ON TABLE public.users TO supabase_auth_admin;

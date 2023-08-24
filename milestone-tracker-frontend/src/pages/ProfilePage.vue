@@ -8,15 +8,11 @@
             <th>{{ $t('pages.profile.email') }}</th>
             <td>{{ localUser.email }}</td>
           </tr>
-          <!-- <tr>
-            <th>{{ $t('pages.profile.username') }}</th>
-            <td>{{ localUser.username }}</td>
-          </tr> -->
           <tr>
             <th>{{ $t('pages.profile.role') }}</th>
             <td>{{ role }}</td>
           </tr>
-          <tr>
+          <tr v-if="proposals.length > 0">
             <th>{{ $t('pages.profile.proposals') }}</th>
             <td>
               <ul>
@@ -30,19 +26,7 @@
               </ul>
             </td>
           </tr>
-          <!--
-          <tr>
-            <th>{{ $t('pages.profile.challenges') }}</th>
-            <td>
-              <ul>
-                <li v-for="challenge in challenges" :key="challenge.id">
-                  {{challenge.title}}
-                </li>
-              </ul>
-            </td>
-          </tr>
-          -->
-          <tr>
+          <tr v-if="allocatedProposals.length > 0">
             <th>{{ $t('pages.profile.proposals_allocated') }}</th>
             <td>
               <ul>

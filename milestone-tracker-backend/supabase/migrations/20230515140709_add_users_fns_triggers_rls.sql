@@ -97,3 +97,8 @@ CREATE POLICY "users update admin"
     FOR UPDATE
     TO public
     USING (((user_id = auth.uid()) OR is_admin(auth.uid())));
+
+CREATE POLICY "dashboard_admin can create user" ON "public"."users"
+AS PERMISSIVE FOR INSERT
+TO supabase_auth_admin
+WITH CHECK (true);
