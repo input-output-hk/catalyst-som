@@ -339,6 +339,13 @@ export default {
       no_reset: "The current link to reset the password is expired. Please visit the login page, click on 'Reset Password' and follow the link you'll received via email.",
       passwords_dont_match: "Passwords don't match."
     },
+    confirm_reset_password: {
+      title: "Reset password",
+      description: "Please clink the button below to reset the password.",
+      reset: "Confirm and reset password",
+      no_reset: "This link expired. Please request again the password reset from the ",
+      login: "login page"
+    },
     notifications: {
       go_to_som: "Open Statement of Milestone",
       go_to_poa: "Open Proof of Achievement",
