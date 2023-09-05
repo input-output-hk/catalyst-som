@@ -28,3 +28,7 @@ class SB():
     def get_entity(self, entity):
         results = self.client.table(entity).select("*").execute()
         return [AttrDict(el) for el in results.data]
+    
+    def create_user(self, email, password):
+        user = self.client.auth.sign_up({ "email": email, "password": password })
+        return user

@@ -63,7 +63,7 @@ def push_proposals(
         for row in reader:
             try:
                 proposal = Proposal(**row, url=proposals_urls[row['id']])
-                results.append(proposal.dict())
+                results.append(orjson.loads(proposal.json()))
             except ValidationError as e:
                 print(row)
                 print(e)
@@ -81,7 +81,7 @@ def push_soms(
         for row in reader:
             try:
                 proposal = get_proposal(row['Project ID'], proposals)
-                proposal.completion_date = row['Completion Date']
+                #proposal.completion_date = row['Completion Date']
                 for i in range(1,6):
                     if i != 4 or row['Do you have M4?'] == 'Yes':
                         som = Som(
@@ -89,14 +89,22 @@ def push_soms(
                             proposal_id = proposal['id'],
                             milestone = i
                         )
+                        if proposal.milestones_qty == 4:
+                            if i == 5:
+                                som.milestone = 4
                         # Passing though JSON to serialize datetime correctly
                         results.append(orjson.loads(som.json()))
             except ValidationError as e:
                 print(e)
             except Exception as e:
                 print(e)
-    sb.upsert_entities(proposals, 'proposals')
+    #sb.upsert_entities(proposals, 'proposals')
     sb.push_entities(results, 'soms')
+    '''
+    for result in results:
+        print(result)
+        sb.push_entities([result], 'soms')
+    '''
 
 @app.command()
 def push_som_reviews(
@@ -106,6 +114,7 @@ def push_som_reviews(
     results = []
     proposals = sb.get_entity('proposals')
     soms = sb.get_entity('soms')
+    ct = get_user(1)
     with open(som_reviews, mode='r') as infile:
         reader = csv.DictReader(infile)
         for row in reader:
@@ -116,10 +125,14 @@ def push_som_reviews(
                 sr_submission = datetime.strptime(row['Timestamp'], '%m/%d/%Y %H:%M:%S')
                 related_soms = get_related(groups_by_creation, sr_submission)
                 for som in related_soms:
+                    ml_n = som['milestone']
+                    if ml_n == 4 and proposal.milestones_qty == 4:
+                        ml_n = 5
                     som_review = SomReview(
                         **row,
                         som_id = som['id'],
-                        milestone = som['milestone']
+                        milestone = ml_n,
+                        user_id = ct.user_id
                     )
                     # Passing though JSON to serialize datetime correctly
                     results.append(orjson.loads(som_review.json()))
@@ -142,7 +155,7 @@ def push_poas(
         for row in reader:
             try:
                 proposal = get_proposal(row[project_id_key], proposals)
-                som = get_som(proposal['id'], row[milestone_key], soms)
+                som = get_som(proposal['id'], row[milestone_key], soms, proposal)
                 poa = Poa(
                     **row,
                     proposal_id = proposal['id'],
@@ -165,12 +178,13 @@ def push_poa_reviews(
     proposals = sb.get_entity('proposals')
     soms = sb.get_entity('soms')
     poas = sb.get_entity('poas')
+    ct = get_user(1)
     with open(poa_reviews, mode='r') as infile:
         reader = csv.DictReader(infile)
         for row in reader:
             try:
                 proposal = get_proposal(row[project_id_key], proposals)
-                som = get_som(proposal['id'], row[milestone_key], soms)
+                som = get_som(proposal['id'], row[milestone_key], soms, proposal)
                 project_poas = get_poas(som['id'], poas)
                 groups_by_creation = make_groups_by(project_poas, 'created_at')
                 sr_submission = datetime.strptime(row['Timestamp'], '%m/%d/%Y %H:%M:%S')
@@ -178,7 +192,8 @@ def push_poa_reviews(
                 for poa in related_poas:
                     poa_review = PoaReview(
                         **row,
-                        poas_id = poa['id']
+                        poas_id = poa['id'],
+                        user_id = ct.user_id
                     )
                     # Passing though JSON to serialize datetime correctly
                     results.append(orjson.loads(poa_review.json()))
@@ -197,33 +212,53 @@ def push_io_reviews(
     spreadsheet_map = proposals_extra_map(sheets_map)
     new_som_reviews = []
     new_poa_reviews = []
+    poa_signoffs = []
+    som_signoffs = []
+    io_user = get_user(2)
+    signoff_user = get_user(4)
     for proposal in proposals:
         sheet_url = spreadsheet_map[proposal['project_id']]
         io_reviews = extract_io_reviews(sheet_url)
         # SoMs review
         project_soms = get_soms(proposal['id'], soms)
-        new_som_reviews += process_io_review(project_soms, io_reviews, proposal)
+        _som_reviews, _poa_signoffs, _som_signoffs = process_io_review(project_soms, io_reviews, proposal, io_user, signoff_user)
+        new_som_reviews += _som_reviews
+        poa_signoffs += _poa_signoffs
+        som_signoffs += _som_signoffs
         # PoA reviews
         for project_som in project_soms:
             project_poas = get_poas(project_som['id'], poas)
-            new_poa_reviews += process_io_review(project_poas, io_reviews, proposal, project_som)
+            _poa_reviews, _poa_signoffs, _som_signoffs = process_io_review(project_poas, io_reviews, proposal, io_user, signoff_user, project_som)
+            new_poa_reviews += _poa_reviews
+            poa_signoffs += _poa_signoffs
+            som_signoffs += _som_signoffs
     publish_io_reviews(new_som_reviews, 'som_reviews')
     publish_io_reviews(new_poa_reviews, 'poas_reviews')
+    sb.push_entities(som_signoffs, 'signoffs')
+    sb.push_entities(poa_signoffs, 'signoffs')
 
-def process_io_review(entities, io_reviews, proposal, parent=None):
+def process_io_review(entities, io_reviews, proposal, io_user, signoff_user, parent=None):
     results = []
+    poa_signoffs = []
+    som_signoffs = []
     groups_by_creation = make_groups_by(entities, 'created_at')
     groups_related = get_groups_related(groups_by_creation, io_reviews)
     for group_related in groups_related:
         elements = group_related['elements']
         for element in elements:
             if parent:
-                review = parse_io_review(proposal['project_id'], group_related['review'], parent, element)
+                review = parse_io_review(proposal, group_related['review'], parent, io_user, element)
+                if review:
+                    if review.content_approved:
+                        poa_signoffs.append({'poa_id': element.id, 'user_id': signoff_user.user_id})
             else:
-                review = parse_io_review(proposal['project_id'], group_related['review'], element)
+                review = parse_io_review(proposal, group_related['review'], element, io_user)
+                if review:
+                    if review.outputs_approves and review.success_criteria_approves and review.evidence_approves:
+                        som_signoffs.append({'som_id': element.id, 'user_id': signoff_user.user_id})
             if review:
                 results.append(orjson.loads(review.json()))
-    return results
+    return results, poa_signoffs, som_signoffs
 
 
 def publish_io_reviews(reviews, entity):
@@ -231,15 +266,19 @@ def publish_io_reviews(reviews, entity):
     to_publish = list(filter(lambda x: review_exists(x, db_reviews), reviews))
     sb.push_entities(to_publish, entity)
 
-def parse_io_review(proposal_id, review, som, poa=None):
-    revision = gdrive.download_revision(proposal_id, review['file_id'], review['rev_id'])
+def parse_io_review(proposal, review, som, io_user, poa=None):
+    revision = gdrive.download_revision(proposal['project_id'], review['file_id'], review['rev_id'])
     with open(revision, mode='r') as infile:
         csv_content = list(csv.reader(infile))
         try:
+            ml = som['milestone']
+            if ml == 4 and proposal['milestones_qty'] == 4:
+                ml = 5
             arguments = {
                 'csv': csv_content,
-                'milestone': som['milestone'],
-                'created_at': review['submission_date']
+                'milestone': ml,
+                'created_at': review['submission_date'],
+                'user_id': io_user.user_id
             }
             if poa:
                 arguments['poas_id'] = poa['id']
@@ -314,8 +353,8 @@ def get_som_by_id(id, soms):
             return s
     raise Exception(f"SoM with id {id} not found")
 
-def get_som(proposal_id, milestone, soms):
-    ml = int(''.join(re.findall(r'\b\d+\b', milestone.replace('Final', '5'))))
+def get_som(proposal_id, milestone, soms, proposal):
+    ml = int(''.join(re.findall(r'\b\d+\b', milestone.replace('Final', str(proposal.milestones_qty)))))
     for s in soms:
         if (
             s['proposal_id'] == proposal_id and
@@ -379,3 +418,10 @@ def get_groups_related(groups, submissions):
                 'review': reviews[-1]
             })
     return results
+
+def get_user(role):
+    users = sb.get_entity('users')
+    for user in users:
+        if user.role == role:
+            return user
+    return None
