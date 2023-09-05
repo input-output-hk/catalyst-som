@@ -300,7 +300,8 @@ export default {
       email: "Email",
       password: "Password",
       login: "Login",
-      reset: "Reset Password"
+      reset: "Reset Password",
+      loading: "Loading..."
     },
     milestones: {
       back: "Go back to main project page.",

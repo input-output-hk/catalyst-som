@@ -17,19 +17,19 @@
             <div class="buttons mt-6">
               <o-button
                 class="login"
-                :disabled="password.length === 0 || email.length === 0"
+                :disabled="password.length === 0 || email.length === 0 || loading"
                 variant="primary"
                 size="medium"
                 native-type="submit">
-                  {{ $t('pages.login.login') }}
+                  {{ loading ? $t('pages.login.loading') : $t('pages.login.login') }}
               </o-button>
               <o-button
                 class="reset"
                 variant="primary"
                 size="medium"
-                :disabled="loading || email.length === 0"
+                :disabled="loadingReset || email.length === 0"
                 @click="handleReset">
-                {{ $t('pages.login.reset') }}
+                {{ loadingReset ? $t('pages.login.loading') : $t('pages.login.reset') }}
               </o-button>
             </div>
           </form>
@@ -45,14 +45,19 @@ import { useUser } from '../store/user.js'
 const { login, resetPassword } = useUser()
 
 const loading = ref(false)
+const loadingReset = ref(false)
 const email = ref('')
 const password = ref('')
 
 const handleLogin = async () => {
-  return login(email.value, password.value)
+  loading.value = true
+  await login(email.value, password.value)
+  loading.value = false
 }
 const handleReset = async () => {
-  return resetPassword(email.value)
+  loadingReset.value = true
+  await resetPassword(email.value)
+  loadingReset.value = false
 }
 </script>
 
