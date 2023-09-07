@@ -209,6 +209,7 @@ AS $BODY$
               where poas.proposal_id in (
                 select allocations.proposal_id from allocations where allocations.user_id = auth.uid()
               )
+              and soms.current = true
               and poas.current = true
               group by soms.milestone, soms.proposal_id, proposals.title, poas.created_at, proposals.project_id
               having count(distinct signoffs.id) = 0
