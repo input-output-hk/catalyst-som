@@ -222,7 +222,7 @@ export default {
   },
   roles: {
     funded_proposer: "Funded proposer",
-    ct_member: "SoM/PoA comunity reviewer",
+    ct_member: "SoM/PoA community reviewer",
     io_member: "Catalyst Team reviewer",
     admin: "Admin",
     signoff: "Signoff"
