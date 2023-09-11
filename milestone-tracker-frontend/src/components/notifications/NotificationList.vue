@@ -1,14 +1,16 @@
 <template>
   <div class="content">
     <h2>{{title}}</h2>
+    
     <div v-if="filters.length > 0" class="field is-horizontal">
-      <o-field v-for="f in filters" :key="f.key" :label="f.name" class="mr-4">
+      <o-field v-for="f in filters" :key="f.key" :label="f.name" class="mr-6 is-flex-grow-1">
         <o-input
-          v-if="f.type !== 'date'"
+          v-if="!['date', 'range'].includes(f.type)"
           v-model="_filter[f.key]"
           :type="f.type"
           :placeholder="f.name"
         />
+        <o-slider v-if="f.type === 'range'" v-model="_filter[f.key]" :min="0" :max="15" :step="1" ticks></o-slider>
         <o-datepicker
           v-if="f.type === 'date'"
           v-model="_filter[f.key]"
@@ -51,11 +53,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const _filter = ref({})
 
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     default: 'Notifications'
@@ -91,4 +93,11 @@ const emit = defineEmits(['applyFilter'])
 const _handleFilter = () => {
   emit('applyFilter', _filter.value)
 }
+
+onMounted(() => {
+  const _ranges = props.filters.filter((f) => f.type === 'range')
+  _ranges.forEach((r) => {
+    _filter.value[r.key] = [0, 10]
+  })
+})
 </script>

@@ -366,6 +366,8 @@ export default {
       open_poa_to_resubmit: "Open and resubmit Proof of Achievement",
       nr_reviews: "# of reviews:",
       nr_approvals: "# of approvals:",
+      nr_reviews_greater: "# of reviews >=:",
+      nr_approvals_greater: "# of approvals >=:",
       from: "Submitted from:",
       poa_to_signoff_received: "Proof of Achievement to be signed off",
       som_to_signoff_received: "Statement of Milestone to be signed off",
