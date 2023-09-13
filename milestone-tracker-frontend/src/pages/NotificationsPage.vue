@@ -138,12 +138,14 @@ const toSignoffFilters = ref([
   {
     type: 'range',
     key: '_nr_reviews',
-    name: t('pages.notifications.nr_reviews')
+    name: t('pages.notifications.nr_reviews'),
+    default: [0, 10]
   },
   {
     type: 'range',
     key: '_nr_approvals',
-    name: t('pages.notifications.nr_approvals')
+    name: t('pages.notifications.nr_approvals'),
+    default: [0, 10]
   },
   {
     type: 'date',
@@ -175,8 +177,8 @@ const handlePoasToSignoffFilters = async (params) => {
   if (canSignoff) {
     poasToSignoff.value = await getPoasToBeSignedOff(
       params._from, 
-      params._nr_reviews || [0, 10],
-      params._nr_approvals || [0, 10]
+      params._nr_reviews || toSignoffFilters.value[0].default,
+      params._nr_approvals || toSignoffFilters.value[1].default
     )
   }
 }
@@ -185,8 +187,8 @@ const handleSomsToSignoffFilters = async (params) => {
   if (canSignoff) {
     somsToSignoff.value = await getSomsToBeSignedOff(
       params._from, 
-      params._nr_reviews || [0, 10],
-      params._nr_approvals || [0, 10]
+      params._nr_reviews || toSignoffFilters.value[0].default,
+      params._nr_approvals || toSignoffFilters.value[1].default
     )
   }
 }

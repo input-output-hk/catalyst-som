@@ -8,6 +8,7 @@ import ProposalsPage from '@/pages/ProposalsPage.vue';
 import ProposalPage from '@/pages/ProposalPage.vue';
 import MilestonesPage from '@/pages/MilestonesPage.vue';
 import NotificationsPage from '@/pages/NotificationsPage.vue';
+import SubmissionsPage from '@/pages/SubmissionsPage.vue';
 import AdminPage from '@/pages/AdminPage.vue';
 
 const routes = [
@@ -68,6 +69,11 @@ const routes = [
     path: '/notifications',
     component: NotificationsPage,
     name: 'notifications'
+  },
+  {
+    path: '/latest-submissions',
+    component: SubmissionsPage,
+    name: 'latest-submissions'
   }
 ]
 

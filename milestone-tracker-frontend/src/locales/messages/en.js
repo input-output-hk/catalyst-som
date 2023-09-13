@@ -34,7 +34,8 @@ export default {
     profile: "Profile",
     to_do_list_updates: "Todo list / Updates",
     admin: "Admin",
-    logout: "Logout {name}"
+    logout: "Logout {name}",
+    latest_submissions: "Latest submissions"
   },
   next_payment: {
     to_be_distributed: "to be distributed in next batch.",
@@ -375,6 +376,10 @@ export default {
       no_filter_results: "No results found with current filters criteria",
       open_poa_to_signoff: "Open and signoff Proof of Achievement",
       open_som_to_signoff: "Open and signoff Statement of Milestone",
+      latest_poa_received: "Latest PoA received",
+      latest_som_received: "Latest SoM received",
+      go_to_latest_poa: "Go to PoA",
+      go_to_latest_som: "Go to SoM",
     }
   }
 }

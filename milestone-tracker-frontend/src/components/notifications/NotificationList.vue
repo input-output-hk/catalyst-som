@@ -97,7 +97,9 @@ const _handleFilter = () => {
 onMounted(() => {
   const _ranges = props.filters.filter((f) => f.type === 'range')
   _ranges.forEach((r) => {
-    _filter.value[r.key] = [0, 10]
+    if (r.default) {
+      _filter.value[r.key] = r.default
+    }
   })
 })
 </script>
