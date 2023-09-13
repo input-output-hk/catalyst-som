@@ -15,7 +15,7 @@ const homeTest: NightwatchTests = {
       .clickDiscoverProposals()
       .expect.element('body')
       .text.to.contain(
-        'All the projects in the Statement of Milestone pilot.'
+        'All the projects in the Milestone pilot.'
       );
 
     browser.assert.urlContains('/proposals');
@@ -24,7 +24,7 @@ const homeTest: NightwatchTests = {
       .clickNavProposals()
       .expect.element('body')
       .text.to.contain(
-        'All the projects in the Statement of Milestone pilot.'
+        'All the projects in the Milestone pilot.'
       );
 
     browser.assert.urlContains('/proposals');
