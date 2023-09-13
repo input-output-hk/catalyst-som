@@ -23,6 +23,10 @@ class Proposal(BaseModel):
     project_id: int = Field(900000, gte=900001, alias='id')
     budget: int
     challenge_id: int
+    funds_distributed: float
+    milestones_qty: int
+    currency: str
+    starting_date: datetime
 
     @validator('budget', pre=True)
     @classmethod
@@ -32,6 +36,11 @@ class Proposal(BaseModel):
         '''
         digits = re.findall(r'\b\d+\b', value)
         return ''.join(digits) if (digits) else 0
+
+    @validator('starting_date', pre=True)
+    @classmethod
+    def parse_date(cls, value):
+        return datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
 
 class Som(BaseModel):
     proposal_id: int
@@ -49,7 +58,7 @@ class Som(BaseModel):
     @validator('month', pre=True)
     @classmethod
     def parse_month(cls, value):
-        month = re.findall(r'^Month ([0-9]{1,2})( 202[0-9])?$', value)
+        month = re.findall(r'^Month ([0-9]{1,2})( - [A-z]* 202[0-9])?$', value)
         return month[0][0] if month else 1
 
     @validator('created_at', pre=True)
@@ -88,6 +97,8 @@ class SomReview(BaseModel):
     evidence_approves: bool
     evidence_comment: str
     som_id: int
+    current: bool = Field(True)
+    user_id: str
     created_at: datetime
 
     @validator('created_at', pre=True)
@@ -115,6 +126,8 @@ class IoSomReview(BaseModel):
     evidence_approves: bool
     evidence_comment: str
     som_id: int
+    current: bool = Field(True)
+    user_id: str
     created_at: datetime
 
     @root_validator(pre=True)
@@ -136,6 +149,8 @@ class IoPoaReview(BaseModel):
     content_approved: bool
     content_comment: str
     poas_id: int
+    current: bool = Field(True)
+    user_id: str
     created_at: datetime
 
     @root_validator(pre=True)
@@ -164,6 +179,8 @@ class PoaReview(BaseModel):
     content_comment: str = Field(alias='Rationale for Approval / Non Approval')
     poas_id: int
     created_at: datetime = Field(alias='Timestamp')
+    current: bool = Field(True)
+    user_id: str
     #user_id: int
     #role: int
 

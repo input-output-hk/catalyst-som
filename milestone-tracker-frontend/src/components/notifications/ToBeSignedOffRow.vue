@@ -30,7 +30,7 @@ const props = defineProps({
   },
   msg: {
     type: String,
-    default: 'Go to'
+    default: ''
   },
   entityType: {
     type: String,
@@ -39,6 +39,9 @@ const props = defineProps({
 })
 
 const _msg = computed(() => {
+  if (props.msg !== '') {
+    return props.msg
+  }
   return (props.entityType === 'som') ? t('pages.notifications.open_som_to_signoff') : t('pages.notifications.open_poa_to_signoff')
 })
 

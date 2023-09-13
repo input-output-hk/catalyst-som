@@ -211,7 +211,7 @@ export const useUser = defineStore('user-store', {
         errorNotification(this.$i18n.t('errors.fetching_poas'))
       }
     },
-    async getPoasToBeSignedOff(from = false, min_nr_reviews = 0, min_nr_approvals = 0) {
+    async getPoasToBeSignedOff(from = false, nr_reviews = [0, 10], nr_approvals = [0, 10]) {
       if (!from) {
         from = new Date(null).toISOString()
       }
@@ -219,8 +219,10 @@ export const useUser = defineStore('user-store', {
         const { data, error } = await supabase
           .rpc('getpoastobesignedoff', {
             _from: from,
-            _min_nr_reviews: min_nr_reviews,
-            _min_nr_approvals: min_nr_approvals
+            _max_nr_approvals: nr_approvals[1],
+            _max_nr_reviews: nr_reviews[1],
+            _min_nr_approvals: nr_approvals[0],
+            _min_nr_reviews: nr_reviews[0]
           })
         if (error) throw(error)
         return data
@@ -228,7 +230,7 @@ export const useUser = defineStore('user-store', {
         errorNotification(this.$i18n.t('errors.fetching_poas'))
       }
     },
-    async getSomsToBeSignedOff(from = false, min_nr_reviews = 0, min_nr_approvals = 0) {
+    async getSomsToBeSignedOff(from = false, nr_reviews = [0, 10], nr_approvals = [0, 10]) {
       if (!from) {
         from = new Date(null).toISOString()
       }
@@ -236,8 +238,10 @@ export const useUser = defineStore('user-store', {
         const { data, error } = await supabase
           .rpc('getsomstobesignedoff', {
             _from: from,
-            _min_nr_reviews: min_nr_reviews,
-            _min_nr_approvals: min_nr_approvals
+            _min_nr_reviews: nr_reviews[0],
+            _max_nr_reviews: nr_reviews[1],
+            _min_nr_approvals: nr_approvals[0],
+            _max_nr_approvals: nr_approvals[1]
           })
         if (error) throw(error)
         return data

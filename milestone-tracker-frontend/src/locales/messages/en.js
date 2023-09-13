@@ -34,7 +34,8 @@ export default {
     profile: "Profile",
     to_do_list_updates: "Todo list / Updates",
     admin: "Admin",
-    logout: "Logout {name}"
+    logout: "Logout {name}",
+    latest_submissions: "Latest submissions"
   },
   next_payment: {
     to_be_distributed: "to be distributed in next batch.",
@@ -47,12 +48,12 @@ export default {
     add_proposal: "Add a project"
   },
   milestone: {
-    som: "Statement of Milestone {nr}",
-    latest_som: "Latest submission of the Statement of Milestone {nr}.",
+    som: "Milestone {nr}",
+    latest_som: "Latest submission of the Milestone {nr}.",
     archived: "Archived Statements of Milestone {nr}",
-    submit_new_som: "Submit new Statement of Milestone",
-    resubmit_som: "Resubmit Statement of Milestone",
-    resubmission_title: "Statement of Milestone resubmission confirmation",
+    submit_new_som: "Submit new Milestone",
+    resubmit_som: "Resubmit Milestone",
+    resubmission_title: "Milestone resubmission confirmation",
     resubmission_msg: "Are you sure you want to resubmit this Statement of Milestone (SoM)? The current SoM and all its reviews will be archived. The new SoM submission will have to go through the review process again.",
     resubmission_confirm: "Proceed with resubmission",
     resubmission_clear: "Cancel",
@@ -63,7 +64,7 @@ export default {
     show_archived_soms: "Show archived Statements of Milestone",
     hide_archived_soms: "Hide archived Statements of Milestone",
     jump_to_poa: "Jump to Proof of Achievement",
-    final_som: "Statement of Final Milestone"
+    final_som: "Final Milestone"
   },
   milestone_recap: {
     title: "M {nr}",
@@ -129,7 +130,7 @@ export default {
     submit: "Submit Proof of Achievement review",
     reset: "Reset",
     poa_approved: "PoA Approved?",
-    poa_approved_help: "Tick the checkbox if the Proof of Achievement for the Statement of Milestone is approved.",
+    poa_approved_help: "Tick the checkbox if the Proof of Achievement for the Milestone is approved.",
     comment: "Comment:",
     comment_help: "Please provide a description why Proof of Achievement (PoA) is approved. In case PoA is not approved, please describe what is missing and how the proposer can amend them in order to get the approval.",
   },
@@ -162,17 +163,17 @@ export default {
     open_reviews: "Open active reviews for this Milestone",
     open_archived_reviews: "Open archived reviews for this Milestone",
     archived_reviews: "These reviews are not active anymore and are archived. Each reviewer assigned to this project can have only one review active at a time and can't modify previous submissions. Every time a new review is submitted, the previous ones become archived.",
-    submit_review: "Submit review for this Statement of Milestone",
-    resubmit_review: "Resubmit review for this Statement of Milestone",
+    submit_review: "Submit review for this Milestone",
+    resubmit_review: "Resubmit review for this Milestone",
     submit_poa: "Submit new Proof of Achievement",
     resubmit_poa: "Resubmit Proof of Achievement",
     signoff: "Signoff",
-    not_submitted: "Statement of Milestone not submitted yet!"
+    not_submitted: "Milestone not submitted yet!"
   },
   new_som: {
-    component_title: "New Statement of Milestone {nr}",
+    component_title: "New Milestone {nr}",
     clone_latest: "Clone latest submission",
-    submit: "Submit Statement of Milestone",
+    submit: "Submit Milestone",
     reset: "Reset",
     title: "Title:",
     outputs: "Outputs:",
@@ -204,7 +205,7 @@ export default {
     resubmission_clear: "Cancel"
   },
   new_som_review: {
-    title: "New Review for Statement of Milestone",
+    title: "New Review for Milestone",
     submit: "Submit",
     reset: "Reset",
     outputs_approved: "Outputs approved?",
@@ -222,7 +223,7 @@ export default {
   },
   roles: {
     funded_proposer: "Funded proposer",
-    ct_member: "SoM/PoA comunity reviewer",
+    ct_member: "Milestone reviewer",
     io_member: "Catalyst Team reviewer",
     admin: "Admin",
     signoff: "Signoff"
@@ -291,16 +292,17 @@ export default {
       how: "How it works",
       faq: "FAQ",
       content: "<p>The Milestone module was created to manage each project's Statement of Milestones (SoM) easily. This new tool automates all processes for submitting, reviewing, approving and managing the SoM throughout the lifecycle of a project, shifting from spreadsheets into a fully integrated module.</p><p>The accountability of Catalyst Funded Proposers (FP) is crucial in preserving a fair and unbiased funding framework. This guide aims to assist Catalyst-funded projects in understanding the processes relevant to their SoM.</p><p>Milestone-based funding enables funded projects to lay out their critical path to delivering their promises, highlighting each key milestone, output, acceptance criteria, costs, and evidence of achievements. In this context, a milestone is an important event or action in a project or your business journey that marks a crucial stage of progress. It is a crucial reporting tool to  inform the Catalyst team and the community of the project's progress.</p>",
-      how_content: "<p>The list of milestone-based projects from the F9 pilot can currently be found in the <a href='/projects'>projects section</a>. From F10 onwards, each project will fall into milestone-based funding and will need to use the new Milestone module to submit a SoM. The Catalyst team and Community Reviewers will review the submitted SoM as part of the on-boarding process. Once Community Reviewers approve a SoM, the Catalyst team will sign off and provide final approval, at which point the FP may start submitting their Proof of Achievement (PoA) for each milestone. Funding is directly linked to the FP demonstrating that they have achieved the milestone they submitted.</p>",
+      how_content: "<p>The list of milestone-based projects from the F9 pilot can currently be found in the <a href='/projects'>projects section</a>. From F10 onwards, each project will fall into milestone-based funding and will need to use the new Milestone module to submit a SoM. The Catalyst team and Milestone Reviewers will review the submitted SoM as part of the on-boarding process. Once Milestone Reviewers approve a SoM, the Catalyst team will sign off and provide final approval, at which point the FP may start submitting their Proof of Achievement (PoA) for each milestone. Funding is directly linked to the FP demonstrating that they have achieved the milestone they submitted.</p>",
       faq_content: "<p>Check the appendix in the <a href='https://docs.projectcatalyst.io/project-funding/how-to-submit-project-milestones/the-statement-of-milestones-module-fund9-only/appendix' target='_blank'>Project Catalyst Knowledge base</a>.</p>"
     },
     login: {
       title: "Login",
-      description: "Login as Funded Proposer, SoM/PoA Community Reviewer or Catalyst team member to interact with milestones.",
+      description: "Login as Funded Proposer, Milestone Reviewer or Catalyst team member to interact with milestones.",
       email: "Email",
       password: "Password",
       login: "Login",
-      reset: "Reset Password"
+      reset: "Reset Password",
+      loading: "Loading..."
     },
     milestones: {
       back: "Go back to main project page.",
@@ -313,7 +315,7 @@ export default {
       username: "Username",
       role: "Role",
       proposals: "Projects (as Funded Proposer):",
-      challenges: "Challenges (as SoM/PoA Community Reviewer):",
+      challenges: "Challenges (as Milestone Reviewer):",
       proposals_allocated: "Projects allocated to review:"
     },
     proposal: {
@@ -339,8 +341,15 @@ export default {
       no_reset: "The current link to reset the password is expired. Please visit the login page, click on 'Reset Password' and follow the link you'll received via email.",
       passwords_dont_match: "Passwords don't match."
     },
+    confirm_reset_password: {
+      title: "Reset password",
+      description: "Please clink the button below to reset the password.",
+      reset: "Confirm and reset password",
+      no_reset: "This link expired. Please request again the password reset from the ",
+      login: "login page"
+    },
     notifications: {
-      go_to_som: "Open Statement of Milestone",
+      go_to_som: "Open Milestone",
       go_to_poa: "Open Proof of Achievement",
       proposal: "Project",
       milestone: "Milestone",
@@ -350,21 +359,27 @@ export default {
       som_to_review: "Statement of Milestone to be reviewed",
       signoff_received: "Final approvals received in the last day | Final approvals received in the last {count} days",
       no_notifications: "No notifications, no relevant events happened from your last visit.",
-      som_reviews_received: "Statement of Milestone reviews received",
+      som_reviews_received: "Milestone reviews received",
       poa_reviews_received: "PoA reviews received",
       approved: "Approved",
       not_approved: "Not Approved",
-      open_som_to_resubmit: "Open and resubmit Statement of Milestone",
+      open_som_to_resubmit: "Open and resubmit Milestone",
       open_poa_to_resubmit: "Open and resubmit Proof of Achievement",
       nr_reviews: "# of reviews:",
       nr_approvals: "# of approvals:",
+      nr_reviews_greater: "# of reviews >=:",
+      nr_approvals_greater: "# of approvals >=:",
       from: "Submitted from:",
       poa_to_signoff_received: "Proof of Achievement to be signed off",
-      som_to_signoff_received: "Statement of Milestone to be signed off",
+      som_to_signoff_received: "Milestone to be signed off",
       filter: "Apply filter",
       no_filter_results: "No results found with current filters criteria",
       open_poa_to_signoff: "Open and signoff Proof of Achievement",
-      open_som_to_signoff: "Open and signoff Statement of Milestone",
+      open_som_to_signoff: "Open and signoff Milestone",
+      latest_poa_received: "Latest PoA received",
+      latest_som_received: "Latest SoM received",
+      go_to_latest_poa: "Go to PoA",
+      go_to_latest_som: "Go to SoM",
     }
   }
 }

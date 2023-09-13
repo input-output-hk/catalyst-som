@@ -2,11 +2,13 @@ import {createRouter} from 'vue-router'
 import HomePage from '@/pages/HomePage.vue';
 import LoginPage from '@/pages/LoginPage.vue';
 import ResetPasswordPage from '@/pages/ResetPasswordPage.vue';
+import ConfirmResetPasswordPage from '@/pages/ConfirmResetPasswordPage.vue';
 import ProfilePage from '@/pages/ProfilePage.vue';
 import ProposalsPage from '@/pages/ProposalsPage.vue';
 import ProposalPage from '@/pages/ProposalPage.vue';
 import MilestonesPage from '@/pages/MilestonesPage.vue';
 import NotificationsPage from '@/pages/NotificationsPage.vue';
+import SubmissionsPage from '@/pages/SubmissionsPage.vue';
 import AdminPage from '@/pages/AdminPage.vue';
 
 const routes = [
@@ -22,7 +24,12 @@ const routes = [
   },
   {
     path: '/reset-password',
+    name: 'reset-password',
     component: ResetPasswordPage
+  },
+  {
+    path: '/confirm-reset-password',
+    component: ConfirmResetPasswordPage
   },
   {
     path: '/profile',
@@ -62,6 +69,11 @@ const routes = [
     path: '/notifications',
     component: NotificationsPage,
     name: 'notifications'
+  },
+  {
+    path: '/latest-submissions',
+    component: SubmissionsPage,
+    name: 'latest-submissions'
   }
 ]
 

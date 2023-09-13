@@ -7,7 +7,7 @@
           <p>{{ $t('pages.reset_password.description') }}</p>
         </div>
         <div class="column is-6">
-          <form @submit.prevent="handleReset" v-if="resetActive">
+          <form v-if="resetActive" @submit.prevent="handleReset">
             <o-field :label="$t('pages.reset_password.password')">
               <o-input v-model="password" type="password" minlength="7" maxlength="100"></o-input>
             </o-field>
