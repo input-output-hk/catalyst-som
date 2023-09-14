@@ -174,7 +174,7 @@ const notificationsCount = computed(() => {
 })
 
 const handlePoasToSignoffFilters = async (params) => {
-  if (canSignoff) {
+  if (canSignoff.value) {
     poasToSignoff.value = await getPoasToBeSignedOff(
       params._from, 
       params._nr_reviews || toSignoffFilters.value[0].default,
@@ -184,7 +184,7 @@ const handlePoasToSignoffFilters = async (params) => {
 }
 
 const handleSomsToSignoffFilters = async (params) => {
-  if (canSignoff) {
+  if (canSignoff.value) {
     somsToSignoff.value = await getSomsToBeSignedOff(
       params._from, 
       params._nr_reviews || toSignoffFilters.value[0].default,
@@ -201,7 +201,7 @@ onMounted(async () => {
   signoffs.value = await getSignoffNotifications(from.toISOString())
   somReviews.value = await getSomReviewsNotifications()
   poaReviews.value = await getPoaReviewsNotifications()
-  if (canSignoff) {
+  if (canSignoff.value) {
     poasToSignoff.value = await getPoasToBeSignedOff()
     somsToSignoff.value = await getSomsToBeSignedOff()
   }

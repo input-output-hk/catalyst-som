@@ -364,7 +364,7 @@ AS $BODY$
             LEFT OUTER JOIN signoffs ON signoffs.poa_id = poas.id
             LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
             WHERE
-            (SELECT role FROM users where user_id = auth.uid()) >= 3 AND
+            (SELECT role FROM users where user_id = auth.uid()) >= 2 AND
             soms.current = true AND 
             poas.current = true AND
             (poas_reviews.current = true OR (_min_nr_reviews = 0)) AND 
@@ -419,7 +419,7 @@ AS $BODY$
             LEFT OUTER JOIN signoffs ON signoffs.som_id = soms.id
             LEFT OUTER JOIN proposals ON soms.proposal_id = proposals.id
             WHERE 
-            (SELECT role FROM users where user_id = auth.uid()) >= 3 AND
+            (SELECT role FROM users where user_id = auth.uid()) >= 2 AND
             soms.current = true AND 
             som_reviews.current = true AND 
             soms.created_at >= _from

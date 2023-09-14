@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <notification-list
-      v-show="canSignoff"
+      v-show="canSetAllocations || canSignoff"
       class="poa-to-signoff-received-notifications"
       :row-component="ToBeSignedOffRow"
       :title="$t('pages.notifications.latest_poa_received')"
@@ -13,7 +13,7 @@
       @apply-filter="handlePoasToSignoffFilters"
     />
     <notification-list
-      v-show="canSignoff"
+      v-show="canSetAllocations || canSignoff"
       class="som-to-signoff-received-notifications"
       :row-component="ToBeSignedOffRow"
       :title="$t('pages.notifications.latest_som_received')"
@@ -44,7 +44,7 @@ const {
   getSomsToBeSignedOff
 } = useUser()
 const userStore = useUser()
-const { canSignoff } = storeToRefs(userStore)
+const { canSetAllocations, canSignoff } = storeToRefs(userStore)
 
 const signoffs = ref([])
 const poasToSignoff = ref([])
@@ -88,7 +88,7 @@ const notificationsCount = computed(() => {
 })
 
 const handlePoasToSignoffFilters = async (params) => {
-  if (canSignoff) {
+  if (canSetAllocations.value || canSignoff.value) {
     poasToSignoff.value = await getPoasToBeSignedOff(
       params._from, 
       params._nr_reviews || toSignoffFilters.value[0].default,
@@ -98,7 +98,7 @@ const handlePoasToSignoffFilters = async (params) => {
 }
 
 const handleSomsToSignoffFilters = async (params) => {
-  if (canSignoff) {
+  if (canSetAllocations.value || canSignoff.value) {
     somsToSignoff.value = await getSomsToBeSignedOff(
       params._from, 
       params._nr_reviews || toSignoffFilters.value[0].default,
@@ -108,7 +108,7 @@ const handleSomsToSignoffFilters = async (params) => {
 }
 
 onMounted(async () => {
-  if (canSignoff) {
+  if (canSetAllocations.value || canSignoff.value) {
     poasToSignoff.value = await getPoasToBeSignedOff(
       toSignoffFilters.value[2].default,
       toSignoffFilters.value[0].default,

@@ -23,7 +23,7 @@
         <router-link v-if="!logged" class="navbar-item" to="/login">{{ $t('nav.login') }}</router-link>
         <router-link v-if="logged" class="navbar-item" to="/profile">{{ $t('nav.profile') }}</router-link>
         <router-link v-if="logged" class="navbar-item" to="/notifications">{{ $t('nav.to_do_list_updates') }}</router-link>
-        <router-link v-if="canSignoff" class="navbar-item" to="/latest-submissions">{{ $t('nav.latest_submissions') }}</router-link>
+        <router-link v-if="canSetAllocations" class="navbar-item" to="/latest-submissions">{{ $t('nav.latest_submissions') }}</router-link>
         <router-link v-if="isAdmin" class="navbar-item" to="/admin">{{ $t('nav.admin') }}</router-link>
       </div>
       <div v-if="logged" class="navbar-end">
@@ -46,7 +46,7 @@ import { useUser } from '@/store/user.js'
 import logoUrl from '@/assets/images/catalyst-logo-white.svg'
 const userStore = useUser()
 const { logout, initUser } = userStore
-const { user, logged, isAdmin, canSignoff } = storeToRefs(userStore)
+const { user, logged, isAdmin, canSetAllocations } = storeToRefs(userStore)
 
 const navActive = ref(false)
 
