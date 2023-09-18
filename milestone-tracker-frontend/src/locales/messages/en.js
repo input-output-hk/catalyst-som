@@ -246,7 +246,14 @@ export default {
     change_request: "Change request",
     activate_change_request: "Create change request",
     last_change_request_on: "Last Change Request activated on: ",
-    link_to_cr: "Link to Change Request"
+    link_to_cr: "Link to Change Request",
+    status: "Status",
+    statuses: {
+      ongoing: "In progress",
+      paused: "Paused",
+      canceled: "Canceled",
+      completed: "Completed"
+    }
   },
   change_requests: {
     created: "Change Request created. Now proposers will be able to resubmit milestones that don't have PoAs already signed off.",
