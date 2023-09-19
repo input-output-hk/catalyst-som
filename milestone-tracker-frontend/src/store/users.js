@@ -132,5 +132,27 @@ export const useUsers = defineStore('users-store', {
         errorNotification(this.$i18n.t('errors.fetching_users'))
       }
     },
+    async getSubmittedPoaReviews(fund, from, to) {
+      try {
+        const { data, error } = await supabase
+          .rpc('getsubmittedpoareviews', {
+            _fund: fund,
+            _from: from,
+            _to: to
+          })
+        if (error) throw(error)
+        const reviewers = await supabase
+          .from('users')
+          .select('*')
+          .eq('role', 2)
+        if (reviewers.error) throw(reviewers.error)
+        return {
+          poas: data,
+          reviewers: reviewers.data
+        }
+      } catch(error) {
+        errorNotification(this.$i18n.t('errors.fetching_proposals'))
+      }
+    }
   }
 })

@@ -36,3 +36,30 @@ export const preparePaymentsData = (allSoms) => {
   }).filter(p => p !== null)
   return result
 }
+
+export const prepareReviewsPaymentsData = (reviews, fund, pricePerReview) => {
+  const poaReviews = reviews.poas
+  const users = reviews.reviewers
+  const reviewsByReviewer = groupBy(poaReviews, 'email')
+  const results = []
+  Object.keys(reviewsByReviewer).forEach((email) => {
+    const reviewerGroup = reviewsByReviewer[email]
+    if (reviewerGroup.length > 0) {
+      const reviewerEmail = reviewerGroup[0].email
+      const user = users.find(u => u.email === reviewerEmail)
+      if (user) {
+        const totalRewards = reviewerGroup.length * pricePerReview
+        const alreadyPayed = Object.keys(user.payment_received).includes(fund) ? user.payment_received[fund] : 0
+        const pendingRewards = totalRewards - alreadyPayed
+        results.push({
+          email: user.email,
+          totalRewards: totalRewards,
+          alreadyPayed: alreadyPayed,
+          pendingRewards: pendingRewards
+        })
+      }
+    }
+    return null
+  })
+  return results.filter(r => (r))
+}
