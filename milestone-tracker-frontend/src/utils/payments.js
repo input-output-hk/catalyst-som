@@ -38,9 +38,9 @@ export const preparePaymentsData = (allSoms) => {
 }
 
 export const prepareReviewsPaymentsData = (reviews, fund, pricePerReview) => {
-  const poaReviews = reviews.poas
+  const _reviews = reviews.reviews
   const users = reviews.reviewers
-  const reviewsByReviewer = groupBy(poaReviews, 'email')
+  const reviewsByReviewer = groupBy(_reviews, 'email')
   const results = []
   Object.keys(reviewsByReviewer).forEach((email) => {
     const reviewerGroup = reviewsByReviewer[email]

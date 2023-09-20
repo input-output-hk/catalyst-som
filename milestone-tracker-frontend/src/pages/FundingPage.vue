@@ -3,7 +3,7 @@
     <div class="content">
       <h1 class="is-size-1">{{ $t('pages.funding.title') }}</h1>
       <section :key="f" v-for="f in funds" class="mb-6">
-        <h4>{{ f }}</h4>
+        <h3>{{ f }}</h3>
         <div class="columns">
           <div class="column is-4">
             <o-button
@@ -69,7 +69,10 @@ const {
   getProposalsSnapshot
 } = proposalsStore
 
-const { getSubmittedPoaReviews } = useUsers()
+const {
+  getSubmittedPoaReviews,
+  getSubmittedSomReviews
+} = useUsers()
 
 const funds = ref(['Fund 9', 'Fund 10'])
 const rewards = ref({
@@ -100,7 +103,8 @@ const exportSomReviews = async (
   _from = '1970-01-01T00:00:00.000Z',
   _to = '2024-01-01T00:00:00.000Z'
 ) => {
-  const reviews = await getSubmittedPoaReviews(fund, _from, _to)
+  const reviews = await getSubmittedSomReviews(fund, _from, _to)
+  console.log(reviews)
   const reviewsPayment = prepareReviewsPaymentsData(reviews, fund, rewardPerReview)
   downloadCsv(reviewsPayment)
 }

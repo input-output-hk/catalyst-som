@@ -34,6 +34,13 @@ AS $function$
 $function$
 ;
 
+ALTER FUNCTION public.getsubmittedpoareviews(character varying, timestamp without time zone, timestamp without time zone) OWNER TO postgres;
+GRANT EXECUTE ON FUNCTION public.getsubmittedpoareviews(character varying, timestamp without time zone, timestamp without time zone) TO PUBLIC;
+GRANT EXECUTE ON FUNCTION public.getsubmittedpoareviews(character varying, timestamp without time zone, timestamp without time zone) TO anon;
+GRANT EXECUTE ON FUNCTION public.getsubmittedpoareviews(character varying, timestamp without time zone, timestamp without time zone) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.getsubmittedpoareviews(character varying, timestamp without time zone, timestamp without time zone) TO postgres;
+GRANT EXECUTE ON FUNCTION public.getsubmittedpoareviews(character varying, timestamp without time zone, timestamp without time zone) TO service_role;
+
 CREATE OR REPLACE FUNCTION public.getproposalssnapshot(_fund character varying)
  RETURNS TABLE(title character varying, project_id bigint, budget bigint, funds_distributed double precision, status bigint, id bigint, milestone bigint, month bigint, cost bigint, completion bigint, poas_id bigint, som_signoff_count bigint, poa_signoff_count bigint)
  LANGUAGE plpgsql
@@ -61,3 +68,9 @@ AS $function$
 $function$
 ;
 
+ALTER FUNCTION public.getproposalssnapshot(character varying) OWNER TO postgres;
+GRANT EXECUTE ON FUNCTION public.getproposalssnapshot(character varying) TO PUBLIC;
+GRANT EXECUTE ON FUNCTION public.getproposalssnapshot(character varying) TO anon;
+GRANT EXECUTE ON FUNCTION public.getproposalssnapshot(character varying) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.getproposalssnapshot(character varying) TO postgres;
+GRANT EXECUTE ON FUNCTION public.getproposalssnapshot(character varying) TO service_role;

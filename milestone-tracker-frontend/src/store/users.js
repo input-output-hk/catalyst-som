@@ -144,10 +144,32 @@ export const useUsers = defineStore('users-store', {
         const reviewers = await supabase
           .from('users')
           .select('*')
-          .eq('role', 2)
+          .eq('role', 1)
         if (reviewers.error) throw(reviewers.error)
         return {
-          poas: data,
+          reviews: data,
+          reviewers: reviewers.data
+        }
+      } catch(error) {
+        errorNotification(this.$i18n.t('errors.fetching_proposals'))
+      }
+    },
+    async getSubmittedSomReviews(fund, from, to) {
+      try {
+        const { data, error } = await supabase
+          .rpc('getsubmittedsomreviews', {
+            _fund: fund,
+            _from: from,
+            _to: to
+          })
+        if (error) throw(error)
+        const reviewers = await supabase
+          .from('users')
+          .select('*')
+          .eq('role', 1)
+        if (reviewers.error) throw(reviewers.error)
+        return {
+          reviews: data,
           reviewers: reviewers.data
         }
       } catch(error) {

@@ -35,7 +35,8 @@ export default {
     to_do_list_updates: "Todo list / Updates",
     admin: "Admin",
     logout: "Logout {name}",
-    latest_submissions: "Latest submissions"
+    latest_submissions: "Latest submissions",
+    funding: "Funding files"
   },
   next_payment: {
     to_be_distributed: "to be distributed in next batch.",

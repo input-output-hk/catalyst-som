@@ -29,6 +29,13 @@ AS $function$
 $function$
 ;
 
+ALTER FUNCTION public.getproposalsnapshot(bigint) OWNER TO postgres;
+GRANT EXECUTE ON FUNCTION public.getproposalsnapshot(bigint) TO PUBLIC;
+GRANT EXECUTE ON FUNCTION public.getproposalsnapshot(bigint) TO anon;
+GRANT EXECUTE ON FUNCTION public.getproposalsnapshot(bigint) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.getproposalsnapshot(bigint) TO postgres;
+GRANT EXECUTE ON FUNCTION public.getproposalsnapshot(bigint) TO service_role;
+
 CREATE OR REPLACE FUNCTION public.getproposalssnapshot()
  RETURNS TABLE(title character varying, project_id bigint, budget bigint, funds_distributed double precision, status bigint, id bigint, milestone bigint, month bigint, cost bigint, completion bigint, poas_id bigint, som_signoff_count bigint, poa_signoff_count bigint)
  LANGUAGE plpgsql
@@ -54,4 +61,9 @@ AS $function$
 $function$
 ;
 
-
+ALTER FUNCTION public.getproposalssnapshot() OWNER TO postgres;
+GRANT EXECUTE ON FUNCTION public.getproposalssnapshot() TO PUBLIC;
+GRANT EXECUTE ON FUNCTION public.getproposalssnapshot() TO anon;
+GRANT EXECUTE ON FUNCTION public.getproposalssnapshot() TO authenticated;
+GRANT EXECUTE ON FUNCTION public.getproposalssnapshot() TO postgres;
+GRANT EXECUTE ON FUNCTION public.getproposalssnapshot() TO service_role;
