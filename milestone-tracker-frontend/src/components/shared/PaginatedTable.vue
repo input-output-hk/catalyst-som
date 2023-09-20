@@ -74,3 +74,10 @@ onMounted(async () => {
 })
 
 </script>
+
+<style lang="scss">
+.table-container {
+  overflow: initial;
+  overflow-y: initial;
+}
+</style>
