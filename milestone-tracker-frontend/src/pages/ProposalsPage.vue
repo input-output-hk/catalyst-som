@@ -7,14 +7,6 @@
           <p>{{ $t('pages.proposals.description') }}</p>
         </div>
         <div class="column is-4 has-text-right">
-          <o-button
-            v-if="isAdmin"
-            variant="primary"
-            size="small"
-            @click="exportCSV"
-          >
-            {{ $t('pages.proposals.export') }}
-          </o-button>
         </div>
       </div>
       <paginated-table
@@ -36,28 +28,16 @@ import { storeToRefs } from 'pinia'
 import { useUser } from '@/store/user.js'
 import ProposalRow from '@/components/proposal/ProposalRow.vue'
 import PaginatedTable from '@/components/shared/PaginatedTable.vue'
-import {
-  preparePaymentsData
- } from '@/utils/exportProposals.js'
-import downloadCsv from '@/utils/exportCsv.js'
 import { useProposals } from '@/store/proposals.js'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const proposalsStore = useProposals()
 const {
   getProposals,
-  getCount,
-  getProposalsSnapshot
+  getCount
 } = proposalsStore
-const { isAdmin, canSetAllocations } = useUser()
+const { canSetAllocations } = useUser()
 const { proposals } = storeToRefs(proposalsStore)
-
-
-const exportCSV = async () => {
-  const soms = await getProposalsSnapshot()
-  const data = preparePaymentsData(soms)
-  downloadCsv(data)
-}
 
 const dynamicHeaders = computed(() => {
   const base = [

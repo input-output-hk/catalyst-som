@@ -93,10 +93,12 @@ export const useProposals = defineStore('proposals-store', {
         errorNotification(this.$i18n.t('errors.fetching_proposals'))
       }
     },
-    async getProposalsSnapshot() {
+    async getProposalsSnapshot(fund) {
       try {
         const { data, error } = await supabase
-          .rpc('getproposalssnapshot')
+          .rpc('getproposalssnapshot', {
+            _fund: fund
+          })
         if (error) throw(error)
         return data
       } catch(error) {

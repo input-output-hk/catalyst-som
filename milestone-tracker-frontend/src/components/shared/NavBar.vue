@@ -24,6 +24,7 @@
         <router-link v-if="logged" class="navbar-item" to="/profile">{{ $t('nav.profile') }}</router-link>
         <router-link v-if="logged" class="navbar-item" to="/notifications">{{ $t('nav.to_do_list_updates') }}</router-link>
         <router-link v-if="canSetAllocations" class="navbar-item" to="/latest-submissions">{{ $t('nav.latest_submissions') }}</router-link>
+        <router-link v-if="isAdmin" class="navbar-item" to="/funding">{{ $t('nav.funding') }}</router-link>
         <router-link v-if="isAdmin" class="navbar-item" to="/admin">{{ $t('nav.admin') }}</router-link>
       </div>
       <div v-if="logged" class="navbar-end">

@@ -55,3 +55,9 @@ const getFilteredUsers = async (text) => {
 }
 
 </script>
+
+<style lang="scss">
+.taginput-container .tag .icon.is-clickable {
+  overflow: hidden;
+}
+</style>

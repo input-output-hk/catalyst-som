@@ -35,7 +35,8 @@ export default {
     to_do_list_updates: "Todo list / Updates",
     admin: "Admin",
     logout: "Logout {name}",
-    latest_submissions: "Latest submissions"
+    latest_submissions: "Latest submissions",
+    funding: "Funding files"
   },
   next_payment: {
     to_be_distributed: "to be distributed in next batch.",
@@ -246,7 +247,14 @@ export default {
     change_request: "Change request",
     activate_change_request: "Create change request",
     last_change_request_on: "Last Change Request activated on: ",
-    link_to_cr: "Link to Change Request"
+    link_to_cr: "Link to Change Request",
+    status: "Status",
+    statuses: {
+      ongoing: "In progress",
+      paused: "Paused",
+      canceled: "Canceled",
+      completed: "Completed"
+    }
   },
   change_requests: {
     created: "Change Request created. Now proposers will be able to resubmit milestones that don't have PoAs already signed off.",
@@ -380,6 +388,14 @@ export default {
       latest_som_received: "Latest Milestones received",
       go_to_latest_poa: "Go to PoA",
       go_to_latest_som: "Go to Milestone",
+    },
+    funding: {
+      title: "Funding files generation",
+      export_proposals: "Export Funding file for proposals",
+      rewards_per_poa: "Rewards amount per PoA review",
+      export_poa_reviews: "Export Funding file for PoA reviews",
+      rewards_per_som: "Rewards amount per SoM review",
+      export_som_reviews: "Export funding file per SoM reviews"
     }
   }
 }

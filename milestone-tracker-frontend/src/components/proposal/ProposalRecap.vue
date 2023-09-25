@@ -62,6 +62,12 @@
           <proposal-change-requests :proposal="proposal" />
         </td>
       </tr>
+      <tr v-if="proposal.status > 0">
+        <th>{{ $t('proposal_recap.status') }}</th>
+        <td>
+          {{ $t(`proposal_recap.statuses.${proposalStatuses[proposal.status]}`) }}
+        </td>
+      </tr>
     </tbody>
   </table>
   <o-modal class="budget-error" :active="budgetError > 0 && !dismissed && canWriteSom(proposal.id)" scroll="keep">
@@ -99,6 +105,7 @@ import { computed, ref } from 'vue'
 import AllocationForm from '@/components/proposal/AllocationForm.vue'
 import ProposalChangeRequests from '@/components/proposal/ProposalChangeRequests.vue'
 import { useUser } from '@/store/user.js'
+import { proposalStatuses } from '@/utils/proposalStatuses.js'
 
 const props = defineProps({
   proposal: {
