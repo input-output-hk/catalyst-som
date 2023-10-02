@@ -1,7 +1,7 @@
 import Vue3Sanitize from "vue-3-sanitize"
 
 const sanitizeOptions = {
-    allowedTags: ['ul', 'li', 'a', 'ol', 'h1', 'h2', 'h3', 'strong', 'b', 'u', 'i'],
+    allowedTags: ['ul', 'li', 'a', 'ol', 'h1', 'h2', 'h3', 'strong', 'b', 'u', 'i', 'p'],
     allowedSchemes: ['http', 'https', 'mailto'],
 }
 
