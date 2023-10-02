@@ -43,7 +43,7 @@ export const useUsers = defineStore('users-store', {
         const { data, error } = await supabase
           .from('users')
           .select('*, challenges_users(*, challenges(id, title)), proposals_users(*, proposals(id, title)), allocations(*, proposals(id, title))')
-          .order('created_at', { ascending: true })
+          .order('created_at, id', { ascending: true })
           .range(from, to)
         if (error) throw(error)
         this._users = data

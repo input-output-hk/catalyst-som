@@ -159,3 +159,12 @@ watch(challenges, () => {
 })
 
 </script>
+
+<style lang="scss">
+.taginput.control .taginput-container .tag > span:not(.icon) {
+  max-width: 350px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+</style>
