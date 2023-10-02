@@ -52,9 +52,11 @@
   import { computed } from 'vue'
   import { useUser } from '@/store/user.js'
   import { roles } from '@/utils/roles.js'
+  import { useI18n } from 'vue-i18n'
+  const { t } = useI18n()
   const { getUserInfo, localUser } = useUser()
 
-  const role = computed(() => roles[getUserInfo.role])
+  const role = computed(() => t(`roles.${roles[getUserInfo.role]}`))
   const proposals = computed(() => {
     return getUserInfo.proposals_users.map((el) => el.proposals)
   })
