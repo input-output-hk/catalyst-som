@@ -39,8 +39,13 @@ const props = defineProps({
 })
 
 const role = computed(() => {
-  if (props.review.role) {
-    return t(`roles.${roles[props.review.role]}`)
+  if (props.review.role === undefined) {
+    return t('som_review.system')
+  }
+  if (props.review.role <= 1) {
+    return t(`roles.${roles[1]}`)
+  } else if (props.review.role > 1) {
+    return t(`roles.${roles[2]}`)
   }
   return t('som_review.system')
 })
