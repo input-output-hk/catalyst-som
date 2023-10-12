@@ -4,7 +4,7 @@
 # Entrypoint script for webapp variables setup.
 # ---------------------------------------------------------------
 #
-# This script serves as the entrypoint to set the variables necessary to run 
+# This script serves as the entrypoint to set the variables necessary to run
 # the webapp. It populates the `env.js` file in the bundle using the values
 # from the environment variables.
 #
@@ -64,11 +64,15 @@ echo ">>> Set local env file..."
 
 while IFS= read -r -d '' file; do
     echo "Setting env to $file"
-    echo "window.env = {" > $file
+    echo "window.env = {" >$file
     for var in "${REQUIRED_ENV[@]}"; do
-        echo "\"$var\": \"${!var}\"," >> $file
+        echo "\"$var\": \"${!var}\"," >>$file
     done
-    echo "}" >> $file
+    echo "}" >>$file
 done < <(find ./app/ -name 'env.js' -print0 | sort -z)
+
+# Workaround until https://github.com/earthly/earthly/issues/3374 is solved
+echo ">>> Updating index.html..."
+touch /app/index.html
 
 echo ">>> Finished entrypoint script"
