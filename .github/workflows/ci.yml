@@ -44,4 +44,4 @@ jobs:
       images: milestone-module-frontend
       tag: ${{ github.sha }}
     secrets:
-      github_token: ${{ secrets.CI_BOT_TOKEN }}
+      token: ${{ secrets.CI_BOT_TOKEN }}
