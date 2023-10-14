@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   check:
-    uses: input-output-hk/catalyst-ci/.github/workflows/check.yml@v2
+    uses: input-output-hk/catalyst-ci/.github/workflows/check.yml@master
     with:
       aws_role_arn: arn:aws:iam::332405224602:role/ci
       aws_region: eu-central-1
@@ -18,7 +18,7 @@ jobs:
       earthly_runner_address: ${{ secrets.EARTHLY_SATELLITE_ADDRESS }}
       earthly_runner_secret: ${{ secrets.EARTHLY_RUNNER_SECRET }}
   release:
-    uses: input-output-hk/catalyst-ci/.github/workflows/release.yml@v2
+    uses: input-output-hk/catalyst-ci/.github/workflows/release.yml@master
     needs: [check]
     with:
       aws_role_arn: arn:aws:iam::332405224602:role/ci
@@ -27,7 +27,7 @@ jobs:
       earthly_runner_address: ${{ secrets.EARTHLY_SATELLITE_ADDRESS }}
       earthly_runner_secret: ${{ secrets.EARTHLY_RUNNER_SECRET }}
   publish:
-    uses: input-output-hk/catalyst-ci/.github/workflows/publish.yml@v2
+    uses: input-output-hk/catalyst-ci/.github/workflows/publish.yml@master
     needs: [release]
     with:
       aws_ecr_registry: 332405224602.dkr.ecr.eu-central-1.amazonaws.com
