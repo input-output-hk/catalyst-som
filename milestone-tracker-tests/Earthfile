@@ -31,9 +31,9 @@ docker:
 
 #     RUN npm run test
 
-publish:
-    FROM +docker
+# publish:
+#     FROM +docker
 
-    ARG tag='latest'
+#     ARG tag='latest'
 
-    SAVE IMAGE milestone-tracker-tests:$tag
+#     SAVE IMAGE milestone-tracker-tests:$tag
