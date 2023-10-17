@@ -42,6 +42,37 @@ class Proposal(BaseModel):
     def parse_date(cls, value):
         return datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
 
+class SbProposal(BaseModel):
+    id: int
+    title: str
+    url: HttpUrl
+    project_id: int = Field(900000, gte=900001)
+    budget: int
+    challenge_id: int
+    funds_distributed: float
+    milestones_qty: int
+    currency: str
+    starting_date: datetime
+
+
+class CohortProposal(BaseModel):
+    project_id: int = Field(900000, gte=900001, alias='id')
+    requested: float
+    remaining: float
+
+    @validator('requested', 'remaining', pre=True)
+    @classmethod
+    def parse_budget(cls, value):
+        '''
+        Parse a budget that comes in this form: 20000.00
+        '''
+        digits = re.findall(r'(\d+)\.(\d+)', value)
+        return float(f"{digits[0][0]}.{digits[0][1]}") if (digits) else float(0)
+
+class LightProposal(BaseModel):
+    project_id: int = Field(900000, gte=900001, alias='id')
+    funds_distributed: float
+
 class Som(BaseModel):
     proposal_id: int
     milestone: int = Field(1, gte=1, lte=5)

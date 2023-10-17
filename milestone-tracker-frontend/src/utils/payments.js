@@ -7,6 +7,7 @@ import {
 
 export const preparePaymentsData = (allSoms) => {
   const somsByProposal = groupBy(allSoms, 'project_id')
+  const maxMilestones = 10
   const result = Object.keys(somsByProposal).map((proposal_id) => {
     const soms = somsByProposal[proposal_id]
     const durations = generateMilestoneDuration(soms)
@@ -29,6 +30,27 @@ export const preparePaymentsData = (allSoms) => {
         proposal[`m${som.milestone}_som_signoff`] = som.som_signoff_count > 0
         proposal[`m${som.milestone}_poa_submitted`] = (som.poas_id !== null)
         proposal[`m${som.milestone}_poa_signoff`] = som.poa_signoff_count > 0
+      })
+      Array.from(Array(maxMilestones)).forEach((_, i) => {
+        const x = i + 1
+        if (!(`m${x}_month` in proposal)) {
+          proposal[`m${x}_month`] = ''
+        }
+        if (!(`m${x}_cost` in proposal)) {
+          proposal[`m${x}_cost`] = ''
+        }
+        if (!(`m${x}_completion` in proposal)) {
+          proposal[`m${x}_completion`] = ''
+        }
+        if (!(`m${x}_som_signoff` in proposal)) {
+          proposal[`m${x}_som_signoff`] = ''
+        }
+        if (!(`m${x}_poa_submitted` in proposal)) {
+          proposal[`m${x}_poa_submitted`] = ''
+        }
+        if (!(`m${x}_poa_signoff` in proposal)) {
+          proposal[`m${x}_poa_signoff`] = ''
+        }
       })
       return proposal
     }
