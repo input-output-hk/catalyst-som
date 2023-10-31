@@ -9,40 +9,17 @@ permissions:
   packages: write
 
 jobs:
-  check:
-    uses: input-output-hk/catalyst-ci/.github/workflows/check.yml@master
-    with:
-      aws_role_arn: arn:aws:iam::332405224602:role/ci
-      aws_region: eu-central-1
-    secrets:
-      earthly_runner_address: ${{ secrets.EARTHLY_SATELLITE_ADDRESS }}
-      earthly_runner_secret: ${{ secrets.EARTHLY_RUNNER_SECRET }}
-  release:
-    uses: input-output-hk/catalyst-ci/.github/workflows/release.yml@master
-    needs: [check]
-    with:
-      aws_role_arn: arn:aws:iam::332405224602:role/ci
-      aws_region: eu-central-1
-    secrets:
-      earthly_runner_address: ${{ secrets.EARTHLY_SATELLITE_ADDRESS }}
-      earthly_runner_secret: ${{ secrets.EARTHLY_RUNNER_SECRET }}
-  publish:
-    uses: input-output-hk/catalyst-ci/.github/workflows/publish.yml@master
-    needs: [release]
+  ci:
+    uses: input-output-hk/catalyst-ci/.github/workflows/ci.yml@master
     with:
       aws_ecr_registry: 332405224602.dkr.ecr.eu-central-1.amazonaws.com
       aws_role_arn: arn:aws:iam::332405224602:role/ci
       aws_region: eu-central-1
-    secrets:
-      earthly_runner_address: ${{ secrets.EARTHLY_SATELLITE_ADDRESS }}
-      earthly_runner_secret: ${{ secrets.EARTHLY_RUNNER_SECRET }}
-  deploy:
-    uses: input-output-hk/catalyst-ci/.github/workflows/deploy.yml@master
-    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-    needs: [publish]
-    with:
-      deployment_repo: input-output-hk/catalyst-world
-      images: |
+      deployment_images: |
         milestone-module-frontend
     secrets:
-      token: ${{ secrets.CI_BOT_TOKEN }}
+      deployment_token: ${{ secrets.CI_BOT_TOKEN }}
+      dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
+      dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+      earthly_runner_address: ${{ secrets.EARTHLY_SATELLITE_ADDRESS }}
+      earthly_runner_secret: ${{ secrets.EARTHLY_RUNNER_SECRET }}
