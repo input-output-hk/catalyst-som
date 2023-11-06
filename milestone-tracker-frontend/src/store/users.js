@@ -166,11 +166,13 @@ export const useUsers = defineStore('users-store', {
         const reviewers = await supabase
           .from('users')
           .select('*')
-          .eq('role', 1)
+          .lte('role', 2)
+        const proposals_signed_off = await supabase.rpc('get_proposals_som_signed_off')
         if (reviewers.error) throw(reviewers.error)
         return {
           reviews: data,
-          reviewers: reviewers.data
+          reviewers: reviewers.data,
+          proposals_signed_off: proposals_signed_off.data
         }
       } catch(error) {
         errorNotification(this.$i18n.t('errors.fetching_proposals'))

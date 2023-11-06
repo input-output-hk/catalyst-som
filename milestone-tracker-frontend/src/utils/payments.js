@@ -60,10 +60,30 @@ export const preparePaymentsData = (allSoms) => {
 }
 
 export const prepareReviewsPaymentsData = (reviews, fund, pricePerReview) => {
-  const _reviews = reviews.reviews
   const users = reviews.reviewers
-  const reviewsByReviewer = groupBy(_reviews, 'email')
+  const proposals_signed_off = reviews.proposals_signed_off.map((el) => el.project_id)
+  const _reviews = reviews.reviews.filter((el) => proposals_signed_off.includes(el.project_id)).map((el, idx) => {
+    return {
+      ...el,
+      _tmp_id: idx
+    }
+  })
+  const reviewsByProject = groupBy(_reviews, 'project_id')
+  let to_be_excluded = []
+  Object.keys(reviewsByProject).forEach((project_id) => {
+    const projectGroup = reviewsByProject[project_id]
+    const toCheck = projectGroup.filter((el) => el.milestones_qty > el.signoffs_count)
+    if (toCheck.length > 0) {
+      if (toCheck.length > 1) {
+        toCheck.sort((a, b) => new Date(b.latest_som_reviewed_at) - new Date(a.latest_som_reviewed_at)).shift()
+      }
+      to_be_excluded = to_be_excluded.concat(toCheck)
+    }
+  })
+  to_be_excluded = to_be_excluded.map((el) => el._tmp_id)
+  const final_reviews = _reviews.filter((el) => !to_be_excluded.includes(el._tmp_id))
   const results = []
+  const reviewsByReviewer = groupBy(final_reviews, 'email')
   Object.keys(reviewsByReviewer).forEach((email) => {
     const reviewerGroup = reviewsByReviewer[email]
     if (reviewerGroup.length > 0) {
