@@ -90,10 +90,10 @@ const exportPoaReviews = async (
   fund,
   rewardPerReview,
   _from = '1970-01-01T00:00:00.000Z',
-  _to = '2024-01-01T00:00:00.000Z'
+  _to = '2025-01-01T00:00:00.000Z'
 ) => {
   const reviews = await getSubmittedPoaReviews(fund, _from, _to)
-  const reviewsPayment = prepareReviewsPaymentsData(reviews, fund, rewardPerReview)
+  const reviewsPayment = prepareReviewsPaymentsData(reviews, fund, rewardPerReview, 'poa')
   downloadCsv(reviewsPayment)
 }
 
@@ -101,11 +101,10 @@ const exportSomReviews = async (
   fund,
   rewardPerReview,
   _from = '1970-01-01T00:00:00.000Z',
-  _to = '2024-01-01T00:00:00.000Z'
+  _to = '2025-01-01T00:00:00.000Z'
 ) => {
   const reviews = await getSubmittedSomReviews(fund, _from, _to)
-  console.log(reviews)
-  const reviewsPayment = prepareReviewsPaymentsData(reviews, fund, rewardPerReview)
+  const reviewsPayment = prepareReviewsPaymentsData(reviews, fund, rewardPerReview, 'som')
   downloadCsv(reviewsPayment)
 }
 

@@ -59,7 +59,7 @@ export const preparePaymentsData = (allSoms) => {
   return result
 }
 
-export const prepareReviewsPaymentsData = (reviews, fund, pricePerReview) => {
+export const prepareReviewsPaymentsData = (reviews, fund, pricePerReview, reward_type) => {
   const users = reviews.reviewers
   const proposals_signed_off = reviews.proposals_signed_off.map((el) => el.project_id)
   const _reviews = reviews.reviews.filter((el) => proposals_signed_off.includes(el.project_id)).map((el, idx) => {
@@ -70,17 +70,19 @@ export const prepareReviewsPaymentsData = (reviews, fund, pricePerReview) => {
   })
   const reviewsByProject = groupBy(_reviews, 'project_id')
   let to_be_excluded = []
-  Object.keys(reviewsByProject).forEach((project_id) => {
-    const projectGroup = reviewsByProject[project_id]
-    const toCheck = projectGroup.filter((el) => el.milestones_qty > el.signoffs_count)
-    if (toCheck.length > 0) {
-      if (toCheck.length > 1) {
-        toCheck.sort((a, b) => new Date(b.latest_som_reviewed_at) - new Date(a.latest_som_reviewed_at)).shift()
+  if (reward_type === 'som') {
+    Object.keys(reviewsByProject).forEach((project_id) => {
+      const projectGroup = reviewsByProject[project_id]
+      const toCheck = projectGroup.filter((el) => el.milestones_qty > el.signoffs_count)
+      if (toCheck.length > 0) {
+        if (toCheck.length > 1) {
+          toCheck.sort((a, b) => new Date(b.latest_som_reviewed_at) - new Date(a.latest_som_reviewed_at)).shift()
+        }
+        to_be_excluded = to_be_excluded.concat(toCheck)
       }
-      to_be_excluded = to_be_excluded.concat(toCheck)
-    }
-  })
-  to_be_excluded = to_be_excluded.map((el) => el._tmp_id)
+    })
+    to_be_excluded = to_be_excluded.map((el) => el._tmp_id)
+  }
   const final_reviews = _reviews.filter((el) => !to_be_excluded.includes(el._tmp_id))
   const results = []
   const reviewsByReviewer = groupBy(final_reviews, 'email')
@@ -91,7 +93,11 @@ export const prepareReviewsPaymentsData = (reviews, fund, pricePerReview) => {
       const user = users.find(u => u.email === reviewerEmail)
       if (user) {
         const totalRewards = reviewerGroup.length * pricePerReview
-        const alreadyPayed = Object.keys(user.payment_received).includes(fund) ? user.payment_received[fund] : 0
+        const fundExists = Object.keys(user.payment_received).includes(`${fund}`)
+        let alreadyPayed = 0
+        if (fundExists) {
+          alreadyPayed = Object.keys(user.payment_received[`${fund}`]).includes(`${reward_type}`) ? user.payment_received[`${fund}`][`${reward_type}`] : 0
+        }
         const pendingRewards = totalRewards - alreadyPayed
         results.push({
           email: user.email,
