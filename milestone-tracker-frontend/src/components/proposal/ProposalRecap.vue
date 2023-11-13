@@ -56,10 +56,10 @@
         <th>{{ $t('proposal_recap.reviewers_allocations') }}</th>
         <td><allocation-form :proposal="proposal" /></td>
       </tr>
-      <tr v-if="canSetChangeRequests">
+      <tr v-if="proposal.change_request?.length > 0">
         <th>{{ $t('proposal_recap.change_request') }}</th>
         <td>
-          <proposal-change-requests :proposal="proposal" />
+          <proposal-change-requests :proposal="proposal" :can-set-change-requests="canSetChangeRequests" />
         </td>
       </tr>
       <tr v-if="proposal.status > 0">
