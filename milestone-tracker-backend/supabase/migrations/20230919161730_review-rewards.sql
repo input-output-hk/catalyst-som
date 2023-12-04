@@ -6,12 +6,12 @@ drop function if exists "public"."getsubmittedpoareviews"(_fund character varyin
 set check_function_bodies = off;
 
 CREATE OR REPLACE FUNCTION public.getsubmittedpoareviews(_fund character varying, _from timestamp without time zone, _to timestamp without time zone)
- RETURNS TABLE(project_id bigint, title character varying, latest_poa_id bigint, latest_poa_reviewed_at timestamp with time zone, email character varying, milestone bigint)
+ RETURNS TABLE(project_id bigint, title character varying, budget bigint, latest_poa_id bigint, latest_poa_reviewed_at timestamp with time zone, email character varying, milestone bigint)
  LANGUAGE plpgsql
 AS $function$
   BEGIN
     RETURN QUERY
-      SELECT proposals.project_id, proposals.title, MAX(poas_reviews.poas_id) as latest_poa_id, MAX(poas_reviews.created_at) as latest_poa_reviewed_at, users.email, soms.milestone
+      SELECT proposals.project_id, proposals.title, proposals.budget, MAX(poas_reviews.poas_id) as latest_poa_id, MAX(poas_reviews.created_at) as latest_poa_reviewed_at, users.email, soms.milestone
       from poas_reviews
       INNER JOIN users
       ON poas_reviews.user_id = users._auth_user_id
@@ -29,7 +29,7 @@ AS $function$
       poas_reviews.created_at < _to AND
       poas_reviews.role = 1 AND
       funds.title = _fund
-      GROUP BY proposals.project_id, proposals.title, soms.milestone, users.email;
+      GROUP BY proposals.project_id, proposals.title, proposals.budget, soms.milestone, users.email;
   end;
 $function$
 ;

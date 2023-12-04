@@ -392,9 +392,9 @@ export default {
     funding: {
       title: "Funding files generation",
       export_proposals: "Export Funding file for proposals",
-      rewards_per_poa: "Rewards amount per PoA review",
+      rewards_per_poa: "Rewards amount/min budget/max budget per PoA review",
       export_poa_reviews: "Export Funding file for PoA reviews",
-      rewards_per_som: "Rewards amount per SoM review",
+      rewards_per_som: "Rewards amount/min budget/max budget per SoM review",
       export_som_reviews: "Export funding file per SoM reviews"
     }
   }

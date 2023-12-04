@@ -59,7 +59,7 @@ export const preparePaymentsData = (allSoms) => {
   return result
 }
 
-export const prepareReviewsPaymentsData = (reviews, fund, pricePerReview, reward_type) => {
+export const prepareReviewsPaymentsData = (reviews, fund, rewardsTiers, reward_type) => {
   const users = reviews.reviewers
   const proposals_signed_off = reviews.proposals_signed_off.map((el) => el.project_id)
   const _reviews = reviews.reviews.filter((el) => proposals_signed_off.includes(el.project_id)).map((el, idx) => {
@@ -83,7 +83,15 @@ export const prepareReviewsPaymentsData = (reviews, fund, pricePerReview, reward
     })
     to_be_excluded = to_be_excluded.map((el) => el._tmp_id)
   }
-  const final_reviews = _reviews.filter((el) => !to_be_excluded.includes(el._tmp_id))
+  const final_reviews = _reviews
+    .filter((el) => !to_be_excluded.includes(el._tmp_id))
+    .map((el) => {
+      const rewardTier = rewardsTiers.find((r) => el.budget > r.min && el.budget <= r.max)
+      return {
+        reward: (rewardTier) ? rewardTier.amount : 0,
+        ...el
+      }
+    })
   const results = []
   const reviewsByReviewer = groupBy(final_reviews, 'email')
   Object.keys(reviewsByReviewer).forEach((email) => {
@@ -92,7 +100,7 @@ export const prepareReviewsPaymentsData = (reviews, fund, pricePerReview, reward
       const reviewerEmail = reviewerGroup[0].email
       const user = users.find(u => u.email === reviewerEmail)
       if (user) {
-        const totalRewards = reviewerGroup.length * pricePerReview
+        const totalRewards = reviewerGroup.map(r => r.reward).reduce((_sum, a) => _sum + a, 0)
         const fundExists = Object.keys(user.payment_received).includes(`${fund}`)
         let alreadyPayed = 0
         if (fundExists) {
@@ -103,7 +111,8 @@ export const prepareReviewsPaymentsData = (reviews, fund, pricePerReview, reward
           email: user.email,
           totalRewards: totalRewards,
           alreadyPayed: alreadyPayed,
-          pendingRewards: pendingRewards
+          pendingRewards: pendingRewards,
+          projects: reviewerGroup.map((p) => p.project_id).join(',')
         })
       }
     }
