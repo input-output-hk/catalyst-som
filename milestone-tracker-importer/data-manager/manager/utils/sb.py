@@ -33,6 +33,10 @@ class SB():
             return [model(**el) for el in results.data]
         else:
             return [AttrDict(el) for el in results.data]
+
+    def search_entity(self, entity, model, key, values):
+        results = self.client.table(entity).select("*").in_(key, values).execute()
+        return [model(**el) for el in results.data]
     
     def create_user(self, email, password):
         user = self.client.auth.sign_up({ "email": email, "password": password })

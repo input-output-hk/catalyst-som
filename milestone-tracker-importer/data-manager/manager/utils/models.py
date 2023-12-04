@@ -1,6 +1,6 @@
 import re
 from datetime import datetime
-from pydantic import BaseModel, Field, HttpUrl, ValidationError, validator, root_validator
+from pydantic import BaseModel, Field, HttpUrl, ValidationError, validator, root_validator, Json
 
 ml_rows_map = {
     1: 9,
@@ -72,6 +72,43 @@ class CohortProposal(BaseModel):
 class LightProposal(BaseModel):
     project_id: int = Field(900000, gte=900001, alias='id')
     funds_distributed: float
+
+class SbReviewer(BaseModel):
+    id: int
+    user_id: str
+    role: int
+    email: str
+    _auth_user_id: str
+    payment_received: dict
+
+class CohortReviewer(BaseModel):
+    email: str
+    som_paid: float = Field(0)
+    poa_paid: float = Field(0)
+
+    def set_paid(self, _type, value):
+        if (_type == 'som'):
+            self.som_paid = self.parse_budget(value)
+        if (_type == 'poa'):
+            self.poa_paid = self.parse_budget(value)
+    
+    @validator('email', pre=True)
+    @classmethod
+    def parse_email(cls, value):
+        return value.lower().strip()
+    
+    @validator('som_paid', 'poa_paid', pre=True)
+    @classmethod
+    def parse_budget(cls, value):
+        '''
+        Parse a budget that comes in this form: 20000.00
+        '''
+        digits = re.findall(r'(\d+)\.(\d+)', value)
+        return float(f"{digits[0][0]}.{digits[0][1]}") if (digits) else float(0)
+
+class LightReviewer(BaseModel):
+    id: int
+    payment_received: dict
 
 class Som(BaseModel):
     proposal_id: int
