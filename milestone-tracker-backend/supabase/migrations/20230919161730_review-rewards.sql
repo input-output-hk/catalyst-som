@@ -27,7 +27,7 @@ AS $function$
       ON challenges.fund_id = funds.id
       WHERE poas_reviews.created_at > _from AND
       poas_reviews.created_at < _to AND
-      poas_reviews.role = 1 AND
+      poas_reviews.role < 2 AND
       funds.title = _fund
       GROUP BY proposals.project_id, proposals.title, proposals.budget, soms.milestone, users.email;
   end;
