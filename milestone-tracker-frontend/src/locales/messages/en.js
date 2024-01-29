@@ -249,6 +249,8 @@ export default {
     last_change_request_on: "Last Change Request activated on: ",
     link_to_cr: "Link to Change Request",
     status: "Status",
+    proposer_ownership: "Proposers",
+    signoffs_allocations: "Allocations for signoff",
     statuses: {
       ongoing: "In progress",
       paused: "Paused",

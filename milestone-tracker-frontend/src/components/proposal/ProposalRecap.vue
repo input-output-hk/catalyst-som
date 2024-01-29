@@ -53,8 +53,16 @@
         </td>
       </tr>
       <tr v-if="canSetAllocations">
+        <th>{{ $t('proposal_recap.proposer_ownership') }}</th>
+        <td><allocation-form :proposal="proposal" :allocation-type="'proposers'" /></td>
+      </tr>
+      <tr v-if="canSetAllocations">
         <th>{{ $t('proposal_recap.reviewers_allocations') }}</th>
         <td><allocation-form :proposal="proposal" /></td>
+      </tr>
+      <tr v-if="canSetAllocations">
+        <th>{{ $t('proposal_recap.signoffs_allocations') }}</th>
+        <td><allocation-form :proposal="proposal" :allocation-type="'signoffs'" /></td>
       </tr>
       <tr v-if="proposal.change_request?.length > 0">
         <th>{{ $t('proposal_recap.change_request') }}</th>

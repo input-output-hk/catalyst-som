@@ -81,17 +81,38 @@ export const useUser = defineStore('user-store', {
         }
       }
     },
+    canSignoff(state) {
+      return (proposal_id) => {
+        if (this.isAdmin) {
+          return true
+        }
+        try {
+          const ret =
+            !state.userInfo.proposals_users.map((el) => el.proposal_id)
+              .includes(proposal_id) &&
+            (
+              state.userInfo.allocations_signoff.map(
+                (el) => el.proposal_id
+              ).includes(proposal_id) ||
+              [3].includes(state.userInfo.role)
+            )
+          return ret
+        } catch {
+          return false
+        }
+      }
+    },
     isAdmin(state) {
       return [3].includes(state.userInfo.role)
     },
-    canSignoff(state) {
+    /*canSignoff(state) {
       return [3,4].includes(state.userInfo.role)
-    },
+    },*/
     canSetAllocations(state) {
-      return [2,3,4].includes(state.userInfo.role)
+      return [2,3].includes(state.userInfo.role)
     },
     canSetChangeRequests(state) {
-      return [3,4].includes(state.userInfo.role)
+      return [2,3].includes(state.userInfo.role)
     }
   },
 
@@ -164,7 +185,7 @@ export const useUser = defineStore('user-store', {
         try {
           const { data, error } = await supabase
             .from('users')
-            .select('*, challenges_users(*, challenges(id, title)), proposals_users(*, proposals(id, title, url, project_id)), allocations(*, proposals(id, title, url, project_id))')
+            .select('*, challenges_users(*, challenges(id, title)), proposals_users(*, proposals(id, title, url, project_id)), allocations(*, proposals(id, title, url, project_id)), allocations_signoff(*, proposals(id, title, url, project_id))')
             .eq('user_id', this.localUser.id)
           if (error) throw(error)
           this.userInfo = data[0]
