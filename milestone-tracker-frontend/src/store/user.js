@@ -51,14 +51,14 @@ export const useUser = defineStore('user-store', {
       - It's not the proposal owner
       AND
       (
-        - It's a challenge team member in the proposal's challenge
+        - The proposal is in their allocations as reviewer
         OR
-        - The proposal is in their allocations
+        - The proposal is in their allocations as signoff
         OR
         - Has Admin, IO team role or Signoff role
       )
       */
-      return (proposal_id, challenge_id) => {
+      return (proposal_id) => {
         if (this.isAdmin) {
           return true
         }
@@ -67,9 +67,9 @@ export const useUser = defineStore('user-store', {
             !state.userInfo.proposals_users.map((el) => el.proposal_id)
               .includes(proposal_id) &&
             (
-              state.userInfo.challenges_users.map(
-                (el) => el.challenge_id
-              ).includes(challenge_id) ||
+              state.userInfo.allocations_signoff.map(
+                (el) => el.proposal_id
+              ).includes(proposal_id) ||
               state.userInfo.allocations.map(
                 (el) => el.proposal_id
               ).includes(proposal_id) ||
@@ -105,9 +105,6 @@ export const useUser = defineStore('user-store', {
     isAdmin(state) {
       return [3].includes(state.userInfo.role)
     },
-    /*canSignoff(state) {
-      return [3,4].includes(state.userInfo.role)
-    },*/
     canSetAllocations(state) {
       return [2,3].includes(state.userInfo.role)
     },
