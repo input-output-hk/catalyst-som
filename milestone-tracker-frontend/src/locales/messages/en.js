@@ -326,7 +326,8 @@ export default {
       role: "Role",
       proposals: "Projects (as Funded Proposer):",
       challenges: "Challenges (as Milestone Reviewer):",
-      proposals_allocated: "Projects allocated to review:"
+      proposals_allocated: "Projects allocated to review:",
+      proposals_allocated_signoff: "Projects allocated to signoff:",
     },
     proposal: {
       open_details: "Open Milestones Details",
@@ -361,6 +362,7 @@ export default {
     notifications: {
       go_to_som: "Open Milestone",
       go_to_poa: "Open Proof of Achievement",
+      proposal_id: "Project ID",
       proposal: "Project",
       milestone: "Milestone",
       submitted_at: "Submitted at",

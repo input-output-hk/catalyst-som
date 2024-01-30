@@ -8,10 +8,6 @@
             <th>{{ $t('pages.profile.email') }}</th>
             <td>{{ localUser.email }}</td>
           </tr>
-          <tr>
-            <th>{{ $t('pages.profile.role') }}</th>
-            <td>{{ role }}</td>
-          </tr>
           <tr v-if="proposals.length > 0">
             <th>{{ $t('pages.profile.proposals') }}</th>
             <td>
@@ -21,7 +17,7 @@
                     class="navbar-item" :to="{
                       name: 'proposal',
                       params: {id: proposal.project_id}
-                    }">{{proposal.title}}</router-link>
+                    }">[{{proposal.project_id}}] {{proposal.title}}</router-link>
                 </li>
               </ul>
             </td>
@@ -36,7 +32,23 @@
                       name: 'proposal',
                       params: {id: proposal.project_id}
                     }">
-                    {{proposal.title}}
+                    [{{proposal.project_id}}] {{proposal.title}}
+                  </router-link>
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr v-if="allocatedSignoffProposals.length > 0">
+            <th>{{ $t('pages.profile.proposals_allocated_signoff') }}</th>
+            <td>
+              <ul>
+                <li v-for="proposal in allocatedSignoffProposals" :key="proposal.id">
+                  <router-link
+                    class="navbar-item" :to="{
+                      name: 'proposal',
+                      params: {id: proposal.project_id}
+                    }">
+                    [{{proposal.project_id}}] {{proposal.title}}
                   </router-link>
                 </li>
               </ul>
@@ -51,17 +63,16 @@
 <script setup>
   import { computed } from 'vue'
   import { useUser } from '@/store/user.js'
-  import { roles } from '@/utils/roles.js'
-  import { useI18n } from 'vue-i18n'
-  const { t } = useI18n()
   const { getUserInfo, localUser } = useUser()
 
-  const role = computed(() => t(`roles.${roles[getUserInfo.role]}`))
   const proposals = computed(() => {
     return getUserInfo.proposals_users.map((el) => el.proposals)
   })
   const allocatedProposals = computed(() => {
     return getUserInfo.allocations.map((el) => el.proposals)
+  })
+  const allocatedSignoffProposals = computed(() => {
+    return getUserInfo.allocations_signoff.map((el) => el.proposals)
   })
   /*
   const challenges = computed(() => {

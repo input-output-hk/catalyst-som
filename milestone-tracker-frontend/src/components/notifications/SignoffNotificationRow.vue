@@ -2,6 +2,11 @@
   <tr>
     <td>
       <router-link :to="{name: 'proposal-milestones-detail-section', params: {id: item.project_id, milestone: milestone, section: targetSection}}">
+        {{ item.project_id }}
+      </router-link>
+    </td>
+    <td>
+      <router-link :to="{name: 'proposal-milestones-detail-section', params: {id: item.project_id, milestone: milestone, section: targetSection}}">
         {{ item.title }}
       </router-link>
     </td>

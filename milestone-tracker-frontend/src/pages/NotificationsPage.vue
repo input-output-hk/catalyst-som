@@ -112,6 +112,7 @@ const somsToSignoff = ref([])
 const signoffsDays = ref(10)
 
 const headers = ref([
+  t('pages.notifications.proposal_id'),
   t('pages.notifications.proposal'),
   t('pages.notifications.milestone'),
   t('pages.notifications.submitted_at'),
@@ -119,6 +120,7 @@ const headers = ref([
 ])
 
 const signoffHeaders = ref([
+  t('pages.notifications.proposal_id'),
   t('pages.notifications.proposal'),
   t('pages.notifications.milestone'),
   t('pages.notifications.signedoff_at'),
@@ -126,6 +128,7 @@ const signoffHeaders = ref([
 ])
 
 const toSignoffHeaders = ref([
+  t('pages.notifications.proposal_id'),
   t('pages.notifications.proposal'),
   t('pages.notifications.milestone'),
   t('pages.notifications.submitted_at'),
