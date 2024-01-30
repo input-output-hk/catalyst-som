@@ -64,7 +64,7 @@
         <th>{{ $t('proposal_recap.signoffs_allocations') }}</th>
         <td><allocation-form :proposal="proposal" :allocation-type="'signoffs'" /></td>
       </tr>
-      <tr v-if="proposal.change_request?.length > 0">
+      <tr v-if="proposal.change_request?.length > 0 || canSetChangeRequests">
         <th>{{ $t('proposal_recap.change_request') }}</th>
         <td>
           <proposal-change-requests :proposal="proposal" :can-set-change-requests="canSetChangeRequests" />

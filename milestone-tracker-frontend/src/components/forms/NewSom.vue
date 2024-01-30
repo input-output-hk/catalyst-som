@@ -137,8 +137,6 @@ const milestoneRules = {
   }
 }
 
-console.log(milestoneRules)
-
 // Form validation rules
 
 const maxMilestoneCost = computed(() => {

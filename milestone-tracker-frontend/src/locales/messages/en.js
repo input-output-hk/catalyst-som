@@ -261,11 +261,13 @@ export default {
   change_requests: {
     created: "Change Request created. Now proposers will be able to resubmit milestones that don't have PoAs already signed off.",
     new_title: "New Change Request",
-    new_confirm: "Do you confirm to create a new Change Request? By doing that proposers will be allowed to submit new milestones that don't have PoAs already signed off.",
+    new_confirm: "Do you confirm to create a new Change Request? By doing that (and ticking the checkbox at the end of the form) proposers will be allowed to submit new milestones that don't have PoAs already signed off.",
     new_create: "Create Change Request",
     cancel: "Cancel",
     url: "Change Request URL",
-    url_help: "Please include the link to the approved Change Request and verify that the link is publicly accessible."
+    url_help: "Please include the link to the approved Change Request and verify that the link is publicly accessible.",
+    resubmission: "Force SoM resubmission?",
+    resubmission_help: "If this checkbox is checked the Change Request will allow the FP to resubmit their milestones. If it's not it will just publicly log the change request."
   },
   reviews_counter: {
     approvals: "approval | approvals",

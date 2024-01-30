@@ -53,6 +53,12 @@ const initialSchema = computed(() => {
       label: t('change_requests.url'),
       help: t('change_requests.url_help'),
       validations: yup.string().url()
+    },
+    resubmission: {
+      type: 'checkbox',
+      label: t('change_requests.resubmission'),
+      help: t('change_requests.resubmission_help'),
+      def: true
     }
   }
 })

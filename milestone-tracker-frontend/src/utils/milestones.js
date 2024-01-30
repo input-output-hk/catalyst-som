@@ -112,7 +112,7 @@ const canSubmitSomByChangeRequest = (proposal, som) => {
       }
       const last_cr = proposal.change_request[proposal.change_request.length - 1]
       const last_signoff = som.signoffs[som.signoffs.length - 1]
-      return (last_cr.created_at > last_signoff.created_at)
+      return (last_cr.created_at > last_signoff.created_at) && last_cr.resubmission
     }
   }
   return false

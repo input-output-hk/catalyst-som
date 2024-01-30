@@ -47,6 +47,9 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
+  default: {
+    default: undefined
+  }
 });
 
 const variant = computed(() => {
