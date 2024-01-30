@@ -232,7 +232,7 @@ export default {
   proposal_recap: {
     proposal_id: "Project ID",
     link: "Link",
-    open_ideascale: "Open in Ideascale",
+    open_ideascale: "Open full project",
     challenge: "Challenge",
     budget: "Budget",
     completion: "Completion date",
