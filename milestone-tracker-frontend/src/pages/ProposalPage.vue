@@ -51,6 +51,13 @@ const proposalId = computed(() => {
   return useRouter().currentRoute.value.params.id;
 })
 
+const currentFundId = computed(() => {
+  if (proposal.value) {
+    return proposal.value.challenges[0].fund_id
+  }
+  return 1
+})
+
 const durations = computed(() => {
   return generateMilestoneDuration(snapshot.value)
 })
@@ -60,7 +67,7 @@ const currentExecuting = computed(() => {
 })
 
 const payment = computed(() => {
-  return getNextPayment(durations.value, currentExecuting.value)
+  return getNextPayment(durations.value, currentExecuting.value, currentFundId)
 })
 
 onMounted(async () => {

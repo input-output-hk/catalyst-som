@@ -54,7 +54,8 @@ const getCurrentMilestone = (milestones) => {
   return accumulator
 }
 
-const getNextPayment = (milestones, current) => {
+const getNextPayment = (milestones, current, fund_id) => {
+  console.log(fund_id)
   const somsApproved = milestones.map((m) => m.som_signoff_count).every((s) => s > 0)
   if (current && milestones.length > 0 && somsApproved) {
     if (milestones[0].status === 0) {

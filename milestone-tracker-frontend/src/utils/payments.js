@@ -5,14 +5,14 @@ import {
   getNextPayment
 } from '@/utils/milestones'
 
-export const preparePaymentsData = (allSoms) => {
+export const preparePaymentsData = (allSoms, fundId) => {
   const somsByProposal = groupBy(allSoms, 'project_id')
   const maxMilestones = 10
   const result = Object.keys(somsByProposal).map((proposal_id) => {
     const soms = somsByProposal[proposal_id]
     const durations = generateMilestoneDuration(soms)
     const currentMilestone = getCurrentMilestone(durations)
-    const nextPayment = getNextPayment(durations, currentMilestone)
+    const nextPayment = getNextPayment(durations, currentMilestone, fundId)
     if (nextPayment) {
       const proposal = {
         proposal_id: soms[0].project_id,

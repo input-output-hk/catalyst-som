@@ -93,6 +93,7 @@ import {
   prepareReviewsPaymentsData
  } from '@/utils/payments.js'
 import downloadCsv from '@/utils/exportCsv.js'
+import { getFundIdFromName } from '@/utils/fund.js'
 
 const proposalsStore = useProposals()
 const {
@@ -144,8 +145,9 @@ const somRewards = ref({
 })
 
 const exportProposals = async (fund) => {
+  const fundId = getFundIdFromName(fund)
   const soms = await getProposalsSnapshot(fund)
-  const data = preparePaymentsData(soms)
+  const data = preparePaymentsData(soms, fundId)
   downloadCsv(data)
 }
 
