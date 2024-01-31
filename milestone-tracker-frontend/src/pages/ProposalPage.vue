@@ -43,6 +43,7 @@ import {
   getCurrentMilestone,
   getNextPayment
 } from '@/utils/milestones.js'
+import { getShortNameFromId } from '@/utils/fund'
 const { getProposal, getProposalSnapshot } = useProposals()
 
 const proposal = ref({})
@@ -53,13 +54,16 @@ const proposalId = computed(() => {
 
 const currentFundId = computed(() => {
   if (proposal.value) {
-    return proposal.value.challenges[0].fund_id
+    if (proposal.value.challenges) {
+      return proposal.value.challenges.fund_id
+    }
   }
   return 1
 })
 
 const durations = computed(() => {
-  return generateMilestoneDuration(snapshot.value)
+  const fund = getShortNameFromId(currentFundId.value)
+  return generateMilestoneDuration(snapshot.value, fund)
 })
 
 const currentExecuting = computed(() => {
@@ -67,7 +71,8 @@ const currentExecuting = computed(() => {
 })
 
 const payment = computed(() => {
-  return getNextPayment(durations.value, currentExecuting.value, currentFundId)
+  const fund = getShortNameFromId(currentFundId.value)
+  return getNextPayment(durations.value, currentExecuting.value, fund)
 })
 
 onMounted(async () => {

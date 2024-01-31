@@ -25,6 +25,11 @@
           {{ $t('milestone_recap.payment') }}
         </p>
         <ul>
+          <li v-if="milestone.previous_poa_payment > 0">
+            <span class="is-size-6 has-text-weight-semibold">
+              {{$n(milestone.previous_poa_payment, 'currency', { currency: proposal.currency })}} - {{ $t('milestone_recap.payment_month_poa', startingMonth - 1) }}
+            </span>
+          </li>
           <li v-for="x, i in Array.from({length: milestone.duration})" :key="i">
             <span class="is-size-6 has-text-weight-semibold">
               {{$n(milestone.monthly_payment, 'currency', { currency: proposal.currency })}} - {{ $t('milestone_recap.payment_month', startingMonth + i - 1) }}

@@ -74,6 +74,7 @@ export default {
     delivery: "Stated delivery on:",
     month: "Month {month}",
     payment_month: "Initial payment | Month {n} | Month {n}",
+    payment_month_poa: "(Previous ML leftover) | Month {n} (Previous ML leftover) | Month {n} (Previous ML leftover)",
     payment: "Payments schedule:",
     payment_starts: "Payments starts after previous milestone Proof of Achievement approval.",
     last_payment: "Last payment occurs after Project Closeout approval.",

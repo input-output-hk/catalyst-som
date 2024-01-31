@@ -4,15 +4,17 @@ import {
   getCurrentMilestone,
   getNextPayment
 } from '@/utils/milestones'
+import { getShortNameFromId } from '@/utils/fund'
 
 export const preparePaymentsData = (allSoms, fundId) => {
   const somsByProposal = groupBy(allSoms, 'project_id')
   const maxMilestones = 10
+  const fund = getShortNameFromId(fundId)
   const result = Object.keys(somsByProposal).map((proposal_id) => {
     const soms = somsByProposal[proposal_id]
-    const durations = generateMilestoneDuration(soms)
+    const durations = generateMilestoneDuration(soms, fund)
     const currentMilestone = getCurrentMilestone(durations)
-    const nextPayment = getNextPayment(durations, currentMilestone, fundId)
+    const nextPayment = getNextPayment(durations, currentMilestone, fund)
     if (nextPayment) {
       const proposal = {
         proposal_id: soms[0].project_id,
