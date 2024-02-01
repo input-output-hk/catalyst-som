@@ -95,7 +95,6 @@ const otherSomsBudget = computed(() => {
   missingMilestones.forEach((m) => {
     if (m !== props.milestone) {
       const cost = (m === lastMilestone) ? props.proposal.budget * 0.15 : props.proposal.budget * 0.05
-      console.log(m, cost)
       definedCost = definedCost + cost
     }
   })

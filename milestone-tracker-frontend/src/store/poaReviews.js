@@ -30,7 +30,6 @@ export const usePoaReviews = defineStore('poas-reviews-store', {
         })
         return data
       } catch(error) {
-        console.log(error)
         errorNotification(this.$i18n.t('errors.creating_poa_review'))
       }
     },

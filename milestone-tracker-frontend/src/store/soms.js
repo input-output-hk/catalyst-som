@@ -101,7 +101,6 @@ export const useSoms = defineStore('soms-store', {
         })
         return data
       } catch(error) {
-        console.log(error)
         errorNotification(this.$i18n.t('errors.creating_som'))
       }
     },

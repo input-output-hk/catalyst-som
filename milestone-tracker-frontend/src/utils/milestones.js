@@ -27,8 +27,8 @@ const fundMonthlyCost = {
 }
 
 const fundPreviousPoaPayments = {
-  'f9': 0,
-  'f10': 0,
+  'f9': () => 0,
+  'f10': () => 0,
   'f11': (previousMl) => {
     if (previousMl) {
       return roundAmounts(previousMl.cost * 0.2)
@@ -40,7 +40,7 @@ const fundPreviousPoaPayments = {
 const generateMilestoneDuration = (milestones, fund) => {
   // Assuming milestones ordered by milestone
   let progress = 0
-  const last = Math.max(...milestones.map((m) => m.milestone))
+  const last = (milestones && milestones.length > 0) ? milestones[0].milestones_qty : 100
   return milestones.map((ml, idx) => {
     const isLast = ml.milestone === last
     let duration = Math.max(ml.month - progress, 1)

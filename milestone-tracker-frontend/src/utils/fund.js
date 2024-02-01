@@ -2,8 +2,8 @@
 const DB_ID_OFFSET = 8
 
 const getFundIdFromName = (name) => {
-  const extractedNumber = /[0-9]*/.exec(name)
-  return extractedNumber - DB_ID_OFFSET;
+  const extractedNumber = /[0-9]+/.exec(name)
+  return parseInt(extractedNumber) - DB_ID_OFFSET;
 }
 
 const getShortNameFromId = (fundId) => {
