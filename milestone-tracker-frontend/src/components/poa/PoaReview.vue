@@ -1,7 +1,10 @@
 <template>
   <table class="table is-bordered is-striped">
     <tr>
-      <td>{{$t('poa_review.from')}} <span class="has-text-weight-semibold">{{role}}</span></td>
+      <td>
+        {{$t('poa_review.from')}} <span class="has-text-weight-semibold">{{role}}</span>
+        <span v-if="identity" class="is-size-7">&nbsp;{{ identity }}</span>
+      </td>
     </tr>
     <tr>
       <td>
@@ -19,14 +22,29 @@
 
 <script setup>
 import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import { roles } from '@/utils/roles.js'
+import { useUser } from '@/store/user.js'
 const { t } = useI18n()
+
+const { user } = storeToRefs(useUser())
+
 const props = defineProps({
   review: {
     type: Object,
     default: () => {}
   }
+})
+
+const identity = computed(() => {
+  if (props.review.users) {
+    if (props.review.users.email === user.value.email) {
+      return t('som_review.you')
+    }
+    return `(${props.review.users.email})`
+  }
+  return null
 })
 
 const role = computed(() => {

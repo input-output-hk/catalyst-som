@@ -204,7 +204,8 @@ export default {
     resubmission_title: "Milestone review resubmission",
     resubmission_msg: "You have already submitted a review for this Milestone. Do you want to resubmit it? The previous submission will be archived.",
     resubmission_confirm: "Proceed with resubmission",
-    resubmission_clear: "Cancel"
+    resubmission_clear: "Cancel",
+    you: "(You)"
   },
   new_som_review: {
     title: "New Review for Milestone",
