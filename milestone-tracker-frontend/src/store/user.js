@@ -4,6 +4,8 @@ import { errorNotification, successNotification } from '@/utils/notifications'
 
 import { env } from '@/env'
 
+const REFRESH_USERINFO_INTERVAL = 1000 * 60 * 5
+
 export const useUser = defineStore('user-store', {
   state: () => {
     return {
@@ -13,6 +15,8 @@ export const useUser = defineStore('user-store', {
       userInfo: {}
     }
   },
+
+  intervalCheck: false,
 
   persist: true,
 
@@ -127,6 +131,7 @@ export const useUser = defineStore('user-store', {
         this.getInfo()
         successNotification(this.$i18n.t('notifications.logged_in'))
         this.$router.push({name: 'proposals'})
+        this.pollingUserInfo()
       } catch(error) {
         this.resetState()
         errorNotification(error.message)
@@ -148,7 +153,20 @@ export const useUser = defineStore('user-store', {
       this.localUser = {}
       this.userInfo = {}
       this.logged = false
+      this.intervalCheck = clearInterval(this.intervalCheck)
       this.$router.push({name: 'login'})
+    },
+    pollingUserInfo() {
+      if (this.intervalCheck) {
+        this.intervalCheck = clearInterval(this.intervalCheck)
+      }
+      this.intervalCheck = setInterval(async () => {
+        if (this.logged) {
+          await this.getInfo()
+        } else {
+          this.intervalCheck = clearInterval(this.intervalCheck)
+        }
+      }, REFRESH_USERINFO_INTERVAL)
     },
     async resetPassword(email) {
       try {
@@ -274,6 +292,9 @@ export const useUser = defineStore('user-store', {
           if (error) throw(error)
           if (!data.session) {
             this.resetState()
+          } else {
+            this.getInfo()
+            this.pollingUserInfo()
           }
         } catch(error) {
           this.resetState()
