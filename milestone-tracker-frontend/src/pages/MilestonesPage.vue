@@ -31,6 +31,7 @@
         </o-tabs>
       </div>
     </div>
+    <proposal-thread :proposal="proposal" class="proposal-threads" />
   </div>
 </template>
 
@@ -90,6 +91,7 @@ onMounted(async () => {
 <script>
 import SingleMilestone from '@/components/proposal/SingleMilestone.vue'
 import ProposalRecap from '@/components/proposal/ProposalRecap.vue'
+import ProposalThread from '@/components/threads/ProposalThread.vue'
 </script>
 
 <style lang="scss">
@@ -97,5 +99,13 @@ import ProposalRecap from '@/components/proposal/ProposalRecap.vue'
   .b-tabs .tab-content {
     padding: 1rem 0.2rem !important;
   }
+}
+.proposal-threads {
+  position: fixed;
+  bottom: 0;
+  left: 30px;
+  width: 600px;
+  max-width: 80%;
+  z-index: 1000;
 }
 </style>

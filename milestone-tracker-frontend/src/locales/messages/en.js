@@ -289,6 +289,12 @@ export default {
     privacy_policy: 'Privacy Policy',
     feedback: 'Feedback'
   },
+  thread: {
+    title: "Discussion",
+    submit: "Send",
+    text: "New message",
+    no_messages: "No messages yet..."
+  },
   pages: {
     admin: {
       title: "Admin",
@@ -404,6 +410,7 @@ export default {
       export_poa_reviews: "Export Funding file for PoA reviews",
       rewards_per_som: "Rewards amount/min budget/max budget per SoM review",
       export_som_reviews: "Export funding file per SoM reviews"
-    }
+    },
+ 
   }
 }

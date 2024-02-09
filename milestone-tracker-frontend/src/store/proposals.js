@@ -63,7 +63,7 @@ export const useProposals = defineStore('proposals-store', {
       try {
         const { data, error } = await supabase
           .from('proposals')
-          .select('*, challenges(*), allocations(*, users(id, user_id, email)), allocations_signoff(*, users(id, user_id, email)),  proposals_users(*, users(id, user_id, email)), change_request(id, created_at, url, resubmission)')
+          .select('*, challenges(*), allocations(*, users(id, user_id, email)), allocations_signoff(*, users(id, user_id, email)),  proposals_users(*, users(id, user_id, email)), change_request(id, created_at, url, resubmission), threads(*)')
           .eq('project_id', id)
         if (error) throw(error)
         return (data.length > 0) ? data[0] : {}
