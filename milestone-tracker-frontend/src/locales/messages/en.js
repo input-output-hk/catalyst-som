@@ -25,7 +25,8 @@ export default {
     signoff_created: "Signoff created.",
     som_review_created: "Milestone review created.",
     som_created: "Milestone created.",
-    allocation_updated: "Allocation updated."
+    allocation_updated: "Allocation updated.",
+    thread_msg_created: "Message sent!"
   },
   nav: {
     home: "Home",

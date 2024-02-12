@@ -25,21 +25,14 @@ export const useThreads = defineStore('threads-store', {
   },
 
   actions: {
-    async createThread(thread, proposal) {
+    async createThread(thread) {
       try {
         const { data, error } = await supabase
           .from('threads')
           .insert([thread])
           .select()
         if (error) throw error
-        console.log(proposal)
         successNotification(this.$i18n.t('notifications.thread_msg_created'))
-        /*
-        emit('getSomsBus', {
-          proposal_id: som.proposal_id,
-          milestone: som.milestone
-        })
-        */
         return data
       } catch(error) {
         errorNotification(this.$i18n.t('errors.creating_thread_msg'))

@@ -22,13 +22,14 @@
       <div class="is-12 column">
         <schema-form
           v-if="canWriteMsg"
+          ref="msgForm"
           class="column is-12"
           :schema="schema"
           @submit="handleCreateMsg"
           >
           <template #afterForm>
             <div class="buttons">
-              <o-button :disabled="submitting" class="new-msg-submit" variant="primary" native-type="submit">
+              <o-button :disabled="submitting || !submittable" class="new-msg-submit" variant="primary" native-type="submit">
                 <span>{{ $t('thread.submit') }}</span>
               </o-button>
             </div>
@@ -48,8 +49,7 @@ import ThreadMessage from '@/components/threads/ThreadMessage.vue'
 
 import { SchemaFormFactory, useSchemaForm } from "formvuelate"
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
-
-import * as yup from 'yup'
+import { debounce } from '@/utils/shared'
 
 import { useFormFields } from '@/composables/useFormFields.js'
 import { useThreads } from '@/store/threads.js'
@@ -78,16 +78,20 @@ const canWriteMsg = computed(() => {
 })
 
 const threadsScroll = ref(null)
+const msgForm = ref(null)
+
+const submittable = computed(() => {
+  return HTMLNotEmpty(formData.value.text)
+})
 
 const initialSchema = ref({
   text: {
     type: 'html',
-    validations: yup.string().test('len', t('validations.text_required'), HTMLNotEmpty),
     label: t(`thread.text`)
   }
 })
 
-const { schema, clearForm } = useFormFields(initialSchema.value)
+let { schema, clearForm } = useFormFields(initialSchema.value)
 const formData = ref({})
 const { updateFormModel } = useSchemaForm(formData)
 let SchemaForm = SchemaFormFactory([
@@ -111,6 +115,7 @@ const _clearForm = () => {
   submitting.value = false
 }
 
+const targetScroll = ref(0)
 const scrollInteracted = ref(false)
 const maxPage = ref(0)
 const threadsNumber = computed(() => {
@@ -121,36 +126,47 @@ const threadsNumber = computed(() => {
 })
 
 watch(threadsNumber, () => {
-  if (!scrollInteracted.value) {
-    nextTick(() => {
+  nextTick(() => {
+    if (!scrollInteracted.value) {
       threadsScroll.value.scrollTo(0, threadsScroll.value.scrollHeight)
-    })
-  }
+    }
+    
+  })
 })
 
 const openCallback = () => {
   nextTick(() => {
+    targetScroll.value = 0
     scrollInteracted.value = false
     threadsScroll.value.scrollTo(0, threadsScroll.value.scrollHeight)
   })
 }
 
-const handleScroll = async (e) => {
-  if (e.currentTarget.scrollTop <= 1) {
-    const newMaxPage = maxPage.value + 1
-    const result = await getThreads(props.proposal.id, newMaxPage, THREADS_PER_REQUEST)
-    if (result > 0) {
-      maxPage.value = newMaxPage
-    }
-  }
-  if (e.currentTarget) {
-    if (e.currentTarget.scrollTop === e.currentTarget.scrollHeight - e.currentTarget.clientHeight) {
+const handleScroll = debounce(async (e) => {
+  targetScroll.value = 0
+  if (e.target) {
+    if (e.target.scrollTop === e.target.scrollHeight - e.target.clientHeight) {
       scrollInteracted.value = false
     } else {
       scrollInteracted.value = true
     }
+    if (e.target.scrollTop <= 1) {
+      const newMaxPage = maxPage.value + 1
+      const oldScrollHeight = threadsScroll.value.scrollHeight
+      const oldScrollPos = threadsScroll.value.scrollTop
+      const result = await getThreads(props.proposal.id, newMaxPage, THREADS_PER_REQUEST)
+      if (result > 0) {
+        maxPage.value = newMaxPage
+        const addedScroll = threadsScroll.value.scrollHeight - oldScrollHeight
+        targetScroll.value = oldScrollPos + addedScroll
+        if (targetScroll.value > 0) {
+          threadsScroll.value.scrollTo(0, targetScroll.value)
+        }
+      }
+    }
+    
   }
-}
+}, 500)
 
 const refreshTimeout = ref(null)
 
