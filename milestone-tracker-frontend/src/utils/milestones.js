@@ -13,17 +13,44 @@ const getPrevMilestone = (milestones, current) => {
   }
 }
 
-const generateMilestoneDuration = (milestones) => {
+const fundMonthlyCost = {
+  'f9': (cost, duration) => {
+    return roundAmounts(cost / duration)
+  },
+  'f10': (cost, duration) => {
+    return roundAmounts(cost / duration)
+  },
+  'f11': (cost, duration, isLast) => {
+    const part = (isLast) ? 1 : 0.8
+    return roundAmounts((cost * part) / duration)
+  },
+}
+
+const fundPreviousPoaPayments = {
+  'f9': () => 0,
+  'f10': () => 0,
+  'f11': (previousMl) => {
+    if (previousMl) {
+      return roundAmounts(previousMl.cost * 0.2)
+    }
+    return 0
+  }
+}
+
+const generateMilestoneDuration = (milestones, fund) => {
   // Assuming milestones ordered by milestone
   let progress = 0
-  return milestones.map((ml) => {
+  const last = (milestones && milestones.length > 0) ? milestones[0].milestones_qty : 100
+  return milestones.map((ml, idx) => {
+    const isLast = ml.milestone === last
     let duration = Math.max(ml.month - progress, 1)
     progress = progress + duration
     return {
       ...ml,
       duration,
       progress,
-      monthly_payment: roundAmounts(ml.cost / duration)
+      monthly_payment: fundMonthlyCost[fund](ml.cost, duration, isLast),
+      previous_poa_payment: fundPreviousPoaPayments[fund](milestones[idx - 1])
     }
   })
 }
@@ -54,7 +81,7 @@ const getCurrentMilestone = (milestones) => {
   return accumulator
 }
 
-const getNextPayment = (milestones, current) => {
+const f9f10paymentSchema = (milestones, current) => {
   const somsApproved = milestones.map((m) => m.som_signoff_count).every((s) => s > 0)
   if (current && milestones.length > 0 && somsApproved) {
     if (milestones[0].status === 0) {
@@ -97,6 +124,19 @@ const getNextPayment = (milestones, current) => {
   return null
 }
 
+const fundsPaymentSchema = {
+  'f9': f9f10paymentSchema,
+  'f10': f9f10paymentSchema,
+  'f11': f9f10paymentSchema
+}
+
+const getNextPayment = (milestones, current, fund) => {
+  if (Object.keys(fundsPaymentSchema).includes(fund)) {
+    return fundsPaymentSchema[fund](milestones, current)
+  }
+  return null
+}
+
 const canSubmitSomByChangeRequest = (proposal, som) => {
   if (proposal.change_request?.length > 0) {
     if (som.signoffs?.length > 0) {
@@ -112,7 +152,7 @@ const canSubmitSomByChangeRequest = (proposal, som) => {
       }
       const last_cr = proposal.change_request[proposal.change_request.length - 1]
       const last_signoff = som.signoffs[som.signoffs.length - 1]
-      return (last_cr.created_at > last_signoff.created_at)
+      return (last_cr.created_at > last_signoff.created_at) && last_cr.resubmission
     }
   }
   return false

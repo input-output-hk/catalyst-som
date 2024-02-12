@@ -50,7 +50,7 @@
       :entity-type="'poa'"
     />
     <notification-list
-      v-show="canSignoff"
+      v-show="canSetAllocations || poasToSignoff.length"
       class="poa-to-signoff-received-notifications"
       :row-component="ToBeSignedOffRow"
       :title="$t('pages.notifications.poa_to_signoff_received')"
@@ -58,11 +58,11 @@
       :headers="toSignoffHeaders"
       :row-msg="$t('pages.notifications.go_to_poa')"
       :entity-type="'poa'"
-      :filters="toSignoffFilters"
+      :filters="(canSetAllocations) ? toSignoffFilters : []"
       @apply-filter="handlePoasToSignoffFilters"
     />
     <notification-list
-      v-show="canSignoff"
+      v-show="canSetAllocations || somsToSignoff.length"
       class="som-to-signoff-received-notifications"
       :row-component="ToBeSignedOffRow"
       :title="$t('pages.notifications.som_to_signoff_received')"
@@ -70,7 +70,7 @@
       :headers="toSignoffHeaders"
       :row-msg="$t('pages.notifications.go_to_som')"
       :entity-type="'som'"
-      :filters="toSignoffFilters"
+      :filters="(canSetAllocations) ? toSignoffFilters : []"
       @apply-filter="handleSomsToSignoffFilters"
     />
     <div v-if="notificationsCount === 0" class="tile is-ml is-parent">
@@ -100,7 +100,7 @@ const {
   getSomsToBeSignedOff
 } = useUser()
 const userStore = useUser()
-const { canSignoff } = storeToRefs(userStore)
+const { canSetAllocations } = storeToRefs(userStore)
 
 const soms = ref([])
 const poas = ref([])
@@ -112,6 +112,7 @@ const somsToSignoff = ref([])
 const signoffsDays = ref(10)
 
 const headers = ref([
+  t('pages.notifications.proposal_id'),
   t('pages.notifications.proposal'),
   t('pages.notifications.milestone'),
   t('pages.notifications.submitted_at'),
@@ -119,6 +120,7 @@ const headers = ref([
 ])
 
 const signoffHeaders = ref([
+  t('pages.notifications.proposal_id'),
   t('pages.notifications.proposal'),
   t('pages.notifications.milestone'),
   t('pages.notifications.signedoff_at'),
@@ -126,6 +128,7 @@ const signoffHeaders = ref([
 ])
 
 const toSignoffHeaders = ref([
+  t('pages.notifications.proposal_id'),
   t('pages.notifications.proposal'),
   t('pages.notifications.milestone'),
   t('pages.notifications.submitted_at'),
@@ -168,29 +171,26 @@ const notificationsCount = computed(() => {
     poasToReview.value.length +
     somReviews.value.length +
     poaReviews.value.length +
-    signoffs.value.length + 
+    signoffs.value.length +
+    somsToSignoff.value.length +
     poasToSignoff.value.length
   )
 })
 
 const handlePoasToSignoffFilters = async (params) => {
-  if (canSignoff.value) {
-    poasToSignoff.value = await getPoasToBeSignedOff(
-      params._from, 
-      params._nr_reviews || toSignoffFilters.value[0].default,
-      params._nr_approvals || toSignoffFilters.value[1].default
-    )
-  }
+  poasToSignoff.value = await getPoasToBeSignedOff(
+    params._from, 
+    params._nr_reviews || toSignoffFilters.value[0].default,
+    params._nr_approvals || toSignoffFilters.value[1].default
+  )
 }
 
 const handleSomsToSignoffFilters = async (params) => {
-  if (canSignoff.value) {
-    somsToSignoff.value = await getSomsToBeSignedOff(
-      params._from, 
-      params._nr_reviews || toSignoffFilters.value[0].default,
-      params._nr_approvals || toSignoffFilters.value[1].default
-    )
-  }
+  somsToSignoff.value = await getSomsToBeSignedOff(
+    params._from, 
+    params._nr_reviews || toSignoffFilters.value[0].default,
+    params._nr_approvals || toSignoffFilters.value[1].default
+  )
 }
 
 onMounted(async () => {
@@ -201,10 +201,8 @@ onMounted(async () => {
   signoffs.value = await getSignoffNotifications(from.toISOString())
   somReviews.value = await getSomReviewsNotifications()
   poaReviews.value = await getPoaReviewsNotifications()
-  if (canSignoff.value) {
-    poasToSignoff.value = await getPoasToBeSignedOff()
-    somsToSignoff.value = await getSomsToBeSignedOff()
-  }
+  poasToSignoff.value = await getPoasToBeSignedOff()
+  somsToSignoff.value = await getSomsToBeSignedOff()
 })
 
 </script>

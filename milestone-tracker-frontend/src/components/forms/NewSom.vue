@@ -40,8 +40,10 @@ import * as yup from 'yup'
 import { useSoms } from '@/store/soms.js'
 import { useFormFields } from '@/composables/useFormFields.js'
 import { getPrevMilestone } from '@/utils/milestones'
+import { getShortNameFromId } from '@/utils/fund'
 import { HTMLNotEmpty } from '@/utils/validations.js'
 import { useI18n } from 'vue-i18n'
+import { env } from '@/env'
 
 const props = defineProps({
   proposal: {
@@ -66,7 +68,6 @@ const emit = defineEmits(['somSubmitted', 'refreshRecap'])
 const { t, n, d } = useI18n()
 const { createSom } = useSoms()
 
-import { env } from '@/env'
 
 const otherSoms = computed(() => {
   if (props.soms) {
@@ -87,7 +88,17 @@ const otherSoms = computed(() => {
 const submitting = ref(false)
 
 const otherSomsBudget = computed(() => {
-  return otherSoms.value.reduce((acc, som) => acc + som.cost, 0)
+  const lastMilestone = props.proposal.milestones_qty
+  const milestonesIndex = [...Array(lastMilestone).keys()].map(i => i + 1)
+  let definedCost = otherSoms.value.reduce((acc, som) => acc + som.cost, 0)
+  const missingMilestones = milestonesIndex.filter(m => !otherSoms.value.map(o => o.milestone).includes(m))
+  missingMilestones.forEach((m) => {
+    if (m !== props.milestone) {
+      const cost = (m === lastMilestone) ? props.proposal.budget * 0.15 : props.proposal.budget * 0.05
+      definedCost = definedCost + cost
+    }
+  })
+  return definedCost
 })
 
 const isLastMilestone = computed(() => {
@@ -109,7 +120,12 @@ const milestoneRules = {
       } else {
         return availableBudget
       }
-    }
+    },
+    minMonth: () => {
+      const min = getPrevMilestone(props.soms, props.milestone)
+      return (min) ? parseInt(min.month) + 1 : 1
+    },
+    maxMonth: () => 24
   },
   f10: {
     minCost: () => {
@@ -133,21 +149,57 @@ const milestoneRules = {
         return Math.min(_max, 75000)
       }
       return _max
+    },
+    minMonth: () => {
+      const min = getPrevMilestone(props.soms, props.milestone)
+      return (min) ? parseInt(min.month) + 1 : 1
+    },
+    maxMonth: () => 24
+  },
+  f11: {
+    minCost: () => {
+      let _min = props.proposal.budget * 0.05
+      if (props.milestone === 1) {
+        _min = Math.min(_min, 75000)
+      }
+      if (isLastMilestone.value) {
+        _min = props.proposal.budget * 0.15
+      }
+      return _min
+    },
+    maxCost: () => {
+      const availableBudget = props.proposal.budget - otherSomsBudget.value
+      const maxMilestoneBudget = 0.30
+      const budgetRule = Math.min(
+        (props.proposal.budget * maxMilestoneBudget), availableBudget
+      )
+      const _max = (!isLastMilestone.value && props.proposal.budget > 0) ? budgetRule : availableBudget
+      if (props.milestone === 1) {
+        return Math.min(_max, 75000)
+      }
+      return _max
+    },
+    minMonth: () => {
+      const min = getPrevMilestone(props.soms, props.milestone)
+      return (min) ? parseInt(min.month) + 1 : 1
+    },
+    maxMonth: () => {
+      const last = getPrevMilestone(props.soms, props.milestone)
+      const lastMonth = (last) ? parseInt(last.month) : 0
+      return (isLastMilestone.value) ? lastMonth + 1 : lastMonth + 3
     }
   }
 }
 
-console.log(milestoneRules)
-
 // Form validation rules
 
 const maxMilestoneCost = computed(() => {
-  const fund = (props.proposal.challenges.fund_id === 1) ? 'f9' : 'f10'
+  const fund = getShortNameFromId(props.proposal.challenges.fund_id)
   return milestoneRules[fund].maxCost()
 })
 
 const minMilestoneCost = computed(() => {
-  const fund = (props.proposal.challenges.fund_id === 1) ? 'f9' : 'f10'
+  const fund = getShortNameFromId(props.proposal.challenges.fund_id)
   return milestoneRules[fund].minCost()
 })
 
@@ -162,10 +214,19 @@ const costRule = computed(() => {
   )
 })
 
+const maxMilestoneMonth = computed(() => {
+  const fund = getShortNameFromId(props.proposal.challenges.fund_id)
+  return milestoneRules[fund].maxMonth()
+})
+
+const minMilestoneMonth = computed(() => {
+  const fund = getShortNameFromId(props.proposal.challenges.fund_id)
+  return milestoneRules[fund].minMonth()
+})
+
+
 const monthRule = computed(() => {
-  const rule = yup.number().required()
-  const min = getPrevMilestone(props.soms, props.milestone)
-  return rule.min((min) ? parseInt(min.month) + 1 : 1)
+  return yup.number().required().min(minMilestoneMonth.value).max(maxMilestoneMonth.value)
 })
 
 const completionRule = computed(() => {
@@ -176,7 +237,8 @@ const completionRule = computed(() => {
 })
 
 const monthOptions = computed(() => {
-  return [...Array(24).keys()].map((m) => {
+  const months = [...Array(24).keys()].slice(minMilestoneMonth.value -1, maxMilestoneMonth.value)
+  return months.map((m) => {
     const startDate = new Date(props.proposal.starting_date)
     const monthName = d(new Date(startDate.setMonth(startDate.getMonth() + parseInt(m + 1))), 'month_only')
     return {

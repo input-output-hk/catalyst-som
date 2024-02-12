@@ -49,7 +49,7 @@
             @confirm="_handlePoaReviewResubmission()"
           />
         </o-modal>
-        <div v-if="current && canSignoff && !locked">
+        <div v-if="current && canSignoff(proposal.id) && !locked">
           <o-button
             variant="primary"
             size="medium"

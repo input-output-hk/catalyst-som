@@ -4,6 +4,8 @@ import { errorNotification, successNotification } from '@/utils/notifications'
 
 import { env } from '@/env'
 
+const REFRESH_USERINFO_INTERVAL = 1000 * 60 * 5
+
 export const useUser = defineStore('user-store', {
   state: () => {
     return {
@@ -13,6 +15,8 @@ export const useUser = defineStore('user-store', {
       userInfo: {}
     }
   },
+
+  intervalCheck: false,
 
   persist: true,
 
@@ -51,14 +55,14 @@ export const useUser = defineStore('user-store', {
       - It's not the proposal owner
       AND
       (
-        - It's a challenge team member in the proposal's challenge
+        - The proposal is in their allocations as reviewer
         OR
-        - The proposal is in their allocations
+        - The proposal is in their allocations as signoff
         OR
         - Has Admin, IO team role or Signoff role
       )
       */
-      return (proposal_id, challenge_id) => {
+      return (proposal_id) => {
         if (this.isAdmin) {
           return true
         }
@@ -67,9 +71,9 @@ export const useUser = defineStore('user-store', {
             !state.userInfo.proposals_users.map((el) => el.proposal_id)
               .includes(proposal_id) &&
             (
-              state.userInfo.challenges_users.map(
-                (el) => el.challenge_id
-              ).includes(challenge_id) ||
+              state.userInfo.allocations_signoff.map(
+                (el) => el.proposal_id
+              ).includes(proposal_id) ||
               state.userInfo.allocations.map(
                 (el) => el.proposal_id
               ).includes(proposal_id) ||
@@ -81,17 +85,35 @@ export const useUser = defineStore('user-store', {
         }
       }
     },
+    canSignoff(state) {
+      return (proposal_id) => {
+        if (this.isAdmin) {
+          return true
+        }
+        try {
+          const ret =
+            !state.userInfo.proposals_users.map((el) => el.proposal_id)
+              .includes(proposal_id) &&
+            (
+              state.userInfo.allocations_signoff.map(
+                (el) => el.proposal_id
+              ).includes(proposal_id) ||
+              [3].includes(state.userInfo.role)
+            )
+          return ret
+        } catch {
+          return false
+        }
+      }
+    },
     isAdmin(state) {
       return [3].includes(state.userInfo.role)
     },
-    canSignoff(state) {
-      return [3,4].includes(state.userInfo.role)
-    },
     canSetAllocations(state) {
-      return [2,3,4].includes(state.userInfo.role)
+      return [2,3].includes(state.userInfo.role)
     },
     canSetChangeRequests(state) {
-      return [3,4].includes(state.userInfo.role)
+      return [2,3].includes(state.userInfo.role)
     }
   },
 
@@ -109,6 +131,7 @@ export const useUser = defineStore('user-store', {
         this.getInfo()
         successNotification(this.$i18n.t('notifications.logged_in'))
         this.$router.push({name: 'proposals'})
+        this.pollingUserInfo()
       } catch(error) {
         this.resetState()
         errorNotification(error.message)
@@ -130,7 +153,20 @@ export const useUser = defineStore('user-store', {
       this.localUser = {}
       this.userInfo = {}
       this.logged = false
+      this.intervalCheck = clearInterval(this.intervalCheck)
       this.$router.push({name: 'login'})
+    },
+    pollingUserInfo() {
+      if (this.intervalCheck) {
+        this.intervalCheck = clearInterval(this.intervalCheck)
+      }
+      this.intervalCheck = setInterval(async () => {
+        if (this.logged) {
+          await this.getInfo()
+        } else {
+          this.intervalCheck = clearInterval(this.intervalCheck)
+        }
+      }, REFRESH_USERINFO_INTERVAL)
     },
     async resetPassword(email) {
       try {
@@ -164,7 +200,7 @@ export const useUser = defineStore('user-store', {
         try {
           const { data, error } = await supabase
             .from('users')
-            .select('*, challenges_users(*, challenges(id, title)), proposals_users(*, proposals(id, title, url, project_id)), allocations(*, proposals(id, title, url, project_id))')
+            .select('*, challenges_users(*, challenges(id, title)), proposals_users(*, proposals(id, title, url, project_id)), allocations(*, proposals(id, title, url, project_id)), allocations_signoff(*, proposals(id, title, url, project_id))')
             .eq('user_id', this.localUser.id)
           if (error) throw(error)
           this.userInfo = data[0]
@@ -256,6 +292,9 @@ export const useUser = defineStore('user-store', {
           if (error) throw(error)
           if (!data.session) {
             this.resetState()
+          } else {
+            this.getInfo()
+            this.pollingUserInfo()
           }
         } catch(error) {
           this.resetState()

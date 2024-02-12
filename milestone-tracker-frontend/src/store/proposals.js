@@ -38,7 +38,7 @@ export const useProposals = defineStore('proposals-store', {
       try {
         const { data, error } = await supabase
           .from('proposals')
-          .select('*, challenges(title), allocations(*, users(id, user_id, email))')
+          .select('*, challenges(title), allocations(*, users(id, user_id, email)), allocations_signoff(*, users(id, user_id, email))')
           .order('project_id')
           .range(from, to)
         if (error) throw(error)
@@ -63,7 +63,7 @@ export const useProposals = defineStore('proposals-store', {
       try {
         const { data, error } = await supabase
           .from('proposals')
-          .select('*, challenges(*), allocations(*, users(id, user_id, email)), change_request(id, created_at, url)')
+          .select('*, challenges(*), allocations(*, users(id, user_id, email)), allocations_signoff(*, users(id, user_id, email)),  proposals_users(*, users(id, user_id, email)), change_request(id, created_at, url, resubmission), threads(*)')
           .eq('project_id', id)
         if (error) throw(error)
         return (data.length > 0) ? data[0] : {}
@@ -121,16 +121,16 @@ export const useProposals = defineStore('proposals-store', {
         errorNotification(this.$i18n.t('errors.fetching_proposals'))
       }
     },
-    async updateProposalAllocations(allocations, proposal) {
+    async _updateAllocations (allocations, proposal, _type) {
       try {
         const { error } = await supabase
-          .from('allocations')
+          .from(_type)
           .delete()
           .eq('proposal_id', proposal.id)
           if (error) throw(error)
           try {
             const { error } = await supabase
-            .from('allocations')
+            .from(_type)
             .insert(allocations)
             if (error) throw(error)
             successNotification(this.$i18n.t('notifications.allocation_updated'))
@@ -140,6 +140,15 @@ export const useProposals = defineStore('proposals-store', {
       } catch (error) {
         errorNotification(this.$i18n.t('errors.updating_allocations'))
       }
+    },
+    async updateProposalAllocations(allocations, proposal) {
+      await this._updateAllocations(allocations, proposal, 'allocations')
+    },
+    async updateProposalSignoffAllocations(allocations, proposal) {
+      await this._updateAllocations(allocations, proposal, 'allocations_signoff')
+    },
+    async updateProposalOwnership(allocations, proposal) {
+      await this._updateAllocations(allocations, proposal, 'proposals_users')
     },
   }
 })

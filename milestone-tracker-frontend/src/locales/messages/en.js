@@ -25,7 +25,8 @@ export default {
     signoff_created: "Signoff created.",
     som_review_created: "Milestone review created.",
     som_created: "Milestone created.",
-    allocation_updated: "Allocation updated."
+    allocation_updated: "Allocation updated.",
+    thread_msg_created: "Message sent!"
   },
   nav: {
     home: "Home",
@@ -74,6 +75,7 @@ export default {
     delivery: "Stated delivery on:",
     month: "Month {month}",
     payment_month: "Initial payment | Month {n} | Month {n}",
+    payment_month_poa: "(Previous ML leftover) | Month {n} (Previous ML leftover) | Month {n} (Previous ML leftover)",
     payment: "Payments schedule:",
     payment_starts: "Payments starts after previous milestone Proof of Achievement approval.",
     last_payment: "Last payment occurs after Project Closeout approval.",
@@ -203,7 +205,8 @@ export default {
     resubmission_title: "Milestone review resubmission",
     resubmission_msg: "You have already submitted a review for this Milestone. Do you want to resubmit it? The previous submission will be archived.",
     resubmission_confirm: "Proceed with resubmission",
-    resubmission_clear: "Cancel"
+    resubmission_clear: "Cancel",
+    you: "(You)"
   },
   new_som_review: {
     title: "New Review for Milestone",
@@ -232,7 +235,7 @@ export default {
   proposal_recap: {
     proposal_id: "Project ID",
     link: "Link",
-    open_ideascale: "Open in Ideascale",
+    open_ideascale: "Open full project",
     challenge: "Challenge",
     budget: "Budget",
     completion: "Completion date",
@@ -249,6 +252,8 @@ export default {
     last_change_request_on: "Last Change Request activated on: ",
     link_to_cr: "Link to Change Request",
     status: "Status",
+    proposer_ownership: "Proposers",
+    signoffs_allocations: "Allocations for signoff",
     statuses: {
       ongoing: "In progress",
       paused: "Paused",
@@ -259,11 +264,13 @@ export default {
   change_requests: {
     created: "Change Request created. Now proposers will be able to resubmit milestones that don't have PoAs already signed off.",
     new_title: "New Change Request",
-    new_confirm: "Do you confirm to create a new Change Request? By doing that proposers will be allowed to submit new milestones that don't have PoAs already signed off.",
+    new_confirm: "Do you confirm to create a new Change Request? By doing that (and ticking the checkbox at the end of the form) proposers will be allowed to submit new milestones that don't have PoAs already signed off.",
     new_create: "Create Change Request",
     cancel: "Cancel",
     url: "Change Request URL",
-    url_help: "Please include the link to the approved Change Request and verify that the link is publicly accessible."
+    url_help: "Please include the link to the approved Change Request and verify that the link is publicly accessible.",
+    resubmission: "Force SoM resubmission?",
+    resubmission_help: "If this checkbox is checked the Change Request will allow the FP to resubmit their milestones. If it's not it will just publicly log the change request."
   },
   reviews_counter: {
     approvals: "approval | approvals",
@@ -283,6 +290,12 @@ export default {
     privacy_policy: 'Privacy Policy',
     feedback: 'Feedback'
   },
+  thread: {
+    title: "Discussion",
+    submit: "Send",
+    text: "New message",
+    no_messages: "No messages yet..."
+  },
   pages: {
     admin: {
       title: "Admin",
@@ -300,7 +313,7 @@ export default {
       how: "How it works",
       faq: "FAQ",
       content: "<p>The Milestone module was created to manage each project's Statement of Milestones (SoM) easily. This new tool automates all processes for submitting, reviewing, approving and managing the SoM throughout the lifecycle of a project, shifting from spreadsheets into a fully integrated module.</p><p>The accountability of Catalyst Funded Proposers (FP) is crucial in preserving a fair and unbiased funding framework. This guide aims to assist Catalyst-funded projects in understanding the processes relevant to their SoM.</p><p>Milestone-based funding enables funded projects to lay out their critical path to delivering their promises, highlighting each key milestone, output, acceptance criteria, costs, and evidence of achievements. In this context, a milestone is an important event or action in a project or your business journey that marks a crucial stage of progress. It is a crucial reporting tool to  inform the Catalyst team and the community of the project's progress.</p>",
-      how_content: "<p>The list of milestone-based projects from the F9 pilot can currently be found in the <a href='/projects'>projects section</a>. From F10 onwards, each project will fall into milestone-based funding and will need to use the new Milestone module to submit a SoM. The Catalyst team and Milestone Reviewers will review the submitted SoM as part of the on-boarding process. Once Milestone Reviewers approve a SoM, the Catalyst team will sign off and provide final approval, at which point the FP may start submitting their Proof of Achievement (PoA) for each milestone. Funding is directly linked to the FP demonstrating that they have achieved the milestone they submitted.</p>",
+      how_content: "<p>The list of milestone-based projects from the F9 pilot can currently be found in the <a href='/projects'>projects section</a>. From F10 onwards, each project will fall into milestone-based funding and will need to use the new Milestone module to submit a SoM. The Catalyst team and Milestone Reviewers will review the submitted SoM as part of the on-boarding process. Once Milestone Reviewers approve a SoM, the Catalyst team will sign off and provide final approval, at which point the FP may start submitting their Proof of Achievement (PoA) for each milestone. Funding is directly linked to the FP demonstrating that they have achieved the milestone they submitted.</p><p>Check the <a href='https://docs.projectcatalyst.io/catalyst-basics/project-onboarding/funded-proposers-fp/statement-of-milestones/how-to-use-the-milestone-module-in-f10' target='_blank'>guide for F10 projects</a> in  the Project Catalyst Knowledge base.</p><p>Check the <a href='https://docs.projectcatalyst.io/project-funding/how-to-submit-project-milestones/the-statement-of-milestones-module-fund9-only/using-the-milestone-module/what-is-the-milestone-module-for' target='_blank'>guide for F9 projects</a> in the Project Catalyst Knowledge base.</p>",
       faq_content: "<p>Check the appendix in the <a href='https://docs.projectcatalyst.io/project-funding/how-to-submit-project-milestones/the-statement-of-milestones-module-fund9-only/appendix' target='_blank'>Project Catalyst Knowledge base</a>.</p>"
     },
     login: {
@@ -324,7 +337,8 @@ export default {
       role: "Role",
       proposals: "Projects (as Funded Proposer):",
       challenges: "Challenges (as Milestone Reviewer):",
-      proposals_allocated: "Projects allocated to review:"
+      proposals_allocated: "Projects allocated to review:",
+      proposals_allocated_signoff: "Projects allocated to signoff:",
     },
     proposal: {
       open_details: "Open Milestones Details",
@@ -359,6 +373,7 @@ export default {
     notifications: {
       go_to_som: "Open Milestone",
       go_to_poa: "Open Proof of Achievement",
+      proposal_id: "Project ID",
       proposal: "Project",
       milestone: "Milestone",
       submitted_at: "Submitted at",
@@ -392,10 +407,11 @@ export default {
     funding: {
       title: "Funding files generation",
       export_proposals: "Export Funding file for proposals",
-      rewards_per_poa: "Rewards amount per PoA review",
+      rewards_per_poa: "Rewards amount/min budget/max budget per PoA review",
       export_poa_reviews: "Export Funding file for PoA reviews",
-      rewards_per_som: "Rewards amount per SoM review",
+      rewards_per_som: "Rewards amount/min budget/max budget per SoM review",
       export_som_reviews: "Export funding file per SoM reviews"
-    }
+    },
+ 
   }
 }

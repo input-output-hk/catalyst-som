@@ -16,6 +16,7 @@
       <div class="column is-6">
         <proposal-recap :proposal="proposal" :snapshot="snapshot" />
       </div>
+      
       <div class="column is-12">
         <h3 class="title is-size-2">{{ $t('pages.proposal.milestone_recap') }}</h3>
         <milestones-recap :proposal="proposal" :durations="durations" />
@@ -31,6 +32,7 @@
         </router-link>
       </div>
     </div>
+    <proposal-thread :proposal="proposal" class="proposal-threads" />
   </section>
 </template>
 
@@ -43,6 +45,7 @@ import {
   getCurrentMilestone,
   getNextPayment
 } from '@/utils/milestones.js'
+import { getShortNameFromId } from '@/utils/fund'
 const { getProposal, getProposalSnapshot } = useProposals()
 
 const proposal = ref({})
@@ -51,8 +54,18 @@ const proposalId = computed(() => {
   return useRouter().currentRoute.value.params.id;
 })
 
+const currentFundId = computed(() => {
+  if (proposal.value) {
+    if (proposal.value.challenges) {
+      return proposal.value.challenges.fund_id
+    }
+  }
+  return 1
+})
+
 const durations = computed(() => {
-  return generateMilestoneDuration(snapshot.value)
+  const fund = getShortNameFromId(currentFundId.value)
+  return generateMilestoneDuration(snapshot.value, fund)
 })
 
 const currentExecuting = computed(() => {
@@ -60,7 +73,8 @@ const currentExecuting = computed(() => {
 })
 
 const payment = computed(() => {
-  return getNextPayment(durations.value, currentExecuting.value)
+  const fund = getShortNameFromId(currentFundId.value)
+  return getNextPayment(durations.value, currentExecuting.value, fund)
 })
 
 onMounted(async () => {
@@ -74,4 +88,16 @@ onMounted(async () => {
 import ProposalRecap from '@/components/proposal/ProposalRecap.vue'
 import MilestonesRecap from '@/components/proposal/MilestonesRecap.vue'
 import nextPayment from '@/components/proposal/NextPayment.vue'
+import ProposalThread from '@/components/threads/ProposalThread.vue'
 </script>
+
+<style lang="scss">
+.proposal-threads {
+  position: fixed;
+  bottom: 0;
+  left: 30px;
+  width: 600px;
+  max-width: 80%;
+  z-index: 1000;
+}
+</style>

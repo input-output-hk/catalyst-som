@@ -163,10 +163,10 @@ const currentSomStatus = computed(() => {
   try {
     if (currentSom.value.signoffs.length > 0) {
       return null
-    } else if (currentSom.value.som_reviews.length === 1 && currentSom.value.signoffs.length === 0) {
+    } else if (currentSom.value.som_reviews.filter(r => r.current).length === 1 && currentSom.value.signoffs.length === 0) {
       return 'waiting_reviews'
     } else {
-      const reviews = currentSom.value.som_reviews.map((r) => (r.outputs_approves && r.evidence_approves && r.success_criteria_approves))
+      const reviews = currentSom.value.som_reviews.filter(r => r.current).map((r) => (r.outputs_approves && r.evidence_approves && r.success_criteria_approves))
       if (reviews.every((r) => (r))) {
         return 'all_approvals'
       } else if (reviews.some((r) => (r))) {

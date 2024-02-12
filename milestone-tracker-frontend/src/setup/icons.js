@@ -8,7 +8,9 @@ import {
   faMinus,
   faPlus,
   faArrowDown,
-  faCalendar
+  faCalendar,
+  faCaretDown,
+  faCaretUp
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -20,5 +22,7 @@ library.add(
   faMinus,
   faPlus,
   faArrowDown,
-  faCalendar
+  faCalendar,
+  faCaretDown,
+  faCaretUp
 )

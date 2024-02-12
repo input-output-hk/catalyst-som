@@ -1,9 +1,9 @@
 <template>
   <div>
-    <o-button variant="warning" @click="confirmChangeRequest = !confirmChangeRequest">
+    <o-button v-if="canSetChangeRequests" variant="warning" @click="confirmChangeRequest = !confirmChangeRequest">
       {{ $t('proposal_recap.activate_change_request') }}
     </o-button>
-    <o-modal v-model:active="confirmChangeRequest">
+    <o-modal v-if="canSetChangeRequests" v-model:active="confirmChangeRequest">
       <new-change-request :proposal="proposal" @clear-change-request="confirmChangeRequest = false" />
     </o-modal>
     <ul v-if="proposal.change_request?.length > 0">
@@ -26,6 +26,10 @@ defineProps({
     type: Object,
     default: () => {}
   },
+  canSetChangeRequests: {
+    type: Boolean,
+    default: false
+  }
 })
 
 </script>

@@ -4,14 +4,17 @@ import {
   getCurrentMilestone,
   getNextPayment
 } from '@/utils/milestones'
+import { getShortNameFromId } from '@/utils/fund'
 
-export const preparePaymentsData = (allSoms) => {
+export const preparePaymentsData = (allSoms, fundId) => {
   const somsByProposal = groupBy(allSoms, 'project_id')
+  const maxMilestones = 10
+  const fund = getShortNameFromId(fundId)
   const result = Object.keys(somsByProposal).map((proposal_id) => {
     const soms = somsByProposal[proposal_id]
-    const durations = generateMilestoneDuration(soms)
+    const durations = generateMilestoneDuration(soms, fund)
     const currentMilestone = getCurrentMilestone(durations)
-    const nextPayment = getNextPayment(durations, currentMilestone)
+    const nextPayment = getNextPayment(durations, currentMilestone, fund)
     if (nextPayment) {
       const proposal = {
         proposal_id: soms[0].project_id,
@@ -30,6 +33,27 @@ export const preparePaymentsData = (allSoms) => {
         proposal[`m${som.milestone}_poa_submitted`] = (som.poas_id !== null)
         proposal[`m${som.milestone}_poa_signoff`] = som.poa_signoff_count > 0
       })
+      Array.from(Array(maxMilestones)).forEach((_, i) => {
+        const x = i + 1
+        if (!(`m${x}_month` in proposal)) {
+          proposal[`m${x}_month`] = ''
+        }
+        if (!(`m${x}_cost` in proposal)) {
+          proposal[`m${x}_cost`] = ''
+        }
+        if (!(`m${x}_completion` in proposal)) {
+          proposal[`m${x}_completion`] = ''
+        }
+        if (!(`m${x}_som_signoff` in proposal)) {
+          proposal[`m${x}_som_signoff`] = ''
+        }
+        if (!(`m${x}_poa_submitted` in proposal)) {
+          proposal[`m${x}_poa_submitted`] = ''
+        }
+        if (!(`m${x}_poa_signoff` in proposal)) {
+          proposal[`m${x}_poa_signoff`] = ''
+        }
+      })
       return proposal
     }
     return null
@@ -37,25 +61,60 @@ export const preparePaymentsData = (allSoms) => {
   return result
 }
 
-export const prepareReviewsPaymentsData = (reviews, fund, pricePerReview) => {
-  const _reviews = reviews.reviews
+export const prepareReviewsPaymentsData = (reviews, fund, rewardsTiers, reward_type) => {
   const users = reviews.reviewers
-  const reviewsByReviewer = groupBy(_reviews, 'email')
+  const proposals_signed_off = reviews.proposals_signed_off.map((el) => el.project_id)
+  const _reviews = reviews.reviews.filter((el) => proposals_signed_off.includes(el.project_id)).map((el, idx) => {
+    return {
+      ...el,
+      _tmp_id: idx
+    }
+  })
+  const reviewsByProject = groupBy(_reviews, 'project_id')
+  let to_be_excluded = []
+  if (reward_type === 'som') {
+    Object.keys(reviewsByProject).forEach((project_id) => {
+      const projectGroup = reviewsByProject[project_id]
+      const toCheck = projectGroup.filter((el) => el.milestones_qty > el.signoffs_count)
+      if (toCheck.length > 0) {
+        if (toCheck.length > 1) {
+          toCheck.sort((a, b) => new Date(b.latest_som_reviewed_at) - new Date(a.latest_som_reviewed_at)).shift()
+        }
+        to_be_excluded = to_be_excluded.concat(toCheck)
+      }
+    })
+    to_be_excluded = to_be_excluded.map((el) => el._tmp_id)
+  }
+  const final_reviews = _reviews
+    .filter((el) => !to_be_excluded.includes(el._tmp_id))
+    .map((el) => {
+      const rewardTier = rewardsTiers.find((r) => el.budget > r.min && el.budget <= r.max)
+      return {
+        reward: (rewardTier) ? rewardTier.amount : 0,
+        ...el
+      }
+    })
   const results = []
+  const reviewsByReviewer = groupBy(final_reviews, 'email')
   Object.keys(reviewsByReviewer).forEach((email) => {
     const reviewerGroup = reviewsByReviewer[email]
     if (reviewerGroup.length > 0) {
       const reviewerEmail = reviewerGroup[0].email
       const user = users.find(u => u.email === reviewerEmail)
       if (user) {
-        const totalRewards = reviewerGroup.length * pricePerReview
-        const alreadyPayed = Object.keys(user.payment_received).includes(fund) ? user.payment_received[fund] : 0
+        const totalRewards = reviewerGroup.map(r => r.reward).reduce((_sum, a) => _sum + a, 0)
+        const fundExists = Object.keys(user.payment_received).includes(`${fund}`)
+        let alreadyPayed = 0
+        if (fundExists) {
+          alreadyPayed = Object.keys(user.payment_received[`${fund}`]).includes(`${reward_type}`) ? user.payment_received[`${fund}`][`${reward_type}`] : 0
+        }
         const pendingRewards = totalRewards - alreadyPayed
         results.push({
           email: user.email,
           totalRewards: totalRewards,
           alreadyPayed: alreadyPayed,
-          pendingRewards: pendingRewards
+          pendingRewards: pendingRewards,
+          projects: reviewerGroup.map((p) => p.project_id).join(',')
         })
       }
     }
