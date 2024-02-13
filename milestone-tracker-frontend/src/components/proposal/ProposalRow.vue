@@ -11,6 +11,9 @@
     <td v-if="canSetAllocations">
      <allocation-form :proposal="item" />
     </td>
+    <td v-if="canSetAllocations">
+      <allocation-form :proposal="item" :allocation-type="'signoffs'" />
+    </td>
   </tr>
 </template>
 

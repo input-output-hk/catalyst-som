@@ -352,7 +352,9 @@ export default {
       title: "Title",
       challenge: "Challenge",
       budget: "Budget",
-      allocations: "Allocations"
+      allocations: "Allocations",
+      reviewer_allocations: "Allocations for Reviewers",
+      signoff_allocations: "Allocations for Signoff",
     },
     reset_password: {
       title: "Reset password",
