@@ -47,7 +47,8 @@ const dynamicHeaders = computed(() => {
     t('pages.proposals.budget')
   ]
   if (canSetAllocations) {
-    base.push(t('pages.proposals.allocations'))
+    base.push(t('pages.proposals.reviewer_allocations'))
+    base.push(t('pages.proposals.signoff_allocations'))
   }
   return base
 })
