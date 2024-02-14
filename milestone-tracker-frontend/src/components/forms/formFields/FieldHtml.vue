@@ -13,6 +13,7 @@
       theme="snow"
       :read-only="props.readonly"
       :enable="!props.disabled"
+      :options="props.editorOptions"
     />
   </field-wrapper>
 </template>
@@ -58,6 +59,10 @@ const props = defineProps({
   modelValue: {
     type: [Object, String],
     required: true,
+  },
+  editorOptions: {
+    type: Object,
+    default: () => ({})
   }
 });
 

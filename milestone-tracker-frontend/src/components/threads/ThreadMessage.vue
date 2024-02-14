@@ -53,7 +53,7 @@ const signoffIds = computed(() => {
 
 const reviewerId = computed(() => {
   if (reviewersIds.value.includes(props.thread.user_id)) {
-    return props.proposal.allocations.map(a => a.user_id).indexOf(props.thread.user_id)
+    return props.proposal.allocations.map(a => a.user_id).indexOf(props.thread.user_id) + 1
   }
   return null
 })

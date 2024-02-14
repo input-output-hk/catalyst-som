@@ -20,21 +20,23 @@
         </div>
       </div>
       <div class="is-12 column">
-        <schema-form
-          v-if="canWriteMsg"
-          ref="msgForm"
-          class="column is-12"
-          :schema="schema"
-          @submit="handleCreateMsg"
-          >
-          <template #afterForm>
-            <div class="buttons">
-              <o-button :disabled="submitting || !submittable" class="new-msg-submit" variant="primary" native-type="submit">
-                <span>{{ $t('thread.submit') }}</span>
-              </o-button>
-            </div>
-          </template>
-        </schema-form>
+        <form @submit.prevent="handleCreateMsg">
+          <schema-form
+            v-if="canWriteMsg"
+            ref="msgForm"
+            class="column is-12"
+            :schema="schema"
+            useCustomFormWrapper
+            >
+            <template #afterForm>
+              <div class="buttons">
+                <o-button :disabled="submitting || !submittable" class="new-msg-submit" variant="primary" native-type="submit">
+                  <span>{{ $t('thread.submit') }}</span>
+                </o-button>
+              </div>
+            </template>
+          </schema-form>
+        </form>
       </div>
     </div>
   </o-collapse>
@@ -87,7 +89,23 @@ const submittable = computed(() => {
 const initialSchema = ref({
   text: {
     type: 'html',
-    label: t(`thread.text`)
+    label: t(`thread.text`),
+    editorOptions: {
+      modules: {
+        keyboard: {
+          bindings: {
+            tab: {
+              key: 13,
+              handler: () => {
+                if (submittable.value) {
+                  handleCreateMsg()
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 })
 

@@ -12,6 +12,7 @@
             <p class="mb-3"><a class="has-text-white" href="https://docs.projectcatalyst.io" target="_blank">{{ $t('footer.knowledge_base') }}</a></p>
             <p class="mb-3"><a class="has-text-white" href="https://static.iohk.io/terms/iog-privacy-policy.pdf" target="_blank">{{ $t('footer.privacy_policy') }}</a></p>
             <p class="mb-3"><a class="has-text-white" href="https://docs.google.com/forms/d/e/1FAIpQLSeNaO6qNSBkSAKWgzB1cqiIKIbAgg3027CDJpdvTVq0gRTKdA/viewform?usp=sf_link" target="_blank">{{ $t('footer.feedback') }}</a></p>
+            <p class="mb-3"><a class="has-text-white" href="https://docs.google.com/spreadsheets/d/1c8J_Rvxnwr496mREXV_n2mmT0ggcS_XlZsN4zPL8MbU/edit#gid=0" target="_blank">{{ $t('footer.change_request_dashboard') }}</a></p>
           </div>
         </div>
       </section>
