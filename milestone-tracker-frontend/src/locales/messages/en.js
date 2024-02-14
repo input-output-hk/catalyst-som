@@ -288,7 +288,8 @@ export default {
     website: 'Website',
     knowledge_base: 'Knowledge Base',
     privacy_policy: 'Privacy Policy',
-    feedback: 'Feedback'
+    feedback: 'Feedback',
+    change_request_dashboard: "Change Requests list"
   },
   thread: {
     title: "Discussion",
@@ -385,7 +386,7 @@ export default {
       signoff_received: "Final approvals received in the last day | Final approvals received in the last {count} days",
       no_notifications: "No notifications, no relevant events happened from your last visit.",
       som_reviews_received: "Milestone reviews received",
-      poa_reviews_received: "PoA reviews received",
+      poa_reviews_received: "Proof of Achievement reviews received",
       approved: "Approved",
       not_approved: "Not Approved",
       open_som_to_resubmit: "Open and resubmit Milestone",

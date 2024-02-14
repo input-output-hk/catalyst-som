@@ -247,7 +247,7 @@ export const useUser = defineStore('user-store', {
         errorNotification(this.$i18n.t('errors.fetching_poas'))
       }
     },
-    async getPoasToBeSignedOff(from = false, nr_reviews = [0, 10], nr_approvals = [0, 10]) {
+    async getPoasToBeSignedOff(from = false, nr_reviews = [2, 10], nr_approvals = [2, 10]) {
       if (!from) {
         from = new Date(null).toISOString()
       }
@@ -266,7 +266,7 @@ export const useUser = defineStore('user-store', {
         errorNotification(this.$i18n.t('errors.fetching_poas'))
       }
     },
-    async getSomsToBeSignedOff(from = false, nr_reviews = [0, 10], nr_approvals = [0, 10]) {
+    async getSomsToBeSignedOff(from = false, nr_reviews = [2, 10], nr_approvals = [2, 10]) {
       if (!from) {
         from = new Date(null).toISOString()
       }

@@ -107,8 +107,8 @@ const poas = ref([])
 const poaReviews = ref([])
 const somReviews = ref([])
 const signoffs = ref([])
-const poasToSignoff = ref([])
-const somsToSignoff = ref([])
+const _poasToSignoff = ref([])
+const _somsToSignoff = ref([])
 const signoffsDays = ref(10)
 
 const headers = ref([
@@ -142,13 +142,13 @@ const toSignoffFilters = ref([
     type: 'range',
     key: '_nr_reviews',
     name: t('pages.notifications.nr_reviews'),
-    default: [0, 10]
+    default: [2, 10]
   },
   {
     type: 'range',
     key: '_nr_approvals',
     name: t('pages.notifications.nr_approvals'),
-    default: [0, 10]
+    default: [2, 10]
   },
   {
     type: 'date',
@@ -165,6 +165,14 @@ const poasToReview = computed(() => {
   return poas.value.filter(poa => poa.my_reviews_count === 0)
 })
 
+const somsToSignoff = computed(() => {
+  return _somsToSignoff.value.filter((s) => (s.nr_reviews >= 2 && s.nr_approvals === s.nr_reviews ))
+})
+
+const poasToSignoff = computed(() => {
+ return _poasToSignoff.value.filter((p) => (p.nr_reviews >= 2 && p.nr_approvals === p.nr_reviews ))
+})
+
 const notificationsCount = computed(() => {
   return (
     somsToReview.value.length +
@@ -178,7 +186,7 @@ const notificationsCount = computed(() => {
 })
 
 const handlePoasToSignoffFilters = async (params) => {
-  poasToSignoff.value = await getPoasToBeSignedOff(
+  _poasToSignoff.value = await getPoasToBeSignedOff(
     params._from, 
     params._nr_reviews || toSignoffFilters.value[0].default,
     params._nr_approvals || toSignoffFilters.value[1].default
@@ -186,7 +194,7 @@ const handlePoasToSignoffFilters = async (params) => {
 }
 
 const handleSomsToSignoffFilters = async (params) => {
-  somsToSignoff.value = await getSomsToBeSignedOff(
+  _somsToSignoff.value = await getSomsToBeSignedOff(
     params._from, 
     params._nr_reviews || toSignoffFilters.value[0].default,
     params._nr_approvals || toSignoffFilters.value[1].default
@@ -201,8 +209,8 @@ onMounted(async () => {
   signoffs.value = await getSignoffNotifications(from.toISOString())
   somReviews.value = await getSomReviewsNotifications()
   poaReviews.value = await getPoaReviewsNotifications()
-  poasToSignoff.value = await getPoasToBeSignedOff()
-  somsToSignoff.value = await getSomsToBeSignedOff()
+  _poasToSignoff.value = await getPoasToBeSignedOff()
+  _somsToSignoff.value = await getSomsToBeSignedOff()
 })
 
 </script>

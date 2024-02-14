@@ -41,7 +41,7 @@
             <span v-if="milestone.milestone === proposal.milestones_qty && (i + 1) === milestone.duration" class="is-size-7 mb-0"> ({{ $t('milestone_recap.last_payment') }})</span>
           </li>
         </ul>
-        <p v-if="milestone.milestone > 1" class="is-size-7 mb-0">{{ $t('milestone_recap.payment_starts') }}</p>
+        <p v-if="milestone.milestone > 1 && milestone.milestone !== proposal.milestones_qty" class="is-size-7 mb-0">{{ $t('milestone_recap.payment_starts') }}</p>
       </div>
       <div v-if="poa">
         <p class="is-size-3 mb-0 has-text-weight-semibold">{{ $t('milestone_recap.poa') }}</p>
