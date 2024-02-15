@@ -1,12 +1,12 @@
 <template>
-  <o-collapse class="card proposal-thread" :open="false" animation="slide" @open="openCallback">
+  <o-collapse class="card proposal-thread" :open="false" animation="slide" @open="openCallback" @close="closeCallback">
     <template #trigger="_props">
       <div class="card-header thread-header" role="button">
         <p class="card-header-title">
           {{ $t('thread.title') }}
         </p>
         <a class="card-header-icon">
-          <o-icon :icon="_props.open ? 'caret-up' : 'caret-down'" />
+          <o-icon :icon="_props.open ? 'caret-down' : 'caret-up'" />
         </a>
       </div>
     </template>
@@ -26,7 +26,7 @@
             ref="msgForm"
             class="column is-12"
             :schema="schema"
-            useCustomFormWrapper
+            use-custom-form-wrapper
             >
             <template #afterForm>
               <div class="buttons">
@@ -43,7 +43,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch, nextTick } from 'vue'
+import { ref, computed, onMounted, watch, nextTick, onUnmounted } from 'vue'
 
 import { storeToRefs } from 'pinia'
         
@@ -65,6 +65,7 @@ const { createThread, getThreads } = threadsStore
 const { proposalThreads } = storeToRefs(threadsStore)        
 
 const THREADS_PER_REQUEST = 10
+const THREADS_REFRESH_INTERVAL = 30 * 1000
 
 const props = defineProps({
   proposal: {
@@ -152,12 +153,20 @@ watch(threadsNumber, () => {
   })
 })
 
-const openCallback = () => {
+const openCallback = async () => {
+  await getThreads(props.proposal.id, 0, THREADS_PER_REQUEST)
+  refreshTimeout.value = setInterval(async () => {
+    await getThreads(props.proposal.id, 0, THREADS_PER_REQUEST)
+  }, THREADS_REFRESH_INTERVAL)
   nextTick(() => {
     targetScroll.value = 0
     scrollInteracted.value = false
     threadsScroll.value.scrollTo(0, threadsScroll.value.scrollHeight)
   })
+}
+
+const closeCallback = () => {
+  clearInterval(refreshTimeout.value) 
 }
 
 const handleScroll = debounce(async (e) => {
@@ -192,9 +201,10 @@ onMounted(async () => {
   setTimeout(async () => {
     await getThreads(props.proposal.id, 0, THREADS_PER_REQUEST)
   }, 1000)
-  refreshTimeout.value = setInterval(async () => {
-    await getThreads(props.proposal.id, 0, THREADS_PER_REQUEST)
-  }, 30000)
+})
+
+onUnmounted(() => {
+  clearInterval(refreshTimeout.value)
 })
 
 </script>
