@@ -90,7 +90,7 @@ export const prepareReviewsPaymentsData = (reviews, fund, rewardsTiers, reward_t
     .map((el) => {
       const rewardTier = rewardsTiers.find((r) => el.budget > r.min && el.budget <= r.max)
       return {
-        reward: (rewardTier) ? rewardTier.amount : 0,
+        reward: (rewardTier) ? parseInt(rewardTier.amount) : 0,
         ...el
       }
     })
