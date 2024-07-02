@@ -66,8 +66,13 @@ class CohortProposal(BaseModel):
         '''
         Parse a budget that comes in this form: 20000.00
         '''
+        #digits = re.findall(r'(\d+)\.(\d+)', value)
+        #return float(f"{digits[0][0]}.{digits[0][1]}") if (digits) else float(0)
         digits = re.findall(r'(\d+)\.(\d+)', value)
-        return float(f"{digits[0][0]}.{digits[0][1]}") if (digits) else float(0)
+        integer = float(f"{digits[0][0]}.{digits[0][1]}") if (digits) else float(0)
+        if value[0] == "-":
+            integer = -integer
+        return integer
 
 class LightProposal(BaseModel):
     project_id: int = Field(900000, gte=900001, alias='id')
@@ -104,7 +109,10 @@ class CohortReviewer(BaseModel):
         Parse a budget that comes in this form: 20000.00
         '''
         digits = re.findall(r'(\d+)\.(\d+)', value)
-        return float(f"{digits[0][0]}.{digits[0][1]}") if (digits) else float(0)
+        integer = float(f"{digits[0][0]}.{digits[0][1]}") if (digits) else float(0)
+        if value[0] == "-":
+            integer = -integer
+        return integer
 
 class LightReviewer(BaseModel):
     id: int
