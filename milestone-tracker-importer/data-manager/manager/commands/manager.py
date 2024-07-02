@@ -34,12 +34,13 @@ def update_funds_distributed(
 
 @app.command()
 def update_reviewers_funds_distributed(
-  sheet_url: str = typer.Option("", help="Spreadsheet URL for Milestone Reviewer cohort"),
+  som_sheet_url: str = typer.Option("", help="Spreadsheet URL for SoM Milestone Reviewer cohort"),
+  poa_sheet_url: str = typer.Option("", help="Spreadsheet URL for PoA Milestone Reviewer cohort"),
   som_sheet_name: str = typer.Option("", help="Sheet name for SoM"),
   poa_sheet_name: str = typer.Option("", help="Sheet name for SoM"),
   email_col: str = typer.Option("C", help="Column (as a letter) used for user email id"),
   paid_to_date_col: str = typer.Option("D", help="Column (as a letter) user for total project budget"),
-  fund: str = typer.Option("Fund 10", help="Fund indentifier, e.g. 'Fund 10' or 'Fund 9'"),
+  fund: str = typer.Option("Fund 10", help="Fund identifier, e.g. 'Fund 10' or 'Fund 9'"),
 ):
   gsheet = GSheet()
 
@@ -47,7 +48,7 @@ def update_reviewers_funds_distributed(
   # SOMS
   if som_sheet_name != "":
     som_rows = funding_utils.extract_reviewer_distribution_data(
-      sheet_url,
+      som_sheet_url,
       som_sheet_name,
       email_col,
       paid_to_date_col
@@ -56,7 +57,7 @@ def update_reviewers_funds_distributed(
   # POA
   if poa_sheet_name != "":
     poa_rows = funding_utils.extract_reviewer_distribution_data(
-      sheet_url,
+      poa_sheet_url,
       poa_sheet_name,
       email_col,
       paid_to_date_col
