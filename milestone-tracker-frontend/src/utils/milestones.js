@@ -1,3 +1,5 @@
+import { getShortNameFromId } from "./fund"
+
 const roundAmounts = (amount) => {
   return Math.round(amount * 1e2) / 1e2
 }
@@ -158,10 +160,65 @@ const canSubmitSomByChangeRequest = (proposal, som) => {
   return false
 }
 
+const fundMinimumReviewers = {
+  'f9': 1,
+  'f10': 2,
+  'f11': 2,
+  'f12': 2
+}
+
+const getMinimumReviewersByFundId = (fundId) => {
+  let nrOfReviewers = 2
+  const currentFund = getShortNameFromId(fundId)
+  if (Object.prototype.hasOwnProperty.call(fundMinimumReviewers, currentFund)) {
+    nrOfReviewers = fundMinimumReviewers[currentFund]
+  }
+  return nrOfReviewers
+}
+
+const canSingleSomsBeSignedOffByReviews = (som, fundId) => {
+  const reviews = som.som_reviews.filter(r => r.current)
+  .map(
+    (r) => (
+      r.outputs_approves && r.evidence_approves && r.success_criteria_approves
+    )
+  )
+  const minimumReviewersRequired = getMinimumReviewersByFundId(fundId)
+  return (
+    (
+      reviews.every((r) => (r)) && 
+      reviews.length >= minimumReviewersRequired
+    ) ||
+    som.signoffs.length > 0
+  )
+}
+
+const canAllSomsBeSignedOffByReviews = (soms, fundId) => {
+  /* Based on the status of the review received it returns true if all the soms can be signed off.
+  This is a requirement to activate the SoM signoff button.
+  A single SoM can be signed off if all the reviews received are approvals.
+  A minimum of 2 reviews are necessary.
+  */
+  return soms.every((s) => canSingleSomsBeSignedOffByReviews(s, fundId))
+}
+
+const isPreviousSomSignedOff = (soms, currentSom) => {
+  if (currentSom.milestone === 1) {
+    return true
+  }
+  const previousMl = soms.find((s) => s.milestone === currentSom.milestone - 1)
+  if (previousMl) {
+    return previousMl.signoffs.length > 0
+  }
+  return false
+}
+
 export {
   getPrevMilestone,
   generateMilestoneDuration,
   getCurrentMilestone,
   getNextPayment,
-  canSubmitSomByChangeRequest
+  canSubmitSomByChangeRequest,
+  canAllSomsBeSignedOffByReviews,
+  isPreviousSomSignedOff,
 }
