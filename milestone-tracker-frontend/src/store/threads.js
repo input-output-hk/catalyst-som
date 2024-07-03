@@ -43,7 +43,7 @@ export const useThreads = defineStore('threads-store', {
       try {
         const { data, error } = await supabase
           .from('threads')
-          .select()
+          .select('*, users(email)')
           .eq('proposal_id', proposalId)
           .order('created_at', { ascending: false })
           .range(from, to)

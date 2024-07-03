@@ -2,7 +2,7 @@
   <div class="message mb-0 column is-10" :class="{'my-msg': isOwnMessage, 'is-link': isOwnMessage}">
     <header class="message-header">
       <p>
-        {{ sender }}
+        {{ sender }} <span v-if="senderEmail" class="is-size-7">({{ senderEmail }})</span>
       </p>
     </header>
     <div class="message-body">
@@ -69,6 +69,16 @@ const sender = computed(() => {
     return t('som_review.system')
   }
 })
+
+const senderEmail = computed(() => {
+  if(props.thread.users) {
+    if (props.thread.users.email) {
+      return props.thread.users.email
+    }
+  }
+  return null
+})
+
 
 </script>
 
