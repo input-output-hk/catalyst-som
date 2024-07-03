@@ -150,5 +150,18 @@ export const useProposals = defineStore('proposals-store', {
     async updateProposalOwnership(allocations, proposal) {
       await this._updateAllocations(allocations, proposal, 'proposals_users')
     },
+    async updateMilestoneQty(_data) {
+      try {
+        const { error } = await supabase
+          .rpc('update_milestone_qty', {
+            _proposal_id: _data.proposal_id,
+            _new_qty: parseInt(_data.qty),
+          })
+        if (error) throw(error)
+        return true
+      } catch(error) {
+        errorNotification(this.$i18n.t('errors.updating_milestone_qty'))
+      }
+    },
   }
 })

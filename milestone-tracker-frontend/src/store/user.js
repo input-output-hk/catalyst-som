@@ -114,6 +114,9 @@ export const useUser = defineStore('user-store', {
     },
     canSetChangeRequests(state) {
       return [2,3].includes(state.userInfo.role)
+    },
+    canSetMilestonesQty(state) {
+      return [2,3].includes(state.userInfo.role)
     }
   },
 
