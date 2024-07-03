@@ -13,7 +13,8 @@ export default {
     creating_signoff: "Error creating Signoff.",
     creating_som_review: "Error creating Milestone review.",
     creating_som: "Error creating Milestone.",
-    updating_allocations: "Error updating allocations."
+    updating_allocations: "Error updating allocations.",
+    updating_milestone_qty: "Error updating milestone quantity."
   },
   notifications: {
     logged_in: "Logged in.",
@@ -254,6 +255,8 @@ export default {
     status: "Status",
     proposer_ownership: "Proposers",
     signoffs_allocations: "Allocations for signoff",
+    change_milestone_qty: "Milestone quantity",
+    activate_change_milestone_qty: "Change quantity",
     statuses: {
       ongoing: "In progress",
       paused: "Paused",
@@ -271,6 +274,14 @@ export default {
     url_help: "Please include the link to the approved Change Request and verify that the link is publicly accessible.",
     resubmission: "Force SoM resubmission?",
     resubmission_help: "If this checkbox is checked the Change Request will allow the FP to resubmit their milestones. If it's not it will just publicly log the change request."
+  },
+  change_milestone_qty: {
+    new_title: "Change quantity of milestones",
+    new_confirm: "You are about to change the milestone quantity for this project. All milestones that doesn't have a PoA signed off will be archived.",
+    number: "New number of milestones",
+    number_help: "The number needs to be different from the current one to proceed and conform to the rules this project is in.",
+    new_create: "Save",
+    cancel: "Cancel"
   },
   reviews_counter: {
     approvals: "approval | approvals",
