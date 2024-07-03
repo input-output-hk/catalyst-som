@@ -70,6 +70,12 @@
           <proposal-change-requests :proposal="proposal" :can-set-change-requests="canSetChangeRequests" />
         </td>
       </tr>
+      <tr v-if="canSetMilestonesQty">
+        <th>{{ $t('proposal_recap.change_milestone_qty') }}</th>
+        <td>
+          <proposal-change-milestone-qty :proposal="proposal" :can-set-milestone-qty="canSetMilestonesQty" />
+        </td>
+      </tr>
       <tr v-if="proposal.status > 0">
         <th>{{ $t('proposal_recap.status') }}</th>
         <td>
@@ -112,6 +118,7 @@
 import { computed, ref } from 'vue'
 import AllocationForm from '@/components/proposal/AllocationForm.vue'
 import ProposalChangeRequests from '@/components/proposal/ProposalChangeRequests.vue'
+import ProposalChangeMilestoneQty from '@/components/proposal/ProposalChangeMilestoneQty.vue'
 import { useUser } from '@/store/user.js'
 import { proposalStatuses } from '@/utils/proposalStatuses.js'
 
@@ -147,7 +154,7 @@ const budgetError = computed(() => {
 
 const dismissed = ref(false)
 
-const { canSetAllocations, canWriteSom, canSetChangeRequests } = useUser()
+const { canSetAllocations, canWriteSom, canSetChangeRequests, canSetMilestonesQty } = useUser()
 
 </script>
 
