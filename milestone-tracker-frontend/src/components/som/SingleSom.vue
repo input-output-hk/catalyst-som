@@ -158,7 +158,7 @@
               />
             </o-modal>
           </div>
-          <div v-if="current && canSignoff(proposal.id) && !locked">
+          <div v-if="somSignoffAvailable">
             <o-button
               class="new-som-signoff"
               variant="primary"
@@ -207,9 +207,13 @@ const props = defineProps({
   current: {
     type: [Object, Boolean],
     default: () => {}
-  }
+  },
+  otherMilestonesSoms: {
+    type: Array,
+    default: () => []
+  },
 })
-const { canWriteSom, canWriteSomReview, canSignoff } = useUser()
+const { canWriteSom, canWriteSomReview, canSignoff, isAdmin } = useUser()
 
 const { bus } = useEventsBus()
 
@@ -262,6 +266,16 @@ const literalMonth = computed(() => {
   return new Date(startDate.setMonth(startDate.getMonth() + parseInt(props.som.month)))
 })
 
+const somSignoffAvailable = computed(() => {
+  return (
+    props.current &&
+    canSignoff(props.proposal.id) &&
+    !locked.value &&
+    (canAllSomsBeSignedOffByReviews(props.otherMilestonesSoms, props.proposal.challenges.fund_id) || isAdmin) &&
+    isPreviousSomSignedOff(props.otherMilestonesSoms, props.som)
+  )
+})
+
 const _handleSomReviewResubmission = () => {
   confirmSomReviewResubmission.value = false
   newReviewVisible.value = true
@@ -310,6 +324,7 @@ import NewPoa from '@/components/forms/NewPoa.vue'
 import PoaList from '@/components/poa/PoaList.vue'
 import NewSignoff from '@/components/forms/NewSignoff.vue'
 import ResubmissionConfirm from '@/components/proposal/ResubmissionConfirm.vue'
+import { canAllSomsBeSignedOffByReviews, isPreviousSomSignedOff } from '../../utils/milestones'
 </script>
 
 <style lang="scss" scoped>

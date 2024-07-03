@@ -43,7 +43,9 @@
       :milestone="milestone"
       :som="currentSom"
       :proposal="proposal"
-      :current="true" />
+      :current="true"
+      :other-milestones-soms="otherMilestonesSoms"
+      />
     <section
       v-if="otherSoms.length > 0"
       class="section has-background-grey-lighter">
