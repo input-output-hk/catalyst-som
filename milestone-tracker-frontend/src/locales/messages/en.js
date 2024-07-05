@@ -27,7 +27,8 @@ export default {
     som_review_created: "Milestone review created.",
     som_created: "Milestone created.",
     allocation_updated: "Allocation updated.",
-    thread_msg_created: "Message sent!"
+    thread_msg_created: "Message sent!",
+    signoff_deleted: "Signoff withdrawn."
   },
   nav: {
     home: "Home",
@@ -154,6 +155,12 @@ export default {
     poa: "Proof of Achievement",
     som: "Milestones"
   },
+  new_signoff_withdraw: {
+    title: "Withdraw signoff",
+    confirm: "Confirm to remove the Signoff? The PoA/SoM will be unlocked and the withdraw publicly logged.",
+    withdraw: "Withdraw",
+    cancel: "Cancel"
+  },
   som: {
     submitted_at: "Milestone submitted at",
     title: "Milestone Title",
@@ -172,7 +179,8 @@ export default {
     submit_poa: "Submit new Proof of Achievement",
     resubmit_poa: "Resubmit Proof of Achievement",
     signoff: "Signoff",
-    not_submitted: "Milestone not submitted yet!"
+    not_submitted: "Milestone not submitted yet!",
+    signoff_withdraw: "Withdraw signoff"
   },
   new_som: {
     component_title: "New Milestone {nr}",
