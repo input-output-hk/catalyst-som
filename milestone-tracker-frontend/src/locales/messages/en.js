@@ -104,7 +104,8 @@ export default {
     resubmission_title: "Proof of Achievement resubmission",
     resubmission_msg: "Are you sure you want to resubmit this Proof of Achievement (PoA)? The current PoA and all its reviews will be archived. The new PoA submission will have to go through the review process again.",
     resubmission_confirm: "Proceed with resubmission",
-    resubmission_clear: "Cancel"
+    resubmission_clear: "Cancel",
+    signoff_withdraw: "Withdraw signoff"
   },
   signoff: {
     poa_signed_off_at: "Proof of Achievement approved by Catalyst Team sign off user on:"
