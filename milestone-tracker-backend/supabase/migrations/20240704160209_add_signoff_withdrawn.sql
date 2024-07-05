@@ -98,6 +98,12 @@ for insert
 to public
 with check ((is_admin(auth.uid()) OR can_access_users(auth.uid())));
 
+create policy "signoff withdraw select"
+on "public"."signoff_withdraws"
+as permissive
+for select
+to public
+using (true);
 
 create policy "Delete signoffs"
 on "public"."signoffs"

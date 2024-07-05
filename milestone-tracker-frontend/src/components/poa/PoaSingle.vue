@@ -18,10 +18,13 @@
             <poa-reviews :poa="poa" :reviews="poa.poas_reviews" :approved="locked > 0" />
           </td>
         </tr>
-        <tr v-if="locked">
-          <th class="has-background-success has-text-white">{{ $t('poa.signed_off_at') }}</th>
-          <td class="has-background-success has-text-white">
-            {{$d(poa.signoffs[0].created_at, 'long')}}
+        <tr v-if="locked || poa.signoff_withdraws.length > 0">
+          <th :class="{'has-background-success has-text-white': locked}">{{ $t('poa.signoff') }}</th>
+          <td :class="{'has-background-success has-text-white': locked}">
+            <p v-if="locked">
+              {{ $t('poa.signed_off_at') }} {{$d(poa.signoffs[0].created_at, 'long')}}
+            </p>
+            <signoff-withdraw-list :withdraws="poa.signoff_withdraws" />
           </td>
         </tr>
       </tbody>
@@ -34,32 +37,44 @@
         variant="primary"
         @click="_handlePoaReviewSubmission()">
           {{ (currentUserReviewSubmission) ? $t('poa.resubmit') : $t('poa.submit') }}
+      </o-button>
+      <o-modal
+        v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current && !locked"
+        v-model:active="confirmPoaReviewResubmission"
+      >
+        <resubmission-confirm
+          :title="$t('poa_review.resubmission_title')"
+          :msg="$t('poa_review.resubmission_msg')"
+          :confirm-msg="$t('poa_review.resubmission_confirm')"
+          :clear-msg="$t('poa_review.resubmission_clear')"
+          :entity="'poa-review'"
+          @clear-confirm="confirmPoaReviewResubmission = false"
+          @confirm="_handlePoaReviewResubmission()"
+        />
+      </o-modal>
+      <div v-if="poaSignoffAvailable">
+        <o-button
+          variant="primary"
+          size="medium"
+          @click="confirmSignoff = !confirmSignoff">
+          {{ $t('poa.signoff') }}
         </o-button>
-        <o-modal
-          v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current && !locked"
-          v-model:active="confirmPoaReviewResubmission"
-        >
-          <resubmission-confirm
-            :title="$t('poa_review.resubmission_title')"
-            :msg="$t('poa_review.resubmission_msg')"
-            :confirm-msg="$t('poa_review.resubmission_confirm')"
-            :clear-msg="$t('poa_review.resubmission_clear')"
-            :entity="'poa-review'"
-            @clear-confirm="confirmPoaReviewResubmission = false"
-            @confirm="_handlePoaReviewResubmission()"
-          />
+        <o-modal v-model:active="confirmSignoff">
+          <new-signoff :som="som" :poa="poa" @clear-signoff="confirmSignoff = false" />
         </o-modal>
-        <div v-if="current && canSignoff(proposal.id) && !locked">
-          <o-button
-            variant="primary"
-            size="medium"
-            @click="confirmSignoff = !confirmSignoff">
-            {{ $t('poa.signoff') }}
-          </o-button>
-          <o-modal v-model:active="confirmSignoff">
-            <new-signoff :som="som" :poa="poa" @clear-signoff="confirmSignoff = false" />
-          </o-modal>
-        </div>
+      </div>
+      <div v-if="poaSignoffWithdrawAvailable">
+        <o-button
+          class="new-poa-signoff-withdraw"
+          variant="warning"
+          size="medium"
+          @click="confirmSignoffWithdraw = !confirmSignoffWithdraw">
+          {{ $t('poa.signoff_withdraw') }}
+        </o-button>
+        <o-modal v-model:active="confirmSignoffWithdraw">
+          <new-signoff-withdraw :signoff="poa.signoffs[0]" :som="som" @clear-signoff-withdraw="confirmSignoffWithdraw = false" />
+        </o-modal>
+      </div>
     </div>
     <section
       v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current && !locked && newReviewVisible"
@@ -78,6 +93,8 @@ import { ref, computed } from 'vue'
 import PoaReviews from '@/components/poa/PoaReviews.vue'
 import NewPoaReview from '@/components/forms/NewPoaReview.vue'
 import NewSignoff from '@/components/forms/NewSignoff.vue'
+import NewSignoffWithdraw from '@/components/forms/NewSignoffWithdraw.vue'
+import SignoffWithdrawList from '@/components/shared/SignoffWithdrawList.vue'
 import ResubmissionConfirm from '@/components/proposal/ResubmissionConfirm.vue'
 
 const props = defineProps({
@@ -99,14 +116,19 @@ const props = defineProps({
   },
 })
 import { useUser } from '@/store/user.js'
-const { canWriteSomReview, canSignoff } = useUser()
+const { canWriteSomReview, canSignoff, canWithdrawSignoff } = useUser()
 
 const newReviewVisible = ref(false)
 const confirmSignoff = ref(false)
+const confirmSignoffWithdraw = ref(false)
 const confirmPoaReviewResubmission = ref(false)
 
 const locked = computed(() => {
   return props.poa.signoffs.length
+})
+
+const somLocked = computed(() => {
+  return (props.som.signoffs.length > 0)
 })
 
 const currentUserReviewSubmission = computed(() => {
@@ -115,6 +137,24 @@ const currentUserReviewSubmission = computed(() => {
     return (currentUserReview)
   }
   return false
+})
+
+const poaSignoffAvailable = computed(() => {
+  return (
+    props.current &&
+    canSignoff(props.proposal.id) && 
+    !locked.value &&
+    somLocked.value
+  )
+})
+
+const poaSignoffWithdrawAvailable = computed(() => {
+  return (
+    props.current &&
+    canWithdrawSignoff &&
+    locked.value &&
+    somLocked.value
+  )
 })
 
 const _handlePoaReviewResubmission = () => {

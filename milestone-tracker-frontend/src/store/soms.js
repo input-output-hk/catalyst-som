@@ -44,7 +44,13 @@ export const useSoms = defineStore('soms-store', {
             poas(
               *,
               poas_reviews(*, users(email)),
-              signoffs(id, created_at)
+              signoffs(id, created_at),
+              signoff_withdraws(
+                created_at,
+                original_signed_off_at,
+                user:signoff_withdraws_user_id_fkey(email),
+                signer:signoff_withdraws_signer_id_fkey(email)
+              )
             )
           `)
           .eq('proposal_id', proposal_id)
