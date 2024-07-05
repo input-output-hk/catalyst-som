@@ -54,10 +54,13 @@
             </td>
             <td v-if="somReviewsVisible"></td>
           </tr>
-          <tr v-if="locked">
-            <th class="has-background-success has-text-white">{{ $t('som.signed_off_at') }}</th>
-            <td class="has-background-success has-text-white">
-              {{$d(som.signoffs[0].created_at, 'long')}}
+          <tr v-if="locked || som.signoff_withdraws.length > 0">
+            <th :class="{'has-background-success has-text-white': locked}">{{ $t('som.signoff') }}</th>
+            <td :class="{'has-background-success has-text-white': locked}">
+              <p v-if="locked">
+                {{ $t('som.signed_off_at') }} {{$d(som.signoffs[0].created_at, 'long')}}
+              </p>
+              <signoff-withdraw-list :withdraws="som.signoff_withdraws" />
             </td>
             <td v-if="somReviewsVisible"></td>
           </tr>
@@ -346,6 +349,7 @@ import NewPoa from '@/components/forms/NewPoa.vue'
 import PoaList from '@/components/poa/PoaList.vue'
 import NewSignoff from '@/components/forms/NewSignoff.vue'
 import NewSignoffWithdraw from '@/components/forms/NewSignoffWithdraw.vue'
+import SignoffWithdrawList from '@/components/shared/SignoffWithdrawList.vue'
 import ResubmissionConfirm from '@/components/proposal/ResubmissionConfirm.vue'
 import { canAllSomsBeSignedOffByReviews, isPreviousSomSignedOff } from '../../utils/milestones'
 </script>

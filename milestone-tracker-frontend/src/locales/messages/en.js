@@ -109,6 +109,12 @@ export default {
   signoff: {
     poa_signed_off_at: "Proof of Achievement approved by Catalyst Team sign off user on:"
   },
+  signoff_withdraw: {
+    title_list: "Signoff withdraws logs:",
+    originally_signed_at: "originally signed off at",
+    originally_signed_by: "by {email}",
+    withdrawn_by: "[withdrawn by {email}]",
+  },
   new_poa: {
     title: "New Proof of Achievement for Milestone {nr}",
     submit: "Submit Proof of Achievement",
