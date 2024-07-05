@@ -117,6 +117,9 @@ export const useUser = defineStore('user-store', {
     },
     canSetMilestonesQty(state) {
       return [2,3].includes(state.userInfo.role)
+    },
+    canWithdrawSignoff(state) {
+      return [2,3].includes(state.userInfo.role)
     }
   },
 

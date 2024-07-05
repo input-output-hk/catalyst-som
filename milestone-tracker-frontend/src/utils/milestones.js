@@ -177,6 +177,9 @@ const getMinimumReviewersByFundId = (fundId) => {
 }
 
 const canSingleSomsBeSignedOffByReviews = (som, fundId) => {
+  if (!som) {
+    return false
+  }
   const reviews = som.som_reviews.filter(r => r.current)
   .map(
     (r) => (
