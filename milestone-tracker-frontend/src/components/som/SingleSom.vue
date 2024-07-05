@@ -54,10 +54,13 @@
             </td>
             <td v-if="somReviewsVisible"></td>
           </tr>
-          <tr v-if="locked">
-            <th class="has-background-success has-text-white">{{ $t('som.signed_off_at') }}</th>
-            <td class="has-background-success has-text-white">
-              {{$d(som.signoffs[0].created_at, 'long')}}
+          <tr v-if="locked || som.signoff_withdraws.length > 0">
+            <th :class="{'has-background-success has-text-white': locked}">{{ $t('som.signoff') }}</th>
+            <td :class="{'has-background-success has-text-white': locked}">
+              <p v-if="locked">
+                {{ $t('som.signed_off_at') }} {{$d(som.signoffs[0].created_at, 'long')}}
+              </p>
+              <signoff-withdraw-list :withdraws="som.signoff_withdraws" />
             </td>
             <td v-if="somReviewsVisible"></td>
           </tr>
@@ -170,6 +173,18 @@
               <new-signoff :som="som" @clear-signoff="confirmSignoff = false" />
             </o-modal>
           </div>
+          <div v-if="somSignoffWithdrawAvailable">
+            <o-button
+              class="new-som-signoff-withdraw"
+              variant="warning"
+              size="medium"
+              @click="confirmSignoffWithdraw = !confirmSignoffWithdraw">
+              {{ $t('som.signoff_withdraw') }}
+            </o-button>
+            <o-modal v-model:active="confirmSignoffWithdraw">
+              <new-signoff-withdraw :signoff="som.signoffs[0]" :som="som" @clear-signoff-withdraw="confirmSignoffWithdraw = false" />
+            </o-modal>
+          </div>
         </div>
       </section>
       <section v-if="newReviewVisible" class="section pt-0">
@@ -213,7 +228,7 @@ const props = defineProps({
     default: () => []
   },
 })
-const { canWriteSom, canWriteSomReview, canSignoff, isAdmin } = useUser()
+const { canWriteSom, canWriteSomReview, canSignoff, isAdmin, canWithdrawSignoff } = useUser()
 
 const { bus } = useEventsBus()
 
@@ -224,6 +239,7 @@ const confirmSomReviewResubmission = ref(false)
 const confirmPoaResubmission = ref(false)
 const newPoAVisible = ref(false)
 const confirmSignoff = ref(false)
+const confirmSignoffWithdraw = ref(false)
 const criteria = ref(['outputs', 'success_criteria', 'evidence'])
 
 const somCost = computed(() => {
@@ -276,6 +292,15 @@ const somSignoffAvailable = computed(() => {
   )
 })
 
+const somSignoffWithdrawAvailable = computed(() => {
+  return (
+    props.current &&
+    canWithdrawSignoff &&
+    locked.value &&
+    !poaLocked.value
+  )
+})
+
 const _handleSomReviewResubmission = () => {
   confirmSomReviewResubmission.value = false
   newReviewVisible.value = true
@@ -323,6 +348,8 @@ import NewSomReview from '@/components/forms/NewSomReview.vue'
 import NewPoa from '@/components/forms/NewPoa.vue'
 import PoaList from '@/components/poa/PoaList.vue'
 import NewSignoff from '@/components/forms/NewSignoff.vue'
+import NewSignoffWithdraw from '@/components/forms/NewSignoffWithdraw.vue'
+import SignoffWithdrawList from '@/components/shared/SignoffWithdrawList.vue'
 import ResubmissionConfirm from '@/components/proposal/ResubmissionConfirm.vue'
 import { canAllSomsBeSignedOffByReviews, isPreviousSomSignedOff } from '../../utils/milestones'
 </script>

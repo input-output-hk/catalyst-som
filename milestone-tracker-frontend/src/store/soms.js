@@ -28,7 +28,31 @@ export const useSoms = defineStore('soms-store', {
       try {
         const { data, error } = await supabase
           .from('soms')
-          .select('*, signoffs(id, created_at), som_reviews(*, users(email)), poas(*, poas_reviews(*, users(email)), signoffs(id, created_at))')
+          .select(`
+            *,
+            signoffs(id, created_at),
+            signoff_withdraws(
+              created_at,
+              original_signed_off_at,
+              user:signoff_withdraws_user_id_fkey(email),
+              signer:signoff_withdraws_signer_id_fkey(email)
+            ),
+            som_reviews(
+              *,
+              users(email)
+            ),
+            poas(
+              *,
+              poas_reviews(*, users(email)),
+              signoffs(id, created_at),
+              signoff_withdraws(
+                created_at,
+                original_signed_off_at,
+                user:signoff_withdraws_user_id_fkey(email),
+                signer:signoff_withdraws_signer_id_fkey(email)
+              )
+            )
+          `)
           .eq('proposal_id', proposal_id)
           .eq('milestone', milestone)
           //.eq('som_reviews.current', true)

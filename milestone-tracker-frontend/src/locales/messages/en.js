@@ -27,7 +27,8 @@ export default {
     som_review_created: "Milestone review created.",
     som_created: "Milestone created.",
     allocation_updated: "Allocation updated.",
-    thread_msg_created: "Message sent!"
+    thread_msg_created: "Message sent!",
+    signoff_deleted: "Signoff withdrawn."
   },
   nav: {
     home: "Home",
@@ -103,10 +104,17 @@ export default {
     resubmission_title: "Proof of Achievement resubmission",
     resubmission_msg: "Are you sure you want to resubmit this Proof of Achievement (PoA)? The current PoA and all its reviews will be archived. The new PoA submission will have to go through the review process again.",
     resubmission_confirm: "Proceed with resubmission",
-    resubmission_clear: "Cancel"
+    resubmission_clear: "Cancel",
+    signoff_withdraw: "Withdraw signoff"
   },
   signoff: {
     poa_signed_off_at: "Proof of Achievement approved by Catalyst Team sign off user on:"
+  },
+  signoff_withdraw: {
+    title_list: "Signoff withdraws logs:",
+    originally_signed_at: "originally signed off at",
+    originally_signed_by: "by {email}",
+    withdrawn_by: "[withdrawn by {email}]",
   },
   new_poa: {
     title: "New Proof of Achievement for Milestone {nr}",
@@ -154,6 +162,12 @@ export default {
     poa: "Proof of Achievement",
     som: "Milestones"
   },
+  new_signoff_withdraw: {
+    title: "Withdraw signoff",
+    confirm: "Confirm to remove the Signoff? The PoA/SoM will be unlocked and the withdraw publicly logged.",
+    withdraw: "Withdraw",
+    cancel: "Cancel"
+  },
   som: {
     submitted_at: "Milestone submitted at",
     title: "Milestone Title",
@@ -172,7 +186,8 @@ export default {
     submit_poa: "Submit new Proof of Achievement",
     resubmit_poa: "Resubmit Proof of Achievement",
     signoff: "Signoff",
-    not_submitted: "Milestone not submitted yet!"
+    not_submitted: "Milestone not submitted yet!",
+    signoff_withdraw: "Withdraw signoff"
   },
   new_som: {
     component_title: "New Milestone {nr}",
