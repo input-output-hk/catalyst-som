@@ -41,6 +41,7 @@ const activeMsg = ref(false)
   }
   ol {
     list-style-type: none !important;
+    margin-left: 1em !important;
     $list-types: lower-alpha lower-roman decimal;
     & > li {
       &:first-child {
