@@ -106,6 +106,41 @@ const isLastMilestone = computed(() => {
   return props.milestone === lastMilestone
 })
 
+const rulesValidationF11 = {
+  minCost: () => {
+    let _min = props.proposal.budget * 0.05
+    if (props.milestone === 1) {
+      _min = Math.min(_min, 75000)
+    }
+    if (isLastMilestone.value) {
+      _min = props.proposal.budget * 0.15
+    }
+    return _min
+  },
+  maxCost: () => {
+    const availableBudget = props.proposal.budget - otherSomsBudget.value
+    const maxMilestoneBudget = 0.30
+    const budgetRule = Math.min(
+      (props.proposal.budget * maxMilestoneBudget), availableBudget
+    )
+    const _max = (!isLastMilestone.value && props.proposal.budget > 0) ? budgetRule : availableBudget
+    if (props.milestone === 1) {
+      return Math.min(_max, 75000)
+    }
+    return _max
+  },
+  minMonth: () => {
+    const min = getPrevMilestone(props.soms, props.milestone)
+    return (min) ? parseInt(min.month) + 1 : 1
+  },
+  maxMonth: () => {
+    const last = getPrevMilestone(props.soms, props.milestone)
+    const lastMonth = (last) ? parseInt(last.month) : 0
+    const dynamicValue = (isLastMilestone.value) ? lastMonth + 1 : lastMonth + 3
+    return Math.min(11, dynamicValue)
+  }
+}
+
 const milestoneRules = {
   f9: {
     minCost: () => 1,
@@ -156,39 +191,8 @@ const milestoneRules = {
     },
     maxMonth: () => 24
   },
-  f11: {
-    minCost: () => {
-      let _min = props.proposal.budget * 0.05
-      if (props.milestone === 1) {
-        _min = Math.min(_min, 75000)
-      }
-      if (isLastMilestone.value) {
-        _min = props.proposal.budget * 0.15
-      }
-      return _min
-    },
-    maxCost: () => {
-      const availableBudget = props.proposal.budget - otherSomsBudget.value
-      const maxMilestoneBudget = 0.30
-      const budgetRule = Math.min(
-        (props.proposal.budget * maxMilestoneBudget), availableBudget
-      )
-      const _max = (!isLastMilestone.value && props.proposal.budget > 0) ? budgetRule : availableBudget
-      if (props.milestone === 1) {
-        return Math.min(_max, 75000)
-      }
-      return _max
-    },
-    minMonth: () => {
-      const min = getPrevMilestone(props.soms, props.milestone)
-      return (min) ? parseInt(min.month) + 1 : 1
-    },
-    maxMonth: () => {
-      const last = getPrevMilestone(props.soms, props.milestone)
-      const lastMonth = (last) ? parseInt(last.month) : 0
-      return (isLastMilestone.value) ? lastMonth + 1 : lastMonth + 3
-    }
-  }
+  f11: rulesValidationF11,
+  f12: rulesValidationF11 // Same as F11
 }
 
 // Form validation rules
