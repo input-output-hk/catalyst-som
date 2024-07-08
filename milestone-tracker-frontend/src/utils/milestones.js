@@ -26,12 +26,22 @@ const fundMonthlyCost = {
     const part = (isLast) ? 1 : 0.8
     return roundAmounts((cost * part) / duration)
   },
+  'f12': (cost, duration, isLast) => {
+    const part = (isLast) ? 1 : 0.8
+    return roundAmounts((cost * part) / duration)
+  },
 }
 
 const fundPreviousPoaPayments = {
   'f9': () => 0,
   'f10': () => 0,
   'f11': (previousMl) => {
+    if (previousMl) {
+      return roundAmounts(previousMl.cost * 0.2)
+    }
+    return 0
+  },
+  'f12': (previousMl) => {
     if (previousMl) {
       return roundAmounts(previousMl.cost * 0.2)
     }
@@ -129,7 +139,8 @@ const f9f10paymentSchema = (milestones, current) => {
 const fundsPaymentSchema = {
   'f9': f9f10paymentSchema,
   'f10': f9f10paymentSchema,
-  'f11': f9f10paymentSchema
+  'f11': f9f10paymentSchema,
+  'f12': f9f10paymentSchema,
 }
 
 const getNextPayment = (milestones, current, fund) => {
