@@ -32,6 +32,46 @@ const activeMsg = ref(false)
 
 .html-text {
   white-space: pre-wrap;
+  ul, ol {
+    @for $i from 1 through 6 {
+      li.ql-indent-#{$i} {
+        margin-left: 1.2em * $i;
+      }
+    }
+  }
+  ol {
+    list-style-type: none !important;
+    margin-left: 1em !important;
+    $list-types: lower-alpha lower-roman decimal;
+    & > li {
+      &:first-child {
+        counter-reset: list-0;
+      }
+      & {
+        counter-increment: list-0;
+      }
+      &:before {
+        content: counter(list-0, decimal) '. '
+      }
+      &:not(.ql-indent-1) + .ql-indent-1 {
+        counter-reset: list-1;
+      }
+    }
+    @for $i from 1 through 6 {
+      @for $j from 1 through ($i - 1) {
+        li.ql-indent-#{$j}:not(li.ql-indent-#{$i}) + li.ql-indent-#{$i} {
+          counter-reset: list-#{$i};
+        }
+      }
+      
+      li.ql-indent-#{$i} {
+        counter-increment: list-#{$i};
+      }
+      li.ql-indent-#{$i}:before {
+        content: counter(list-#{$i}, nth($list-types, (($i - 1) % 3) + 1)) '. '
+      }
+    }
+  }
 }
 
 </style>
