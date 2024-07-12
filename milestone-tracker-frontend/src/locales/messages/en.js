@@ -14,7 +14,8 @@ export default {
     creating_som_review: "Error creating Milestone review.",
     creating_som: "Error creating Milestone.",
     updating_allocations: "Error updating allocations.",
-    updating_milestone_qty: "Error updating milestone quantity."
+    updating_milestone_qty: "Error updating milestone quantity.",
+    creating_account: "Error creating account."
   },
   notifications: {
     logged_in: "Logged in.",
@@ -28,7 +29,8 @@ export default {
     som_created: "Milestone created.",
     allocation_updated: "Allocation updated.",
     thread_msg_created: "Message sent!",
-    signoff_deleted: "Signoff withdrawn."
+    signoff_deleted: "Signoff withdrawn.",
+    account_created: "Account created!"
   },
   nav: {
     home: "Home",
@@ -278,6 +280,19 @@ export default {
       canceled: "Canceled",
       completed: "Completed"
     }
+  },
+  new_account: {
+    start: "Create user account",
+    title: "New user account",
+    confirm: "A new user account will be created for the email indicated (if not already present). The account will also be associated to the project id indicated as a proposer. After the creation the user can use the reset password feature to have access.",
+    create: "Create",
+    cancel: "Cancel",
+    email_address: "Email Address",
+    email_address_help: "Insert the email address to use for the creation of the new account.",
+    admin_passkey: "Admin Passkey",
+    admin_passkey_help: "Insert the admin passkey for the creation of users. This is not you password.",
+    project_id: "Project ID",
+    project_id_help: "The project id the new account will be associated with."
   },
   change_requests: {
     created: "Change Request created. Now proposers will be able to resubmit milestones that don't have PoAs already signed off.",
