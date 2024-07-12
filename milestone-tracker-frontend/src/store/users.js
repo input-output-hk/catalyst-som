@@ -132,6 +132,25 @@ export const useUsers = defineStore('users-store', {
         errorNotification(this.$i18n.t('errors.fetching_users'))
       }
     },
+    async createAccount(email, passkey, project_id) {
+      try {
+        const { data, error } = await supabase
+          .rpc('_create_user', {
+            _email: email,
+            _project_id: project_id,
+            password: passkey
+          })
+        if (error) throw(error)
+        if (!data) {
+          errorNotification(this.$i18n.t('errors.creating_account'))
+          return false
+        }
+        successNotification(this.$i18n.t('notifications.account_created'))
+        return data
+      } catch(error) {
+        errorNotification(this.$i18n.t('errors.creating_account'))
+      }
+    },
     async getSubmittedPoaReviews(fund, from, to) {
       try {
         const { data, error } = await supabase
