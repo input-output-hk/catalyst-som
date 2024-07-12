@@ -1,4 +1,5 @@
 import { getShortNameFromId } from "./fund"
+import { env } from '@/env'
 
 const roundAmounts = (amount) => {
   return Math.round(amount * 1e2) / 1e2
@@ -227,6 +228,121 @@ const isPreviousSomSignedOff = (soms, currentSom) => {
   return false
 }
 
+
+// Specific validation rules
+const minCostF9 = () => 1
+
+const maxCostF9 = (proposal, otherSomsBudget, isLastMilestone) => {
+  return () => {
+    const availableBudget = proposal.budget - otherSomsBudget
+    const maxMilestoneBudget = parseFloat(env.VITE_MAX_MILESTONE_BUDGET)
+    const budgetRule = Math.min(
+      (proposal.budget * maxMilestoneBudget), availableBudget
+    )
+    if (!isLastMilestone && proposal.budget > 0) {
+      return budgetRule
+    } else {
+      return availableBudget
+    }
+  }
+}
+
+const minMonthF9 = (soms, milestone) => {
+  return () => {
+    const min = getPrevMilestone(soms, milestone)
+    return (min) ? parseInt(min.month) + 1 : 1
+  }
+}
+
+const maxMonthF9 = () => 24
+
+const minCostF10 = (proposal, milestone, isLastMilestone) => {
+  return () => {
+    let _min = proposal.budget * 0.05
+    if (milestone === 1) {
+      _min = Math.min(_min, 75000)
+    }
+    if (isLastMilestone) {
+      _min = proposal.budget * 0.15
+    }
+    return _min
+  }
+}
+
+const maxCostF10 = (proposal, otherSomsBudget, isLastMilestone, milestone) => {
+  return () => {
+    const availableBudget = proposal.budget - otherSomsBudget
+    const maxMilestoneBudget = 0.30
+    const budgetRule = Math.min(
+      (proposal.budget * maxMilestoneBudget), availableBudget
+    )
+    const _max = (!isLastMilestone && proposal.budget > 0) ? budgetRule : availableBudget
+    if (milestone === 1) {
+      return Math.min(_max, 75000)
+    }
+    return _max
+  }
+}
+
+const minMonthF10 = (soms, milestone) => {
+  return () => {
+    const min = getPrevMilestone(soms, milestone)
+    return (min) ? parseInt(min.month) + 1 : 1
+  }
+}
+
+const maxMonthF11 = (soms, milestone, isLastMilestone) => {
+  return () => {
+    const last = getPrevMilestone(soms, milestone)
+    const lastMonth = (last) ? parseInt(last.month) : 0
+    const dynamicValue = (isLastMilestone) ? lastMonth + 1 : lastMonth + 3
+    return Math.min(11, dynamicValue)
+  }
+}
+
+const generateValidationRules = (proposal, milestone, otherSomsBudget, isLastMilestone, soms) => {
+  const rulesValidationF11 = {
+    minCost: minCostF10(proposal, milestone, isLastMilestone),
+    maxCost: maxCostF10(
+      proposal,
+      otherSomsBudget,
+      isLastMilestone,
+      milestone,
+    ),
+    minMonth: minMonthF10(soms, milestone),
+    maxMonth: maxMonthF11(soms, milestone, isLastMilestone)
+  }
+
+  return {
+    f9: {
+      minCost: minCostF9,
+      maxCost: maxCostF9(
+        proposal,
+        otherSomsBudget,
+        isLastMilestone
+      ),
+      minMonth: minMonthF9(
+        soms,
+        milestone
+      ),
+      maxMonth: maxMonthF9,
+    },
+    f10: {
+      minCost: minCostF10(proposal, milestone, isLastMilestone),
+      maxCost: maxCostF10(
+        proposal,
+        otherSomsBudget,
+        isLastMilestone,
+        milestone,
+      ),
+      minMonth: minMonthF10(soms, milestone),
+      maxMonth: maxMonthF9
+    },
+    f11: rulesValidationF11,
+    f12: rulesValidationF11 // Same as F11
+  }
+}
+
 export {
   getPrevMilestone,
   generateMilestoneDuration,
@@ -235,4 +351,5 @@ export {
   canSubmitSomByChangeRequest,
   canAllSomsBeSignedOffByReviews,
   isPreviousSomSignedOff,
+  generateValidationRules
 }
