@@ -5,6 +5,7 @@ import {
   getNextPayment
 } from '@/utils/milestones'
 import { getShortNameFromId } from '@/utils/fund'
+import { generateValidationRules } from './milestones'
 
 export const preparePaymentsData = (allSoms, fundId) => {
   const somsByProposal = groupBy(allSoms, 'project_id')
@@ -16,6 +17,7 @@ export const preparePaymentsData = (allSoms, fundId) => {
     const currentMilestone = getCurrentMilestone(durations)
     const nextPayment = getNextPayment(durations, currentMilestone, fund)
     if (nextPayment) {
+      const totalSomsBudget = soms.reduce((sum, a) => sum + a.cost, 0) 
       const proposal = {
         proposal_id: soms[0].project_id,
         title: soms[0].title,
@@ -23,15 +25,37 @@ export const preparePaymentsData = (allSoms, fundId) => {
         funds_distributed: soms[0].funds_distributed,
         poa_payment: nextPayment.poaPayment,
         chunk_payment: nextPayment.chunkPayment,
-        tot_payment: (nextPayment.poaPayment + nextPayment.chunkPayment)
+        tot_payment: (nextPayment.poaPayment + nextPayment.chunkPayment),
+        validation_total_budget: soms[0].budget === totalSomsBudget,
+        validation_all_signed_off: soms.every(s => s.som_signoff_count > 0),
       }
-      soms.forEach((som) => {
+      
+      soms.forEach((som, idx) => {
+        const otherSomsBudget = totalSomsBudget - som.cost
+        const isLastMilestone = idx === (soms.length - 1)
+        const validationRules = generateValidationRules(
+          {budget: soms[0].budget},
+          som.milestone,
+          otherSomsBudget,
+          isLastMilestone,
+          soms
+        )
+        const validationBudget = (
+          som.cost >= validationRules[fund].minCost() &&
+          som.cost <= validationRules[fund].maxCost()
+        )
+        const validationDuration = (
+          som.month >= validationRules[fund].minMonth() &&
+          som.month <= validationRules[fund].maxMonth()
+        )
         proposal[`m${som.milestone}_month`] = som.month
         proposal[`m${som.milestone}_cost`] = som.cost
         proposal[`m${som.milestone}_completion`] = som.completion
         proposal[`m${som.milestone}_som_signoff`] = som.som_signoff_count > 0
         proposal[`m${som.milestone}_poa_submitted`] = (som.poas_id !== null)
         proposal[`m${som.milestone}_poa_signoff`] = som.poa_signoff_count > 0
+        proposal[`m${som.milestone}_validation_budget`] = validationBudget
+        proposal[`m${som.milestone}_validation_duration`] = validationDuration
       })
       Array.from(Array(maxMilestones)).forEach((_, i) => {
         const x = i + 1
@@ -52,6 +76,12 @@ export const preparePaymentsData = (allSoms, fundId) => {
         }
         if (!(`m${x}_poa_signoff` in proposal)) {
           proposal[`m${x}_poa_signoff`] = ''
+        }
+        if (!(`m${x}_validation_budget` in proposal)) {
+          proposal[`m${x}_validation_budget`] = ''
+        }
+        if (!(`m${x}_validation_duration` in proposal)) {
+          proposal[`m${x}_validation_duration`] = ''
         }
       })
       return proposal

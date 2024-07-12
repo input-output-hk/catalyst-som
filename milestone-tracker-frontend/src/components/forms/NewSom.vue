@@ -39,11 +39,10 @@ import * as yup from 'yup'
 
 import { useSoms } from '@/store/soms.js'
 import { useFormFields } from '@/composables/useFormFields.js'
-import { getPrevMilestone } from '@/utils/milestones'
+import { getPrevMilestone, generateValidationRules } from '@/utils/milestones'
 import { getShortNameFromId } from '@/utils/fund'
 import { HTMLNotEmpty } from '@/utils/validations.js'
 import { useI18n } from 'vue-i18n'
-import { env } from '@/env'
 
 const props = defineProps({
   proposal: {
@@ -106,105 +105,26 @@ const isLastMilestone = computed(() => {
   return props.milestone === lastMilestone
 })
 
-const rulesValidationF11 = {
-  minCost: () => {
-    let _min = props.proposal.budget * 0.05
-    if (props.milestone === 1) {
-      _min = Math.min(_min, 75000)
-    }
-    if (isLastMilestone.value) {
-      _min = props.proposal.budget * 0.15
-    }
-    return _min
-  },
-  maxCost: () => {
-    const availableBudget = props.proposal.budget - otherSomsBudget.value
-    const maxMilestoneBudget = 0.30
-    const budgetRule = Math.min(
-      (props.proposal.budget * maxMilestoneBudget), availableBudget
-    )
-    const _max = (!isLastMilestone.value && props.proposal.budget > 0) ? budgetRule : availableBudget
-    if (props.milestone === 1) {
-      return Math.min(_max, 75000)
-    }
-    return _max
-  },
-  minMonth: () => {
-    const min = getPrevMilestone(props.soms, props.milestone)
-    return (min) ? parseInt(min.month) + 1 : 1
-  },
-  maxMonth: () => {
-    const last = getPrevMilestone(props.soms, props.milestone)
-    const lastMonth = (last) ? parseInt(last.month) : 0
-    const dynamicValue = (isLastMilestone.value) ? lastMonth + 1 : lastMonth + 3
-    return Math.min(11, dynamicValue)
-  }
-}
-
-const milestoneRules = {
-  f9: {
-    minCost: () => 1,
-    maxCost: () => {
-      const availableBudget = props.proposal.budget - otherSomsBudget.value
-      const maxMilestoneBudget = parseFloat(env.VITE_MAX_MILESTONE_BUDGET)
-      const budgetRule = Math.min(
-        (props.proposal.budget * maxMilestoneBudget), availableBudget
-      )
-      if (!isLastMilestone.value && props.proposal.budget > 0) {
-        return budgetRule
-      } else {
-        return availableBudget
-      }
-    },
-    minMonth: () => {
-      const min = getPrevMilestone(props.soms, props.milestone)
-      return (min) ? parseInt(min.month) + 1 : 1
-    },
-    maxMonth: () => 24
-  },
-  f10: {
-    minCost: () => {
-      let _min = props.proposal.budget * 0.05
-      if (props.milestone === 1) {
-        _min = Math.min(_min, 75000)
-      }
-      if (isLastMilestone.value) {
-        _min = props.proposal.budget * 0.15
-      }
-      return _min
-    },
-    maxCost: () => {
-      const availableBudget = props.proposal.budget - otherSomsBudget.value
-      const maxMilestoneBudget = 0.30
-      const budgetRule = Math.min(
-        (props.proposal.budget * maxMilestoneBudget), availableBudget
-      )
-      const _max = (!isLastMilestone.value && props.proposal.budget > 0) ? budgetRule : availableBudget
-      if (props.milestone === 1) {
-        return Math.min(_max, 75000)
-      }
-      return _max
-    },
-    minMonth: () => {
-      const min = getPrevMilestone(props.soms, props.milestone)
-      return (min) ? parseInt(min.month) + 1 : 1
-    },
-    maxMonth: () => 24
-  },
-  f11: rulesValidationF11,
-  f12: rulesValidationF11 // Same as F11
-}
+const milestoneRules = computed(() => {
+  return generateValidationRules(
+    props.proposal,
+    props.milestone,
+    otherSomsBudget.value,
+    isLastMilestone.value,
+    props.soms
+  )
+})
 
 // Form validation rules
 
 const maxMilestoneCost = computed(() => {
   const fund = getShortNameFromId(props.proposal.challenges.fund_id)
-  return milestoneRules[fund].maxCost()
+  return milestoneRules.value[fund].maxCost()
 })
 
 const minMilestoneCost = computed(() => {
   const fund = getShortNameFromId(props.proposal.challenges.fund_id)
-  return milestoneRules[fund].minCost()
+  return milestoneRules.value[fund].minCost()
 })
 
 const costRule = computed(() => {
@@ -220,12 +140,12 @@ const costRule = computed(() => {
 
 const maxMilestoneMonth = computed(() => {
   const fund = getShortNameFromId(props.proposal.challenges.fund_id)
-  return milestoneRules[fund].maxMonth()
+  return milestoneRules.value[fund].maxMonth()
 })
 
 const minMilestoneMonth = computed(() => {
   const fund = getShortNameFromId(props.proposal.challenges.fund_id)
-  return milestoneRules[fund].minMonth()
+  return milestoneRules.value[fund].minMonth()
 })
 
 
