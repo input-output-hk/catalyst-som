@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 import { SchemaFormFactory, useSchemaForm } from "formvuelate"
 import VeeValidatePlugin from "@formvuelate/plugin-vee-validate"
@@ -176,7 +176,7 @@ const initialSchema = computed(() => {
   const localSchema = {
     title: {
       type: 'string',
-      help: t('new_som.title_help')
+      help: t('new_som.title_help'),
     },
     outputs: {
       type: 'html',
@@ -277,5 +277,13 @@ const _clearForm = () => {
   clearForm(formData, updateFormModel)
   submitting.value = false
 }
+
+onMounted(() => {
+  if (isLastMilestone.value) {
+    updateFormModel('outputs', {type: 'update', content: t('new_som.last_milestone_outputs_default')})
+    updateFormModel('success_criteria', {type: 'update', content: t('new_som.last_milestone_success_criteria_default')})
+    updateFormModel('evidence', {type: 'update', content: t('new_som.last_milestone_evidence_default')})
+  }
+})
 
 </script>
