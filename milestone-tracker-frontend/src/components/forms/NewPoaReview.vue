@@ -2,6 +2,9 @@
   <div class="content new-poa-review-popup">
     <div class="box">
       <h3>{{ $t('new_poa_review.title') }}</h3>
+        <o-notification v-if="!isPreviousPoaSignedOff" class="is-warning">
+          {{ $t('new_poa_review.no_previous_signoff') }}
+        </o-notification>
       <schema-form
         class="card-content scrollable-modal"
         :schema="schema"
@@ -43,6 +46,10 @@ const props = defineProps({
   som: {
     type: Object,
     default: () => {}
+  },
+  isPreviousPoaSignedOff: {
+    type: Boolean,
+    default: false
   }
 })
 const emit = defineEmits(['poaReviewSubmitted'])
