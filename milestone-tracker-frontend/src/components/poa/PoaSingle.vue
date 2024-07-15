@@ -80,6 +80,7 @@
       v-if="canWriteSomReview(proposal.id, proposal.challenge_id) && current && !locked && newReviewVisible"
       class="section pr-0 pl-0">
       <new-poa-review
+        :is-previous-poa-signed-off="isPreviousPoaSignedOff"
         :som="som"
         :poa="poa"
         @poa-review-submitted="newReviewVisible = false"
@@ -114,6 +115,10 @@ const props = defineProps({
     type: Object,
     default: () => {}
   },
+  isPreviousPoaSignedOff: {
+    type: Boolean,
+    default: false
+  }
 })
 import { useUser } from '@/store/user.js'
 const { canWriteSomReview, canSignoff, canWithdrawSignoff } = useUser()

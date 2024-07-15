@@ -194,7 +194,12 @@
       </section>
       <div v-if="som.poas.length > 0" class="columns">
         <div :id="`poa-${som.milestone}`" class="column is-12">
-          <poa-list :som="som" :poas="som.poas" :proposal="proposal" :submittable-poa="current && canWriteSom(proposal.id) && (locked > 0) && !poaLocked" />
+          <poa-list
+            :is-previous-poa-signed-off="isPreviousPoaSignedOff(otherMilestonesSoms, som)"
+            :som="som"
+            :poas="som.poas"
+            :proposal="proposal"
+            :submittable-poa="current && canWriteSom(proposal.id) && (locked > 0) && !poaLocked" />
         </div>
       </div>
     </div>
@@ -351,7 +356,7 @@ import NewSignoff from '@/components/forms/NewSignoff.vue'
 import NewSignoffWithdraw from '@/components/forms/NewSignoffWithdraw.vue'
 import SignoffWithdrawList from '@/components/shared/SignoffWithdrawList.vue'
 import ResubmissionConfirm from '@/components/proposal/ResubmissionConfirm.vue'
-import { canAllSomsBeSignedOffByReviews, isPreviousSomSignedOff } from '../../utils/milestones'
+import { canAllSomsBeSignedOffByReviews, isPreviousSomSignedOff, isPreviousPoaSignedOff } from '../../utils/milestones'
 </script>
 
 <style lang="scss" scoped>

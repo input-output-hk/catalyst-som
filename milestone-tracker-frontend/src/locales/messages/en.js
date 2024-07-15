@@ -150,6 +150,7 @@ export default {
     poa_approved_help: "Tick the checkbox if the Proof of Achievement for the Milestone is approved.",
     comment: "Comment:",
     comment_help: "Please provide a description why Proof of Achievement (PoA) is approved. In case PoA is not approved, please describe what is missing and how the proposer can amend them in order to get the approval.",
+    no_previous_signoff: "Previous milestone's PoA is not signed off yet. It is recommended to wait for its final approval before proceeding with the review of this PoA."
   },
   poa_reviews: {
     open: "Open",

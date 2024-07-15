@@ -235,6 +235,29 @@ const isPreviousSomSignedOff = (soms, currentSom) => {
   return false
 }
 
+const isPreviousPoaSignedOff = (soms, currentSom) => {
+  if (currentSom) {
+    if (currentSom.milestone === 1) {
+      return true
+    }
+    const previousMl = soms.find((s) => {
+      if (s) {
+        return s.milestone === currentSom.milestone - 1
+      }
+      return false
+    })
+    if (previousMl) {
+      if (previousMl.poas.length > 0) {
+        const previousPoa = previousMl.poas.find((p) => p.current)
+        if (previousPoa) {
+          return previousPoa.signoffs.length > 0
+        }
+      }
+    }
+  }
+  return false
+}
+
 
 // Specific validation rules
 const minCostF9 = () => 1
@@ -358,5 +381,6 @@ export {
   canSubmitSomByChangeRequest,
   canAllSomsBeSignedOffByReviews,
   isPreviousSomSignedOff,
+  isPreviousPoaSignedOff,
   generateValidationRules
 }

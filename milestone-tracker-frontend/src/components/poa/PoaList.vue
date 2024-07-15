@@ -17,6 +17,7 @@
     
       <poa-single
         class="current-poa"
+        :is-previous-poa-signed-off="isPreviousPoaSignedOff"
         :current="true"
         :poa="renderedPoas.current"
         :som="som"
@@ -58,6 +59,10 @@ const props = defineProps({
     default: () => {}
   },
   submittablePoa: {
+    type: Boolean,
+    default: false
+  },
+  isPreviousPoaSignedOff: {
     type: Boolean,
     default: false
   }
