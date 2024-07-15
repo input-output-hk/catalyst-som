@@ -61,6 +61,12 @@ const initialSchema = computed(() => {
       label: t('new_poa.content'),
       help: t('new_poa.content_help'),
       validations: yup.string().test('len', t('validations.text_required'), HTMLNotEmpty)
+    },
+    no_sensitive_info: {
+      type: 'checkbox',
+      label: t('new_poa.no_sensitive_info'),
+      help: t('new_poa.no_sensitive_info_help'),
+      validations: yup.boolean().oneOf([true], t('new_poa.no_sensitive_validation'))
     }
   }
 })
@@ -77,7 +83,7 @@ let SchemaForm = SchemaFormFactory([
 const handleCreatePoa = async () => {
   submitting.value = true
   const response = await createPoa({
-    ...formData.value,
+    content: formData.value.content,
     current: true,
     proposal_id: props.proposal.id,
     challenge_id: props.proposal.challenge_id,

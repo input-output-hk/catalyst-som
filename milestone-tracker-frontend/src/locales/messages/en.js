@@ -124,6 +124,9 @@ export default {
     reset: "Reset",
     content: "Content",
     content_help: "Please describe the Proof of Achievement, including links to resources (if any). Remember that the PoA has to satisfy the \"Outputs\", the \"Acceptance Criteria\" and the \"Evidence of Milestone Completion\" indicated in the Milestone.",
+    no_sensitive_info: "Please confirm that the content you are submitting does not contain any sensitive info.",
+    no_sensitive_info_help: "The PoA submission is public and any information submitted here will become publicly available. For this reason and sensitive info (e.g. personal info by third parties) must not be uploaded here.",
+    no_sensitive_validation: "This confirmation is mandatory."
   },
   poas: {
     title: "Proof of Achievement",
