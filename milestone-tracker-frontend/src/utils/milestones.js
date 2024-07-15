@@ -218,12 +218,19 @@ const canAllSomsBeSignedOffByReviews = (soms, fundId) => {
 }
 
 const isPreviousSomSignedOff = (soms, currentSom) => {
-  if (currentSom.milestone === 1) {
-    return true
-  }
-  const previousMl = soms.find((s) => s.milestone === currentSom.milestone - 1)
-  if (previousMl) {
-    return previousMl.signoffs.length > 0
+  if (currentSom) {
+    if (currentSom.milestone === 1) {
+      return true
+    }
+    const previousMl = soms.find((s) => {
+      if (s) {
+        return s.milestone === currentSom.milestone - 1
+      }
+      return false
+    })
+    if (previousMl) {
+      return previousMl.signoffs.length > 0
+    }
   }
   return false
 }
@@ -237,7 +244,7 @@ const maxCostF9 = (proposal, otherSomsBudget, isLastMilestone) => {
     const availableBudget = proposal.budget - otherSomsBudget
     const maxMilestoneBudget = parseFloat(env.VITE_MAX_MILESTONE_BUDGET)
     const budgetRule = Math.min(
-      (proposal.budget * maxMilestoneBudget), availableBudget
+      Math.ceil(proposal.budget * maxMilestoneBudget), availableBudget
     )
     if (!isLastMilestone && proposal.budget > 0) {
       return budgetRule
@@ -258,12 +265,12 @@ const maxMonthF9 = () => 24
 
 const minCostF10 = (proposal, milestone, isLastMilestone) => {
   return () => {
-    let _min = proposal.budget * 0.05
+    let _min = Math.floor(proposal.budget * 0.05)
     if (milestone === 1) {
       _min = Math.min(_min, 75000)
     }
     if (isLastMilestone) {
-      _min = proposal.budget * 0.15
+      _min = Math.floor(proposal.budget * 0.15)
     }
     return _min
   }
@@ -274,7 +281,7 @@ const maxCostF10 = (proposal, otherSomsBudget, isLastMilestone, milestone) => {
     const availableBudget = proposal.budget - otherSomsBudget
     const maxMilestoneBudget = 0.30
     const budgetRule = Math.min(
-      (proposal.budget * maxMilestoneBudget), availableBudget
+      Math.ceil(proposal.budget * maxMilestoneBudget), availableBudget
     )
     const _max = (!isLastMilestone && proposal.budget > 0) ? budgetRule : availableBudget
     if (milestone === 1) {

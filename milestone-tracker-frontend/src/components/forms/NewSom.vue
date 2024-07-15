@@ -93,7 +93,7 @@ const otherSomsBudget = computed(() => {
   const missingMilestones = milestonesIndex.filter(m => !otherSoms.value.map(o => o.milestone).includes(m))
   missingMilestones.forEach((m) => {
     if (m !== props.milestone) {
-      const cost = (m === lastMilestone) ? props.proposal.budget * 0.15 : props.proposal.budget * 0.05
+      const cost = (m === lastMilestone) ? Math.floor(props.proposal.budget * 0.15) : Math.floor(props.proposal.budget * 0.05)
       definedCost = definedCost + cost
     }
   })
