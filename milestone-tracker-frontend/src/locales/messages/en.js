@@ -214,9 +214,9 @@ export default {
     month_help: "In which month do you plan to complete this milestone. Month 1 of your project should be the same month as the initial payment. Month 2 is the next month after your initial payment.",
     cost_help: "What is the cost forecast in {currency} to complete this milestone? The cost of the milestone cannot exceed 30% of the whole budget. For this milestone you cannot exceed {maxCost}.",
     completion_help: "Once you have completed this milestone, how much in % terms will you have completed of your project? The completion must be at least 10% more than the previous milestone.",
-    last_milestone_outputs_default: "<ul><li>Final close-out report</li><li>Final close-out video</li></ul>",
-    last_milestone_success_criteria_default: "<ul><li>Final close-out report is publicly available</li><li>Final close-out video is publicly available</li></ul>",
-    last_milestone_evidence_default: "<ul><li>Link to final close-out report</li><li>Link to final close-out video</li></ul>"
+    last_milestone_outputs_default: "<ul><li>Final close-out report</li><li>Final closeout video</li></ul>",
+    last_milestone_success_criteria_default: "<ul><li>Final closeout report is publicly available</li><li>Final closeout video is publicly available</li></ul>",
+    last_milestone_evidence_default: "<ul><li>Link to final closeout report</li><li>Link to final closeout video</li></ul>"
   },
   som_review: {
     from: "From",
