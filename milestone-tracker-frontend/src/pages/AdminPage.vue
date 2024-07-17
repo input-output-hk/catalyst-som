@@ -3,9 +3,6 @@
     <div class="content">
       <h1 class="is-size-1">{{ $t('pages.admin.title') }}</h1>
       <p>{{ $t('pages.admin.description') }}</p>
-      <p class="has-text-right">
-        <new-user />
-      </p>
       <paginated-table
         class-style="users-list"
         :headers="[
@@ -28,7 +25,6 @@
 <script setup>
 import UserItem from '@/components/admin/UserItem.vue'
 import PaginatedTable from '@/components/shared/PaginatedTable.vue'
-import NewUser from '@/components/forms/NewUser.vue'
 import { useUsers } from '@/store/users.js'
 import { storeToRefs } from 'pinia'
 const userStore = useUsers()

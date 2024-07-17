@@ -1,5 +1,3 @@
-drop policy "Proposals update" on "public"."proposals";
-
 drop policy "Delete signoffs" on "public"."signoffs";
 
 create table "public"."signoff_withdraws" (
