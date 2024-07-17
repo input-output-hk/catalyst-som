@@ -7,6 +7,9 @@
           <p>{{ $t('pages.proposals.description') }}</p>
         </div>
         <div class="column is-4 has-text-right">
+          <div v-if="canSetChangeRequests">
+            <new-user />
+          </div>
         </div>
       </div>
       <paginated-table
@@ -28,6 +31,7 @@ import { storeToRefs } from 'pinia'
 import { useUser } from '@/store/user.js'
 import ProposalRow from '@/components/proposal/ProposalRow.vue'
 import PaginatedTable from '@/components/shared/PaginatedTable.vue'
+import NewUser from '@/components/forms/NewUser.vue'
 import { useProposals } from '@/store/proposals.js'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
@@ -36,7 +40,7 @@ const {
   getProposals,
   getCount
 } = proposalsStore
-const { canSetAllocations } = useUser()
+const { canSetAllocations, canSetChangeRequests } = useUser()
 const { proposals } = storeToRefs(proposalsStore)
 
 const dynamicHeaders = computed(() => {
