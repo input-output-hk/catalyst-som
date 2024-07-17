@@ -29,6 +29,8 @@ end;
 $function$
 ;
 
+drop policy "Proposals update" on "public"."proposals";
+
 create policy "Proposals update"
 on "public"."proposals"
 as permissive
