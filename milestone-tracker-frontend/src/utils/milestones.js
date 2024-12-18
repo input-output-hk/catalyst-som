@@ -31,6 +31,10 @@ const fundMonthlyCost = {
     const part = (isLast) ? 1 : 0.8
     return roundAmounts((cost * part) / duration)
   },
+  'f13': (cost, duration, isLast) => {
+    const part = (isLast) ? 1 : 0.8
+    return roundAmounts((cost * part) / duration)
+  },
 }
 
 const fundPreviousPoaPayments = {
@@ -43,6 +47,12 @@ const fundPreviousPoaPayments = {
     return 0
   },
   'f12': (previousMl) => {
+    if (previousMl) {
+      return roundAmounts(previousMl.cost * 0.2)
+    }
+    return 0
+  },
+  'f13': (previousMl) => {
     if (previousMl) {
       return roundAmounts(previousMl.cost * 0.2)
     }
@@ -142,6 +152,7 @@ const fundsPaymentSchema = {
   'f10': f9f10paymentSchema,
   'f11': f9f10paymentSchema,
   'f12': f9f10paymentSchema,
+  'f13': f9f10paymentSchema,
 }
 
 const getNextPayment = (milestones, current, fund) => {
@@ -176,7 +187,8 @@ const fundMinimumReviewers = {
   'f9': 1,
   'f10': 2,
   'f11': 2,
-  'f12': 2
+  'f12': 2,
+  'f13': 2,
 }
 
 const getMinimumReviewersByFundId = (fundId) => {
@@ -369,7 +381,8 @@ const generateValidationRules = (proposal, milestone, otherSomsBudget, isLastMil
       maxMonth: maxMonthF9
     },
     f11: rulesValidationF11,
-    f12: rulesValidationF11 // Same as F11
+    f12: rulesValidationF11, // Same as F11
+    f13: rulesValidationF11 // Same as F11
   }
 }
 

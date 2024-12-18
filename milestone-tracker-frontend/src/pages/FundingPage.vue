@@ -105,7 +105,7 @@ const {
   getSubmittedSomReviews
 } = useUsers()
 
-const funds = ref(['Fund 9', 'Fund 10', 'Fund 11', 'Fund 12'])
+const funds = ref(['Fund 9', 'Fund 10', 'Fund 11', 'Fund 12', 'Fund 13'])
 const poaRewards = ref({
   'Fund 9': [
     {
@@ -139,6 +139,18 @@ const poaRewards = ref({
     }
   ],
   'Fund 12': [
+    {
+      amount: 200,
+      min: 0,
+      max: 150000
+    },
+    {
+      amount: 250,
+      min: 150000,
+      max: 10000000
+    }
+  ],
+  'Fund 13': [
     {
       amount: 200,
       min: 0,
@@ -186,6 +198,18 @@ const somRewards = ref({
     },
     {
       amount: 250,
+      min: 150000,
+      max: 10000000
+    }
+  ],
+  'Fund 13': [
+    {
+      amount: 0,
+      min: 0,
+      max: 150000
+    },
+    {
+      amount: 0,
       min: 150000,
       max: 10000000
     }
