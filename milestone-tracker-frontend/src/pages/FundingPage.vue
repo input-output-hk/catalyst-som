@@ -227,7 +227,7 @@ const exportPoaReviews = async (
   fund,
   rewardPerReview,
   _from = '1970-01-01T00:00:00.000Z',
-  _to = '2025-01-01T00:00:00.000Z'
+  _to = new Date().toISOString()
 ) => {
   const reviews = await getSubmittedPoaReviews(fund, _from, _to)
   const reviewsPayment = prepareReviewsPaymentsData(reviews, fund, rewardPerReview, 'poa')
@@ -238,7 +238,7 @@ const exportSomReviews = async (
   fund,
   rewardPerReview,
   _from = '1970-01-01T00:00:00.000Z',
-  _to = '2025-01-01T00:00:00.000Z'
+  _to = new Date().toISOString()
 ) => {
   const reviews = await getSubmittedSomReviews(fund, _from, _to)
   const reviewsPayment = prepareReviewsPaymentsData(reviews, fund, rewardPerReview, 'som')
