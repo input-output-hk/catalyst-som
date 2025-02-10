@@ -22,6 +22,10 @@ class SB():
         results = self.client.table(entity).insert(proposals).execute()
         return results.data
 
+    def update_entity(self, where, _data, entity, fields=None):
+        results = self.client.table(entity).update(_data).eq(where['key'], where['value']).execute()
+        return results.data
+
     def upsert_entities(self, _data, entity, fields=None):
         data = self.prepare_data(_data, fields)
         results = self.client.table(entity).upsert(data).execute()

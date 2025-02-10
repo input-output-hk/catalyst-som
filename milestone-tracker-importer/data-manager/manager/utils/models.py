@@ -269,3 +269,29 @@ class PoaReview(BaseModel):
     @classmethod
     def parse_approval(cls, value):
         return (value == 'Yes')
+
+class SBPoaReview(BaseModel):
+    id: int
+    content_approved: bool
+    content_comment: str
+    poas_id: int
+    role: int
+    created_at: datetime
+    user_id: str
+    current: bool
+
+class SBSomReview(BaseModel):
+    id: int
+    outputs_approves: bool
+    outputs_comment: str
+    success_criteria_approves: bool
+    success_criteria_comment: str
+    evidence_approves: bool
+    evidence_comment: str
+    current: bool
+    som_id: int
+    role: int
+    created_at: datetime
+    user_id: str
+
+

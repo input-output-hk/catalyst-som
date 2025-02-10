@@ -5,7 +5,7 @@ from rich import print
 from typing import List, Dict
 from manager.utils.gsheet import GSheet
 from manager.utils.sb import SB
-from manager.utils.models import CohortProposal, LightProposal, SbProposal, CohortReviewer, SbReviewer
+from manager.utils.models import CohortProposal, LightProposal, SbProposal, CohortReviewer, SbReviewer, SBPoaReview, SBSomReview
 
 app = typer.Typer()
 sb = SB()
@@ -69,6 +69,56 @@ def update_reviewers_funds_distributed(
   
 
   print("[bold green]Project funds distributed successfully updated.[/bold green]")
+
+@app.command()
+def migrate_user_reviews(
+  source_email: str = typer.Option("", help="Email to be used as starting point of the migration."),
+  target_email: str = typer.Option("", help="Email to be used as final point of the migration.")
+):
+  origin_user = sb.search_entity('users', SbReviewer, 'email', [source_email])[0]
+  target_user = sb.search_entity('users', SbReviewer, 'email', [target_email])[0]
+
+
+  origin_user_som_reviews = sb.search_entity('som_reviews', SBSomReview, 'user_id', [origin_user.user_id])
+  target_user_som_reviews = sb.search_entity('som_reviews', SBSomReview, 'user_id', [target_user.user_id])
+  for som_review in origin_user_som_reviews:
+    duplicates = [np for np in target_user_som_reviews if (np.som_id == som_review.som_id and np.current == True)]
+    if (len(duplicates)>0):
+      print("Contains duplicates as current, please check.")
+    print({
+      'id': som_review.id,
+      'old_user': origin_user.user_id,
+      'user_id': target_user.user_id,
+      'current': False if len(duplicates) > 0 else som_review.current
+    })
+    proceed = typer.confirm("Migrate this SOM review?")
+    if proceed:
+      sb.update_entity(
+        {'key': 'id', 'value': som_review.id},
+        {'user_id': target_user.user_id, 'current': False if len(duplicates) > 0 else som_review.current},
+        'som_reviews'
+      )
+
+
+  origin_user_poas_reviews = sb.search_entity('poas_reviews', SBPoaReview, 'user_id', [origin_user.user_id])
+  target_user_poas_reviews = sb.search_entity('poas_reviews', SBPoaReview, 'user_id', [target_user.user_id])
+  for poa_review in origin_user_poas_reviews:
+    duplicates = [np for np in target_user_poas_reviews if (np.poas_id == poa_review.poas_id and np.current == True)]
+    if (len(duplicates)>0):
+      print("Contains duplicates as current, please check.")
+    print({
+      'id': poa_review.id,
+      'old_user': origin_user.user_id,
+      'user_id': target_user.user_id,
+      'current': False if len(duplicates) > 0 else poa_review.current
+    })
+    proceed = typer.confirm("Migrate this PoA review?")
+    if proceed:
+      sb.update_entity(
+        {'key': 'id', 'value': poa_review.id},
+        {'user_id': target_user.user_id, 'current': False if len(duplicates) > 0 else poa_review.current},
+        'poas_reviews'
+      )
 
 class FundingUtils:
   def __init__(self, gsheet):
