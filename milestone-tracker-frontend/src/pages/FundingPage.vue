@@ -226,7 +226,6 @@ const exportSomReviews = async (
   _to = new Date().toISOString()
 ) => {
   const reviews = await getSubmittedSomReviews(fund, _from, _to)
-  console.log(reviews)
   const reviewsPayment = prepareReviewsPaymentsData(reviews, fund, rewardPerReview, 'som')
   downloadCsv(reviewsPayment)
 }
