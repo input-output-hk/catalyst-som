@@ -6,6 +6,7 @@ import {
 } from '@/utils/milestones'
 import { getShortNameFromId } from '@/utils/fund'
 import { generateValidationRules } from './milestones'
+import { getFundIdFromName } from './fund'
 
 export const preparePaymentsData = (allSoms, fundId) => {
   const somsByProposal = groupBy(allSoms, 'project_id')
@@ -91,6 +92,30 @@ export const preparePaymentsData = (allSoms, fundId) => {
   return result
 }
 
+const somReviewPaymentF9 = (el, rewardsTiers) => {
+  const rewardTier = rewardsTiers.find((r) => el.budget > r.min && el.budget <= r.max)
+  return {
+    reward: (rewardTier) ? parseInt(rewardTier.amount) : 0,
+    ...el
+  }
+}
+
+const somReviewPaymentF13 = (el, rewardsTiers) => {
+  const rewardTier = rewardsTiers.find((r) => el.budget > r.min && el.budget <= r.max)
+  return {
+    reward: (rewardTier) ? parseInt(rewardTier.amount) * el.milestones_reviewed_qty : 0,
+    ...el
+  }
+}
+
+const somReviewPayments = {
+  'f9': somReviewPaymentF9,
+  'f10': somReviewPaymentF9,
+  'f11': somReviewPaymentF9,
+  'f12': somReviewPaymentF9,
+  'f13': somReviewPaymentF13,
+}
+
 export const prepareReviewsPaymentsData = (reviews, fund, rewardsTiers, reward_type) => {
   const users = reviews.reviewers
   const proposals_signed_off = reviews.proposals_signed_off.map((el) => el.project_id)
@@ -118,11 +143,7 @@ export const prepareReviewsPaymentsData = (reviews, fund, rewardsTiers, reward_t
   const final_reviews = _reviews
     .filter((el) => !to_be_excluded.includes(el._tmp_id))
     .map((el) => {
-      const rewardTier = rewardsTiers.find((r) => el.budget > r.min && el.budget <= r.max)
-      return {
-        reward: (rewardTier) ? parseInt(rewardTier.amount) : 0,
-        ...el
-      }
+      return somReviewPayments[getShortNameFromId(getFundIdFromName(fund))](el, rewardsTiers)
     })
   const results = []
   const reviewsByReviewer = groupBy(final_reviews, 'email')
