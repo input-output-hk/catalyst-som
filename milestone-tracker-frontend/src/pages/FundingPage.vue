@@ -47,7 +47,7 @@
           </div>
           <div class="column is-4">
             <div v-for="rule, idx in somRewards[f]" :key="`som-rewards-${idx}`" class="mb-5">
-              <o-field :label="$t('pages.funding.rewards_per_som')">
+              <o-field :label="`${$t('pages.funding.rewards_per_som')} (${somRewards[f][idx].description})`">
                 <o-input
                   v-model="somRewards[f][idx].amount"
                   class="number-input"
@@ -128,37 +128,32 @@ const poaRewards = ref({
   ],
   'Fund 11': [
     {
-      amount: 200,
+      amount: 160,
       min: 0,
       max: 150000
     },
     {
-      amount: 250,
+      amount: 180,
       min: 150000,
       max: 10000000
     }
   ],
   'Fund 12': [
     {
-      amount: 200,
+      amount: 160,
       min: 0,
       max: 150000
     },
     {
-      amount: 250,
+      amount: 180,
       min: 150000,
       max: 10000000
     }
   ],
   'Fund 13': [
     {
-      amount: 200,
+      amount: 100,
       min: 0,
-      max: 150000
-    },
-    {
-      amount: 250,
-      min: 150000,
       max: 10000000
     }
   ]
@@ -168,50 +163,40 @@ const somRewards = ref({
     {
       amount: 100,
       min: 0,
-      max: 1000000
+      max: 1000000,
+      description: "per all milestones"
     }
   ],
   'Fund 10': [
     {
       amount: 350,
       min: 0,
-      max: 10000000
+      max: 10000000,
+      description: "per all milestones"
     }
   ],
   'Fund 11': [
     {
-      amount: 200,
-      min: 0,
-      max: 150000
-    },
-    {
       amount: 250,
-      min: 150000,
-      max: 10000000
+      min: 0,
+      max: 10000000,
+      description: "per all milestones"
     }
   ],
   'Fund 12': [
     {
-      amount: 200,
-      min: 0,
-      max: 150000
-    },
-    {
       amount: 250,
-      min: 150000,
-      max: 10000000
+      min: 0,
+      max: 10000000,
+      description: "per all milestones"
     }
   ],
   'Fund 13': [
     {
-      amount: 0,
+      amount: 50,
       min: 0,
-      max: 150000
-    },
-    {
-      amount: 0,
-      min: 150000,
-      max: 10000000
+      max: 10000000,
+      description: "per single milestone"
     }
   ]
 })
