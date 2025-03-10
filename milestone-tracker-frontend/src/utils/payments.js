@@ -142,7 +142,6 @@ export const prepareReviewsPaymentsData = (reviews, fund, rewardsTiers, reward_t
     }
   })
   const reviewsByProject = groupBy(_reviews, 'project_id')
-  console.log(reviews)
   let to_be_excluded = []
   if (reward_type === 'som') {
     Object.keys(reviewsByProject).forEach((project_id) => {
