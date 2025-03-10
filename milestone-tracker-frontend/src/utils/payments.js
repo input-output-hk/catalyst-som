@@ -92,6 +92,14 @@ export const preparePaymentsData = (allSoms, fundId) => {
   return result
 }
 
+const poaReviewPaymentF9 = (el, rewardsTiers) => {
+  const rewardTier = rewardsTiers.find((r) => el.budget > r.min && el.budget <= r.max)
+  return {
+    reward: (rewardTier) ? parseInt(rewardTier.amount) : 0,
+    ...el
+  }
+}
+
 const somReviewPaymentF9 = (el, rewardsTiers) => {
   const rewardTier = rewardsTiers.find((r) => el.budget > r.min && el.budget <= r.max)
   return {
@@ -116,6 +124,14 @@ const somReviewPayments = {
   'f13': somReviewPaymentF13,
 }
 
+const poaReviewPayments = {
+  'f9': poaReviewPaymentF9,
+  'f10': poaReviewPaymentF9,
+  'f11': poaReviewPaymentF9,
+  'f12': poaReviewPaymentF9,
+  'f13': poaReviewPaymentF9,
+}
+
 export const prepareReviewsPaymentsData = (reviews, fund, rewardsTiers, reward_type) => {
   const users = reviews.reviewers
   const proposals_signed_off = reviews.proposals_signed_off.map((el) => el.project_id)
@@ -126,6 +142,7 @@ export const prepareReviewsPaymentsData = (reviews, fund, rewardsTiers, reward_t
     }
   })
   const reviewsByProject = groupBy(_reviews, 'project_id')
+  console.log(reviews)
   let to_be_excluded = []
   if (reward_type === 'som') {
     Object.keys(reviewsByProject).forEach((project_id) => {
@@ -143,7 +160,11 @@ export const prepareReviewsPaymentsData = (reviews, fund, rewardsTiers, reward_t
   const final_reviews = _reviews
     .filter((el) => !to_be_excluded.includes(el._tmp_id))
     .map((el) => {
-      return somReviewPayments[getShortNameFromId(getFundIdFromName(fund))](el, rewardsTiers)
+      if (reward_type === 'som') {
+        return somReviewPayments[getShortNameFromId(getFundIdFromName(fund))](el, rewardsTiers)
+      } else {
+        return poaReviewPayments[getShortNameFromId(getFundIdFromName(fund))](el, rewardsTiers)
+      }
     })
   const results = []
   const reviewsByReviewer = groupBy(final_reviews, 'email')
