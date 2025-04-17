@@ -120,30 +120,31 @@ const literalMonth = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+@use "sass:color";
 $primary: #133FF0;
 .is-ml:nth-child(1) {
   & > .notification {
-    background: change-color($primary, $lightness: 96%);
+    background: color.change($primary, $lightness: 96%);
   }
 }
 .is-ml:nth-child(2) {
   & > .notification {
-    background: change-color($primary, $lightness: 94%);
+    background: color.change($primary, $lightness: 94%);
   }
 }
 .is-ml:nth-child(3) {
   & > .notification {
-    background: change-color($primary, $lightness: 92%);
+    background: color.change($primary, $lightness: 92%);
   }
 }
 .is-ml:nth-child(4) {
   & > .notification {
-    background: change-color($primary, $lightness: 88%);
+    background: color.change($primary, $lightness: 88%);
   }
 }
 .is-ml:nth-child(5) {
   & > .notification {
-    background: change-color($primary, $lightness: 82%);
+    background: color.change($primary, $lightness: 82%);
   }
 }
 </style>

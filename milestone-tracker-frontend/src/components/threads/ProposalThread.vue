@@ -210,7 +210,7 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-
+@use "sass:color";
 $primary: #133FF0;
 .messages-container {
   width: 100%;
@@ -218,7 +218,7 @@ $primary: #133FF0;
   overflow: auto;
 }
 .thread-header {
-  background: change-color($primary, $lightness: 70%);
+  background: color.change($primary, $lightness: 70%);
   .card-header-title {
     color: white;
   }
