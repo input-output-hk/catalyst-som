@@ -1,7 +1,7 @@
 <template>
   <o-collapse class="card proposal-thread is-flex is-flex-direction-column" :open="false" animation="slide" @open="openCallback" @close="closeCallback">
     <template #trigger="_props">
-      <div class="card-header thread-header is-clickable is-small" role="button">
+      <div class="card-header thread-header is-clickable is-small " role="button">
         <p class="card-header-title">
           {{ $t('thread.title') }}
         </p>
@@ -10,7 +10,7 @@
         </a>
       </div>
     </template>
-    <div class="content mb-0 columns is-multiline is-gapless">
+    <div class="container mb-0 is-multiline is-gapless">
       <div ref="threadsScroll" class="messages-container" @scroll="handleScroll">
         <div v-for="thread in proposalThreads(proposal.id)" :key="`thread-${thread.id}`" class="thread-message mb-0 column is-12 columns is-gapless">
           <thread-message :proposal="proposal" :thread="thread" />
