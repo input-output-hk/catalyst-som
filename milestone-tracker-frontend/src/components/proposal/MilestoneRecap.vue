@@ -1,7 +1,7 @@
 <template>
-  <div v-if="som" class="tile is-ml is-parent">
-    <div class="tile is-child notification">
-      <h1 class="title is-size-1 mb-2">
+  <div v-if="som" class="column is-full-mobile is-half-tablet is-one-quarter-desktop is-ml tile-item">
+    <div class="is-child notification">
+      <h1 class="is-size-1 mb-2">
         <router-link :to="{name: 'proposal-milestones-detail', params: {id: proposal.project_id, milestone: milestone.milestone}}">
           <span v-if="milestone.milestone !== proposal.milestones_qty">{{ $t('milestone_recap.title', {nr: milestone.milestone}) }}</span>
           <span v-if="milestone.milestone === proposal.milestones_qty">{{ $t('milestone_recap.final_title') }}</span>

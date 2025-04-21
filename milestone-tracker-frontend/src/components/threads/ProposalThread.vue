@@ -1,11 +1,11 @@
 <template>
-  <o-collapse class="card proposal-thread" :open="false" animation="slide" @open="openCallback" @close="closeCallback">
+  <o-collapse class="card proposal-thread is-flex is-flex-direction-column" :open="false" animation="slide" @open="openCallback" @close="closeCallback">
     <template #trigger="_props">
-      <div class="card-header thread-header" role="button">
+      <div class="card-header thread-header is-clickable is-small" role="button">
         <p class="card-header-title">
           {{ $t('thread.title') }}
         </p>
-        <a class="card-header-icon">
+        <a class="card-header-icon ">
           <o-icon :icon="_props.open ? 'caret-down' : 'caret-up'" />
         </a>
       </div>

@@ -7,11 +7,11 @@
           <p>{{ $t('pages.login.description') }}</p>
         </div>
         <div class="column is-6">
-          <form @submit.prevent="handleLogin">
-            <o-field :label="$t('pages.login.email')">
+        <form  @submit.prevent="handleLogin">
+            <o-field class="is-flex is-flex-direction-column" :label="$t('pages.login.email')">
               <o-input v-model="email" type="email"></o-input>
             </o-field>
-            <o-field :label="$t('pages.login.password')">
+            <o-field class="is-flex is-flex-direction-column" :label="$t('pages.login.password')">
               <o-input v-model="password" type="password"></o-input>
             </o-field>
             <div class="buttons mt-6">

@@ -1,6 +1,6 @@
 <template>
   <div class="table-container" :class="classStyle">
-    <table class="table is-bordered is-striped">
+    <table class="table is-bordered is-striped is-fullwidth">
       <thead>
         <tr>
           <th v-for="header in headers" :key="header">{{header}}</th>
