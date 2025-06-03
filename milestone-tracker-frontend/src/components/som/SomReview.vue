@@ -1,7 +1,9 @@
 <template>
   <table class="table is-bordered is-striped">
-    <tr>
-      <td>
+    <tbody>
+
+      <tr>
+        <td>
         {{ $t('som_review.from')}} 
         <span class="has-text-weight-semibold">{{role}}</span> 
         <span v-if="identity" class="is-size-7">&nbsp;{{ identity }}</span>
@@ -16,13 +18,14 @@
           :class="`${property}_comment`"
           class="html-text"
           v-html="$sanitize(review[`${property}_comment`])" />
-      </td>
+        </td>
     </tr>
     <tr>
       <td>
         {{ $t('som_review.submitted_at') }} <span class="has-text-weight-semibold">{{$d(review.created_at, 'long')}}</span>
       </td>
     </tr>
+  </tbody>
   </table>
 </template>
 

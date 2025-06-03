@@ -25,6 +25,7 @@ const activeMsg = ref(false)
 </script>
 
 <style lang="scss">
+@use "sass:list";
 .scrollable-modal {
   //overflow: auto !important;
  // max-height: 90vh
@@ -68,7 +69,7 @@ const activeMsg = ref(false)
         counter-increment: list-#{$i};
       }
       li.ql-indent-#{$i}:before {
-        content: counter(list-#{$i}, nth($list-types, (($i - 1) % 3) + 1)) '. '
+        content: counter(list-#{$i}, list.nth($list-types, (($i - 1) % 3) + 1)) '. '
       }
     }
   }

@@ -20,13 +20,24 @@
     <div v-if="proposal.milestones_qty" class="content columns is-multiline">
       <div class="column is-12 milestones-wrapper">
         <o-tabs v-model="activeTab" type="boxed">
-          <o-tab-item v-for="ml in [...Array(proposal.milestones_qty).keys()]" :key="`ml-${ml + 1}`">
-            <template
-              #header>
-              <span v-if="ml + 1 !== proposal.milestones_qty">{{ $t('pages.milestones.milestone', {nr: ml + 1}) }}</span>
-              <span v-if="ml + 1 === proposal.milestones_qty">{{ $t('pages.milestones.final_milestone') }}</span>
+          <o-tab-item
+            v-for="ml in proposal.milestones_qty"
+            :key="`ml-${ml}`"
+            :value="ml"
+          >
+            <template #header>
+              <span>
+                {{ ml === proposal.milestones_qty
+                  ? $t('pages.milestones.final_milestone')
+                  : $t('pages.milestones.milestone', { nr: ml })
+                }}
+              </span>
             </template>
-            <single-milestone :proposal="proposal" :milestone="ml + 1" @refresh-recap="refreshRecap" />
+            <single-milestone
+              :proposal="proposal"
+              :milestone="ml"
+              @refresh-recap="refreshRecap"
+            />
           </o-tab-item>
         </o-tabs>
       </div>
