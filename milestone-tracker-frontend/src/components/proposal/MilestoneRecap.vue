@@ -1,7 +1,7 @@
 <template>
-  <div v-if="som" class="tile is-ml is-parent">
-    <div class="tile is-child notification">
-      <h1 class="title is-size-1 mb-2">
+  <div v-if="som" class="column is-full-mobile is-half-tablet is-one-quarter-desktop is-ml tile-item">
+    <div class="is-child notification">
+      <h1 class="is-size-1 mb-2">
         <router-link :to="{name: 'proposal-milestones-detail', params: {id: proposal.project_id, milestone: milestone.milestone}}">
           <span v-if="milestone.milestone !== proposal.milestones_qty">{{ $t('milestone_recap.title', {nr: milestone.milestone}) }}</span>
           <span v-if="milestone.milestone === proposal.milestones_qty">{{ $t('milestone_recap.final_title') }}</span>
@@ -120,30 +120,31 @@ const literalMonth = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+@use "sass:color";
 $primary: #133FF0;
 .is-ml:nth-child(1) {
   & > .notification {
-    background: change-color($primary, $lightness: 96%);
+    background: color.change($primary, $lightness: 96%);
   }
 }
 .is-ml:nth-child(2) {
   & > .notification {
-    background: change-color($primary, $lightness: 94%);
+    background: color.change($primary, $lightness: 94%);
   }
 }
 .is-ml:nth-child(3) {
   & > .notification {
-    background: change-color($primary, $lightness: 92%);
+    background: color.change($primary, $lightness: 92%);
   }
 }
 .is-ml:nth-child(4) {
   & > .notification {
-    background: change-color($primary, $lightness: 88%);
+    background: color.change($primary, $lightness: 88%);
   }
 }
 .is-ml:nth-child(5) {
   & > .notification {
-    background: change-color($primary, $lightness: 82%);
+    background: color.change($primary, $lightness: 82%);
   }
 }
 </style>

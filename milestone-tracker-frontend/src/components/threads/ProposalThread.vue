@@ -1,16 +1,16 @@
 <template>
-  <o-collapse class="card proposal-thread" :open="false" animation="slide" @open="openCallback" @close="closeCallback">
+  <o-collapse class="card proposal-thread is-flex is-flex-direction-column" :open="false" animation="slide" @open="openCallback" @close="closeCallback">
     <template #trigger="_props">
-      <div class="card-header thread-header" role="button">
+      <div class="card-header thread-header is-clickable is-small " role="button">
         <p class="card-header-title">
           {{ $t('thread.title') }}
         </p>
-        <a class="card-header-icon">
+        <a class="card-header-icon ">
           <o-icon :icon="_props.open ? 'caret-down' : 'caret-up'" />
         </a>
       </div>
     </template>
-    <div class="content mb-0 columns is-multiline is-gapless">
+    <div class="container mb-0 is-multiline is-gapless">
       <div ref="threadsScroll" class="messages-container" @scroll="handleScroll">
         <div v-for="thread in proposalThreads(proposal.id)" :key="`thread-${thread.id}`" class="thread-message mb-0 column is-12 columns is-gapless">
           <thread-message :proposal="proposal" :thread="thread" />
@@ -210,7 +210,7 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-
+@use "sass:color";
 $primary: #133FF0;
 .messages-container {
   width: 100%;
@@ -218,7 +218,7 @@ $primary: #133FF0;
   overflow: auto;
 }
 .thread-header {
-  background: change-color($primary, $lightness: 70%);
+  background: color.change($primary, $lightness: 70%);
   .card-header-title {
     color: white;
   }

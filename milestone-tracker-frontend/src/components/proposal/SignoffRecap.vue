@@ -1,7 +1,7 @@
 <template>
-  <div v-if="signoffs.length > 0" class="tile is-ancestor mb-0">
-    <div class="tile is-12 is-parent">
-      <div class="tile is-child notification is-success">
+  <div v-if="signoffs.length > 0" class="mb-0">
+    <div class="is-12 is-parent">
+      <div class="is-child notification is-success has-text-white">
         <strong>{{ $t('signoff.poa_signed_off_at') }}</strong> {{ $d(signoffs[0].created_at, 'long') }}
       </div>
     </div>

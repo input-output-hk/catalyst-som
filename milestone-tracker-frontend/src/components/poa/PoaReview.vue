@@ -1,10 +1,12 @@
 <template>
   <table class="table is-bordered is-striped">
-    <tr>
-      <td>
-        {{$t('poa_review.from')}} <span class="has-text-weight-semibold">{{role}}</span>
-        <span v-if="identity" class="is-size-7">&nbsp;{{ identity }}</span>
-      </td>
+    <tbody>
+
+      <tr>
+        <td>
+          {{$t('poa_review.from')}} <span class="has-text-weight-semibold">{{role}}</span>
+          <span v-if="identity" class="is-size-7">&nbsp;{{ identity }}</span>
+        </td>
     </tr>
     <tr>
       <td>
@@ -17,6 +19,7 @@
         {{$t('poa_review.submitted_at')}} <span class="has-text-weight-semibold">{{$d(review.created_at, 'long')}}</span>
       </td>
     </tr>
+  </tbody>
   </table>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="tile is-ancestor is-flex-wrap-wrap is-justify-content-flex-start">
+  <div class="columns is-multiline">
     <milestone-recap v-for="ml in durations" :key="ml.id" :proposal="proposal" :milestone="ml" />
   </div>
 </template>

@@ -92,7 +92,7 @@
         </p>
       </header>
       <div class="card-content">
-        <p>
+        <p v-if="proposal.budget && proposal.currency">
           {{ $t(
               'proposal_recap.budget_error_msg',
               {
