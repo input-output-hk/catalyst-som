@@ -1,4 +1,4 @@
-drop policy "SoMs update" on "public"."soms";
+drop policy if exists "SoMs update" on "public"."soms";
 
 set check_function_bodies = off;
 
@@ -29,7 +29,7 @@ end;
 $function$
 ;
 
-drop policy "Proposals update" on "public"."proposals";
+drop policy if exists "Proposals update" on "public"."proposals";
 
 create policy "Proposals update"
 on "public"."proposals"
