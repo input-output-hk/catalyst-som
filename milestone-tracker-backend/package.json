@@ -1,5 +1,12 @@
 {
+  "name": "milestone-tracker-backend",
+  "version": "1.0.0",
+  "description": "Backend for the Milestone Tracker",
+  "main": "index.js",
+  "scripts": {
+    "start": "supabase start"
+  },
   "dependencies": {
-    "supabase": "^1.136.3"
+    "supabase": "^2.24.3"
   }
 }
