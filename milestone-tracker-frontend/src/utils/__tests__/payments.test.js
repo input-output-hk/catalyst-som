@@ -1,5 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
+vi.mock('@/utils/groupBy.js', () => ({
+  groupBy: vi.fn()
+}))
+
 vi.mock('@/utils/milestones', () => ({
   generateMilestoneDuration: vi.fn(),
   getCurrentMilestone: vi.fn(),
@@ -7,14 +11,19 @@ vi.mock('@/utils/milestones', () => ({
 }))
 
 vi.mock('../milestones.js', () => ({
+  generateMilestoneDuration: vi.fn(),
+  getCurrentMilestone: vi.fn(),
+  getNextPayment: vi.fn(),
   generateValidationRules: vi.fn()
 }))
 
 vi.mock('@/utils/fund', () => ({
   getShortNameFromId: vi.fn()
 }))
+
 vi.mock('../fund.js', () => ({
-  getFundIdFromName: vi.fn()
+  getFundIdFromName: vi.fn(),
+  getShortNameFromId: vi.fn()
 }))
 
 import {
@@ -22,6 +31,7 @@ import {
   prepareReviewsPaymentsData
 } from '../payments.js'
 
+import { groupBy } from '@/utils/groupBy.js'
 import {
   generateMilestoneDuration,
   getCurrentMilestone,
@@ -34,6 +44,13 @@ import { getFundIdFromName } from '../fund.js'
 
 beforeEach(() => {
   vi.clearAllMocks()
+
+  groupBy.mockImplementation((array, key) => {
+    return array.reduce((result, currentValue) => {
+      (result[currentValue[key]] = result[currentValue[key]] || []).push(currentValue);
+      return result;
+    }, {});
+  })
 
   getShortNameFromId.mockReturnValue('f9')
   getFundIdFromName.mockReturnValue(1)
