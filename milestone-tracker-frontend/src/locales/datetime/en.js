@@ -18,6 +18,15 @@ export default {
     hour: 'numeric',
     minute: 'numeric'
   },
+  long_utc: {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    timeZone: 'UTC',
+    timeZoneName: 'short'
+  },
   month_only: {
     year: 'numeric',
     month: 'short'

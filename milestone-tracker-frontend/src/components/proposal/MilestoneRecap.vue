@@ -53,6 +53,20 @@
       </div>
     </div>
   </div>
+  <div v-else class="tile is-ml is-parent">
+    <div class="tile is-child notification is-light">
+      <h1 class="title is-size-1 mb-2">
+        <span v-if="milestone.milestone !== proposal.milestones_qty">{{ $t('milestone.planned_milestone', {nr: milestone.milestone}) }}</span>
+        <span v-if="milestone.milestone === proposal.milestones_qty">{{ $t('milestone_recap.final_title') }}</span>
+      </h1>
+      <div class="content">
+        <p class="is-size-6 has-text-grey">{{ $t('milestone.planned_milestone_description') }}</p>
+        <div class="has-text-centered mt-4">
+          <o-icon icon="clock" size="large" variant="grey" />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>

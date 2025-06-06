@@ -10,7 +10,7 @@
         </tr>
         <tr>
           <th>{{ $t('poa.submitted_at') }}</th>
-          <td>{{$d(poa.created_at, 'long')}}</td>
+          <td>{{$d(poa.created_at, 'long_utc')}}</td>
         </tr>
         <tr v-if="poa.poas_reviews.length > 0">
           <th>{{ $t('poa.reviews') }}</th>
@@ -22,7 +22,7 @@
           <th :class="{'has-background-success has-text-white': locked}">{{ $t('poa.signoff') }}</th>
           <td :class="{'has-background-success has-text-white': locked}">
             <p v-if="locked">
-              {{ $t('poa.signed_off_at') }} {{$d(poa.signoffs[0].created_at, 'long')}}
+              {{ $t('poa.signed_off_at') }} {{$d(poa.signoffs[0].created_at, 'long_utc')}}
             </p>
             <signoff-withdraw-list :withdraws="poa.signoff_withdraws" />
           </td>

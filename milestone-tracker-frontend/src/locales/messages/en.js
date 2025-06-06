@@ -70,7 +70,9 @@ export default {
     show_archived_soms: "Show archived Milestone",
     hide_archived_soms: "Hide archived Milestone",
     jump_to_poa: "Jump to Proof of Achievement",
-    final_som: "Final Milestone"
+    final_som: "Final Milestone",
+    planned_milestone: "Planned Milestone {nr}",
+    planned_milestone_description: "This milestone is planned for future submission. It will be available once the previous milestone is completed and approved."
   },
   milestone_recap: {
     title: "M {nr}",
@@ -253,7 +255,7 @@ export default {
   roles: {
     funded_proposer: "Funded proposer",
     ct_member: "Milestone reviewer",
-    io_member: "Catalyst Team reviewer",
+    io_member: "Catalyst Team sign off",
     admin: "Admin",
     signoff: "Signoff"
   },
@@ -286,6 +288,12 @@ export default {
       paused: "Paused",
       canceled: "Canceled",
       completed: "Completed"
+    },
+    status_explanations: {
+      ongoing: "The project is currently active and milestone submissions are ongoing",
+      paused: "The project has been temporarily suspended and milestone submissions are on hold",
+      canceled: "The project has been permanently terminated and will not continue",
+      completed: "The project has been successfully finished and all milestones are complete"
     }
   },
   new_account: {
@@ -331,6 +339,7 @@ export default {
   validations: {
     text_required: "This is a required field",
     min_text_required: "This field must be at least {min} characters long",
+    max_text_required: "This field must be at most {max} characters long",
   },
   footer: {
     website: 'Website',

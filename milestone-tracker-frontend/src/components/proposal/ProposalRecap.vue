@@ -79,7 +79,16 @@
       <tr v-if="proposal.status > 0">
         <th>{{ $t('proposal_recap.status') }}</th>
         <td>
-          {{ $t(`proposal_recap.statuses.${proposalStatuses[proposal.status]}`) }}
+          <div class="is-flex is-align-items-center">
+            <span class="mr-2">{{ $t(`proposal_recap.statuses.${proposalStatuses[proposal.status]}`) }}</span>
+            <o-tooltip 
+              :label="$t(`proposal_recap.status_explanations.${proposalStatuses[proposal.status]}`)"
+              variant="dark"
+              position="top"
+            >
+              <o-icon icon="question-circle" size="small" />
+            </o-tooltip>
+          </div>
         </td>
       </tr>
     </tbody>

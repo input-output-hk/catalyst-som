@@ -5,7 +5,10 @@
         <tbody class="som-recap">
           <tr>
             <th>{{ $t('som.submitted_at') }}</th>
-            <td>{{ $d(som.created_at, 'long') }}</td>
+            <td>
+              <div>{{ $d(som.created_at, 'long_utc') }}</div>
+              <div class="is-size-7 has-text-grey">{{ getTimeElapsed(som.created_at) }}</div>
+            </td>
             <td v-if="somReviewsVisible"></td>
           </tr>
           <tr>
@@ -58,7 +61,7 @@
             <th :class="{'has-background-success has-text-white': locked}">{{ $t('som.signoff') }}</th>
             <td :class="{'has-background-success has-text-white': locked}">
               <p v-if="locked">
-                {{ $t('som.signed_off_at') }} {{$d(som.signoffs[0].created_at, 'long')}}
+                {{ $t('som.signed_off_at') }} {{$d(som.signoffs[0].created_at, 'long_utc')}}
               </p>
               <signoff-withdraw-list :withdraws="som.signoff_withdraws" />
             </td>
@@ -215,6 +218,7 @@
 import { ref, watch, computed } from 'vue'
 import { useUser } from '@/store/user.js'
 import useEventsBus from '@/eventBus'
+import { getTimeElapsed } from '@/utils/timeUtils.js'
 const props = defineProps({
   som: {
     type: [Object, Boolean],

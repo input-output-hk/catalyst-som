@@ -20,7 +20,7 @@
     </tr>
     <tr>
       <td>
-        {{ $t('som_review.submitted_at') }} <span class="has-text-weight-semibold">{{$d(review.created_at, 'long')}}</span>
+        {{ $t('som_review.submitted_at') }} <span class="has-text-weight-semibold">{{$d(review.created_at, 'long_utc')}}</span>
       </td>
     </tr>
   </table>
