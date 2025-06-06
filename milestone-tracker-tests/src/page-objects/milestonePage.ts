@@ -60,11 +60,15 @@ const milestonePageCommands = {
       .waitForElementVisible(`@evidence_approved${ml}`, 10000)
       .waitForElementVisible(`@evidence_comment${ml}`, 10000)
       .click(`@outputs_approved${ml}`)
+      .click(`@outputs_approved${ml} option[value="approved"]`)
       .click(`@outputs_comment${ml}`)
       .sendKeys(`@outputs_comment${ml}`, `${stringBase}${stringSeed}`)
+      .click(`@success_criteria_approved${ml}`)
+      .click(`@success_criteria_approved${ml} option[value="approved"]`)
       .click(`@success_criteria_comment${ml}`)
       .sendKeys(`@success_criteria_comment${ml}`, `${stringBase}${stringSeed}`)
       .click(`@evidence_approved${ml}`)
+      .click(`@evidence_approved${ml} option[value="approved"]`)
       .click(`@evidence_comment${ml}`)
       .sendKeys(`@evidence_comment${ml}`, `${stringBase}${stringSeed}`)
   },
@@ -255,7 +259,7 @@ mls.forEach((ml) => {
   // For SoM review
   mlReviewFields.forEach((field) => {
     const somReviewsFieldsEls = {
-      [`${field}_approved${ml}`]: `${mlEl} .new-som-review [model="${field}_approves"] .checkbox`,
+      [`${field}_approved${ml}`]: `${mlEl} .new-som-review [model="${field}_approves"] select`,
       [`${field}_comment${ml}`]: `${mlEl} .new-som-review [model="${field}_comment"] .ql-editor`,
       [`lastSomReview${field}_approved${ml}`]: `${mlEl} .som-reviews-popup .reviews:nth-child(1) .${field}_approves`,
       [`lastSomReview${field}_comment${ml}`]: `${mlEl} .som-reviews-popup .reviews:nth-child(1) .${field}_comment`
