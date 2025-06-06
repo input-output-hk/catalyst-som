@@ -14,7 +14,7 @@
     </tr>
     <tr>
       <td>
-        {{$t('poa_review.submitted_at')}} <span class="has-text-weight-semibold">{{$d(review.created_at, 'long')}}</span>
+        {{$t('poa_review.submitted_at')}} <span class="has-text-weight-semibold">{{$d(review.created_at, 'long_utc')}}</span>
       </td>
     </tr>
   </table>

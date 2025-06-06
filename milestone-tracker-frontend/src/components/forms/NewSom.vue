@@ -177,6 +177,7 @@ const initialSchema = computed(() => {
     title: {
       type: 'string',
       help: t('new_som.title_help'),
+      validations: yup.string().required(t('validations.text_required')).max(100, t('validations.max_text_required', { max: 100 }))
     },
     outputs: {
       type: 'html',
