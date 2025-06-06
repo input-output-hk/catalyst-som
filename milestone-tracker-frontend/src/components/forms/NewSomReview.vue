@@ -49,24 +49,31 @@ const initialSchema = computed(() => {
   const keys = ['outputs', 'success_criteria', 'evidence']
   keys.forEach((key) => {
     schema[`${key}_approves`] = {
-      type: 'checkbox',
+      type: 'select',
       label: t(`new_som_review.${key}_approved`),
       help: t(`new_som_review.${key}_approved_help`),
+      required: true,
+      options: [
+        { value: 'approved', label: t('new_som_review.approval_option_approved') },
+        { value: 'not_approved', label: t('new_som_review.approval_option_not_approved') }
+      ],
+      default: '',
+      validations: yup.string().required(t('validations.text_required')).oneOf(['approved', 'not_approved'])
     }
     schema[`${key}_comment`] = {
       type: 'html',
       label: t(`new_som_review.${key}_comment`),
       help: t(`new_som_review.${key}_comment_help`),
-      validations: yup.string().when('_', {
-        is: true,
+      validations: yup.string().when([`${key}_approves`], {
+        is: (approves) => approves === 'not_approved',
+        then: (schema) => {
+          const minLength = 75
+          const minLengthValidation = HTMLMinLen(minLength)
+          return schema.required().test('len', t('validations.min_text_required', {min: minLength}), minLengthValidation)
+        },
         otherwise: (schema) => {
           const minLength = 75
           const minLengthValidation = HTMLMinLen(minLength)
-          if (!formData.value[`${key}_approves`]) {
-            return schema.required().test('len', t('validations.min_text_required', {min: minLength}), minLengthValidation)
-          }
-          // same output just to not lose logic.
-          // this branch can be be simple `schema` if it is not required for approved review.
           return schema.required().test('len', t('validations.min_text_required', {min: minLength}), minLengthValidation)
         }
       })
@@ -84,8 +91,16 @@ let SchemaForm = SchemaFormFactory([
 
 const handleCreateSomReview = async () => {
   submitting.value = true
+  
+  // Convert select field values to boolean for backend
+  const reviewData = { ...formData.value }
+  const keys = ['outputs', 'success_criteria', 'evidence']
+  keys.forEach((key) => {
+    reviewData[`${key}_approves`] = reviewData[`${key}_approves`] === 'approved'
+  })
+  
   const response =  await createSomReview({
-    ...formData.value,
+    ...reviewData,
     som_id: props.som.id,
     current: true
   }, props.som)
